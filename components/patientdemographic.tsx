@@ -7,7 +7,7 @@ const PatientDemographic = () => {
     <div className="">
     
       <div className="mx-auto max-w-3xl text-center">
-        <h2 className="text-3xl font-bold md:text-5xl text-left">Contact Sales</h2>
+        <h2 className="text-3xl font-bold md:text-5xl text-left">Patient Demographic</h2>
         <p className="mx-auto mb-12 mt-4 max-w-xl text-[#647084]"></p>
       </div>
      
