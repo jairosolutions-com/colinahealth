@@ -5,7 +5,7 @@ const PatientDemographic = () => {
     <div className="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-24 lg:py-32 ">
       <div className="ring-1  ring-gray-300">
         <div className=" w-full max-w-3xl text-left pl-8 pt-8">
-          <h2 className="text-3xl font-bold md:text-5xl text-left text-[#071437]">
+          <h2 className="text-3xl font-medium md:text-5xl text-left text-[#071437]">
             Patient Demographic
           </h2>
           <p className="mx-auto mb-12 mt-4 max-w-xl text-[#647084]"></p>
