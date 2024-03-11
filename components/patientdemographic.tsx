@@ -12,36 +12,36 @@ const PatientDemographic = () => {
         </div>
 
         <form className="ring-1 ring-gray-300 mb-4 text-left sm:px-4 md:px-20" name="wf-form-name" method="get">
-          <div className="mb-4 grid grid-cols-2 gap-6">
-            
-            <div>
+          <div className=" " >
+          <div className="mb-4 grid grid-cols-2 gap-6 ">
+            <div className="flex flex-row gap-x-[80px]">
               <label className="mb-1 font-medium">Full Name</label>
               <input
                 type="text"
-                className="h-9 w-full bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
+                className="h-9 w-96 bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
                 placeholder="Input name"
               />
             </div>
-            <div>
+              <div className="flex flex-row gap-x-[80px]">
               <label className="mb-1 font-medium">Gender</label>
               <input
                 type="text"
-                className="h-9 w-full bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
+                className="h-9 w-96 bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
                 placeholder="Input Gender"
               />
             </div>
           </div>
 
           <div className="mb-4 grid grid-cols-2 gap-6">
-            <div>
+          <div className="flex flex-row gap-x-[120px]">
               <label className="mb-1 font-medium">Age</label>
               <input
                 type="text"
-                className="h-9 w-full bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
+                className="h-9 w-96 bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
                 placeholder="Input Age"
               />
             </div>
-            <div>
+            <div className="flex flex-row gap-x-[67px]">
               <label className="mb-1 font-medium">Date of Birth</label>
               <input
                 type="text"
@@ -52,7 +52,7 @@ const PatientDemographic = () => {
           </div>
 
           <div className="mb-4 grid grid-cols-2 gap-6">
-            <div>
+          <div className="flex flex-row gap-x-[70px]">
               <label className="mb-1 font-medium">Contact Phone</label>
               <input
                 type="text"
@@ -60,7 +60,7 @@ const PatientDemographic = () => {
                 placeholder="Input contact phone"
               />
             </div>
-            <div>
+            <div className="flex flex-row gap-x-[65px]">
               <label className="mb-1 font-medium">Address1</label>
               <input
                 type="text"
@@ -71,7 +71,7 @@ const PatientDemographic = () => {
           </div>
 
           <div className="mb-4 grid grid-cols-2 gap-6">
-            <div>
+          <div className="flex flex-row gap-x-[115px]">
               <label className="mb-1 font-medium">City</label>
               <input
                 type="text"
@@ -79,7 +79,7 @@ const PatientDemographic = () => {
                 placeholder="Input city"
               />
             </div>
-            <div>
+            <div className="flex flex-row gap-x-[64px]">
               <label className="mb-1 font-medium">Address2</label>
               <input
                 type="text"
@@ -90,7 +90,7 @@ const PatientDemographic = () => {
           </div>
 
           <div className="mb-4 grid grid-cols-2 gap-6">
-            <div> 
+          <div className="flex flex-row gap-x-[107px]">
               <label className="mb-1 font-medium">State</label>
               <input
                 type="text"
@@ -98,7 +98,7 @@ const PatientDemographic = () => {
                 placeholder="Input state"
               />
             </div>
-            <div>
+            <div className="flex flex-row gap-x-[76px]">
               <label className="mb-1 font-medium">Country</label>
               <input
                 type="text"
@@ -109,7 +109,7 @@ const PatientDemographic = () => {
           </div>
 
           <div className="mb-4 grid grid-cols-2 gap-6">
-            <div> 
+          <div className="flex flex-row gap-x-[80px]">
               <label className="mb-1 font-medium">Allergies</label>
               <input
                 type="text"
@@ -117,7 +117,7 @@ const PatientDemographic = () => {
                 placeholder="Input allergies"
               />
             </div>
-            <div>
+            <div className="flex flex-row gap-x-[115px]">
               <label className="mb-1 font-medium">Zip</label>
               <input
                 type="text"
@@ -128,7 +128,7 @@ const PatientDemographic = () => {
           </div>
 
           <div className="mb-4 grid grid-cols-2 gap-6">
-            <div> 
+          <div className="flex flex-row gap-x-[63px]">
               <label className="mb-1 font-medium">Admission Date</label>
               <input
                 type="text"
@@ -136,18 +136,18 @@ const PatientDemographic = () => {
                 placeholder="Input admission date"
               />
             </div>
-            <div>
-              <label className="mb-1 font-medium">Zip</label>
+            <div className="flex flex-row gap-x-[70px]">
+              <label className="mb-1 font-medium">Code Status</label>
               <input
                 type="text"
                 className="h-9 w-full bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
-                placeholder="Input zip"
+                placeholder="Input code status"
               />
             </div>
           </div>  
 
           <div className="mb-4 grid grid-cols-2 gap-6">
-            <div> 
+          <div className="flex flex-row gap-x-[105px]">
               <label className="mb-1 font-medium">Email</label>
               <input
                 type="text"
@@ -170,7 +170,9 @@ const PatientDemographic = () => {
               </button>
             </div>
           </div>
+          </div>
         </form>
+
       </div>
     </div>
   );
