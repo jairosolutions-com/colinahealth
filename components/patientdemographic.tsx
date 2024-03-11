@@ -3,19 +3,19 @@ import React from "react";
 const PatientDemographic = () => {
   return (
     <div className="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-24 lg:py-32">
-      <div className="">
-        <div className="max-w-3xl text-left ">
-          <h2 className="text-3xl font-bold md:text-5xl text-left ">
+      <div className="ring-1  ring-gray-300">
+        <div className=" w-full max-w-3xl text-left pl-8 pt-8">
+          <h2 className="text-3xl font-bold md:text-5xl text-left text-[#071437]">
             Patient Demographic
           </h2>
           <p className="mx-auto mb-12 mt-4 max-w-xl text-[#647084]"></p>
         </div>
 
         <form className="ring-1 ring-gray-300 mb-4 text-left sm:px-4 md:px-20" name="wf-form-name" method="get">
-          <div className=" " >
+          <div className="pt-8 pb-8 " >
           <div className="mb-4 grid grid-cols-2 gap-6 ">
-            <div className="flex flex-row gap-x-[80px]">
-              <label className="mb-1 font-medium">Full Name</label>
+            <div className="flex flex-row gap-x-[75px]">
+              <label className="mb-1 font-medium text-[#333333] text-nowrap">Full Name</label>
               <input
                 type="text"
                 className="h-9 w-96 bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
@@ -34,15 +34,15 @@ const PatientDemographic = () => {
 
           <div className="mb-4 grid grid-cols-2 gap-6">
           <div className="flex flex-row gap-x-[120px]">
-              <label className="mb-1 font-medium">Age</label>
+              <label className="mb-1 font-medium text-nowrap">Age</label>
               <input
                 type="text"
                 className="h-9 w-96 bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
                 placeholder="Input Age"
               />
             </div>
-            <div className="flex flex-row gap-x-[67px]">
-              <label className="mb-1 font-medium">Date of Birth</label>
+            <div className="flex flex-row gap-x-[40px]">
+              <label className="mb-1 font-medium text-nowrap">Date of Birth</label>
               <input
                 type="text"
                 className="h-9 w-full bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
@@ -52,8 +52,8 @@ const PatientDemographic = () => {
           </div>
 
           <div className="mb-4 grid grid-cols-2 gap-6">
-          <div className="flex flex-row gap-x-[70px]">
-              <label className="mb-1 font-medium">Contact Phone</label>
+          <div className="flex flex-row gap-x-[35px]">
+              <label className="mb-1 font-medium text-nowrap">Contact Phone</label>
               <input
                 type="text"
                 className="h-9 w-full bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
@@ -71,7 +71,7 @@ const PatientDemographic = () => {
           </div>
 
           <div className="mb-4 grid grid-cols-2 gap-6">
-          <div className="flex flex-row gap-x-[115px]">
+          <div className="flex flex-row gap-x-[116px]">
               <label className="mb-1 font-medium">City</label>
               <input
                 type="text"
@@ -128,16 +128,16 @@ const PatientDemographic = () => {
           </div>
 
           <div className="mb-4 grid grid-cols-2 gap-6">
-          <div className="flex flex-row gap-x-[63px]">
-              <label className="mb-1 font-medium">Admission Date</label>
+          <div className="flex flex-row gap-x-[27px]">
+              <label className="mb-1 font-medium text-nowrap">Admission Date</label>
               <input
                 type="text"
                 className="h-9 w-full bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
                 placeholder="Input admission date"
               />
             </div>
-            <div className="flex flex-row gap-x-[70px]">
-              <label className="mb-1 font-medium">Code Status</label>
+            <div className="flex flex-row gap-x-[45px]">
+              <label className="mb-1 font-medium text-nowrap">Code Status</label>
               <input
                 type="text"
                 className="h-9 w-full bg-[#f2f2f7] px-3 py-6 text-sm text-[#333333]"
