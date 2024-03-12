@@ -7,36 +7,36 @@ import { useRouter } from "next/navigation";
 export default function PatientPage() {
   const router = useRouter();
   return (
-    <div className="relative w-full mx-24 mt-5">
+    <div className="relative w-full mx-24 mt-24">
       <div className="flex justify-end">
         <a href="" className="text-[#64748B] underline">
           Back to Dashboard
         </a>
       </div>
       <div className="flex justify-between items-center">
-        <div className="flex flex-col mb-5">
+        <div className="flex flex-col mb-5 px-5">
           <p className="p-title">Patients List Records</p>
           {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[21px] mt-2">
+          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[21px] mt-2 ">
             Total of 20 Patients
           </p>
         </div>
         <div className="flex flex-row justify-end">
           <button className=" mr-2 btn-add h-12">
             <img
-              src="/imgs/addbtn.svg"
+              src="/imgs/add.svg"
               alt="Custom Icon"
               className="w-5 h-5 mr-2"
             />
             Add
           </button>
-          <button className=" btn-pdfs btn-pdfs:hover h-12">
+          <button className="btn-pdfs relative h-12">
             <img
               src="/imgs/downloadpdf.svg"
               alt="Custom Icon"
-              className="w-5 h-5 mr-2"
+              className="w-5 h-5 mr-2 "
             />
-            Export PDF
+            Download PDF
           </button>
         </div>
       </div>
@@ -62,7 +62,7 @@ export default function PatientPage() {
             </button>
             <p className="text-[#191D23] opacity-[60%]">Sort by</p>
             <button className="bg-[#FFFFFF] w-[165px] h-[47px] mx-3 rounded-[5px] px-[20px] items-center flex justify-between">
-              Select
+              Choose
               <img src="/imgs/dropdown.svg" alt="" />
             </button>
           </div>
@@ -79,14 +79,14 @@ export default function PatientPage() {
                 <th scope="col" className="px-6 py-3 w-[552px]">
                   Name
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3 w-[277px]">
                   Age
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3 w-[277px]">
                   Gender
                 </th>
 
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-[70px] py-3 w-[210px] ">
                   Action
                 </th>
               </tr>
@@ -103,8 +103,8 @@ export default function PatientPage() {
                 <td className="px-6 py-4">21</td>
                 <td className="px-6 py-4">Male</td>
 
-                <td className="px-6 py-4">
-                  <button className="btn-edit">Edit</button>
+                <td className="px-[50px] py-4">
+                  <button className="btn-view">Edit</button>
                 </td>
               </tr>
               <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -118,8 +118,8 @@ export default function PatientPage() {
                 <td className="px-6 py-4">21</td>
                 <td className="px-6 py-4">Male</td>
 
-                <td className="px-6 py-4">
-                  <button className="btn-edit">Edit</button>
+                <td className="px-[50px] py-4">
+                  <button className="btn-view">Edit</button>
                 </td>
               </tr>
               <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -133,8 +133,8 @@ export default function PatientPage() {
                 <td className="px-6 py-4">21</td>
                 <td className="px-6 py-4">Male</td>
 
-                <td className="px-6 py-4">
-                  <button className="btn-edit">Edit</button>
+                <td className="px-[50px] py-4">
+                  <button className="btn-view">Edit</button>
                 </td>
               </tr>
               <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -148,8 +148,8 @@ export default function PatientPage() {
                 <td className="px-6 py-4">21</td>
                 <td className="px-6 py-4">Male</td>
 
-                <td className="px-6 py-4">
-                  <button className="btn-edit">Edit</button>
+                <td className="px-[50px] py-4">
+                  <button className="btn-view">Edit</button>
                 </td>
               </tr>
               <tr>
@@ -163,8 +163,8 @@ export default function PatientPage() {
                 <td className="px-6 py-4">21</td>
                 <td className="px-6 py-4">Male</td>
 
-                <td className="px-6 py-4">
-                  <button className="btn-edit">Edit</button>
+                <td className="px-[50px] py-4">
+                  <button className="btn-view">Edit</button>
                 </td>
               </tr>
             </tbody>
