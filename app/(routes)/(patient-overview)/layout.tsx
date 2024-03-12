@@ -41,37 +41,38 @@ export default function PatientOverviewLayout({
     },
   ];
   return (
-    <div className="flex flex-col w-full gap-[150px] px-28 mt-24">
-      <div className="flex flex-col gap-[20px]">
-        <div className="text-2xl ">
+    <div className="flex flex-col w-full gap-[150px] px-28 mt-28">
+      <div className="flex flex-col gap-[5px]">
+        <div className="text-2xl font-bold">
           <h1>Patient Overview</h1>
+          <p className="text-[16px] font-medium opacity-60">Medical History</p>
         </div>
-        <div className="ring-1 w-full h-full shadow-md ring-gray-300 px-5 pt-5 pb-[14px] rounded-md mt-2">
+        <div className="form ring-1 w-full h-full shadow-md ring-gray-300 px-5 pt-5 rounded-md">
           <div className="flex">
             <div className="flex flex-col">
               <img
                 src="/imgs/dennis.svg"
                 alt="profile"
-                width="252"
-                height="252"
+                width="200"
+                height="200"
               />
             </div>
             {/* 1 */}
-            <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
+            <div className="justify-between ml-4 flex flex-col w-full ">
               <div>
-                <div className=" w-full justify-between text-2xl font-semibold flex">
+                <div className=" w-full justify-between text-2xl font-semibold flex px-2">
                   <h1> Drake Ramos</h1>
-                  <div className=" items-center ml-10 flex ">
-                    <a
-                      href=""
+                  <div className=" cursor-pointer items-center ml-10 flex ">
+                    <p
                       className="underline text-sm font-semibold text-[#07143799] text-right"
+                      onClick={() => onNavigate(router, "/patient-details")}
                     >
                       See more details
-                    </a>
+                    </p>
                   </div>
                 </div>
                 <div>
-                  <div className="flex flex-row w-full">
+                  <div className="flex flex-row w-full mt-2">
                     <img
                       src="/imgs/profile-circle.svg"
                       className="px-1"
@@ -92,7 +93,7 @@ export default function PatientOverviewLayout({
                       </div>
                       <div className="flex">
                         <p className="flex items-center">
-                          ID: SGY-5146846548465
+                          UID: SGY-5146846548465
                         </p>
                         <img src="/imgs/id.svg" alt="copy" />
                       </div>
@@ -123,19 +124,20 @@ export default function PatientOverviewLayout({
                       </div>
                     </div>
                   </div>
-                </div>
+                  <div className="mt-5">
+                  <div className="flex gap-[50px] py-5 px-2">
+                    {tabs.map((tab, index) => (
+                      <p
+                        className="cursor-pointer font-semibold hover:text-[#007C85] hover:border-b-4 border-[#007C85]"
+                        key={index}
+                        onClick={() => onNavigate(router, tab.url)}
+                      >
+                        {tab.label}
+                        
+                      </p>
+                    ))}
+                  </div>
               </div>
-              <div className="mt-2">
-                <div className="flex gap-[20px]">
-                  {tabs.map((tab, index) => (
-                    <p
-                      className="cursor-pointer hover:underline"
-                      key={index}
-                      onClick={() => onNavigate(router, tab.url)}
-                    >
-                      {tab.label}
-                    </p>
-                  ))}
                 </div>
               </div>
             </div>
