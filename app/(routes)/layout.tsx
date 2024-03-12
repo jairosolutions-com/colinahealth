@@ -9,6 +9,7 @@ export default function Layout({
     <>
       <Navbar />
       <div className="h-full w-full flex   ">{children}</div>
+
     </>
   );
 }
