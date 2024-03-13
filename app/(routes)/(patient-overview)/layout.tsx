@@ -124,20 +124,19 @@ export default function PatientOverviewLayout({
                       </div>
                     </div>
                   </div>
-                  <div className="mt-5">
-                  <div className="flex gap-[50px] py-5 px-2">
-                    {tabs.map((tab, index) => (
-                      <p
-                        className="cursor-pointer font-semibold hover:text-[#007C85] hover:border-b-4 border-[#007C85]"
-                        key={index}
-                        onClick={() => onNavigate(router, tab.url)}
-                      >
-                        {tab.label}
-                        
-                      </p>
-                    ))}
+                  <div className="mt-6">
+                    <div className="flex gap-[50px] py-5 px-2">
+                      {tabs.map((tab, index) => (
+                        <p
+                          className="cursor-pointer font-semibold hover:text-[#007C85] hover:border-b-[3px] h-[28px] border-[#007C85]"
+                          key={index}
+                          onClick={() => onNavigate(router, tab.url)}
+                        >
+                          {tab.label}
+                        </p>
+                      ))}
+                    </div>
                   </div>
-              </div>
                 </div>
               </div>
             </div>
