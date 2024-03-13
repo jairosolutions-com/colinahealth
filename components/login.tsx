@@ -13,7 +13,7 @@ export const Login = () => {
             <img
               src="/imgs/Bimage.png"
               alt="Your Image"
-              className="w-full h-full object-cover"
+              className="w-full md:h-screen object-cover"
             />
           </div>
 
