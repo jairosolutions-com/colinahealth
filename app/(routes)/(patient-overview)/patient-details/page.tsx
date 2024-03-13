@@ -11,7 +11,7 @@ export default function PatientDetails() {
 
   return (
     <div className="flex flex-col w-full">
-      <div className="text-xl  font-semibold px-16 w-full h-[50px] pt-3 ring-1 ring-gray-300">
+      <div className="text-xl font-semibold px-16 w-full h-[50px] pt-3 ring-1 ring-gray-300 pl-[110px]">
         Patient Details
       </div>
       <div className=" w-full h-full ring-1 ring-gray-300 px-5 pt-5 pb-5 ">
@@ -286,8 +286,8 @@ export default function PatientDetails() {
               )}
             </div>
           </div>
-
-          <div className="mt-4 mb-3  justify-end flex pt-5">
+          <div className="mb-4 ">
+          <div className="justify-end flex pt-5">
             <button
               type="button"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded w-24 h-8  "
@@ -296,15 +296,16 @@ export default function PatientDetails() {
               {editMode ? "Save" : "Edit"}
             </button>
           </div>
+          </div>
         </div>
       </div>
-      <div className="text-xl  font-semibold px-16 w-full h-[50px] pt-3 ring-1 ring-gray-300">
+      <div className="text-xl  font-semibold px-16 w-full h-[50px] pt-3 ring-1 ring-gray-300 pl-[110px]">
         Emergency Contact
       </div>
 
       <div className=" w-full h-full ring-1 ring-gray-300 px-5 pt-5 pb-5 ">
         <div className="pl-11">
-          <div className="grid grid-cols-2 grid-rows-1 max-w-[736px] w-full">
+          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
             <div className="mt-12 flex items-center">
               <label className=" font-medium text-md mr-[40px] text-nowrap">
                 Emergency Contact Name:
@@ -312,7 +313,7 @@ export default function PatientDetails() {
               {editMode ? (
                 <input
                   type="text"
-                  className="h-9 bg-[#F3F3F3]  px-3 py-2 text-sm text-[#333333] text-normal rounded text-nowrap"
+                  className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
                   defaultValue="Scarlette Johnson"
                 />
               ) : (
@@ -322,7 +323,7 @@ export default function PatientDetails() {
               )}
             </div>
           </div>
-          <div className="grid grid-cols-2 grid-rows-1 max-w-[736px] w-full">
+          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
             <div className="mt-12 flex items-center">
               <label className=" font-medium text-md mr-[147px] text-nowrap">
                 Relationship:
@@ -330,7 +331,7 @@ export default function PatientDetails() {
               {editMode ? (
                 <input
                   type="text"
-                  className="h-9 bg-[#F3F3F3] px-3 py-2 text-sm text-[#333333]"
+                  className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
                   defaultValue="Siblings"
                 />
               ) : (
@@ -340,7 +341,7 @@ export default function PatientDetails() {
               )}
             </div>
           </div>
-          <div className="grid grid-cols-2 grid-rows-1 max-w-[736px] w-full">
+          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
             <div className="mt-12 flex items-center">
               <label className=" font-medium text-md mr-[116px] text-nowrap">
                 Contact Number:
@@ -348,7 +349,7 @@ export default function PatientDetails() {
               {editMode ? (
                 <input
                   type="text"
-                  className="h-9 bg-[#F3F3F3] px-3 py-2 text-sm text-[#333333]"
+                  className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
                   defaultValue="(555) 789078"
                 />
               ) : (
@@ -358,7 +359,7 @@ export default function PatientDetails() {
               )}
             </div>
           </div>
-          <div className="grid grid-cols-2 grid-rows-1 max-w-[736px] w-full">
+          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
             <div className="mt-12 flex items-center">
               <label className=" font-medium text-md mr-[137px] text-nowrap">
                 Contact Email:
@@ -366,7 +367,7 @@ export default function PatientDetails() {
               {editMode ? (
                 <input
                   type="text"
-                  className="h-9 bg-[#F3F3F3] px-3 py-2 text-sm text-[#333333]"
+                  className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
                   defaultValue="scarlette@gmail.com"
                 />
               ) : (
@@ -377,15 +378,17 @@ export default function PatientDetails() {
             </div>
           </div>
         </div>
-        <div className="mt-4 mb-3  justify-end flex pt-5 pr-[401px]">
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded w-24 h-8  "
-            onClick={handleEditClick}
-          >
-            {editMode ? "Save" : "Edit"}
-          </button>
-        </div>
+        <div className="mb-4 ">
+          <div className="justify-end flex pt-5">
+            <button
+              type="button"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded w-24 h-8  "
+              onClick={handleEditClick}
+            >
+              {editMode ? "Save" : "Edit"}
+            </button>
+          </div>
+          </div>
       </div>
     </div>
   );
