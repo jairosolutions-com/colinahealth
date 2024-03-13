@@ -8,7 +8,8 @@ export default function Layout({
   return (
     <>
       <Navbar />
-      <div className="h-full w-full flex justify-center">{children}</div>
+      <div className="h-full w-full flex   ">{children}</div>
+
     </>
   );
 }

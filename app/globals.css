@@ -8,3 +8,154 @@ body,
   height: 100%;
   /* color: white; */
 }
+
+/* start buttons add/pdf */
+
+
+.btn-add
+{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1B84FF;
+  color: white;
+  font-weight: bold;
+  width: 104px;
+ 
+  border-radius: 5px;
+}
+
+.btn-add:hover
+{
+  background-color: #2267B9;
+}
+/* test */
+.btn-pdfs
+{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius:  5.23px;
+  border-radius:  5.23px;
+  border-radius:  5.23pxpx;
+  box-shadow: 0px 1px 3px transparent;
+  box-shadow: 0px 1px 3px transparent;
+  box-shadow: 0px 1px 3px transparent;
+  font-family: Arial;
+  color: #000000;
+  font-size: 20px;
+  padding: 10px 20px 10px 20px;
+  border: solid #D0D5DD 2px;
+  text-decoration: none;
+  width: 254px;
+  
+}
+
+.btn-pdfs:hover {
+  background:  #007C85;
+  color: #ffffff;
+  
+}
+
+.btn-pdfs:hover > img {
+  filter: brightness(0) invert(1);
+}
+
+
+/* end buttons add/pdf */
+
+/* start page title */
+.pagetitle {
+  font-style: Manrope;
+  color: #191D23;
+  
+}
+
+/* end page title */
+
+.search {
+  width: 636px;
+  height: 52px;
+  margin-top: 16px;
+  margin-left: 15px;
+  border-radius: 5px;
+  border: 1px;
+  padding: 10px;
+  gap: 10px;
+}
+
+/* fcard */
+.form
+{
+  width: 1777px;
+  height: 83px ;
+  margin-top: 83px;
+  border-radius: 5px;
+  gap: 13px;
+
+  
+}
+/* ecard */
+
+/* fsearch */
+.isearch
+{
+  width: 636px;
+  height: 52px;
+  margin-top: 16px;
+  margin-left: 16px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px;
+  gap: 10px;
+}
+/* esearch */
+
+/* sort by*/
+
+.btn-pagination
+{
+  border: 0.9px;
+  background: #007C85;
+  color: #ffffff;
+  width: 48px;
+  height: 30px;
+}
+
+.ipt-pagination
+{
+  width: 48px;
+  height: 30px;
+  border: 1px;
+}
+
+.btn-view
+{
+  color: #000000;
+  width: 109px;
+  height: 42px;
+  border-radius: 5px;
+  background: #E7EAEE;
+}
+.btn-view:hover
+{
+  background-color: #007C85;
+  color: #ffffff;
+}
+
+.p-title
+{
+  height: 32px;
+  line-height: 43px;
+  font-weight: 700;
+  font-size: 30px;
+  /* w-[1157px] h-[32px] leading-[42px] font-bold */
+}
+
+.table-row
+{
+  width: 286px;
+  height: 70px;
+  border-bottom: #E7EAEE;
+  border: 1px;
+}
