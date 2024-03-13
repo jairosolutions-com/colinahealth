@@ -1,27 +1,29 @@
 "use client";
 
-import { onNavigate } from "@/actions/navigation";
-import Header from "@/components/dropdown-sortby";
+import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/view";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-export default function PatientPage() {
-  const router = useRouter();
+export default function Allergies() {
+  // start of orderby & sortby function
+  const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
+
+  const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
+
+  const optionsOrderedBy = ["Accending", "Decending"];
+  const optionsSortBy = ["Type", "Severity", "Reaction", "Notes"];
+  // end of orderby & sortby function
+
   return (
-    <div className=" relative w-full mx-24 mt-24">
-      <div className="flex justify-end">
-        <a href="" className="text-[#64748B] underline">
-          Back to Dashboard
-        </a>
-      </div>
+    <div className="  w-full">
       <div className="flex justify-between items-center">
-        <div className="flex flex-col mb-5 px-3">
-          <p className="p-title">Patients List Records</p>
+        <div className="flex flex-col">
+          <p className="p-title">Medical History Logs - Allergies</p>
           {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[21px] mt-2 ">
-            Total of 20 Patients
+          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[21px] mt-2 mb-4 ">
+            Total of 6 Patients
           </p>
         </div>
         <div className="flex flex-row justify-end">
@@ -30,30 +32,39 @@ export default function PatientPage() {
         </div>
       </div>
 
-      <div className="mx-3 w-full shadow-md sm:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
-          <form className=" mr-5">
+      <div className="w-full shadow-md sm:rounded-lg items-center">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
+          <form className="">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className="outline-none py-3 px-5 m-5 w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
+                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
                 type="text"
                 placeholder="Search by reference no. or name..."
               />
             </div>
           </form>
-          <div className="flex items-center">
-            <p className="text-[#191D23] opacity-[60%]">Order by</p>
-            <button className="bg-[#FFFFFF] w-[165px] h-[47px] mx-3 rounded-[5px] px-[20px] items-center flex justify-between">
-              Select
-              <img src="/imgs/dropdown.svg" alt="" />
-            </button>
-            <p className="text-[#191D23] opacity-[60%]">Sort by</p>
-            <button className="bg-[#FFFFFF] w-[165px] h-[47px] mx-3 rounded-[5px] px-[20px] items-center flex justify-between">
-              Choose
-              <img src="/imgs/dropdown.svg" alt="" />
-            </button>
+          <div className="flex w-full justify-end items-center gap-[12px]">
+            <p className="text-[#191D23] opacity-[60%] font-semibold">
+              Order by
+            </p>
+            <DropdownMenu
+              options={optionsOrderedBy}
+              open={isOpenOrderedBy}
+              width={"165px"}
+              label={"Select"}
+            />
+
+            <p className="text-[#191D23] opacity-[60%] font-semibold">
+              Sort by
+            </p>
+            <DropdownMenu
+              options={optionsSortBy}
+              open={isOpenSortedBy}
+              width={"165px"}
+              label={"Select"}
+            />
           </div>
         </div>
 
@@ -88,12 +99,7 @@ export default function PatientPage() {
                 >
                   SGY-5146846548465
                 </th>
-                <td
-                  onClick={() =>
-                    onNavigate(router, "/medical-history/allergies")
-                  }
-                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
-                >
+                <td className="truncate max-w-[552px] px-6 py-4">
                   Drake Ramos
                 </td>
                 <td className="px-6 py-4">21</td>
@@ -169,7 +175,7 @@ export default function PatientPage() {
         {/* END OF TABLE */}
       </div>
       {/* pagination */}
-      <div className="mx-3 mt-5">
+      <div className="mt-5">
         <div className="flex justify-between">
           <p className="font-medium size-[18px] w-[138px] items-center">
             Page 1 of 10

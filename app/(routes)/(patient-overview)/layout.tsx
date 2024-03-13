@@ -15,7 +15,7 @@ export default function PatientOverviewLayout({
   const tabs = [
     {
       label: "Medical History",
-      url: "/medical-history",
+      url: "/medical-history/allergies",
     },
     {
       label: "Medication",
@@ -65,7 +65,9 @@ export default function PatientOverviewLayout({
       <div className="flex flex-col gap-[5px]">
         <div className="text-2xl font-bold ">
           <h1>Patient Overview</h1>
-          <p className="text-[16px] font-medium opacity-60">Medical History</p>
+          <p className="text-[16px] font-medium text-[#64748B]">
+            Medical History
+          </p>
         </div>
         <div className="form ring-1 w-full h-[220px] shadow-md ring-gray-300 px-5 pt-5 rounded-md">
           <div className="flex">
@@ -77,7 +79,6 @@ export default function PatientOverviewLayout({
                 height="200"
               />
             </div>
-            {/* 1 */}
             <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
               <div>
                 <div className=" w-full justify-between text-2xl font-semibold flex">
@@ -103,7 +104,7 @@ export default function PatientOverviewLayout({
                     <div>
                       <p className="flex items-center mr-11">Patient</p>
                     </div>
-                    {/*  */}
+
                     <div className="flex">
                       <div>
                         <p className="flex items-center mr-11">Age: 100</p>
@@ -119,7 +120,7 @@ export default function PatientOverviewLayout({
                       </div>
                     </div>
                   </div>
-                  {/*  */}
+
                   <div className="mb-5"></div>
                   <div className="flex flex-row w-full">
                     <img
@@ -130,11 +131,12 @@ export default function PatientOverviewLayout({
                       height="26" // Adjust these values to change the size
                     />
                     <div>
-                      <p className="flex items-center mr-11">
-                        Code Status: DNR
+                      <p className="flex items-center mr-11 ">
+                        Code Status:{" "}
+                        <p className="text-red-500 font-semibold">DNR</p>
                       </p>
                     </div>
-                    {/*  */}
+
                     <div className="flex">
                       <div>
                         <div></div>
