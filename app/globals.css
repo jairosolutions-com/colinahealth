@@ -85,8 +85,8 @@ body,
 }
 
 /* fcard */
-.form
-{
+.form-card
+/* {
   width: 1777px;
   height: 83px ;
   margin-top: 83px;
@@ -94,7 +94,7 @@ body,
   gap: 13px;
 
   
-}
+} */
 /* ecard */
 
 /* fsearch */
@@ -159,3 +159,4 @@ body,
   border-bottom: #E7EAEE;
   border: 1px;
 }
+

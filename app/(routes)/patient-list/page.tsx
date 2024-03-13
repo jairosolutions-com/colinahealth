@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 export default function PatientPage() {
   const router = useRouter();
   return (
-    <div className="relative w-full mx-24 mt-24">
+    <div className=" relative w-full mx-24 mt-24">
       <div className="flex justify-end">
         <a href="" className="text-[#64748B] underline">
           Back to Dashboard
@@ -48,7 +48,7 @@ export default function PatientPage() {
             <label className=""></label>
             <div className="flex">
               <input
-                className="py-3 px-5 m-5 w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
+                className=" py-3 px-5 m-5 w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
                 type="text"
                 placeholder="Search by reference no. or name..."
               />
@@ -72,7 +72,7 @@ export default function PatientPage() {
         <div>
           <table className="w-full text-left rtl:text-right">
             <thead className="">
-              <tr className="uppercase text-[#64748B] border border-[#E7EAEE]">
+              <tr className="uppercase text-[#64748B] border-y  ">
                 <th scope="col" className="px-6 py-3 w-[286px] h-[70px]">
                   Patient ID
                 </th>
@@ -92,14 +92,16 @@ export default function PatientPage() {
               </tr>
             </thead>
             <tbody>
-              <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
                 <th
                   scope="row"
                   className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
                   SGY-5146846548465
                 </th>
-                <td className="px-6 py-4">Drake Ramos</td>
+                <td className="truncate max-w-[552px] px-6 py-4">
+                  Drake Ramos
+                </td>
                 <td className="px-6 py-4">21</td>
                 <td className="px-6 py-4">Male</td>
 
@@ -107,7 +109,7 @@ export default function PatientPage() {
                   <button className="btn-view">Edit</button>
                 </td>
               </tr>
-              <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -122,7 +124,7 @@ export default function PatientPage() {
                   <button className="btn-view">Edit</button>
                 </td>
               </tr>
-              <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -137,7 +139,7 @@ export default function PatientPage() {
                   <button className="btn-view">Edit</button>
                 </td>
               </tr>
-              <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
