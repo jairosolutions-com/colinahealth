@@ -152,7 +152,7 @@ export default function PatientOverviewLayout({
                     className={`cursor-pointer font-semibold ${
                       activeTab === index
                         ? "text-[#007C85] border-b-[3px] border-[#007C85]"
-                        : "hover:text-[#007C85] hover:border-b-[3px] border-[#007C85]"
+                        : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
                     }`}
                     key={index}
                     onClick={() => {
