@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { Navbar } from "@/components/navbar";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,7 @@ export default function PatientOverviewLayout({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
+
   const [activeTab, setActiveTab] = useState<number>(0);
   const tabs = [
     {
@@ -41,6 +42,24 @@ export default function PatientOverviewLayout({
       url: "/notes",
     },
   ];
+
+  useEffect(() => {
+    const handleBodyClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const isOutsideLabels = !target.closest(".tab-label");
+
+      if (isOutsideLabels) {
+        setActiveTab(-1); // Reset activeTab when clicking outside the labels
+      }
+    };
+
+    document.body.addEventListener("click", handleBodyClick);
+
+    return () => {
+      document.body.removeEventListener("click", handleBodyClick);
+    };
+  }, []);
+
   return (
     <div className="flex flex-col w-full px-28 mt-28">
       <div className="flex flex-col gap-[5px]">
