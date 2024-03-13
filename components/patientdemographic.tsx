@@ -19,7 +19,7 @@ const PatientDemographic = () => {
               <input
                 type="text"
                 className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60  rounded border border-gray-200"
-                placeholder="input fullname"
+                placeholder="input full name"
               />
             </div>
               <div className="flex flex-row gap-x-[80px]">  
