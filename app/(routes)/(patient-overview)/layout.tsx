@@ -42,7 +42,7 @@ export default function PatientOverviewLayout({
     },
   ];
   return (
-    <div className="flex flex-col w-full gap-[150px] px-28 mt-28">
+    <div className="flex flex-col w-full px-28 mt-28">
       <div className="flex flex-col gap-[5px]">
         <div className="text-2xl font-bold ">
           <h1>Patient Overview</h1>
@@ -149,7 +149,7 @@ export default function PatientOverviewLayout({
           </div>
         </div>
       </div>
-      <div className="h-full w-full flex items-center justify-center mt-5">
+      <div className="w-full flex items-center justify-center mt-5">
         {children}
       </div>
     </div>
