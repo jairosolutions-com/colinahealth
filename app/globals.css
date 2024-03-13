@@ -85,7 +85,7 @@ body,
 }
 
 /* fcard */
-.form
+.form-overview
 {
   width: 1777px;
   height: 83px ;
@@ -159,3 +159,4 @@ body,
   border-bottom: #E7EAEE;
   border: 1px;
 }
+
