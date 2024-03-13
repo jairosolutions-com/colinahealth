@@ -20,9 +20,9 @@ export const Navbar = () => {
   ];
 
   return (
-    <div className="fixed bg-[#007C85] w-full flex items-center justify-between px-[100px] py-[10px]">
-      <Image src={"/imgs/colina-logo.png"} alt={""} width={320} height={57} />
-      <div className="flex gap-[100px]">
+    <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[105px]">
+      <Image src={"/imgs/colina-logo.png"} alt={""} width={200} height={37} />
+      <div className="flex gap-[20px] items-center">
         <div className="flex gap-[20px]">
           {routes.map((route, index) => (
             <p
@@ -34,9 +34,9 @@ export const Navbar = () => {
             </p>
           ))}
         </div>
-        <div className="flex gap-[20px]">
-          <FaBell className="text-white w-[20px] h-[20px]" />
-          <FaUser className="text-white w-[20px] h-[20px]" />
+        <div className="flex gap-3 items-center">
+          <Image src={"/imgs/admin 1.png"} alt={""} width={30} height={30} />
+          <Image src={"/svgs/arrow-down.svg"} alt={""} width={15} height={15} />
         </div>
       </div>
     </div>

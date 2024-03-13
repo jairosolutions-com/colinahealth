@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { Navbar } from "@/components/navbar";
 import { useRouter } from "next/navigation";
@@ -10,10 +10,12 @@ export default function PatientOverviewLayout({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
+
+  const [activeTab, setActiveTab] = useState<number>(0);
   const tabs = [
     {
       label: "Medical History",
-      url: "/medical-history",
+      url: "/medical-history/allergies",
     },
     {
       label: "Medication",
@@ -40,14 +42,34 @@ export default function PatientOverviewLayout({
       url: "/notes",
     },
   ];
+
+  useEffect(() => {
+    const handleBodyClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const isOutsideLabels = !target.closest(".tab-label");
+
+      if (isOutsideLabels) {
+        setActiveTab(-1); // Reset activeTab when clicking outside the labels
+      }
+    };
+
+    document.body.addEventListener("click", handleBodyClick);
+
+    return () => {
+      document.body.removeEventListener("click", handleBodyClick);
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col w-full gap-[150px] px-28 mt-28">
+    <div className="flex flex-col w-full px-28 mt-28">
       <div className="flex flex-col gap-[5px]">
-        <div className="text-2xl font-bold">
+        <div className="text-2xl font-bold ">
           <h1>Patient Overview</h1>
-          <p className="text-[16px] font-medium opacity-60">Medical History</p>
+          <p className="text-[16px] font-medium text-[#64748B]">
+            Medical History
+          </p>
         </div>
-        <div className="form ring-1 w-full h-full shadow-md ring-gray-300 px-5 pt-5 rounded-md">
+        <div className="form ring-1 w-full h-[220px] shadow-md ring-gray-300 px-5 pt-5 rounded-md">
           <div className="flex">
             <div className="flex flex-col">
               <img
@@ -57,10 +79,10 @@ export default function PatientOverviewLayout({
                 height="200"
               />
             </div>
-            {/* 1 */}
-            <div className="justify-between ml-4 flex flex-col w-full ">
+
+            <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
               <div>
-                <div className=" w-full justify-between text-2xl font-semibold flex px-2">
+                <div className=" w-full justify-between text-2xl font-semibold flex">
                   <h1> Drake Ramos</h1>
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
@@ -83,7 +105,7 @@ export default function PatientOverviewLayout({
                     <div>
                       <p className="flex items-center mr-11">Patient</p>
                     </div>
-                    {/*  */}
+
                     <div className="flex">
                       <div>
                         <p className="flex items-center mr-11">Age: 100</p>
@@ -93,13 +115,13 @@ export default function PatientOverviewLayout({
                       </div>
                       <div className="flex">
                         <p className="flex items-center">
-                          UID: SGY-5146846548465
+                          ID: SGY-5146846548465
                         </p>
                         <img src="/imgs/id.svg" alt="copy" />
                       </div>
                     </div>
                   </div>
-                  {/*  */}
+
                   <div className="mb-5"></div>
                   <div className="flex flex-row w-full">
                     <img
@@ -110,11 +132,12 @@ export default function PatientOverviewLayout({
                       height="26" // Adjust these values to change the size
                     />
                     <div>
-                      <p className="flex items-center mr-11">
-                        Code Status: DNR
+                      <p className="flex items-center mr-11 ">
+                        Code Status:{" "}
+                        <p className="text-red-500 font-semibold">DNR</p>
                       </p>
                     </div>
-                    {/*  */}
+
                     <div className="flex">
                       <div>
                         <div></div>
@@ -124,28 +147,32 @@ export default function PatientOverviewLayout({
                       </div>
                     </div>
                   </div>
-                  <div className="mt-5">
-                  <div className="flex gap-[50px] py-5 px-2">
-                    {tabs.map((tab, index) => (
-                      <p
-                        className="cursor-pointer font-semibold hover:text-[#007C85] hover:border-b-4 border-[#007C85]"
-                        key={index}
-                        onClick={() => onNavigate(router, tab.url)}
-                      >
-                        {tab.label}
-                        
-                      </p>
-                    ))}
-                  </div>
-              </div>
                 </div>
+              </div>
+              <div className="flex gap-[50px] px-2">
+                {tabs.map((tab, index) => (
+                  <p
+                    className={`cursor-pointer font-semibold ${
+                      activeTab === index
+                        ? "text-[#007C85] border-b-[3px] border-[#007C85]"
+                        : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
+                    }`}
+                    key={index}
+                    onClick={() => {
+                      setActiveTab(index);
+                      router.push(tab.url);
+                    }}
+                  >
+                    {tab.label}
+                  </p>
+                ))}
               </div>
             </div>
           </div>
         </div>
-        <div className="h-full w-full flex items-center justify-center">
-          {children}
-        </div>
+      </div>
+      <div className="w-full flex items-center justify-center mt-5">
+        {children}
       </div>
     </div>
   );

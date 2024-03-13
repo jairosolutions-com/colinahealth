@@ -36,25 +36,19 @@ body,
   align-items: center;
   justify-content: center;
   border-radius:  5.23px;
-  border-radius:  5.23px;
-  border-radius:  5.23pxpx;
-  box-shadow: 0px 1px 3px transparent;
-  box-shadow: 0px 1px 3px transparent;
-  box-shadow: 0px 1px 3px transparent;
-  font-family: Arial;
+  font-family: Manrope;
   color: #000000;
   font-size: 20px;
   padding: 10px 20px 10px 20px;
   border: solid #D0D5DD 2px;
   text-decoration: none;
   width: 254px;
-  
 }
 
 .btn-pdfs:hover {
   background:  #007C85;
   color: #ffffff;
-  
+  border-color:#007C85;
 }
 
 .btn-pdfs:hover > img {
@@ -129,7 +123,7 @@ body,
   border: 1px;
 }
 
-.btn-view
+.btn-edit
 {
   color: #000000;
   width: 109px;
@@ -137,7 +131,7 @@ body,
   border-radius: 5px;
   background: #E7EAEE;
 }
-.btn-view:hover
+.btn-edit:hover
 {
   background-color: #007C85;
   color: #ffffff;
