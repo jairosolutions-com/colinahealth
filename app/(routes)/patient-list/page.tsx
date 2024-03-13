@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 export default function PatientPage() {
   const router = useRouter();
   return (
-    <div className="relative w-full mx-24 mt-24">
+    <div className=" relative w-full mx-24 mt-24">
       <div className="flex justify-end">
         <a href="" className="text-[#64748B] underline">
           Back to Dashboard
