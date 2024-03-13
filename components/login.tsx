@@ -9,7 +9,7 @@ export const Login = () => {
     <div>
       <section>
         <div className="grid gap-0 md:h-screen md:grid-cols-2">
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center overflow-hidden">
             <img
               src="/imgs/Bimage.png"
               alt="Your Image"
