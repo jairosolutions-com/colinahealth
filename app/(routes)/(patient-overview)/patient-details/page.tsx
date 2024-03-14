@@ -270,7 +270,7 @@ export default function PatientDetails() {
           </div>
           <div className="grid  grid-rows-1 max-w-[736px] w-full">
             <div className="mt-8 flex items-center ">
-              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[136px] text-nowrap">
+              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[132px] text-nowrap">
                 Email:
               </label>
               {editMode ? (
