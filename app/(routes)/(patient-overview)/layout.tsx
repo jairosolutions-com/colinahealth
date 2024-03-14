@@ -62,10 +62,12 @@ export default function PatientOverviewLayout({
 
   return (
     <div className="flex flex-col w-full px-28 mt-28">
-      <div className="flex flex-col gap-[5px]">
-        <div className="text-2xl font-bold ">
+      <div className="flex flex-col gap-[3px]">
+        <div className="text-2xl font-bold">
           <h1>Patient Overview</h1>
-          <p className="text-[16px] font-medium opacity-60">Medical History</p>
+          <p className="text-[16px] font-medium text-[#64748B] mt-[-5px]">
+            {tabs[activeTab]?.label}
+          </p>
         </div>
         <div className="form ring-1 w-full h-[220px] shadow-md ring-gray-300 px-5 pt-5 rounded-md">
           <div className="flex">
