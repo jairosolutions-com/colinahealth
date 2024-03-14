@@ -37,7 +37,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60  rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  rounded border border-gray-200"
                     placeholder="input fullname"
                   />
                 </div>
@@ -47,7 +47,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                     placeholder="input gender"
                   />
                 </div>
@@ -60,7 +60,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                     placeholder="input age"
                   />
                 </div>
@@ -70,7 +70,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                     placeholder="input date of birth"
                   />
                 </div>
@@ -83,7 +83,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                     placeholder="input contact phone"
                   />
                 </div>
@@ -93,7 +93,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                     placeholder="input Address"
                   />
                 </div>
@@ -106,7 +106,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                     placeholder="input city"
                   />
                 </div>
@@ -116,7 +116,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                     placeholder="input Addres2"
                   />
                 </div>
@@ -129,7 +129,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                     placeholder="input state"
                   />
                 </div>
@@ -139,7 +139,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                     placeholder="input country"
                   />
                 </div>
@@ -152,7 +152,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
                     placeholder="input allergies"
                   />
                 </div>
@@ -162,7 +162,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                     placeholder="input zip"
                   />
                 </div>
@@ -175,7 +175,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                     placeholder="input admission date"
                   />
                 </div>
@@ -185,7 +185,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
                     placeholder="input code status"
                   />
                 </div>
@@ -198,7 +198,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </label>
                   <input
                     type="text"
-                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] opacity-60 text-normal rounded border border-gray-200"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                     placeholder="input email"
                   />
                 </div>
