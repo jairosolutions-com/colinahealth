@@ -23,19 +23,26 @@ export default function Surgeries() {
     <div className="  w-full">
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
-          <p className="p-title">Medical History Logs - Surgery </p>
+          <div className="flex flex-row items-center">
+            <h1 className="font-semibold text-[30px]">Medical History</h1>
+            <h1 className="font-semibold text-[30px] mx-2">{">"} </h1>
+            <h1
+              onClick={() => onNavigate(router, "/medical-history/allergies")}
+              className=" font-semibold text-[25px]  cursor-pointer text-gray-600"
+            >
+              Allergies
+            </h1>
+            <h1 className="font-semibold text-[30px] mx-2">{">"} </h1>
+            <h1 className="font-semibold text-[25px] cursor-pointer text-[#007C85]">
+              Surgeries
+            </h1>
+          </div>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[21px] mt-2 mb-4 ">
             Total of 6 Patients
           </p>
         </div>
         <div className="flex flex-row justify-end">
-          <button
-            onClick={() => onNavigate(router, "/medical-history/allergies")}
-            className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu"
-          >
-            Allergies
-          </button>
           <Add></Add>
           <DownloadPDF></DownloadPDF>
         </div>
@@ -184,7 +191,7 @@ export default function Surgeries() {
         {/* END OF TABLE */}
       </div>
       {/* pagination */}
-      <div className="mt-5">
+      <div className="mt-5 pb-5">
         <div className="flex justify-between">
           <p className="font-medium size-[18px] w-[138px] items-center">
             Page 1 of 10
