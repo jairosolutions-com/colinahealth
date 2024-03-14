@@ -27,7 +27,7 @@ const Allergies = () => {
           <p className="p-title">Medical History Logs - Allergies</p>
 
           {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[16px]  mb-4 ">
+          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]  mb-4 ">
             Total of 6 Patients
           </p>
         </div>
@@ -180,120 +180,68 @@ const Allergies = () => {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr>
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white "
-                >
-                  SGY-5146846548465
-                </th>
-                <td className="px-6 py-4">Drake Ramos</td>
-                <td className="px-6 py-4">21</td>
-                <td className="px-6 py-4">Male</td>
-
-                <td className="px-[50px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr>
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white "
-                >
-                  SGY-5146846548465
-                </th>
-                <td className="px-6 py-4">Drake Ramos</td>
-                <td className="px-6 py-4">21</td>
-                <td className="px-6 py-4">Male</td>
-
-                <td className="px-[50px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr>
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white "
-                >
-                  SGY-5146846548465
-                </th>
-                <td className="px-6 py-4">Drake Ramos</td>
-                <td className="px-6 py-4">21</td>
-                <td className="px-6 py-4">Male</td>
-
-                <td className="px-[50px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
         {/* END OF TABLE */}
       </div>
       {/* pagination */}
-      <div className="mt-1">
-        <div className="flex justify-between">
-          <p className="font-medium size-[18px] w-[138px] items-center">
-            Page 1 of 10
-          </p>
-          <div>
-            <nav>
-              <div className="flex -space-x-px text-sm">
-                <div>
-                  <a
-                    href="#"
-                    className="flex border border-px items-center justify-center  w-[77px] h-full"
-                  >
-                    Prev
-                  </a>
-                </div>
-                <div>
-                  {/* wala pay active function */}
-                  <a
-                    href="#"
-                    className="flex border border-px items-center justify-center  w-[49px] h-full"
-                  >
-                    1
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="#"
-                    className="flex border border-px items-center justify-center  w-[49px] h-full"
-                  >
-                    2
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="#"
-                    aria-current="page"
-                    className="flex border border-px items-center justify-center  w-[49px] h-full"
-                  >
-                    3
-                  </a>
-                </div>
-
-                <div className="ml-5">
-                  <a
-                    href="#"
-                    className="flex border border-px items-center justify-center  w-[77px] h-full"
-                  >
-                    Next
-                  </a>
-                </div>
-                <div className="flex px-5 ">
-                  <input
-                    className="ipt-pagination text-center border ring-1 ring-gray-300 border-gray-100"
-                    type="text"
-                    placeholder="-"
-                  />
-                  <div className="px-9">
-                    <button className="btn-pagination ">Go </button>
-                  </div>
-                </div>
+      <div className="mt-2 flex justify-between">
+        <p className="font-medium text-sm items-center">Page 1 of 10</p>
+        <div className="flex">
+          <nav>
+            <div className="flex -space-x-px text-sm">
+              <div>
+                <a
+                  href="#"
+                  className="flex border border-px items-center justify-center w-[77px] h-[25px] mr-2"
+                >
+                  Prev
+                </a>
               </div>
-            </nav>
+              <div>
+                {/* wala pay active function */}
+                <a
+                  href="#"
+                  className="flex border border-px items-center justify-center w-[49px] h-[25px] mr-2"
+                >
+                  1
+                </a>
+              </div>
+              <div>
+                <a
+                  href="#"
+                  className="flex border border-px items-center justify-center w-[49px] h-[25px] mr-2"
+                >
+                  2
+                </a>
+              </div>
+              <div>
+                <a
+                  href="#"
+                  aria-current="page"
+                  className="flex border border-px items-center justify-center w-[49px] h-[25px] mr-2"
+                >
+                  3
+                </a>
+              </div>
+              <div>
+                <a
+                  href="#"
+                  className="flex border border-px items-center justify-center w-[77px] h-[25px] mr-2"
+                >
+                  Next
+                </a>
+              </div>
+            </div>
+          </nav>
+          <div className="flex items-center justify-end">
+            <input
+              className="ipt-pagination text-center border ring-1 ring-gray-300 border-gray-100 w-[40px] h-[25px] px-2 mr-2"
+              type="text"
+              placeholder="-"
+            />
+            <button className="btn-pagination">Go</button>
           </div>
         </div>
       </div>
