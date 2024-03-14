@@ -43,22 +43,10 @@ export default function PatientOverviewLayout({
     },
   ];
 
-  useEffect(() => {
-    const handleBodyClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      const isOutsideLabels = !target.closest(".tab-label");
-
-      if (isOutsideLabels) {
-        setActiveTab(-1); // Reset activeTab when clicking outside the labels
-      }
-    };
-
-    document.body.addEventListener("click", handleBodyClick);
-
-    return () => {
-      document.body.removeEventListener("click", handleBodyClick);
-    };
-  }, []);
+  const handleSeeMoreDetails = (url: string, tabIndex: number) => {
+    onNavigate(router, url);
+    setActiveTab(tabIndex);
+  };
 
   return (
     <div className="flex flex-col w-full px-28 mt-28">
@@ -87,7 +75,14 @@ export default function PatientOverviewLayout({
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
                       className="underline text-sm font-semibold text-[#07143799] text-right"
-                      onClick={() => onNavigate(router, "/patient-details")}
+                      onClick={() => {
+                        onNavigate(router, "/patient-details");
+                        // Find the index of the tab with label "Patient Details"
+                        const patientDetailsTabIndex = tabs.findIndex(
+                          (tab) => tab.label === "View Details"
+                        );
+                        setActiveTab(patientDetailsTabIndex);
+                      }}
                     >
                       See more details
                     </p>
