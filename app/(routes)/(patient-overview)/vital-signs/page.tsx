@@ -35,7 +35,7 @@ export default function vitalsigns() {
         </div>
       </div>
 
-      <div className="w-full shadow-md sm:rounded-lg items-center">
+      <div className="w-full sm:rounded-lg items-center">
         <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
           <form className="">
             {/* search bar */}

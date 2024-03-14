@@ -14,8 +14,6 @@ export default function PatientPage() {
 
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
-   
-   
   };
 
   return (
@@ -34,26 +32,29 @@ export default function PatientPage() {
           </p>
         </div>
         <div className="flex flex-row justify-end">
-        <button 
-    onClick={() => isModalOpen(true)}
-    className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu">
-      <img src="/imgs/add.svg" alt="Custom Icon" className="w-5 h-5 mr-2" />
-      Add
-    </button>
-    <button className="btn-pdfs hover:bg-[#007C85] h-[42px] hover:border-[#007C85] hover:text-white flex items-center justify-center rounded-lg font-manrope text-black text-lg px-8 py-4 border-2 border-gray-300 text-center w-64 relative ">
-      <img
-        src="/imgs/downloadpdf.svg"
-        alt="Custom Icon"
-        className="w-5 h-5 mr-2"
-      />
-      Download PDF
-    </button>
+          <button
+            onClick={() => isModalOpen(true)}
+            className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu"
+          >
+            <img
+              src="/imgs/add.svg"
+              alt="Custom Icon"
+              className="w-5 h-5 mr-2"
+            />
+            Add
+          </button>
+          <button className="btn-pdfs hover:bg-[#007C85] h-[42px] hover:border-[#007C85] hover:text-white flex items-center justify-center rounded-lg font-manrope text-black text-lg px-8 py-4 border-2 border-gray-300 text-center w-64 relative ">
+            <img
+              src="/imgs/downloadpdf.svg"
+              alt="Custom Icon"
+              className="w-5 h-5 mr-2"
+            />
+            Download PDF
+          </button>
         </div>
-
-  
       </div>
 
-      <div className="mx-3 w-full shadow-md sm:rounded-lg items-center">
+      <div className="mx-3 w-full sm:rounded-lg items-center">
         <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[73px]">
           <form className=" mr-5">
             {/* search bar */}
@@ -84,7 +85,7 @@ export default function PatientPage() {
         <div>
           <table className="w-full text-left rtl:text-right">
             <thead className="">
-              <tr className="uppercase text-[#64748B] border-y  ">
+              <tr className="uppercase text-[#64748B] border-y ">
                 <th scope="col" className="px-6 py-3 w-[286px] h-[70px]">
                   Patient ID
                 </th>
@@ -236,8 +237,50 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-             
-             
+              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+                <th
+                  scope="row"
+                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  SGY-5146846548465
+                </th>
+                <td
+                  onClick={() =>
+                    onNavigate(router, "/medical-history/allergies")
+                  }
+                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
+                >
+                  Drake Ramos
+                </td>
+                <td className="px-6 py-4">21</td>
+                <td className="px-6 py-4">Male</td>
+
+                <td className="px-[60px] py-4">
+                  <Edit></Edit>
+                </td>
+              </tr>
+              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+                <th
+                  scope="row"
+                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  SGY-5146846548465
+                </th>
+                <td
+                  onClick={() =>
+                    onNavigate(router, "/medical-history/allergies")
+                  }
+                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
+                >
+                  Drake Ramos
+                </td>
+                <td className="px-6 py-4">21</td>
+                <td className="px-6 py-4">Male</td>
+
+                <td className="px-[60px] py-4">
+                  <Edit></Edit>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

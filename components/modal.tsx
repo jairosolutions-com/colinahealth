@@ -28,7 +28,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               Patient Demographic
             </h2>
           </div>
-          <div className="mx-auto w-full max-w-7xl px-5 py-10 md:px-10 ring-1 ring-gray-200">
+          <div className="h-[530px] w-full max-w-7xl py-10 md:px-10 ring-1 ring-gray-200">
             <div className="">
               <div className="mb-4 grid grid-cols-2 gap-6 ">
                 <div className="flex flex-row gap-x-[75px]">
