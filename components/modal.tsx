@@ -12,7 +12,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
   return (
     <>
       <div
-        className={`absolute left-0 top-0 w-full h-screen bg-[#76898A99] flex items-center justify-center`}
+        className={`absolute left-0 top-0 w-full h-full bg-[#76898A99] flex items-center justify-center`}
       >
         <div className="max-w-[1018px] w-full bg-[#FFFFFF]">
           
