@@ -12,10 +12,12 @@ export default function PatientOverviewLayout({
   const router = useRouter();
 
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [detailsClicked, setDetailsClicked] = useState<boolean>(false); // State to track if "See more details" is clicked
+
   const tabs = [
     {
       label: "Medical History",
-      url: "/medical-history",
+      url: "/medical-history/allergies",
     },
     {
       label: "Medication",
@@ -45,7 +47,14 @@ export default function PatientOverviewLayout({
 
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
     onNavigate(router, url);
-    setActiveTab(tabIndex);
+    setActiveTab(-1); // Reset activeTab to -1 when "See more details" is clicked
+    setDetailsClicked(true); // Set detailsClicked to true when "See more details" is clicked
+  };
+
+  const handleTabClick = (index: number, url: string) => {
+    setActiveTab(index);
+    onNavigate(router, url);
+    setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
   };
 
   return (
@@ -54,7 +63,11 @@ export default function PatientOverviewLayout({
         <div className="text-2xl font-bold">
           <h1>Patient Overview</h1>
           <p className="text-[16px] font-medium text-[#64748B] mt-[-5px]">
-            {tabs[activeTab]?.label}
+            {detailsClicked
+              ? "View - Details"
+              : activeTab !== -1
+              ? tabs[activeTab]?.label
+              : ""}
           </p>
         </div>
         <div className="form ring-1 w-full h-[220px] shadow-md ring-gray-300 px-5 pt-5 rounded-md">
@@ -67,7 +80,6 @@ export default function PatientOverviewLayout({
                 height="200"
               />
             </div>
-            {/* 1 */}
             <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
               <div>
                 <div className=" w-full justify-between text-2xl font-semibold flex">
@@ -75,14 +87,9 @@ export default function PatientOverviewLayout({
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
                       className="underline text-sm font-semibold text-[#07143799] text-right"
-                      onClick={() => {
-                        onNavigate(router, "/patient-details");
-                        // Find the index of the tab with label "Patient Details"
-                        const patientDetailsTabIndex = tabs.findIndex(
-                          (tab) => tab.label === "View Details"
-                        );
-                        setActiveTab(patientDetailsTabIndex);
-                      }}
+                      onClick={() =>
+                        handleSeeMoreDetails("/patient-details", -1)
+                      }
                     >
                       See more details
                     </p>
@@ -94,13 +101,12 @@ export default function PatientOverviewLayout({
                       src="/imgs/profile-circle.svg"
                       className="px-1"
                       alt="profile"
-                      width="26" // Adjust these values to change the size
-                      height="26" // Adjust these values to change the size
+                      width="26"
+                      height="26"
                     />
                     <div>
                       <p className="flex items-center mr-11">Patient</p>
                     </div>
-                    {/*  */}
                     <div className="flex">
                       <div>
                         <p className="flex items-center mr-11">Age: 100</p>
@@ -116,25 +122,22 @@ export default function PatientOverviewLayout({
                       </div>
                     </div>
                   </div>
-                  {/*  */}
                   <div className="mb-5"></div>
                   <div className="flex flex-row w-full">
                     <img
                       src="/imgs/codestatus.svg"
                       className="px-1"
                       alt="codestatus"
-                      width="26" // Adjust these values to change the size
-                      height="26" // Adjust these values to change the size
+                      width="26"
+                      height="26"
                     />
                     <div>
                       <p className="flex items-center mr-11">
                         Code Status: DNR
                       </p>
                     </div>
-                    {/*  */}
                     <div className="flex">
                       <div>
-                        <div></div>
                         <p className="flex items-center mr-11">
                           Allergy: Skin Allergy
                         </p>
@@ -152,10 +155,7 @@ export default function PatientOverviewLayout({
                         : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
                     }`}
                     key={index}
-                    onClick={() => {
-                      setActiveTab(index);
-                      router.push(tab.url);
-                    }}
+                    onClick={() => handleTabClick(index, tab.url)}
                   >
                     {tab.label}
                   </p>
