@@ -270,7 +270,7 @@ export default function PatientDetails() {
           </div>
           <div className="grid  grid-rows-1 max-w-[736px] w-full">
             <div className="mt-8 flex items-center ">
-              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[136px] text-nowrap">
+              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[132px] text-nowrap">
                 Email:
               </label>
               {editMode ? (
@@ -288,9 +288,16 @@ export default function PatientDetails() {
           </div>
           <div className="mb-4 ">
           <div className="justify-end flex pt-5">
+          <button
+              type="button"
+              className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3 "
+              onClick={handleEditClick}
+            > 
+              {editMode ? "Cancel" : "Cancel"}
+            </button>
             <button
               type="button"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded w-24 h-8  "
+              className="bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8  "
               onClick={handleEditClick}
             >
               {editMode ? "Save" : "Edit"}
@@ -307,7 +314,7 @@ export default function PatientDetails() {
         <div className="pl-11">
           <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
             <div className="mt-12 flex items-center">
-              <label className=" font-medium text-md mr-[40px] text-nowrap">
+              <label className=" font-medium text-md mr-[46px] text-nowrap">
                 Emergency Contact Name:
               </label>
               {editMode ? (
@@ -382,12 +389,20 @@ export default function PatientDetails() {
           <div className="justify-end flex pt-5">
             <button
               type="button"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded w-24 h-8  "
+              className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3"
+              onClick={handleEditClick}
+            > 
+              {editMode ? "Cancel" : "Cancel"}
+            </button>
+
+            <button
+              type="button"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8 "
               onClick={handleEditClick}
             >
               {editMode ? "Save" : "Edit"}
             </button>
-          </div>
+          </div>  
           </div>
       </div>
     </div>

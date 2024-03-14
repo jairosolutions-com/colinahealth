@@ -1,14 +1,23 @@
 "use client";
 
 import { onNavigate } from "@/actions/navigation";
-import Header from "@/components/dropdown-sortby";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/view";
 import { useRouter } from "next/navigation";
+import { Modal } from "@/components/modal";
+import { useState } from "react";
 
 export default function PatientPage() {
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const isModalOpen = (isOpen: boolean) => {
+    setIsOpen(isOpen);
+   
+   
+  };
+
   return (
     <div className=" relative w-full mx-24 mt-24">
       <div className="flex justify-end">
@@ -25,9 +34,23 @@ export default function PatientPage() {
           </p>
         </div>
         <div className="flex flex-row justify-end">
-          <Add></Add>
-          <DownloadPDF></DownloadPDF>
+        <button 
+    onClick={() => isModalOpen(true)}
+    className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu">
+      <img src="/imgs/add.svg" alt="Custom Icon" className="w-5 h-5 mr-2" />
+      Add
+    </button>
+    <button className="btn-pdfs hover:bg-[#007C85] h-[42px] hover:border-[#007C85] hover:text-white flex items-center justify-center rounded-lg font-manrope text-black text-lg px-8 py-4 border-2 border-gray-300 text-center w-64 relative ">
+      <img
+        src="/imgs/downloadpdf.svg"
+        alt="Custom Icon"
+        className="w-5 h-5 mr-2"
+      />
+      Download PDF
+    </button>
         </div>
+
+  
       </div>
 
       <div className="mx-3 w-full shadow-md sm:rounded-lg items-center">
@@ -235,6 +258,9 @@ export default function PatientPage() {
           </div>
         </div>
       </div>
+      {isOpen && (
+        <Modal isModalOpen={isModalOpen} isOpen={isOpen} label="sample label" />
+      )}
     </div>
   );
 }
