@@ -236,59 +236,17 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
-                <th
-                  scope="row"
-                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  SGY-5146846548465
-                </th>
-                <td
-                  onClick={() =>
-                    onNavigate(router, "/medical-history/allergies")
-                  }
-                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
-                >
-                  Drake Ramos
-                </td>
-                <td className="px-6 py-4">21</td>
-                <td className="px-6 py-4">Male</td>
-
-                <td className="px-[60px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
-                <th
-                  scope="row"
-                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  SGY-5146846548465
-                </th>
-                <td
-                  onClick={() =>
-                    onNavigate(router, "/medical-history/allergies")
-                  }
-                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
-                >
-                  Drake Ramos
-                </td>
-                <td className="px-6 py-4">21</td>
-                <td className="px-6 py-4">Male</td>
-
-                <td className="px-[60px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
+             
+             
             </tbody>
           </table>
         </div>
         {/* END OF TABLE */}
       </div>
       {/* pagination */}
-      <div className="mt-5 flex justify-between">
+      <div className="mt-5 flex justify-between w-full mx-3">
         <div>
-          <p className="font-medium text-sm items-center px-3">Page 1 of 10</p>
+          <p className="font-medium text-sm items-center">Page 1 of 10</p>
         </div>
         <div className="flex items-center">
           <nav>
@@ -296,7 +254,7 @@ export default function PatientPage() {
               <div>
                 <a
                   href="#"
-                  className="flex border border-px items-center justify-center w-[77px] h-[25px] mr-2"
+                  className="flex border border-px items-center justify-center w-[77px] h-[25px] "
                 >
                   Prev
                 </a>
@@ -305,7 +263,7 @@ export default function PatientPage() {
                 {/* wala pay active function */}
                 <a
                   href="#"
-                  className="flex border border-px items-center justify-center w-[49px] h-[25px] mr-2"
+                  className="flex border border-px items-center justify-center w-[49px] h-[25px] "
                 >
                   1
                 </a>
@@ -313,7 +271,7 @@ export default function PatientPage() {
               <div>
                 <a
                   href="#"
-                  className="flex border border-px items-center justify-center w-[49px] h-[25px] mr-2"
+                  className="flex border border-px items-center justify-center w-[49px] h-[25px] "
                 >
                   2
                 </a>
@@ -322,7 +280,7 @@ export default function PatientPage() {
                 <a
                   href="#"
                   aria-current="page"
-                  className="flex border border-px items-center justify-center w-[49px] h-[25px] mr-2"
+                  className="flex border border-px items-center justify-center w-[49px] h-[25px] "
                 >
                   3
                 </a>
@@ -339,7 +297,7 @@ export default function PatientPage() {
           </nav>
           <div className="flex items-center justify-end">
             <input
-              className="ipt-pagination text-center border ring-1 ring-gray-300 border-gray-100 w-[40px] h-[25px] px-2 mr-2"
+              className="ipt-pagination text-center border ring-1 ring-gray-300 border-gray-100 w-[40px] h-[25px]  "
               type="text"
               placeholder="-"
             />
