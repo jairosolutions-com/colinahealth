@@ -20,13 +20,13 @@ export default function PatientPage() {
 
   return (
     <div className=" relative w-full mx-24 mt-24">
-      <div className="flex justify-end">
+      <div className="flex justify-end w-full mx-3">
         <a href="" className="text-[#64748B] underline">
           Back to Dashboard
         </a>
       </div>
-      <div className="flex justify-between items-center">
-        <div className="flex flex-col mb-5 px-3">
+      <div className="flex justify-between items-center w-full mx-3">
+        <div className="flex flex-col mb-5 ">
           <p className="p-title">Patients List Records</p>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[16px] mt-2 ">
