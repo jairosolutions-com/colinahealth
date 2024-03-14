@@ -24,21 +24,19 @@ export default function Surgeries() {
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
-            <h1 className="font-semibold text-[30px]">Medical History</h1>
-            <h1 className="font-semibold text-[30px] mx-2">{">"} </h1>
+            <h1 className="p-title">Medical History</h1>
+            <h1 className="p-title mx-2">{">"} </h1>
             <h1
               onClick={() => onNavigate(router, "/medical-history/allergies")}
-              className=" font-semibold text-[25px]  cursor-pointer text-gray-600"
+              className=" p-title  cursor-pointer text-gray-600"
             >
               Allergies
             </h1>
-            <h1 className="font-semibold text-[30px] mx-2">{">"} </h1>
-            <h1 className="font-semibold text-[25px] cursor-pointer text-[#007C85]">
-              Surgeries
-            </h1>
+            <h1 className="p-title mx-2">{">"} </h1>
+            <h1 className="p-title cursor-pointer text-[#007C85]">Surgeries</h1>
           </div>
           {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[21px] mt-2 mb-4 ">
+          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
             Total of 6 Patients
           </p>
         </div>

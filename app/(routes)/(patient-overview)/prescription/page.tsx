@@ -23,9 +23,9 @@ export default function prescription() {
     <div className="  w-full">
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
-          <h1 className="font-semibold text-[30px]">Prescription </h1>
+          <h1 className="p-title">Prescription </h1>
           {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[21px] mt-2 mb-4 ">
+          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
             Total of 6 Patients
           </p>
         </div>
