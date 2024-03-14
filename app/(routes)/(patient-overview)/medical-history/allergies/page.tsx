@@ -23,28 +23,30 @@ const Allergies = () => {
   return (
     <div className="  w-full">
       <div className="flex justify-between items-center">
-        <div className="flex flex-col">
-          <p className="p-title">Medical History Logs - Allergies</p>
+        <div className="flex items-center">
+          <div className="flex flex-col">
+            <p className="p-title">Medical History Logs - Allergies</p>
 
-          {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]  mb-4 ">
-            Total of 6 Patients
-          </p>
-        </div>
-        <div className="flex flex-row justify-end">
-          <button
-            onClick={() => onNavigate(router, "/medical-history/surgeries")}
-            className=" mr-2 btn-add"
-          >
-            Surgery
-          </button>
-          <Add></Add>
-          <DownloadPDF></DownloadPDF>
+            {/* number of patiens */}
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]  mb-4 ">
+              Total of 6 Patients
+            </p>
+          </div>
+          <div className="flex flex-row px-11">
+            <button
+              onClick={() => onNavigate(router, "/medical-history/surgeries")}
+              className=" mr-2 btn-add"
+            >
+              Surgery
+            </button>
+            <Add></Add>
+            <DownloadPDF></DownloadPDF>
+          </div>
         </div>
       </div>
 
       <div className="w-full shadow-md sm:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[73px] px-5">
           <form className="">
             {/* search bar */}
             <label className=""></label>
@@ -116,7 +118,7 @@ const Allergies = () => {
                 <td className="px-6 py-4">21</td>
                 <td className="px-6 py-4">Male</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[60px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -131,7 +133,7 @@ const Allergies = () => {
                 <td className="px-6 py-4">21</td>
                 <td className="px-6 py-4">Male</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[60px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -146,7 +148,7 @@ const Allergies = () => {
                 <td className="px-6 py-4">21</td>
                 <td className="px-6 py-4">Male</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[60px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -161,22 +163,7 @@ const Allergies = () => {
                 <td className="px-6 py-4">21</td>
                 <td className="px-6 py-4">Male</td>
 
-                <td className="px-[50px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr>
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white "
-                >
-                  SGY-5146846548465
-                </th>
-                <td className="px-6 py-4">Drake Ramos</td>
-                <td className="px-6 py-4">21</td>
-                <td className="px-6 py-4">Male</td>
-
-                <td className="px-[50px] py-4">
+                <td className="px-[60px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>

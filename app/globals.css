@@ -19,6 +19,7 @@ body,
   color: white;
   font-weight: bold;
   width: 104px;
+  height: 40px;
 
   border-radius: 5px;
 }
@@ -30,15 +31,16 @@ body,
 .btn-pdfs {
   display: flex;
   align-items: center;
+  font-weight: bold;
   justify-content: center;
   border-radius: 5.23px;
-  font-family: Manrope;
   color: #000000;
-  font-size: 20px;
+  font-size: 18px;
   padding: 10px 20px 10px 20px;
   border: solid #d0d5dd 2px;
   text-decoration: none;
-  width: 254px;
+  width: 200px;
+  height: 40px;
 }
 
 .btn-pdfs:hover {

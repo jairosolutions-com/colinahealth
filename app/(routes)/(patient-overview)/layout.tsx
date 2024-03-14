@@ -58,7 +58,7 @@ export default function PatientOverviewLayout({
   };
 
   return (
-    <div className="flex flex-col w-full px-28 mt-24">
+    <div className="flex flex-col w-full px-4 lg:px-28 mt-[100px]">
       <div className="flex flex-col gap-[3px]">
         <div className="text-2xl font-bold">
           <h1>Patient Overview</h1>
