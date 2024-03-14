@@ -314,7 +314,7 @@ export default function PatientDetails() {
         <div className="pl-11">
           <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
             <div className="mt-12 flex items-center">
-              <label className=" font-medium text-md mr-[40px] text-nowrap">
+              <label className=" font-medium text-md mr-[46px] text-nowrap">
                 Emergency Contact Name:
               </label>
               {editMode ? (

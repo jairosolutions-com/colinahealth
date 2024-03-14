@@ -15,6 +15,7 @@ export default function PatientPage() {
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
    
+   
   };
 
   return (
