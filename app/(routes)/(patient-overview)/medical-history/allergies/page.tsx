@@ -1,12 +1,16 @@
 "use client";
 
+import React from "react";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/view";
 import { useState } from "react";
+import { onNavigate } from "@/actions/navigation";
+import { useRouter } from "next/navigation";
 
-export default function Allergies() {
+const Allergies = () => {
+  const router = useRouter();
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
 
@@ -21,12 +25,19 @@ export default function Allergies() {
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <p className="p-title">Medical History Logs - Allergies</p>
+
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[21px] mt-2 mb-4 ">
             Total of 6 Patients
           </p>
         </div>
         <div className="flex flex-row justify-end">
+          <button
+            onClick={() => onNavigate(router, "/medical-history/surgeries")}
+            className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu"
+          >
+            Surgery
+          </button>
           <Add></Add>
           <DownloadPDF></DownloadPDF>
         </div>
@@ -232,7 +243,7 @@ export default function Allergies() {
                     type="text"
                     placeholder="-"
                   />
-                  <div className="px-5">
+                  <div className="px-9">
                     <button className="btn-pagination ">Go </button>
                   </div>
                 </div>
@@ -243,4 +254,6 @@ export default function Allergies() {
       </div>
     </div>
   );
-}
+};
+
+export default Allergies;
