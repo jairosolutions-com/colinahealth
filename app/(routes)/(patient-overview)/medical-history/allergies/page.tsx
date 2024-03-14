@@ -27,14 +27,14 @@ const Allergies = () => {
           <p className="p-title">Medical History Logs - Allergies</p>
 
           {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[21px] mt-2 mb-4 ">
+          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[16px]  mb-4 ">
             Total of 6 Patients
           </p>
         </div>
         <div className="flex flex-row justify-end">
           <button
             onClick={() => onNavigate(router, "/medical-history/surgeries")}
-            className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu"
+            className=" mr-2 btn-add"
           >
             Surgery
           </button>
@@ -180,13 +180,58 @@ const Allergies = () => {
                   <Edit></Edit>
                 </td>
               </tr>
+              <tr>
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white "
+                >
+                  SGY-5146846548465
+                </th>
+                <td className="px-6 py-4">Drake Ramos</td>
+                <td className="px-6 py-4">21</td>
+                <td className="px-6 py-4">Male</td>
+
+                <td className="px-[50px] py-4">
+                  <Edit></Edit>
+                </td>
+              </tr>
+              <tr>
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white "
+                >
+                  SGY-5146846548465
+                </th>
+                <td className="px-6 py-4">Drake Ramos</td>
+                <td className="px-6 py-4">21</td>
+                <td className="px-6 py-4">Male</td>
+
+                <td className="px-[50px] py-4">
+                  <Edit></Edit>
+                </td>
+              </tr>
+              <tr>
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white "
+                >
+                  SGY-5146846548465
+                </th>
+                <td className="px-6 py-4">Drake Ramos</td>
+                <td className="px-6 py-4">21</td>
+                <td className="px-6 py-4">Male</td>
+
+                <td className="px-[50px] py-4">
+                  <Edit></Edit>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
         {/* END OF TABLE */}
       </div>
       {/* pagination */}
-      <div className="mt-5">
+      <div className="mt-1">
         <div className="flex justify-between">
           <p className="font-medium size-[18px] w-[138px] items-center">
             Page 1 of 10

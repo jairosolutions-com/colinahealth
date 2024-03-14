@@ -11,58 +11,52 @@ body,
 
 /* start buttons add/pdf */
 
-
-.btn-add
-{
+.btn-add {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #1B84FF;
+  background-color: #1b84ff;
   color: white;
   font-weight: bold;
   width: 104px;
- 
+
   border-radius: 5px;
 }
 
-.btn-add:hover
-{
-  background-color: #2267B9;
+.btn-add:hover {
+  background-color: #2267b9;
 }
 /* test */
-.btn-pdfs
-{
+.btn-pdfs {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius:  5.23px;
+  border-radius: 5.23px;
   font-family: Manrope;
   color: #000000;
   font-size: 20px;
   padding: 10px 20px 10px 20px;
-  border: solid #D0D5DD 2px;
+  border: solid #d0d5dd 2px;
   text-decoration: none;
   width: 254px;
 }
 
 .btn-pdfs:hover {
-  background:  #007C85;
+  background: #007c85;
   color: #ffffff;
-  border-color:#007C85;
+  border-color: #007c85;
 }
 
 .btn-pdfs:hover > img {
   filter: brightness(0) invert(1);
 }
 
-
 /* end buttons add/pdf */
 
 /* start page title */
 .pagetitle {
   font-style: Manrope;
-  color: #191D23;
-  
+  color: #191d23;
 }
 
 /* end page title */
@@ -92,8 +86,7 @@ body,
 /* ecard */
 
 /* fsearch */
-.isearch
-{
+.isearch {
   width: 636px;
   height: 52px;
   margin-top: 16px;
@@ -107,50 +100,43 @@ body,
 
 /* sort by*/
 
-.btn-pagination
-{
+.btn-pagination {
   border: 0.9px;
-  background: #007C85;
+  background: #007c85;
   color: #ffffff;
   width: 48px;
   height: 30px;
 }
 
-.ipt-pagination
-{
+.ipt-pagination {
   width: 48px;
   height: 30px;
   border: 1px;
 }
 
-.btn-edit
-{
+.btn-edit {
   color: #000000;
   width: 109px;
   height: 42px;
   border-radius: 5px;
-  background: #E7EAEE;
+  background: #e7eaee;
 }
-.btn-edit:hover
-{
-  background-color: #007C85;
+.btn-edit:hover {
+  background-color: #007c85;
   color: #ffffff;
 }
 
-.p-title
-{
+.p-title {
   height: 32px;
-  line-height: 43px;
+  line-height: 32px;
   font-weight: 700;
-  font-size: 30px;
+  font-size: 24px;
   /* w-[1157px] h-[32px] leading-[42px] font-bold */
 }
 
-.table-row
-{
+.table-row {
   width: 286px;
   height: 70px;
-  border-bottom: #E7EAEE;
+  border-bottom: #e7eaee;
   border: 1px;
 }
-
