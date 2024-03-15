@@ -5,7 +5,7 @@ import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/view";
 import { useRouter } from "next/navigation";
-import { Modal } from "@/components/modal";
+import { Modal } from "@/components/shared/modal";
 import { useState } from "react";
 
 export default function PatientPage() {
