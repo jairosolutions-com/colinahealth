@@ -48,7 +48,7 @@ const Allergies = () => {
             Total of 6 Patients
           </p>
         </div>
-        <div className="flex flex-row justify-end">
+        <div className="flex flex-row justify-end mt-[15px]">
           <button
             onClick={() => isModalOpen(true)}
             className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu"
