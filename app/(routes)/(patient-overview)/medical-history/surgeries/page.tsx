@@ -46,7 +46,7 @@ export default function Surgeries() {
         </div>
       </div>
 
-      <div className="w-full shadow-md sm:rounded-lg items-center">
+      <div className="w-full sm:rounded-lg items-center">
         <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
           <form className="">
             {/* search bar */}
@@ -249,7 +249,7 @@ export default function Surgeries() {
             <button className="btn-pagination">Go</button>
           </div>
         </div>
-      </div>  
+      </div>
     </div>
   );
 }
