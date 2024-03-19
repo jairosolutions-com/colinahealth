@@ -58,7 +58,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                     placeholder="input age"
                   />
                 </div>
-                <div className="flex flex-row gap-x-[40px]">
+                <div className="flex flex-row gap-x-[42px]">
                   <label className="mb-1 font-medium font-manrope text-nowrap mt-2">
                     Date of Birth
                   </label>
@@ -81,7 +81,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                     placeholder="input contact phone"
                   />
                 </div>
-                <div className="flex flex-row gap-x-[65px]">
+                <div className="flex flex-row gap-x-[67px]">
                   <label className="mb-1 font-medium font-manrope mt-2">
                     Address1
                   </label>
@@ -104,7 +104,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                     placeholder="input city"
                   />
                 </div>
-                <div className="flex flex-row gap-x-[64px]">
+                <div className="flex flex-row gap-x-[65px]">
                   <label className="mb-1 font-medium font-manrope mt-2">
                     Address2
                   </label>
@@ -127,7 +127,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                     placeholder="input state"
                   />
                 </div>
-                <div className="flex flex-row gap-x-[76px]">
+                <div className="flex flex-row gap-x-[74px]">
                   <label className="mb-1 font-medium font-manrope mt-2">
                     Country
                   </label>
@@ -150,7 +150,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                     placeholder="input allergies"
                   />
                 </div>
-                <div className="flex flex-row gap-x-[115px]">
+                <div className="flex flex-row gap-x-[112px]">
                   <label className="mb-1 font-medium font-manrope mt-2">
                     Zip
                   </label>
@@ -173,7 +173,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                     placeholder="input admission date"
                   />
                 </div>
-                <div className="flex flex-row gap-x-[45px]">
+                <div className="flex flex-row gap-x-[42px]">
                   <label className="mb-1 font-medium font-manrope text-nowrap mt-2">
                     Code Status
                   </label>
