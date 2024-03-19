@@ -25,6 +25,11 @@ const Allergies = () => {
 
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else if (!isOpen) {
+      document.body.style.overflow = "scroll";
+    }
   };
 
   return (
