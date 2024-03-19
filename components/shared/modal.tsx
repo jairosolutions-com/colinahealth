@@ -22,12 +22,34 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               Patient Demographic
             </h2>
           </div>
-          <div className="h-[530px] w-full max-w-7xl py-10 md:px-10 ring-1 ring-gray-200">
+          <div className="h-[600px] w-full max-w-7xl py-10 md:px-10 ring-1 ring-gray-200">
             <div className="">
               <div className="mb-4 grid grid-cols-2 gap-6 ">
-                <div className="flex flex-row gap-x-[75px]">
+                <div className="flex flex-row gap-x-[70px]">
                   <label className="mb-1 font-medium font-manrope text-nowrap mt-2">
-                    Full Name
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  rounded border border-gray-200"
+                    placeholder="input fullname"
+                  />
+                </div>
+                <div className="flex flex-row gap-x-[56px]">
+                  <label className="mb-1 font-medium font-manrope mt-2 text-nowrap">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
+                    placeholder="input gender"
+                  />
+                </div>
+              </div>
+              <div className="mb-4 grid grid-cols-2 gap-6 ">
+                <div className="flex flex-row gap-x-[55px]">
+                  <label className="mb-1 font-medium font-manrope text-nowrap mt-2">
+                    Middle Initial
                   </label>
                   <input
                     type="text"
@@ -46,7 +68,6 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   />
                 </div>
               </div>
-
               <div className="mb-4 grid grid-cols-2 gap-6">
                 <div className="flex flex-row gap-x-[120px]">
                   <label className="mb-1 font-medium font-manrope text-nowrap mt-2">
