@@ -19,9 +19,12 @@ export default function PatientPage() {
   return (
     <div className=" relative w-full mx-24 mt-24">
       <div className="flex justify-end w-full mx-3">
-        <a href="" className="text-[#64748B] underline">
+        <p
+          onClick={() => onNavigate(router, "/dashboard")}
+          className="text-[#64748B] underline cursor-pointer"
+        >
           Back to Dashboard
-        </a>
+        </p>
       </div>
       <div className="flex justify-between items-center w-full mx-3">
         <div className="flex flex-col mb-5 ">
@@ -114,7 +117,10 @@ export default function PatientPage() {
                 </th>
                 <td
                   onClick={() =>
-                    onNavigate(router, "/medical-history/allergies")
+                    onNavigate(
+                      router,
+                      "/patient-overview/patiendId/medical-history/allergies"
+                    )
                   }
                   className="cursor-pointer truncate max-w-[552px] px-6 py-4"
                 >
@@ -136,7 +142,10 @@ export default function PatientPage() {
                 </th>
                 <td
                   onClick={() =>
-                    onNavigate(router, "/medical-history/allergies")
+                    onNavigate(
+                      router,
+                      "/patient-overview/patiendId/medical-history/allergies"
+                    )
                   }
                   className="cursor-pointer truncate max-w-[552px] px-6 py-4"
                 >
@@ -158,7 +167,10 @@ export default function PatientPage() {
                 </th>
                 <td
                   onClick={() =>
-                    onNavigate(router, "/medical-history/allergies")
+                    onNavigate(
+                      router,
+                      "/patient-overview/patiendId/medical-history/allergies"
+                    )
                   }
                   className="cursor-pointer truncate max-w-[552px] px-6 py-4"
                 >
@@ -180,7 +192,10 @@ export default function PatientPage() {
                 </th>
                 <td
                   onClick={() =>
-                    onNavigate(router, "/medical-history/allergies")
+                    onNavigate(
+                      router,
+                      "/patient-overview/patiendId/medical-history/allergies"
+                    )
                   }
                   className="cursor-pointer truncate max-w-[552px] px-6 py-4"
                 >
@@ -202,7 +217,10 @@ export default function PatientPage() {
                 </th>
                 <td
                   onClick={() =>
-                    onNavigate(router, "/medical-history/allergies")
+                    onNavigate(
+                      router,
+                      "/patient-overview/patiendId/medical-history/allergies"
+                    )
                   }
                   className="cursor-pointer truncate max-w-[552px] px-6 py-4"
                 >
@@ -224,7 +242,10 @@ export default function PatientPage() {
                 </th>
                 <td
                   onClick={() =>
-                    onNavigate(router, "/medical-history/allergies")
+                    onNavigate(
+                      router,
+                      "/patient-overview/patiendId/medical-history/allergies"
+                    )
                   }
                   className="cursor-pointer truncate max-w-[552px] px-6 py-4"
                 >
@@ -246,7 +267,10 @@ export default function PatientPage() {
                 </th>
                 <td
                   onClick={() =>
-                    onNavigate(router, "/medical-history/allergies")
+                    onNavigate(
+                      router,
+                      "/patient-overview/patiendId/medical-history/allergies"
+                    )
                   }
                   className="cursor-pointer truncate max-w-[552px] px-6 py-4"
                 >
@@ -268,7 +292,10 @@ export default function PatientPage() {
                 </th>
                 <td
                   onClick={() =>
-                    onNavigate(router, "/medical-history/allergies")
+                    onNavigate(
+                      router,
+                      "/patient-overview/patiendId/medical-history/allergies"
+                    )
                   }
                   className="cursor-pointer truncate max-w-[552px] px-6 py-4"
                 >

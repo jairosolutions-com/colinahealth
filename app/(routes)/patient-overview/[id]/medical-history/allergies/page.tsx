@@ -37,7 +37,12 @@ const Allergies = () => {
             <h1 className="p-title text-[#007C85] cursor-pointer">Allergies</h1>
             <h1 className="p-title mx-2">{">"} </h1>
             <h1
-              onClick={() => onNavigate(router, "/medical-history/surgeries")}
+              onClick={() =>
+                onNavigate(
+                  router,
+                  "/patient-overview/patiendId/medical-history/surgeries"
+                )
+              }
               className="p-title cursor-pointer text-gray-600"
             >
               Surgeries

@@ -17,31 +17,31 @@ export default function PatientOverviewLayout({
   const tabs = [
     {
       label: "Medical History",
-      url: "/medical-history/allergies",
+      url: "/patient-overview/patientId/medical-history/allergies",
     },
     {
       label: "Medication",
-      url: "/medication",
+      url: "/patient-overview/patientId/medication",
     },
     {
       label: "Prescription",
-      url: "/prescription",
+      url: "/patient-overview/patientId/prescription",
     },
     {
       label: "Vital Signs",
-      url: "/vital-signs",
+      url: "/patient-overview/patientId/vital-signs",
     },
     {
       label: "Laboratory Results",
-      url: "/lab-results",
+      url: "/patient-overview/patientId/lab-results",
     },
     {
       label: "Appointment",
-      url: "/patient-appointment",
+      url: "/patient-overview/patientId/patient-appointment",
     },
     {
       label: "Notes",
-      url: "/notes",
+      url: "/patient-overview/patientId/notes",
     },
   ];
 
