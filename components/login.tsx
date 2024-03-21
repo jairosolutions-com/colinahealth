@@ -58,7 +58,7 @@ export const Login = () => {
                   <div>
                     <div
                       className="inline-block w-full cursor-pointer items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out"
-                      onClick={() => onNavigate(router, "/patient-list")}
+                      onClick={() => onNavigate(router, "/dashboard")}
                     >
                       Sign In
                     </div>

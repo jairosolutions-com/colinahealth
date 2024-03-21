@@ -379,6 +379,9 @@ export default function PatientPage() {
           </div>
         </div>
       </div>
+      {isOpen && (
+        <Modal isModalOpen={isModalOpen} isOpen={isOpen} label="sample label" />
+      )}
     </div>
   );
 }
