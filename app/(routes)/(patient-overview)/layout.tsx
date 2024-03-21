@@ -62,7 +62,7 @@ export default function PatientOverviewLayout({
       <div className="flex flex-col gap-[3px]">
         <div className="text-2xl font-bold">
           <h1>Patient Overview</h1>
-          <p className="text-[16px] font-medium text-[#64748B] mt-[-5px]">
+          <p className="text-[14px] font-medium text-[#64748B] mt-[-5px]">
             {detailsClicked
               ? "View - Details"
               : activeTab !== -1

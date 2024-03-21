@@ -27,7 +27,7 @@ export default function PatientPage() {
         <div className="flex flex-col mb-5 ">
           <p className="p-title">Patients List Records</p>
           {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[16px] mt-2 ">
+          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mt-2 ">
             Total of 20 Patients
           </p>
         </div>
@@ -289,7 +289,7 @@ export default function PatientPage() {
       {/* pagination */}
       <div className="mt-5 flex justify-between w-full mx-3">
         <div>
-          <p className="font-medium text-sm items-center">Page 1 of 10</p>
+          <p className="font-medium text-[14px] items-center">Page 1 of 10</p>
         </div>
         <div className="flex items-center">
           <nav>
