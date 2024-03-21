@@ -27,7 +27,12 @@ export default function Surgeries() {
             <h1 className="p-title">Medical History</h1>
             <h1 className="p-title mx-2">{">"} </h1>
             <h1
-              onClick={() => onNavigate(router, "/medical-history/allergies")}
+              onClick={() =>
+                onNavigate(
+                  router,
+                  "/patient-overview/patiendId/medical-history/allergies"
+                )
+              }
               className=" p-title  cursor-pointer text-gray-600"
             >
               Allergies
