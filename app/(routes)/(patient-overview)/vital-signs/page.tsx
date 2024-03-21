@@ -76,20 +76,20 @@ export default function vitalsigns() {
           <table className="w-full text-left rtl:text-right">
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[288px] h-[70px]">
+                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
                   DATE
                 </th>
-                <th scope="col" className="px-6 py-3 w-[558px]">
+                <th scope="col" className="px-6 py-3 w-[400px]">
                   TYPE
                 </th>
-                <th scope="col" className="px-6 py-3 w-[450px]">
+                <th scope="col" className="px-6 py-3 w-[400px]">
                   SURGERY
                 </th>
-                <th scope="col" className="px-6 py-3 w-[250px]">
+                <th scope="col" className="px-6 py-3 w-[300px]">
                   NOTES
                 </th>
 
-                <th scope="col" className="px-[70px] py-3 w-[10px] ">
+                <th scope="col" className="px-[80px] py-3 w-[10px] ">
                   Action
                 </th>
               </tr>
@@ -108,7 +108,7 @@ export default function vitalsigns() {
                 <td className="px-6 py-4">Major</td>
                 <td className="px-6 py-4">Irritated</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -123,7 +123,7 @@ export default function vitalsigns() {
                 <td className="px-6 py-4">Major</td>
                 <td className="px-6 py-4">Irritated</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -138,7 +138,7 @@ export default function vitalsigns() {
                 <td className="px-6 py-4">Major</td>
                 <td className="px-6 py-4">Irritated</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -153,7 +153,7 @@ export default function vitalsigns() {
                 <td className="px-6 py-4">Major</td>
                 <td className="px-6 py-4">Irritated</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -168,7 +168,7 @@ export default function vitalsigns() {
                 <td className="px-6 py-4">Major</td>
                 <td className="px-6 py-4">Irritated</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -238,7 +238,7 @@ export default function vitalsigns() {
             <button className="btn-pagination">Go</button>
           </div>
         </div>
-      </div>  
+      </div>
     </div>
   );
 }

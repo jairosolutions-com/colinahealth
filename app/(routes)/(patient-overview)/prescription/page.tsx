@@ -76,22 +76,22 @@ export default function prescription() {
           <table className="w-full text-left rtl:text-right">
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[180px] h-[70px]">
+                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
                   MEDICINE NAME
                 </th>
-                <th scope="col" className="px-0 py-3 w-[150px]">
+                <th scope="col" className="px-0 py-3 w-[300px]">
                   FREQUENCY
                 </th>
-                <th scope="col" className="px-3 py-3 w-[180px]">
+                <th scope="col" className="px-3 py-3 w-[300px]">
                   INTERVAL
                 </th>
-                <th scope="col" className="px-20  py-3 w-[200px]">
+                <th scope="col" className="px-20  py-3 w-[300px]">
                   DOSAGE
                 </th>
                 <th scope="col" className="pl-10 pr-6 py-3 w-[200px] ">
                   STATUS
                 </th>
-                <th scope="col" className="px-[70px] py-3 w-[10px] ">
+                <th scope="col" className="px-[80px] py-3 w-[10px] ">
                   ACTION
                 </th>
               </tr>
@@ -112,7 +112,7 @@ export default function prescription() {
                 </td>
                 <td className="truncate max-w-[286px] px-20 py-4">500 mg</td>
                 <td className="px-12 py-4">NONE</td>
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -131,7 +131,7 @@ export default function prescription() {
                 </td>
                 <td className="truncate max-w-[286px] px-20 py-4">500 mg</td>
                 <td className="px-12 py-4">NONE</td>
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -150,7 +150,7 @@ export default function prescription() {
                 </td>
                 <td className="truncate max-w-[286px] px-20 py-4">500 mg</td>
                 <td className="px-12 py-4">NONE</td>
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -169,7 +169,7 @@ export default function prescription() {
                 </td>
                 <td className="truncate max-w-[286px] px-20 py-4">500 mg</td>
                 <td className="px-12 py-4">NONE</td>
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -188,7 +188,7 @@ export default function prescription() {
                 </td>
                 <td className="truncate max-w-[286px] px-20 py-4">500 mg</td>
                 <td className="px-12 py-4">NONE</td>
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -198,67 +198,71 @@ export default function prescription() {
         {/* END OF TABLE */}
       </div>
       {/* pagination */}
-      <div className="mt-5 flex justify-between w-full">
-        <div>
-          <p className="font-medium text-sm items-center">Page 1 of 10</p>
-        </div>
-        <div className="flex items-center">
-          <nav>
-            <div className="flex space-x-px text-sm">
-              <div>
-                <a
-                  href="#"
-                  className="flex border border-px items-center justify-center w-[77px] h-[25px] "
-                >
-                  Prev
-                </a>
+      <div className="mt-5 pb-5">
+        <div className="flex justify-between">
+          <p className="font-medium text-[14px] w-[138px] items-center">
+            Page 1 of 10
+          </p>
+          <div>
+            <nav>
+              <div className="flex -space-x-px text-sm">
+                <div>
+                  <a
+                    href="#"
+                    className="flex border border-px items-center justify-center  w-[77px] h-full"
+                  >
+                    Prev
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="#"
+                    className="flex border border-px items-center justify-center  w-[49px] h-full"
+                  >
+                    1
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="#"
+                    className="flex border border-px items-center justify-center  w-[49px] h-full"
+                  >
+                    2
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="#"
+                    aria-current="page"
+                    className="flex border border-px items-center justify-center  w-[49px] h-full"
+                  >
+                    3
+                  </a>
+                </div>
+
+                <div className="">
+                  <a
+                    href="#"
+                    className="flex border border-px items-center justify-center  w-[77px] h-full mr-5"
+                  >
+                    Next
+                  </a>
+                </div>
+                <div className="flex">
+                  <input
+                    className="ipt-pagination border text-center"
+                    type="text"
+                    placeholder="-"
+                  />
+                  <div className="">
+                    <button className="btn-pagination ">Go </button>
+                  </div>
+                </div>
               </div>
-              <div>
-                {/* wala pay active function */}
-                <a
-                  href="#"
-                  className="flex border border-px items-center justify-center w-[49px] h-[25px] "
-                >
-                  1
-                </a>
-              </div>
-              <div>
-                <a
-                  href="#"
-                  className="flex border border-px items-center justify-center w-[49px] h-[25px] "
-                >
-                  2
-                </a>
-              </div>
-              <div>
-                <a
-                  href="#"
-                  aria-current="page"
-                  className="flex border border-px items-center justify-center w-[49px] h-[25px] "
-                >
-                  3
-                </a>
-              </div>
-              <div>
-                <a
-                  href="#"
-                  className="flex border border-px items-center justify-center w-[77px] h-[25px] mr-2"
-                >
-                  Next
-                </a>
-              </div>
-            </div>
-          </nav>
-          <div className="flex items-center justify-end">
-            <input
-              className="ipt-pagination text-center border ring-1 ring-gray-300 border-gray-100 w-[40px] h-[25px]  "
-              type="text"
-              placeholder="-"
-            />
-            <button className="btn-pagination">Go</button>
+            </nav>
           </div>
         </div>
-      </div>  
+      </div>
     </div>
   );
 }
