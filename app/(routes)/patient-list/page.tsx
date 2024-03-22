@@ -26,7 +26,7 @@ export default function PatientPage() {
       <div className="flex justify-end w-full mx-3">
         <p
           onClick={() => onNavigate(router, "/dashboard")}
-          className="text-[#64748B] underline cursor-pointer"
+          className="text-[#64748B] underline "
         >
           Back to Dashboard
         </p>
@@ -113,7 +113,31 @@ export default function PatientPage() {
               </tr>
             </thead>
             <tbody>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white  border-b hover:bg-[#f4f4f4]">
+                <th
+                  scope="row"
+                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  SGY-5146846548465
+                </th>
+                <td
+                  className=" truncate max-w-[552px] px-6 py-4"
+                >
+                  Drake Ramos
+                </td>
+                <td className="px-6 py-4">21</td>
+                <td className="px-6 py-4">Male</td>
+
+                <td className="px-[60px] py-4"  onClick={() =>
+                    onNavigate(
+                      router,
+                      "/patient-overview/patiendId/medical-history/allergies"
+                    )
+                  }>
+                  <Edit></Edit>
+                </td>
+              </tr>
+              <tr className="odd:bg-white   border-b hover:bg-[#f4f4f4]">
                 <th
                   scope="row"
                   className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -127,7 +151,7 @@ export default function PatientPage() {
                       "/patient-overview/patiendId/medical-history/allergies"
                     )
                   }
-                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
+                  className=" truncate max-w-[552px] px-6 py-4"
                 >
                   Drake Ramos
                 </td>
@@ -138,7 +162,7 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white    border-b hover:bg-[#f4f4f4]">
                 <th
                   scope="row"
                   className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -152,7 +176,7 @@ export default function PatientPage() {
                       "/patient-overview/patiendId/medical-history/allergies"
                     )
                   }
-                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
+                  className=" truncate max-w-[552px] px-6 py-4"
                 >
                   Drake Ramos
                 </td>
@@ -163,7 +187,7 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white    border-b hover:bg-[#f4f4f4]">
                 <th
                   scope="row"
                   className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -177,7 +201,7 @@ export default function PatientPage() {
                       "/patient-overview/patiendId/medical-history/allergies"
                     )
                   }
-                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
+                  className=" truncate max-w-[552px] px-6 py-4"
                 >
                   Drake Ramos
                 </td>
@@ -188,7 +212,7 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white    border-b hover:bg-[#f4f4f4]">
                 <th
                   scope="row"
                   className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -202,7 +226,7 @@ export default function PatientPage() {
                       "/patient-overview/patiendId/medical-history/allergies"
                     )
                   }
-                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
+                  className=" truncate max-w-[552px] px-6 py-4"
                 >
                   Drake Ramos
                 </td>
@@ -213,7 +237,7 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white    border-b hover:bg-[#f4f4f4]">
                 <th
                   scope="row"
                   className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -227,7 +251,7 @@ export default function PatientPage() {
                       "/patient-overview/patiendId/medical-history/allergies"
                     )
                   }
-                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
+                  className=" truncate max-w-[552px] px-6 py-4"
                 >
                   Drake Ramos
                 </td>
@@ -238,7 +262,7 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white    border-b hover:bg-[#f4f4f4]">
                 <th
                   scope="row"
                   className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -252,7 +276,7 @@ export default function PatientPage() {
                       "/patient-overview/patiendId/medical-history/allergies"
                     )
                   }
-                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
+                  className=" truncate max-w-[552px] px-6 py-4"
                 >
                   Drake Ramos
                 </td>
@@ -263,7 +287,7 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white    border-b hover:bg-[#f4f4f4]">
                 <th
                   scope="row"
                   className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -277,32 +301,7 @@ export default function PatientPage() {
                       "/patient-overview/patiendId/medical-history/allergies"
                     )
                   }
-                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
-                >
-                  Drake Ramos
-                </td>
-                <td className="px-6 py-4">21</td>
-                <td className="px-6 py-4">Male</td>
-
-                <td className="px-[60px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
-                <th
-                  scope="row"
-                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  SGY-5146846548465
-                </th>
-                <td
-                  onClick={() =>
-                    onNavigate(
-                      router,
-                      "/patient-overview/patiendId/medical-history/allergies"
-                    )
-                  }
-                  className="cursor-pointer truncate max-w-[552px] px-6 py-4"
+                  className=" truncate max-w-[552px] px-6 py-4"
                 >
                   Drake Ramos
                 </td>
