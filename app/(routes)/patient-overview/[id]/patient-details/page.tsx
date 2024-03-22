@@ -3,10 +3,15 @@
 import React, { useState } from "react";
 
 export default function PatientDetails() {
-  const [editMode, setEditMode] = useState(false);
+  const [patientEditMode, setPatientEditMode] = useState(false);
+  const [emergencyEditMode, setEmergencyEditMode] = useState(false);
 
-  const handleEditClick = () => {
-    setEditMode(!editMode);
+  const handlePatientEditClick = () => {
+    setPatientEditMode(!patientEditMode);
+  };
+
+  const handleEmergencyEditClick = () => {
+    setEmergencyEditMode(!emergencyEditMode);
   };
 
   return (
@@ -21,7 +26,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[100px] text-nowrap">
                 Full Name:
               </label>
-              {editMode ? (
+              {patientEditMode? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
@@ -39,7 +44,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[119px] text-nowrap">
                 Gender:
               </label>
-              {editMode ? (
+              {patientEditMode? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -57,7 +62,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[144px] text-nowrap">
                 Age:
               </label>
-              {editMode ? (
+              {patientEditMode? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -75,7 +80,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[80px] text-nowrap">
                 Date of Birth:
               </label>
-              {editMode ? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -93,7 +98,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[60px] text-nowrap">
                 Contact Phone:
               </label>
-              {editMode ? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -111,7 +116,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[106px] text-nowrap">
                 Address1:
               </label>
-              {editMode ? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -129,7 +134,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[144px] text-nowrap">
                 City:
               </label>
-              {editMode ? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -147,7 +152,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[105px] text-nowrap">
                 Address2:
               </label>
-              {editMode ? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   className="h-9  w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -165,7 +170,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[134px] text-nowrap">
                 State:
               </label>
-              {editMode ? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -183,7 +188,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[116px] text-nowrap">
                 Country:
               </label>
-              {editMode ? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -201,7 +206,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[108px] text-nowrap">
                 Allergies:
               </label>
-              {editMode ? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -219,7 +224,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[156px] text-nowrap">
                 Zip:
               </label>
-              {editMode ? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -237,7 +242,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[55px] text-nowrap">
                 Admission Date:
               </label>
-              {editMode ? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   className="h-9  w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -255,7 +260,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[87px] text-nowrap">
                 Code Status:
               </label>
-              {editMode ? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -273,7 +278,7 @@ export default function PatientDetails() {
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[132px] text-nowrap">
                 Email:
               </label>
-              {editMode ? (
+              {patientEditMode? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
@@ -291,16 +296,16 @@ export default function PatientDetails() {
           <button
               type="button"
               className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3 "
-              onClick={handleEditClick}
+              onClick={handlePatientEditClick}
             > 
-              {editMode ? "Cancel" : "Cancel"}
+              {patientEditMode? "Cancel" : "Cancel"}
             </button>
             <button
               type="button"
               className="bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8  "
-              onClick={handleEditClick}
+              onClick={handlePatientEditClick}
             >
-              {editMode ? "Save" : "Edit"}
+              {patientEditMode? "Save" : "Edit"}
             </button>
           </div>
           </div>
@@ -317,7 +322,7 @@ export default function PatientDetails() {
               <label className=" font-medium text-md mr-[46px] text-nowrap">
                 Emergency Contact Name:
               </label>
-              {editMode ? (
+              {emergencyEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
@@ -335,7 +340,7 @@ export default function PatientDetails() {
               <label className=" font-medium text-md mr-[147px] text-nowrap">
                 Relationship:
               </label>
-              {editMode ? (
+              {emergencyEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
@@ -353,7 +358,7 @@ export default function PatientDetails() {
               <label className=" font-medium text-md mr-[116px] text-nowrap">
                 Contact Number:
               </label>
-              {editMode ? (
+              {emergencyEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
@@ -371,7 +376,7 @@ export default function PatientDetails() {
               <label className=" font-medium text-md mr-[137px] text-nowrap">
                 Contact Email:
               </label>
-              {editMode ? (
+              {emergencyEditMode ? (
                 <input
                   type="text"
                   className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
@@ -390,17 +395,17 @@ export default function PatientDetails() {
             <button
               type="button"
               className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3"
-              onClick={handleEditClick}
+              onClick={handleEmergencyEditClick}
             > 
-              {editMode ? "Cancel" : "Cancel"}
+              {emergencyEditMode ? "Cancel" : "Cancel"}
             </button>
 
             <button
               type="button"
               className="bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8 "
-              onClick={handleEditClick}
+              onClick={handleEmergencyEditClick}
             >
-              {editMode ? "Save" : "Edit"}
+              {emergencyEditMode ? "Save" : "Edit"}
             </button>
           </div>  
           </div>
