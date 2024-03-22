@@ -24,8 +24,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               className="w-5 h-5 text-white"
             />
           </div>
-
-          <div className="bg-white">
+          <form className="bg-white">
             <div className="grid grid-rows-1 max-w-[736px] w-full pl-[70px]">
             <div className="mt-12 flex items-center">
               <label className=" font-bold text-lg mr-[87px] text-nowrap pt-4">
@@ -33,47 +32,60 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               </label>
                 <input
                   type="text"
-                  className="h-12 w-[500px]  px-3 py-2 text-sm text-gray-400 text-normal rounded-lg border border-gray-200"
-                  defaultValue="input type of allergy"
+                  className="h-12 w-[500px]  px-3 py-2 text-sm text-normal rounded-lg border border-gray-200"
+                  placeholder="input type of allergy"
                 />
             </div>
             
           </div>
           <div className="grid grid-rows-1 max-w-[736px] w-full pl-[70px]">
-            <div className="mt-12 flex items-center">
+            <div className="mt-10 flex items-center">
+              <label className=" font-bold text-lg mr-[57px] text-nowrap pt-4">
+                Allergen
+              </label>
+                <input
+                  type="text"
+                  className="h-12 w-[500px]  px-3 py-2 text-sm text-normal rounded-lg border border-gray-200"
+                  placeholder="input severity"
+                />
+            </div>
+            
+          </div>
+          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[70px]">
+            <div className="mt-10 flex items-center">
               <label className=" font-bold text-lg mr-[57px] text-nowrap pt-4">
                 Severity
               </label>
                 <input
                   type="text"
-                  className="h-12 w-[500px]  px-3 py-2 text-sm  text-gray-400 text-normal rounded-lg border border-gray-200"
-                  defaultValue="input severity"
+                  className="h-12 w-[500px]  px-3 py-2 text-sm text-normal rounded-lg border border-gray-200"
+                  placeholder="input severity"
                 />
             </div>
             
           </div>
           <div className="grid grid-rows-1 max-w-[736px] w-full pl-[70px]">
-            <div className="mt-12 flex items-center">
+            <div className="mt-10 flex items-center">
               <label className=" font-bold text-lg mr-[53px] text-nowrap pt-4">
                 Reaction
               </label>
                 <input
                   type="text"
-                  className="h-12 w-[500px]  px-3 py-2 text-sm  text-gray-400 text-normal rounded-lg border border-gray-200"
-                  defaultValue="input reaction"
+                  className="h-12 w-[500px]  px-3 py-2 text-sm text-normal rounded-lg border border-gray-200"
+                  placeholder="input reaction"
                 />
             </div>
             
           </div>
           <div className="grid grid-rows-1 max-w-[736px] w-full pl-[70px] pb-9">
-            <div className="mt-12 flex items-center">
+            <div className="mt-10 flex items-center">
               <label className=" font-bold text-lg mr-[80px] text-nowrap pb-[100px]">
                 Notes 
               </label>
                 <input
                   type="text"
-                  className="pb-[100px]   w-[500px]  px-3 py-2 text-sm  text-gray-400 text-normal rounded-lg border border-gray-200"
-                  defaultValue="input notes"
+                  className="pb-[100px]   w-[500px]  px-3 py-2 text-sm text-normal rounded-lg border border-gray-200"
+                  placeholder="input notes"
                 />
             </div>
           </div>
@@ -83,11 +95,8 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               className="bg-blue-500 hover:bg-blue-700 text-[#ffff] font-semibold font-manrope py-1 px-4 rounded w-24 h-8 mr-3"
              >Submit
             </button>
-
-
           </div>  
-          
-          </div>
+          </form>
         </div>
       </div>
     
