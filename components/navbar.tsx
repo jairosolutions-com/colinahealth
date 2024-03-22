@@ -4,6 +4,7 @@ import { onNavigate } from "@/actions/navigation";
 import { FaUser, FaBell } from "react-icons/fa";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { setAccessToken } from "@/app/api/login-api/accessToken";
 
 export const Navbar = () => {
   const router = useRouter();
@@ -18,6 +19,11 @@ export const Navbar = () => {
       url: "/appointments",
     },
   ];
+
+  const handleLogOut = () => {
+    setAccessToken("");
+    onNavigate(router, "/login");
+  };
 
   return (
     <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[105px]">
@@ -34,7 +40,7 @@ export const Navbar = () => {
             </p>
           ))}
         </div>
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-3 items-center" onClick={handleLogOut}>
           <Image src={"/imgs/admin 1.png"} alt={""} width={30} height={30} />
           <Image src={"/svgs/arrow-down.svg"} alt={""} width={15} height={15} />
         </div>

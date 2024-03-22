@@ -35,7 +35,7 @@ export default function vitalsigns() {
         </div>
       </div>
 
-      <div className="w-full shadow-md sm:rounded-lg items-center">
+      <div className="w-full sm:rounded-lg items-center">
         <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
           <form className="">
             {/* search bar */}
@@ -76,20 +76,20 @@ export default function vitalsigns() {
           <table className="w-full text-left rtl:text-right">
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[288px] h-[70px]">
+                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
                   DATE
                 </th>
-                <th scope="col" className="px-6 py-3 w-[558px]">
+                <th scope="col" className="px-6 py-3 w-[400px]">
                   TYPE
                 </th>
-                <th scope="col" className="px-6 py-3 w-[450px]">
+                <th scope="col" className="px-6 py-3 w-[400px]">
                   SURGERY
                 </th>
-                <th scope="col" className="px-6 py-3 w-[250px]">
+                <th scope="col" className="px-6 py-3 w-[300px]">
                   NOTES
                 </th>
 
-                <th scope="col" className="px-[70px] py-3 w-[10px] ">
+                <th scope="col" className="px-[80px] py-3 w-[10px] ">
                   Action
                 </th>
               </tr>
@@ -108,7 +108,7 @@ export default function vitalsigns() {
                 <td className="px-6 py-4">Major</td>
                 <td className="px-6 py-4">Irritated</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -123,7 +123,7 @@ export default function vitalsigns() {
                 <td className="px-6 py-4">Major</td>
                 <td className="px-6 py-4">Irritated</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -138,7 +138,7 @@ export default function vitalsigns() {
                 <td className="px-6 py-4">Major</td>
                 <td className="px-6 py-4">Irritated</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -153,7 +153,7 @@ export default function vitalsigns() {
                 <td className="px-6 py-4">Major</td>
                 <td className="px-6 py-4">Irritated</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -168,7 +168,7 @@ export default function vitalsigns() {
                 <td className="px-6 py-4">Major</td>
                 <td className="px-6 py-4">Irritated</td>
 
-                <td className="px-[50px] py-4">
+                <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
               </tr>
@@ -180,7 +180,7 @@ export default function vitalsigns() {
       {/* pagination */}
       <div className="mt-5 pb-5">
         <div className="flex justify-between">
-          <p className="font-medium size-[18px] w-[138px] items-center">
+          <p className="font-medium text-[14px] w-[138px] items-center">
             Page 1 of 10
           </p>
           <div>
@@ -195,7 +195,6 @@ export default function vitalsigns() {
                   </a>
                 </div>
                 <div>
-                  {/* wala pay active function */}
                   <a
                     href="#"
                     className="flex border border-px items-center justify-center  w-[49px] h-full"
@@ -221,21 +220,21 @@ export default function vitalsigns() {
                   </a>
                 </div>
 
-                <div className="ml-5">
+                <div className="">
                   <a
                     href="#"
-                    className="flex border border-px items-center justify-center  w-[77px] h-full"
+                    className="flex border border-px items-center justify-center  w-[77px] h-full mr-5"
                   >
                     Next
                   </a>
                 </div>
-                <div className="flex px-5 ">
+                <div className="flex">
                   <input
-                    className="ipt-pagination text-center border ring-1 ring-gray-300 border-gray-100"
+                    className="ipt-pagination border text-center"
                     type="text"
                     placeholder="-"
                   />
-                  <div className="px-9">
+                  <div className="">
                     <button className="btn-pagination ">Go </button>
                   </div>
                 </div>
