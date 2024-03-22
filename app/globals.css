@@ -141,3 +141,8 @@ body,
   border-bottom: #e7eaee;
   border: 1px;
 }
+.required-field::before {
+  content: "*";
+  color: red;
+  margin-left:0;
+}
