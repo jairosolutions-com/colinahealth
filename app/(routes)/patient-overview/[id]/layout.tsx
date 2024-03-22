@@ -48,10 +48,10 @@ export default function PatientOverviewLayout({
     },
   ];
 
-  const handleSeeMoreDetails = () => {
-    onNavigate(router, `/patient-overview/patientID/patient-details`);
-    setActiveTab(-1); // Reset activeTab to -1 when "See more details" is clicked
-    setDetailsClicked(true); // Set detailsClicked to true when "See more details" is clicked
+  const handleSeeMoreDetails = (url: string, tabIndex: number) => {
+    onNavigate(router, url);
+    setActiveTab(-1);
+    setDetailsClicked(true);
   };
 
   const handleTabClick = (url: string) => {
@@ -89,7 +89,7 @@ export default function PatientOverviewLayout({
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
                       className="underline text-sm font-semibold text-[#07143799] text-right"
-                      onClick={() => handleSeeMoreDetails()}
+                      onClick={() => handleSeeMoreDetails("/patient-overview/patientId/patient-details", -1)}
                     >
                       See more details
                     </p>
