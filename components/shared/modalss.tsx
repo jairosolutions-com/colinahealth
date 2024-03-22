@@ -42,7 +42,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
           <div className="grid grid-rows-1 max-w-[736px] w-full pl-[70px]">
             <div className="mt-12 flex items-center">
               <label className=" font-bold text-lg mr-[70px] text-nowrap pt-4">
-                Sugery
+                Surgery
               </label>
                 <input
                   type="text"

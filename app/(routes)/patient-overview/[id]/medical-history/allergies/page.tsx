@@ -35,7 +35,7 @@ const Allergies = () => {
   console.log(params, "for surgery patientId");
   const patientId = params.id.toUpperCase();
 
-  const optionsOrderedBy = ["Accending", "Decending"];
+  const optionsOrderedBy = ["Ascending", "Descending"];
   const optionsSortBy = ["Type", "Severity", "Reaction", "Notes"];
   // end of orderby & sortby function
 
@@ -131,7 +131,7 @@ const Allergies = () => {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, term]);
+  }, [currentPage, sortOrder, term, isModalOpen]);
 
   return (
     <div className="  w-full">
@@ -257,17 +257,19 @@ const Allergies = () => {
                     scope="row"
                     className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
-                    {allergy.uuid}
+                    {allergy.allergies_uuid}
                   </th>
-                  <td className="px-6 py-4">{allergy.createdAt}</td>
-                  <td className="px-6 py-4">{allergy.type}</td>
+                  <td className="px-6 py-4">{allergy.allergies_createdAt}</td>
+                  <td className="px-6 py-4">{allergy.allergies_type}</td>
                   <td className=" max-w-[552px] px-6 py-4">
-                    {allergy.allergen}
+                    {allergy.allergies_allergen}
                   </td>
-                  
-                  <td className="px-6 py-4">{allergy.severity}</td>
-                  <td className="px-6 py-4">{allergy.reaction}</td>
-                  <td className="px-6 py-4">{allergy.notes?allergy.notes:"None"}</td>
+
+                  <td className="px-6 py-4">{allergy.allergies_severity}</td>
+                  <td className="px-6 py-4">{allergy.allergies_reaction}</td>
+                  <td className="px-6 py-4">
+                    {allergy.allergies_notes ? allergy.allergies_notes : "None"}
+                  </td>
 
                   <td className="px-[50px] py-4">
                     <Edit></Edit>
