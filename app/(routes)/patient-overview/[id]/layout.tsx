@@ -54,8 +54,9 @@ export default function PatientOverviewLayout({
     setDetailsClicked(true);
   };
 
-  const handleTabClick = (url: string) => {
+  const handleTabClick = (url: string, tabIndex: number) => {
     onNavigate(router, url);
+    setActiveTab(tabIndex);
     setDetailsClicked(false);
   };
 
@@ -149,18 +150,18 @@ export default function PatientOverviewLayout({
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
                   <p
-                    className={`cursor-pointer font-semibold  ${
-                      pathname === tab.url
-                        ? "text-[#007C85] border-b-[3px] border-[#007C85]"
-                        : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
-                    }`}
-                    key={index}
-                    onClick={() => {
-                      handleTabClick(tab.url);
-                    }}
-                  >
-                    {tab.label}
-                  </p>
+                  className={`cursor-pointer font-semibold  ${
+                    pathname === tab.url
+                      ? "text-[#007C85] border-b-[3px] border-[#007C85]"
+                      : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
+                  }`}
+                  key={index}
+                  onClick={() => {
+                    handleTabClick(tab.url, index); // Pass both URL and tabIndex
+                  }}
+                >
+                  {tab.label}
+                </p>
                 ))}
               </div>
             </div>
