@@ -30,7 +30,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   <input
                     type="text" id="" name="" required
                     className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
-                    placeholder="input fullname"
+                    placeholder="input firstname"
                   />
                 </div>
                 <div className="flex flex-row gap-x-[56px]">
@@ -40,7 +40,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   <input
                     type="text" id="" name="" required
                     className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
-                    placeholder="input gender"
+                    placeholder="input lastname"
                   />
                 </div>
               </div>
@@ -52,7 +52,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   <input
                     type="text" id="" name="" required
                     className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  rounded border border-gray-200"
-                    placeholder="input fullname"
+                    placeholder="input middlename"
                   />
                 </div>
                 <div className="flex flex-row gap-x-[80px]">
