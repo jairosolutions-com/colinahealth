@@ -293,13 +293,15 @@ export default function PatientDetails() {
           </div>
           <div className="mb-4 ">
           <div className="justify-end flex pt-5">
-          <button
-              type="button"
-              className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3 "
-              onClick={handlePatientEditClick}
-            > 
-              {patientEditMode? "Cancel" : "Cancel"}
-            </button>
+          {patientEditMode && (
+              <button
+                type="button"
+                className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3 "
+                onClick={handlePatientEditClick}
+              >
+                Cancel
+              </button>
+            )}
             <button
               type="button"
               className="bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8  "
@@ -392,13 +394,15 @@ export default function PatientDetails() {
         </div>
         <div className="mb-4 ">
           <div className="justify-end flex pt-5">
-            <button
-              type="button"
-              className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3"
-              onClick={handleEmergencyEditClick}
-            > 
-              {emergencyEditMode ? "Cancel" : "Cancel"}
-            </button>
+          {emergencyEditMode && (
+              <button
+                type="button"
+                className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3"
+                onClick={handleEmergencyEditClick}
+              >
+                Cancel
+              </button>
+            )}
 
             <button
               type="button"
