@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { Navbar } from "@/components/navbar";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export default function PatientOverviewLayout({
   children,
@@ -10,9 +11,11 @@ export default function PatientOverviewLayout({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [detailsClicked, setDetailsClicked] = useState<boolean>(false); // State to track if "See more details" is clicked
+  const [tabUrl, setTabUrl] = useState<string>("");
+  const [detailsClicked, setDetailsClicked] = useState<boolean>(false);
 
   const tabs = [
     {
@@ -45,16 +48,15 @@ export default function PatientOverviewLayout({
     },
   ];
 
-  const handleSeeMoreDetails = (url: string, tabIndex: number) => {
-    onNavigate(router, url);
+  const handleSeeMoreDetails = () => {
+    onNavigate(router, `/patient-overview/patientID/patient-details`);
     setActiveTab(-1); // Reset activeTab to -1 when "See more details" is clicked
     setDetailsClicked(true); // Set detailsClicked to true when "See more details" is clicked
   };
 
-  const handleTabClick = (index: number, url: string) => {
-    setActiveTab(index);
+  const handleTabClick = (url: string) => {
     onNavigate(router, url);
-    setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
+    setDetailsClicked(false);
   };
 
   return (
@@ -87,9 +89,7 @@ export default function PatientOverviewLayout({
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
                       className="underline text-sm font-semibold text-[#07143799] text-right"
-                      onClick={() =>
-                        handleSeeMoreDetails("/patient-details", -1)
-                      }
+                      onClick={() => handleSeeMoreDetails()}
                     >
                       See more details
                     </p>
@@ -149,13 +149,15 @@ export default function PatientOverviewLayout({
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
                   <p
-                    className={`cursor-pointer font-semibold ${
-                      activeTab === index
+                    className={`cursor-pointer font-semibold  ${
+                      pathname === tab.url
                         ? "text-[#007C85] border-b-[3px] border-[#007C85]"
                         : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
                     }`}
                     key={index}
-                    onClick={() => handleTabClick(index, tab.url)}
+                    onClick={() => {
+                      handleTabClick(tab.url);
+                    }}
                   >
                     {tab.label}
                   </p>
