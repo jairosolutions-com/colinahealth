@@ -56,7 +56,7 @@ export default function Surgeries() {
           </p>
         </div>
         <div className="flex flex-row justify-end">
-        <button
+          <button
             onClick={() => isModalOpen(true)}
             className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu"
           >
@@ -138,7 +138,7 @@ export default function Surgeries() {
               </tr>
             </thead>
             <tbody>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white  hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -155,7 +155,7 @@ export default function Surgeries() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white  hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -170,7 +170,7 @@ export default function Surgeries() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white  hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -185,25 +185,10 @@ export default function Surgeries() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white  hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  10/12/2024
-                </th>
-                <td className="px-6 py-4">Skin Allergy</td>
-                <td className="px-6 py-4">Major</td>
-                <td className="px-6 py-4">Irritated</td>
-
-                <td className="px-[70px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr>
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white "
                 >
                   10/12/2024
                 </th>

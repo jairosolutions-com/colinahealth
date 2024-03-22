@@ -98,7 +98,7 @@ export default function Medication() {
               </tr>
             </thead>
             <tbody>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -115,7 +115,7 @@ export default function Medication() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -132,7 +132,7 @@ export default function Medication() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -149,7 +149,7 @@ export default function Medication() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -160,21 +160,6 @@ export default function Medication() {
                 <td className="truncate max-w-[286px] px-3 py-4 tb-med">
                   Medicol
                 </td>
-                <td className="truncate max-w-[286px] px-6 py-4">None</td>
-                <td className="px-6 py-4">Given</td>
-                <td className="px-[70px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr>
-                <th
-                  scope="row"
-                  className="px-6  py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white "
-                >
-                  10/12/2024
-                </th>
-                <td className="px-0 py-4">6:20 am</td>
-                <td className="truncate max-w-[286px] px-3 py-4 ">Medicol</td>
                 <td className="truncate max-w-[286px] px-6 py-4">None</td>
                 <td className="px-6 py-4">Given</td>
                 <td className="px-[70px] py-4">
