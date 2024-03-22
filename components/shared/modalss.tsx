@@ -33,34 +33,47 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               </label>
                 <input
                   type="text"
-                  className="h-12 w-[500px]  px-3 py-2 text-sm text-gray-400 text-normal rounded-lg border border-gray-200"
-                  defaultValue="input type of allergy"
+                  className="h-12 w-[500px]  px-3 py-2 text-sm text-normal rounded-lg border border-gray-200"
+                  placeholder="input type of allergy"
                 />
             </div>
             
           </div>
           <div className="grid grid-rows-1 max-w-[736px] w-full pl-[70px]">
-            <div className="mt-12 flex items-center">
+            <div className="mt-10 flex items-center">
+              <label className=" font-bold text-lg mr-[92px] text-nowrap pt-4">
+                Date
+              </label>
+                <input
+                  type="text"
+                  className="h-12 w-[500px]  px-3 py-2 text-sm text-normal rounded-lg border border-gray-200"
+                  placeholder="input severity"
+                />
+            </div>
+            
+          </div>
+          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[70px]">
+            <div className="mt-10 flex items-center">
               <label className=" font-bold text-lg mr-[70px] text-nowrap pt-4">
                 Sugery
               </label>
                 <input
                   type="text"
-                  className="h-12 w-[500px]  px-3 py-2 text-sm  text-gray-400 text-normal rounded-lg border border-gray-200"
-                  defaultValue="input severity"
+                  className="h-12 w-[500px]  px-3 py-2 text-sm text-normal rounded-lg border border-gray-200"
+                  placeholder="input severity"
                 />
             </div>
             
           </div>
           <div className="grid grid-rows-1 max-w-[736px] w-full pl-[70px] pb-9">
-            <div className="mt-12 flex items-center">
+            <div className="mt-10 flex items-center">
               <label className=" font-bold text-lg mr-[80px] text-nowrap pb-[100px]">
                 Notes 
               </label>
                 <input
                   type="text"
-                  className="pb-[100px]   w-[500px]  px-3 py-2 text-sm  text-gray-400 text-normal rounded-lg border border-gray-200"
-                  defaultValue="input notes"
+                  className="pb-[100px]   w-[500px]  px-3 py-2 text-sm text-normal rounded-lg border border-gray-200"
+                  placeholder="input notes"
                 />
             </div>
           </div>
