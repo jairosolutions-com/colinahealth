@@ -144,5 +144,5 @@ body,
 .required-field::before {
   content: "*";
   color: red;
-  margin-left:0;
+  margin-right:5px;
 }
