@@ -259,7 +259,7 @@ export default function Surgeries() {
                   >
                     {surgery.surgeries_uuid}
                   </th>
-                  <td className="px-6 py-4">
+                  <td className="px-2 py-4">
                     {surgery.surgeries_dateOfSurgery}
                   </td>
                   <td className="px-6 py-4">
@@ -269,7 +269,7 @@ export default function Surgeries() {
                     {surgery.surgeries_surgery}
                   </td>
                   <td className="px-6 py-4">{surgery.surgeries_notes}</td>
-                  <td className="px-[50px] py-4">
+                  <td className="px-[50px] py-4 flex items-center justify-center  ">
                     <Edit></Edit>
                   </td>
                 </tr>

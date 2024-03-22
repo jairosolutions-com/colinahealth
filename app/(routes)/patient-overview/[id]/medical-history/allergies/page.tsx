@@ -288,7 +288,7 @@ const Allergies = () => {
                   >
                     {allergy.allergies_uuid}
                   </th>
-                  <td className="px-6 py-4">
+                  <td className="px-2 py-4">
                     {" "}
                     {formatDate(allergy.allergies_createdAt)}
                   </td>
@@ -303,7 +303,7 @@ const Allergies = () => {
                     {allergy.allergies_notes ? allergy.allergies_notes : "None"}
                   </td>
 
-                  <td className="px-[50px] py-4">
+                  <td className="px-[50px] py-4 flex items-center justify-center">
                     <Edit></Edit>
                   </td>
                 </tr>
