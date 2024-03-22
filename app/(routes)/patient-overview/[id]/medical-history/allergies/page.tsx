@@ -9,7 +9,7 @@ import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { Modal } from "@/components/shared/modals";
-import { searchAllergiesByPatient } from "@/app/api/medical-history-api/allergies-api";
+import { fetchAllergiesByPatient } from "@/app/api/medical-history-api/allergies-api";
 
 const Allergies = () => {
   const router = useRouter();
@@ -137,7 +137,7 @@ const Allergies = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await searchAllergiesByPatient(
+        const response = await fetchAllergiesByPatient(
           patientId,
           term,
           currentPage,

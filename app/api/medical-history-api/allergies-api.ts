@@ -67,7 +67,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 //   }
 // }
 
-export async function searchAllergiesByPatient(
+export async function fetchAllergiesByPatient(
   patientUuid: string,
   term: string,
   currentPage: number,

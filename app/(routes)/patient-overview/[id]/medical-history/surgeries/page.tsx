@@ -13,7 +13,7 @@ import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries
 export default function Surgeries() {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-  const [PatientSurgeries, setPatientSurgeries] = useState<any[]>([]);
+  const [patientSurgeries, setPatientSurgeries] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalSurgeries, setTotalSurgeries] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -31,12 +31,11 @@ export default function Surgeries() {
     item: string;
   }>();
 
-  // const patientId = params.id.toUpperCase();
-  const patientId = params.id;
+  const patientId = params.id.toUpperCase();
+  // const patientId = params.id;
 
-  const optionsOrderedBy = ["Accending", "Decending"];
+  const optionsOrderedBy = ["Ascending", "Descending"];
   const optionsSortBy = ["Type", "Surgery", "Notes"];
-  // end of orderby & sortby function
   const [isOpen, setIsOpen] = useState(false);
 
   const isModalOpen = (isOpen: boolean) => {
@@ -109,25 +108,18 @@ export default function Surgeries() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         const response = await fetchSurgeriesByPatient(
           patientId,
           term,
           currentPage,
-          "dateOfSurgeries",
+          "dateOfSurgery",
           sortOrder as "ASC" | "DESC",
           router
         );
 
         //convert date to ISO string
 
-        const surgeriesWithIsoDate = response.data.map((surgery: any) => ({
-          ...surgery,
-          dateOfSurgeries: new Date(surgery.dateOfSurgeries)
-            .toISOString()
-            .split("T")[0],
-        }));
-        setPatientSurgeries(surgeriesWithIsoDate);
+        setPatientSurgeries(response.data);
         console.log("Patient list after setting state:", response.data);
         setTotalPages(response.totalPages);
         setTotalSurgeries(response.totalCount);
@@ -141,7 +133,7 @@ export default function Surgeries() {
     fetchData();
   }, [currentPage, sortOrder, term]);
 
-  console.log(PatientSurgeries, "PatientSurgeries");
+  console.log(patientSurgeries, "PatientSurgeries");
   return (
     <div className="  w-full">
       <div className="flex justify-between items-center">
@@ -165,7 +157,7 @@ export default function Surgeries() {
           </div>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
-            Total of 6 Patients
+            Total of {totalSurgeries} Patients
           </p>
         </div>
         <div className="flex flex-row justify-end">
@@ -202,8 +194,9 @@ export default function Surgeries() {
                 type="text"
                 placeholder="Search by reference no. or name..."
                 value={term}
-                onChange={(e) => {
-                  setTerm(e.target.value);
+                onChange={(event) => {
+                  setTerm(event.target.value);
+                  setCurrentPage(1);
                 }}
               />
             </div>
@@ -258,24 +251,24 @@ export default function Surgeries() {
               </tr>
             </thead>
             <tbody>
-              {PatientSurgeries.map((surgery, index) => (
-                <tr
-                  key={index}
-                  className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700"
-                >
+              {patientSurgeries.map((surgery, index) => (
+                <tr key={index} className="  even:bg-gray-50  border-b ">
                   <th
                     scope="row"
-                    className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap   "
+                    className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
-                    {surgery.uuid}
+                    {surgery.surgeries_uuid}
                   </th>
-                  <td className="truncate max-w-[552px] px-6 py-4">
-                    {surgery.dateOfSurgeries}
+                  <td className="px-6 py-4">
+                    {surgery.surgeries_dateOfSurgery}
                   </td>
-                  <td className="px-6 py-4">{surgery.typeOfSurgeries}</td>
-                  <td className="px-6 py-4">{surgery.surgery}</td>
-                  <td className="px-6 py-4">{surgery.notes}</td>
-
+                  <td className="px-6 py-4">
+                    {surgery.surgeries_typeOfSurgery}
+                  </td>
+                  <td className=" max-w-[552px] px-6 py-4">
+                    {surgery.surgeries_surgery}
+                  </td>
+                  <td className="px-6 py-4">{surgery.surgeries_notes}</td>
                   <td className="px-[50px] py-4">
                     <Edit></Edit>
                   </td>
