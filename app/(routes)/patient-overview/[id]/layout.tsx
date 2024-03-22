@@ -4,7 +4,7 @@ import { onNavigate } from "@/actions/navigation";
 import { Navbar } from "@/components/navbar";
 import { useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
-
+import { usePathname } from "next/navigation";
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
@@ -22,35 +22,36 @@ export default function PatientOverviewLayout({
   const [error, setError] = useState<string>("");
   const [detailsClicked, setDetailsClicked] = useState<boolean>(false); // State to track if "See more details" is clicked
   const patientId = params.id.toUpperCase();
+  const pathname = usePathname();
 
   const tabs = [
     {
       label: "Medical History",
-      url: `/patient-overview/${patientId}/medical-history/allergies`,
+      url: `/patient-overview/${params.id}/medical-history/allergies`,
     },
     {
       label: "Medication",
-      url: `/patient-overview/${patientId}/medication`,
+      url: `/patient-overview/${params.id}/medication`,
     },
     {
       label: "Prescription",
-      url: `/patient-overview/${patientId}/prescription`,
+      url: `/patient-overview/${params.id}/prescription`,
     },
     {
       label: "Vital Signs",
-      url: `/patient-overview/${patientId}/vital-signs`,
+      url: `/patient-overview/${params.id}/vital-signs`,
     },
     {
       label: "Laboratory Results",
-      url: `/patient-overview/${patientId}/lab-results`,
+      url: `/patient-overview/${params.id}/lab-results`,
     },
     {
       label: "Appointment",
-      url: `/patient-overview/${patientId}/patient-appointment`,
+      url: `/patient-overview/${params.id}/patient-appointment`,
     },
     {
       label: "Notes",
-      url: `/patient-overview/${patientId}/notes`,
+      url: `/patient-overview/${params.id}/notes`,
     },
   ];
 
@@ -60,10 +61,14 @@ export default function PatientOverviewLayout({
     setDetailsClicked(true); // Set detailsClicked to true when "See more details" is clicked
   };
 
-  const handleTabClick = (index: number, url: string) => {
-    setActiveTab(index);
+  // const handleTabClick = (index: number, url: string) => {
+  //   setActiveTab(index);
+  //   onNavigate(router, url);
+  //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
+  // };
+  const handleTabClick = (url: string) => {
     onNavigate(router, url);
-    setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
+    setDetailsClicked(false);
   };
 
   useEffect(() => {
@@ -109,6 +114,7 @@ export default function PatientOverviewLayout({
               <div>
                 <div className=" w-full justify-between text-2xl font-semibold flex">
                   <h1>
+                    {" "}
                     {patientData[0]?.firstName} {patientData[0]?.lastName}
                   </h1>
                   <div className=" cursor-pointer items-center ml-10 flex ">
@@ -163,26 +169,14 @@ export default function PatientOverviewLayout({
                       height="26"
                     />
                     <div>
-                      <div className={`flex items-center mr-11 `}>
-                        Code Status:{" "}
-                        <p
-                          className={`${
-                            patientData[0]?.codeStatus == "DNR"
-                              ? "text-red-500"
-                              : "text-blue-500"
-                          }`}
-                        >
-                          {patientData[0]?.codeStatus}
-                        </p>
-                      </div>
+                      <p className="flex items-center mr-11">
+                        Code Status: {patientData[0]?.codeStatus}
+                      </p>
                     </div>
                     <div className="flex">
                       <div>
-                        <p className={`flex items-center mr-11`}>
-                          Allergy:{" "}
-                          {patientData[0]?.allergies
-                            ? patientData[0]?.allergies
-                            : "None"}
+                        <p className="flex items-center mr-11">
+                          Allergy: {patientData[0]?.allergies}
                         </p>
                       </div>
                     </div>
@@ -192,13 +186,15 @@ export default function PatientOverviewLayout({
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
                   <p
-                    className={`cursor-pointer font-semibold ${
-                      activeTab === index
+                    className={`cursor-pointer font-semibold  ${
+                      pathname === tab.url
                         ? "text-[#007C85] border-b-[3px] border-[#007C85]"
                         : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
                     }`}
                     key={index}
-                    onClick={() => handleTabClick(index, tab.url)}
+                    onClick={() => {
+                      handleTabClick(tab.url);
+                    }}
                   >
                     {tab.label}
                   </p>

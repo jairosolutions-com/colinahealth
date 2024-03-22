@@ -31,7 +31,8 @@ export default function Surgeries() {
     item: string;
   }>();
 
-  const patientId = params.id.toUpperCase();
+  // const patientId = params.id.toUpperCase();
+  const patientId = params.id;
 
   const optionsOrderedBy = ["Accending", "Decending"];
   const optionsSortBy = ["Type", "Surgery", "Notes"];

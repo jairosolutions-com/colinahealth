@@ -6,7 +6,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 // Function to get the access token from local storage
 
 export async function fetchPatientOverview(
-  patientId: number,
+  patientId: string,
   router: any
 ): Promise<any> {
   try {

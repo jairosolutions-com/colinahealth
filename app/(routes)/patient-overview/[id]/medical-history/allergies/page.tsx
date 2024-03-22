@@ -34,6 +34,7 @@ const Allergies = () => {
 
   console.log(params, "for surgery patientId");
   const patientId = params.id.toUpperCase();
+  // const patientId = params.id;
 
   const optionsOrderedBy = ["Ascending", "Descending"];
   const optionsSortBy = ["Type", "Severity", "Reaction", "Notes"];
@@ -62,7 +63,32 @@ const Allergies = () => {
       setCurrentPage(currentPage + 1);
     }
   };
+  const formatDate = (createdAt: string | number | Date) => {
+    // Create a new Date object from the provided createdAt date string
+    const date = new Date(createdAt);
 
+    // Get the month, day, and year
+    const month = date.toLocaleString("default", { month: "short" });
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    // // Get the hours and minutes
+    // let hours = date.getHours();
+    // const minutes = date.getMinutes();
+
+    // // Convert hours to AM/PM format
+    // const ampm = hours >= 12 ? "pm" : "am";
+    // hours %= 12;
+    // hours = hours || 12; // Handle midnight
+
+    // // Format the time string
+    // const time = `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
+
+    // Format the date string
+    const formattedDate = `${month} ${day}, ${year}`;
+
+    return formattedDate;
+  };
   const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -262,7 +288,10 @@ const Allergies = () => {
                   >
                     {allergy.allergies_uuid}
                   </th>
-                  <td className="px-6 py-4">{allergy.allergies_createdAt}</td>
+                  <td className="px-6 py-4">
+                    {" "}
+                    {formatDate(allergy.allergies_createdAt)}
+                  </td>
                   <td className="px-6 py-4">{allergy.allergies_type}</td>
                   <td className=" max-w-[552px] px-6 py-4">
                     {allergy.allergies_allergen}
@@ -270,7 +299,7 @@ const Allergies = () => {
 
                   <td className="px-6 py-4">{allergy.allergies_severity}</td>
                   <td className="px-6 py-4">{allergy.allergies_reaction}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-2 py-4">
                     {allergy.allergies_notes ? allergy.allergies_notes : "None"}
                   </td>
 

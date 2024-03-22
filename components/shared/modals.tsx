@@ -19,6 +19,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
   }>();
 
   const patientId = params.id.toUpperCase();
+  // const patientId = params.id;
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
