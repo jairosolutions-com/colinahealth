@@ -117,16 +117,8 @@ export async function searchAllergiesByPatient(
 }
 
 
-export async function createAllergiesOfPatient(
-  patientId: string,
-  formData: any,
-  router: any // Pass router instance as a parameter
-): Promise<any> {
-
-
-  console.log(formData, "fform data")
+export async function createAllergiesOfPatient(patientId: string, formData: any, router: any): Promise<any> {
   try {
-    console.log("create", formData);
     const accessToken = getAccessToken();
     if (!accessToken) {
       throw new Error("Access token not found in local storage");
@@ -136,25 +128,14 @@ export async function createAllergiesOfPatient(
       Authorization: `Bearer ${accessToken}`,
     };
 
-    const response = await axios.post(
-      `${apiUrl}/allergies/${patientId}`,
-      formData,
-      { headers }
-    );
+    // Make the API request to create the allergy
+    const response = await axios.post(`${apiUrl}/allergies/${patientId}`, formData, { headers });
+    const createdAllergy = response.data;
 
-    console.log(response.data, "response data allergy");
-    const patientAllergies = response.data;
-    console.log(patientAllergies, "patient allergies after search");
-    return patientAllergies;
+    return createdAllergy;
   } catch (error) {
-    if ((error as AxiosError).response?.status === 401) {
-      setAccessToken("");
-      onNavigate(router, "/login");
-      return Promise.reject(new Error("Unauthorized access"));
-    }
-    console.error(
-      "Error searching patient allergies:",
-      (error as AxiosError).message
-    );
+    console.error("Error creating allergy:", error);
+    throw error; // Rethrow the error to handle it in the component
   }
 }
+

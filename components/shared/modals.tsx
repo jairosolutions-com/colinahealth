@@ -38,15 +38,12 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
   };
 
   const handleSubmit = async () => {
-    // Call the addPatient API function here
     try {
-      const allergy = await createAllergiesOfPatient(
-        patientId,
-        formData,
-        router
-      );
-      console.log("allergy added successfully:", allergy);
-      // Optionally, you can reset the form data after successful submission
+      // Call the createAllergiesOfPatient API function
+      const allergy = await createAllergiesOfPatient(patientId, formData, router);
+      console.log("Allergy added successfully:", allergy);
+  
+      // Reset the form data after successful submission
       setFormData({
         patientUuid: patientId,
         type: "",
@@ -55,19 +52,12 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
         reaction: "",
         notes: "",
       });
-
-      isModalOpen(false);
-    } catch (error: any) {
-      if (error.message === "Patient already exist") {
-        console.error("Error adding patient: Patient already exists");
-        // Handle specific error message (e.g., display an error message to the user)
-        setError("Patient already exists");
-      } else {
-        console.error("Error adding patient:", error);
-        // Handle other errors (e.g., display a generic error message to the user)
-      }
+    } catch (error) {
+      console.error("Error adding allergy:", error);
+      setError("Failed to add allergy");
     }
   };
+  
   return (
     <div
       className={`absolute left-0 top-0 w-full h-full bg-[#76898A99] flex items-center justify-center `}

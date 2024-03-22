@@ -108,6 +108,7 @@ export default function Surgeries() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         const response = await fetchSurgeriesByPatient(
           patientId,
           term,
@@ -137,9 +138,9 @@ export default function Surgeries() {
     };
 
     fetchData();
-  }, [currentPage, sortOrder,term]);
+  }, [currentPage, sortOrder, term]);
 
-console.log(PatientSurgeries, "PatientSurgeries")
+  console.log(PatientSurgeries, "PatientSurgeries");
   return (
     <div className="  w-full">
       <div className="flex justify-between items-center">
@@ -200,7 +201,9 @@ console.log(PatientSurgeries, "PatientSurgeries")
                 type="text"
                 placeholder="Search by reference no. or name..."
                 value={term}
-                onChange={(e) => setTerm(e.target.value)}
+                onChange={(e) => {
+                  setTerm(e.target.value);
+                }}
               />
             </div>
           </form>
@@ -277,7 +280,7 @@ console.log(PatientSurgeries, "PatientSurgeries")
                   </td>
                 </tr>
               ))}
-              </tbody>
+            </tbody>
           </table>
         </div>
         {/* END OF TABLE */}
@@ -347,13 +350,9 @@ console.log(PatientSurgeries, "PatientSurgeries")
           </div>
         </div>
       )}
-        {isOpen && (
-          <Modal
-            isModalOpen={isModalOpen}
-            isOpen={isOpen}
-            label="sample label"
-          />
-        )}
-      </div>
+      {isOpen && (
+        <Modal isModalOpen={isModalOpen} isOpen={isOpen} label="sample label" />
+      )}
+    </div>
   );
 }

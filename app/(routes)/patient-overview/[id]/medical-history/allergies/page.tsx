@@ -120,7 +120,6 @@ const Allergies = () => {
           router
         );
         setPatientAllergies(response.data);
-        console.log("Patient allergies after setting state:", response.data);
         setTotalPages(response.totalPages);
         setTotalAllergies(response.totalCount);
         setIsLoading(false);
@@ -131,7 +130,7 @@ const Allergies = () => {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, term, isModalOpen]);
+  }, [currentPage, sortOrder, term]);
 
   return (
     <div className="  w-full">
@@ -156,7 +155,7 @@ const Allergies = () => {
           </div>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
-            Total of 6 Patients
+            Total of {totalAllergies} Allergies
           </p>
         </div>
         <div className="flex flex-row justify-end mt-[15px]">
@@ -191,6 +190,10 @@ const Allergies = () => {
               <input
                 className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
                 type="text"
+                onChange={(event) => {
+                  setTerm(event.target.value);
+                  setCurrentPage(1);
+                }}
                 placeholder="Search by reference no. or name..."
               />
             </div>
