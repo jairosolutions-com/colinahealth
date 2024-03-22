@@ -113,34 +113,35 @@ export default function PatientPage() {
               </tr>
             </thead>
             <tbody>
-              <tr className="odd:bg-white  border-b hover:bg-[#f4f4f4]">
+              <tr className="odd:bg-white  border-b hover:bg-[#F4F4F4] group">
                 <th
                   scope="row"
-                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                 >
                   SGY-5146846548465
                 </th>
-                <td
-                  className=" truncate max-w-[552px] px-6 py-4"
-                >
+                <td className=" truncate max-w-[552px] px-6 py-4">
                   Drake Ramos
                 </td>
                 <td className="px-6 py-4">21</td>
                 <td className="px-6 py-4">Male</td>
 
-                <td className="px-[60px] py-4"  onClick={() =>
+                <td
+                  className="px-[60px] py-4"
+                  onClick={() =>
                     onNavigate(
                       router,
                       "/patient-overview/patiendId/medical-history/allergies"
                     )
-                  }>
+                  }
+                >
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white   border-b hover:bg-[#f4f4f4]">
+              <tr className="odd:bg-white   border-b hover:bg-[#F4F4F4] group">
                 <th
                   scope="row"
-                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                 >
                   SGY-5146846548465
                 </th>
@@ -162,10 +163,10 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white    border-b hover:bg-[#f4f4f4]">
+              <tr className="odd:bg-white border-b hover:bg-[#F4F4F4] group">
                 <th
                   scope="row"
-                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                 >
                   SGY-5146846548465
                 </th>
@@ -187,10 +188,10 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white    border-b hover:bg-[#f4f4f4]">
+              <tr className="odd:bg-white    border-b hover:bg-[#F4F4F4] group">
                 <th
                   scope="row"
-                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                 >
                   SGY-5146846548465
                 </th>
@@ -212,10 +213,10 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white    border-b hover:bg-[#f4f4f4]">
+              <tr className="odd:bg-white    border-b hover:bg-[#F4F4F4] group">
                 <th
                   scope="row"
-                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                 >
                   SGY-5146846548465
                 </th>
@@ -237,10 +238,10 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white    border-b hover:bg-[#f4f4f4]">
+              <tr className="odd:bg-white    border-b hover:bg-[#F4F4F4] group">
                 <th
                   scope="row"
-                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                 >
                   SGY-5146846548465
                 </th>
@@ -262,10 +263,10 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white    border-b hover:bg-[#f4f4f4]">
+              <tr className="odd:bg-white    border-b hover:bg-[#F4F4F4] group">
                 <th
                   scope="row"
-                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                 >
                   SGY-5146846548465
                 </th>
@@ -287,10 +288,10 @@ export default function PatientPage() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white    border-b hover:bg-[#f4f4f4]">
+              <tr className="odd:bg-white    border-b hover:bg-[#F4F4F4] group">
                 <th
                   scope="row"
-                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                 >
                   SGY-5146846548465
                 </th>
