@@ -168,19 +168,12 @@ export default function PatientPage({ patient }: { patient: any }) {
   console.log("patientList", patientList);
 
   return (
-    <div className=" relative w-full mx-24 mt-24">
-      <div className="flex justify-end w-full mx-3">
-        <p
-          onClick={() => onNavigate(router, "/dashboard")}
-          className="text-[#64748B] underline "
-        >
     <div className="relative w-full mx-24 mt-24">
       <div className="flex justify-end">
         <p 
           onClick={() => onNavigate(router, "/dashboard")}
         className="text-[#64748B] underline">
           Back to Dashboard
-        </p>
         </p>
       </div>
       <div className="flex justify-between items-center">
@@ -214,8 +207,6 @@ export default function PatientPage({ patient }: { patient: any }) {
         </div>
       </div>
 
-      <div className="mx-3 w-full sm:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[73px]">
       <div className="w-full shadow-md sm:rounded-lg items-center">
         <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
           <form className=" mr-5">

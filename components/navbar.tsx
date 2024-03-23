@@ -41,7 +41,7 @@ export const Navbar = () => {
           ))}
         </div>
         <div className="flex gap-3 items-center" onClick={handleLogOut}>
-          <Image src={"/imgs/admin 1.png"} alt={""} width={30} height={30} />
+          <Image src={"/imgs/dennis.svg"} alt={""} width={30} height={30} />
           <Image src={"/svgs/arrow-down.svg"} alt={""} width={15} height={15} />
         </div>
       </div>
