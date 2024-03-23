@@ -157,7 +157,7 @@ export default function PatientPage({ patient }: { patient: any }) {
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <img src="/loading/colina-logo-animation.gif" alt="logo" width={100} />
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
       </div>
     );
   }
@@ -170,9 +170,10 @@ export default function PatientPage({ patient }: { patient: any }) {
   return (
     <div className="relative w-full mx-24 mt-24">
       <div className="flex justify-end">
-        <p 
+        <p
           onClick={() => onNavigate(router, "/dashboard")}
-        className="text-[#64748B] underline">
+          className="text-[#64748B] underline"
+        >
           Back to Dashboard
         </p>
       </div>
