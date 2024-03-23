@@ -98,7 +98,7 @@ export default function Medication() {
               </tr>
             </thead>
             <tbody>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -115,7 +115,7 @@ export default function Medication() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -132,7 +132,7 @@ export default function Medication() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -149,7 +149,7 @@ export default function Medication() {
                   <Edit></Edit>
                 </td>
               </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b dark:border-gray-700">
+              <tr className="odd:bg-white hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"

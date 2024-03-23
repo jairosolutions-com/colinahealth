@@ -155,7 +155,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   />
                 </div>
                 <div className="flex flex-row gap-x-[80px]">
-                  <label className="mb-1 font-medium font-manrope mt-2">
+                  <label className="mb-1 font-medium font-manrope mt-2 required-field">
                     Gender
                   </label>
                   <input
@@ -170,7 +170,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               </div>
               <div className="mb-4 grid grid-cols-2 gap-6">
                 <div className="flex flex-row gap-x-[120px]">
-                  <label className="mb-1 font-medium font-manrope text-nowrap mt-2">
+                  <label className="mb-1 font-medium font-manrope text-nowrap mt-2 required-field">
                     Age
                   </label>
                   <input
@@ -198,8 +198,8 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               </div>
 
               <div className="mb-4 grid grid-cols-2 gap-6">
-                <div className="flex flex-row gap-x-[35px]">
-                  <label className="mb-1 font-medium font-manrope text-nowrap mt-2">
+                <div className="flex flex-row gap-x-[36px]">
+                  <label className="mb-1 font-medium font-manrope text-nowrap mt-2 required-field">
                     Contact Phone
                   </label>
                   <input
@@ -211,6 +211,8 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                     onChange={handleChange}
                   />
                 </div>
+                <div className="flex flex-row gap-x-[65px]">
+                  <label className="mb-1 font-medium font-manrope mt-2 required-field">
                 <div className="flex flex-row gap-x-[67px]">
                   <label className="mb-1 font-medium font-manrope mt-2">
                     Address1
@@ -227,8 +229,8 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               </div>
 
               <div className="mb-4 grid grid-cols-2 gap-6">
-                <div className="flex flex-row gap-x-[116px]">
-                  <label className="mb-1 font-medium font-manrope mt-2">
+                <div className="flex flex-row gap-x-[119px]">
+                  <label className="mb-1 font-medium font-manrope mt-2 required-field">
                     City
                   </label>
                   <input
@@ -256,8 +258,8 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               </div>
 
               <div className="mb-4 grid grid-cols-2 gap-6">
-                <div className="flex flex-row gap-x-[107px]">
-                  <label className="mb-1 font-medium font-manrope mt-2">
+                <div className="flex flex-row gap-x-[108px]">
+                  <label className="mb-1 font-medium font-manrope mt-2 required-field">
                     State
                   </label>
                   <input
@@ -357,8 +359,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
+            </form>
         </div>
       </div>
     </>

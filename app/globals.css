@@ -113,7 +113,6 @@ body,
 .ipt-pagination {
   width: 48px;
   height: 25px;
-  border: 1px;
 }
 
 .btn-edit {
@@ -141,4 +140,9 @@ body,
   height: 70px;
   border-bottom: #e7eaee;
   border: 1px;
+}
+.required-field::before {
+  content: "*";
+  color: red;
+  margin-right:5px;
 }

@@ -143,6 +143,7 @@ export const Login = () => {
                     <button
                       className="inline-block w-full cursor-pointer items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out"
                       type="submit"
+                      onClick={() => onNavigate(router, "/dashboard")}
                     >
                       Sign In
                     </button>
