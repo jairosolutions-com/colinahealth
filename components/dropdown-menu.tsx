@@ -38,7 +38,7 @@ const DropdownMenu = ({ open, width, label, options }: DropdownMenuProps) => {
           className="bg-[#FFFFFF] relative w-full h-[47px] rounded-[5px] px-[20px] items-center flex justify-between font-semibold opacity-[60%]"
         >
           {optionLabel}
-          <img src="/path/to/dropdown.svg" alt="" />
+          <img src="/imgs/dropdown.svg" alt="" />
         </button>
 
         {isOpen && (

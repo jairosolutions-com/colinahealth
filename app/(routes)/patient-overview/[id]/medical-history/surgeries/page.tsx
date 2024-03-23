@@ -23,7 +23,7 @@ export default function Surgeries() {
   const [term, setTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("ASC");
   const router = useRouter();
-  const [sortBy, setSortBy] = useState("Type");
+  const [sortBy, setSortBy] = useState("typeOfSurgery");
 
   const params = useParams<{
     id: any;
@@ -44,7 +44,13 @@ export default function Surgeries() {
 
   const handleSortOptionClick = (option: string) => {
     setIsOpenSortedBy(false);
-    setSortBy(option);
+    if (option === "Type") {
+      setSortBy("typeOfSurgery");
+    } else if (option === "Surgery") {
+      setSortBy("surgery");
+    } else {
+      setSortBy("notes");
+    }
     console.log("option", option);
   };
   const optionsOrderedBy = [
@@ -52,9 +58,9 @@ export default function Surgeries() {
     { label: "Descending", onClick: handleOrderOptionClick },
   ];
   const optionsSortBy = [
-    { label: "Type", onClick: handleOrderOptionClick },
-    { label: "Surgery", onClick: handleOrderOptionClick },
-    { label: "Notes", onClick: handleOrderOptionClick },
+    { label: "Type", onClick: handleSortOptionClick },
+    { label: "Surgery", onClick: handleSortOptionClick },
+    { label: "Notes", onClick: handleSortOptionClick },
   ];
   const [isOpen, setIsOpen] = useState(false);
 
@@ -132,7 +138,7 @@ export default function Surgeries() {
           patientId,
           term,
           currentPage,
-          "dateOfSurgery",
+          sortBy,
           sortOrder as "ASC" | "DESC",
           router
         );
@@ -151,7 +157,7 @@ export default function Surgeries() {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, term]);
+  }, [currentPage, sortOrder, sortBy, term]);
 
   console.log(patientSurgeries, "PatientSurgeries");
   return (
@@ -225,8 +231,14 @@ export default function Surgeries() {
             <p className="text-[#191D23] opacity-[60%] font-semibold">
               Order by
             </p>
-            {/* <DropdownMenu
-              options={optionsOrderedBy}
+            <DropdownMenu
+              options={optionsOrderedBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                  console.log("label", label);
+                },
+              }))}
               open={isOpenOrderedBy}
               width={"165px"}
               label={"Select"}
@@ -236,11 +248,17 @@ export default function Surgeries() {
               Sort by
             </p>
             <DropdownMenu
-              options={optionsSortBy}
+              options={optionsSortBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                  console.log("label", label);
+                },
+              }))}
               open={isOpenSortedBy}
               width={"165px"}
               label={"Select"}
-            /> */}
+            />
           </div>
         </div>
 
