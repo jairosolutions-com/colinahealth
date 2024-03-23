@@ -174,7 +174,8 @@ export default function PatientOverviewLayout({
                     <div className="flex">
                       <div>
                         <p className="flex items-center mr-11">
-                          Allergy: {patientData[0]?.allergies}
+                          Allergy: {patientData[0]?.allergies ? patientData[0]?.allergies : "None"}
+                   
                         </p>
                       </div>
                     </div>

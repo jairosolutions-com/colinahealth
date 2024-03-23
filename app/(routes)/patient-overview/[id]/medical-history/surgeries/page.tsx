@@ -23,6 +23,7 @@ export default function Surgeries() {
   const [term, setTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("ASC");
   const router = useRouter();
+  const [sortBy, setSortBy] = useState("Type");
 
   const params = useParams<{
     id: any;
@@ -32,9 +33,29 @@ export default function Surgeries() {
 
   const patientId = params.id.toUpperCase();
   // const patientId = params.id;
+  const handleOrderOptionClick = (option: string) => {
+    setIsOpenOrderedBy(false);
+    if (option === "Ascending") {
+      setSortOrder("ASC");
+    } else {
+      setSortOrder("DESC");
+    }
+  };
 
-  const optionsOrderedBy = ["Ascending", "Descending"];
-  const optionsSortBy = ["Type", "Surgery", "Notes"];
+  const handleSortOptionClick = (option: string) => {
+    setIsOpenSortedBy(false);
+    setSortBy(option);
+    console.log("option", option);
+  };
+  const optionsOrderedBy = [
+    { label: "Ascending", onClick: handleOrderOptionClick },
+    { label: "Descending", onClick: handleOrderOptionClick },
+  ];
+  const optionsSortBy = [
+    { label: "Type", onClick: handleOrderOptionClick },
+    { label: "Surgery", onClick: handleOrderOptionClick },
+    { label: "Notes", onClick: handleOrderOptionClick },
+  ];
   const [isOpen, setIsOpen] = useState(false);
 
   const isModalOpen = (isOpen: boolean) => {
@@ -204,7 +225,7 @@ export default function Surgeries() {
             <p className="text-[#191D23] opacity-[60%] font-semibold">
               Order by
             </p>
-            <DropdownMenu
+            {/* <DropdownMenu
               options={optionsOrderedBy}
               open={isOpenOrderedBy}
               width={"165px"}
@@ -219,7 +240,7 @@ export default function Surgeries() {
               open={isOpenSortedBy}
               width={"165px"}
               label={"Select"}
-            />
+            /> */}
           </div>
         </div>
 

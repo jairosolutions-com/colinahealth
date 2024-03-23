@@ -25,6 +25,7 @@ const Allergies = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>("");
   const [term, setTerm] = useState<string>("");
+  const [sortBy, setSortBy] = useState("Type");
 
   const params = useParams<{
     id: any;
@@ -36,9 +37,29 @@ const Allergies = () => {
   const patientId = params.id.toUpperCase();
   // const patientId = params.id;
 
-  const optionsOrderedBy = ["Ascending", "Descending"];
-  const optionsSortBy = ["Type", "Severity", "Reaction", "Notes"];
-  // end of orderby & sortby function
+  const handleOrderOptionClick = (option: string) => {
+    if (option === "Ascending") {
+      setSortOrder("ASC");
+    } else {
+      setSortOrder("DESC");
+    }
+  };
+
+  const handleSortOptionClick = (option: string) => {
+    setSortBy(option);
+    console.log("option", option);
+  };
+
+  const optionsOrderedBy = [
+    { label: "Ascending", onClick: handleOrderOptionClick },
+    { label: "Descending", onClick: handleOrderOptionClick },
+  ];
+  const optionsSortBy = [
+    { label: "Type", onClick: handleSortOptionClick },
+    { label: "Severity", onClick: handleSortOptionClick },
+    { label: "Reaction", onClick: handleSortOptionClick },
+    { label: "Notes", onClick: handleSortOptionClick },
+  ]; // end of orderby & sortby function
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -72,19 +93,6 @@ const Allergies = () => {
     const day = date.getDate();
     const year = date.getFullYear();
 
-    // // Get the hours and minutes
-    // let hours = date.getHours();
-    // const minutes = date.getMinutes();
-
-    // // Convert hours to AM/PM format
-    // const ampm = hours >= 12 ? "pm" : "am";
-    // hours %= 12;
-    // hours = hours || 12; // Handle midnight
-
-    // // Format the time string
-    // const time = `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
-
-    // Format the date string
     const formattedDate = `${month} ${day}, ${year}`;
 
     return formattedDate;
@@ -141,7 +149,7 @@ const Allergies = () => {
           patientId,
           term,
           currentPage,
-          "allergen",
+          sortBy,
           sortOrder as "ASC" | "DESC",
           router
         );
@@ -156,7 +164,7 @@ const Allergies = () => {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, term]);
+  }, [currentPage, sortOrder, sortBy, term]);
 
   return (
     <div className="  w-full">
@@ -229,7 +237,12 @@ const Allergies = () => {
               Order by
             </p>
             <DropdownMenu
-              options={optionsOrderedBy}
+              options={optionsOrderedBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                },
+              }))}
               open={isOpenOrderedBy}
               width={"165px"}
               label={"Select"}
@@ -239,7 +252,13 @@ const Allergies = () => {
               Sort by
             </p>
             <DropdownMenu
-              options={optionsSortBy}
+              options={optionsSortBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                  console.log("label", label);
+                },
+              }))}
               open={isOpenSortedBy}
               width={"165px"}
               label={"Select"}
