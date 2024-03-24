@@ -186,9 +186,13 @@ console.log(pathname,'pathname')
                       height="26"
                     />
                     <div>
-                      <p className="flex items-center mr-11">
-                        Code Status: {patientData[0]?.codeStatus}
-                      </p>
+                      <h1 className={`flex items-center mr-11`}>
+                        Code Status: 
+                        <p className={` 
+                          ${patientData[0]?.codeStatus === 'DNR' ? 'text-red-500' : 'text-blue-500'} ml-1`}>
+                          {patientData[0]?.codeStatus}
+                        </p>
+                      </h1>
                     </div>
                     <div className="flex">
                       <div>
@@ -206,11 +210,11 @@ console.log(pathname,'pathname')
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
                   <p
-                  className={`cursor-pointer font-semibold ${
-                    pathname === tab.url || (tabUrl === "surgeries" && tab.label === "Medical History")
-                      ? "text-[#007C85] border-b-[3px] border-[#007C85]"
-                      : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
-                  }`}
+                    className={`cursor-pointer font-semibold ${
+                      pathname === tab.url || (tabUrl === "surgeries" && tab.label === "Medical History")
+                        ? "text-[#007C85] border-b-[3px] border-[#007C85]"
+                        : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
+                    }`}
                     key={index}
                     onClick={() => {
                       handleTabClick(tab.url);

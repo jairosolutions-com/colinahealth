@@ -296,6 +296,11 @@ export default function Surgeries() {
                 </th>
               </tr>
             </thead>
+            {patientSurgeries.length === 0 ? (
+              <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                <p className="text-xl font-semibold text-gray-700">No Surgeries</p>
+              </div>
+            ):(
             <tbody>
               {patientSurgeries.map((surgery, index) => (
                 <tr key={index} className="  even:bg-gray-50  border-b ">
@@ -321,6 +326,7 @@ export default function Surgeries() {
                 </tr>
               ))}
             </tbody>
+            )}
           </table>
         </div>
         {/* END OF TABLE */}

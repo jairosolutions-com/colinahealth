@@ -275,6 +275,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                     Country
                   </label>
                   <select
+                  className="w-full"
                     name="country"
                     onChange={(event) =>
                       handleCountryChange(event.target.value)
