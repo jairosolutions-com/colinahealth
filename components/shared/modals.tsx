@@ -1,6 +1,6 @@
 "use client";
 
-import { createAllergiesOfPatient } from "@/app/api/medical-history-api/allergies-api";
+import { createAllergiesOfPatient } from "@/app/api/medical-history-api/allergies.api";
 import { X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -41,9 +41,13 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
   const handleSubmit = async () => {
     try {
       // Call the createAllergiesOfPatient API function
-      const allergy = await createAllergiesOfPatient(patientId, formData, router);
+      const allergy = await createAllergiesOfPatient(
+        patientId,
+        formData,
+        router
+      );
       console.log("Allergy added successfully:", allergy);
-  
+
       // Reset the form data after successful submission
       setFormData({
         patientUuid: patientId,
@@ -58,7 +62,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
       setError("Failed to add allergy");
     }
   };
-  
+
   return (
     <div
       className={`absolute left-0 top-0 w-full h-full bg-[#76898A99] flex items-center justify-center `}

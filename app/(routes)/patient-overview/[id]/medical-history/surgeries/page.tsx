@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { Modal } from "@/components/shared/modalss";
-import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries-api";
+import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries.api";
 
 export default function Surgeries() {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -157,7 +157,15 @@ export default function Surgeries() {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, sortBy, term]);
+  }, [currentPage, sortOrder, sortBy, term, isOpen]);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
+  }
 
   console.log(patientSurgeries, "PatientSurgeries");
   return (

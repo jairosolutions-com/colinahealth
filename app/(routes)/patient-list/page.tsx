@@ -5,12 +5,16 @@ import {
   fetchPatientList,
   searchPatientList,
 } from "@/app/api/patients-api/patientList.api";
+import DropdownMenu from "@/components/dropdown-menu";
 
 import { Modal } from "@/components/shared/modal";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function PatientPage({ patient }: { patient: any }) {
+  const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
+  const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
+  const [sortBy, setSortBy] = useState("firstName");
   const [patientList, setPatientList] = useState<any[]>([]);
   const [patientId, setPatientId] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -25,6 +29,35 @@ export default function PatientPage({ patient }: { patient: any }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter();
+
+  const handleOrderOptionClick = (option: string) => {
+    if (option === "Ascending") {
+      setSortOrder("ASC");
+    } else {
+      setSortOrder("DESC");
+    }
+  };
+
+  const handleSortOptionClick = (option: string) => {
+    if(option=='Age'){
+      setSortBy("age");
+    } else if (option=="Name"){
+      setSortBy('firstName')
+    } else if (option=="Gender"){
+      setSortBy('gender')
+    }
+    console.log(sortBy,'ooption')
+  };
+
+  const optionsOrderedBy = [
+    { label: "Ascending", onClick: handleOrderOptionClick },
+    { label: "Descending", onClick: handleOrderOptionClick },
+  ];
+  const optionsSortBy = [
+    { label: "Name", onClick: handleSortOptionClick },
+    { label: "Age", onClick: handleSortOptionClick },
+    { label: "Gender", onClick: handleSortOptionClick },
+  ]; // end of orderby & sortby function
 
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
@@ -88,44 +121,16 @@ export default function PatientPage({ patient }: { patient: any }) {
     return pageNumbers;
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetchPatientList(
-  //         currentPage,
-  //         "firstName",
-  //         sortOrder as "ASC" | "DESC",
-  //         router
-  //       );
-  //       setPatientList(response.data);
-  //       console.log("Patient list after setting state:", response.data);
-  //       setTotalPages(response.totalPages);
-  //       setTotalPatient(response.totalCount);
-  //       setIsLoading(false);
-  //     } catch (error: any) {
-  //       setError(error.message);
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [currentPage, sortOrder]);
-
-  console.log(sortOrder);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await searchPatientList(
           term,
           currentPage,
-          "firstName",
+          sortBy,
           sortOrder as "ASC" | "DESC",
           router
         );
-        console.log("Search response:", response);
-        console.log("term:", term);
-
         if (response.data.length === 0) {
           setPatientList([]);
 
@@ -144,10 +149,11 @@ export default function PatientPage({ patient }: { patient: any }) {
     };
 
     fetchData();
-  }, [term, sortOrder, currentPage]);
+  }, [term, sortOrder, currentPage, sortBy, isOpen]);
 
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
+    setIsLoading(true)
     onNavigate(
       router,
       `/patient-overview/${lowercasePatientId}/medical-history/allergies`
@@ -168,7 +174,7 @@ export default function PatientPage({ patient }: { patient: any }) {
   console.log("patientList", patientList);
 
   return (
-    <div className="relative w-full mx-24 mt-24">
+    <div className="relative w-full mx-24 mt-24 select-none">
       <div className="flex justify-end">
         <p
           onClick={() => onNavigate(router, "/dashboard")}
@@ -178,8 +184,8 @@ export default function PatientPage({ patient }: { patient: any }) {
         </p>
       </div>
       <div className="flex justify-between items-center">
-        <div className="flex flex-col mb-5 px-5">
-          <p className="p-title">Patients List Records</p>
+        <div className="flex flex-col mb-5 px-5 ">
+          <p className="p-title ">Patients List Records</p>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[21px] mt-2 ">
             Total of {totalPatient} Patients
@@ -219,27 +225,39 @@ export default function PatientPage({ patient }: { patient: any }) {
                 type="text"
                 placeholder="Search by reference no. or name..."
                 value={term}
-                onChange={(e) => setTerm(e.target.value)}
+                onChange={(e) => {
+                  setTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
               />
             </div>
           </form>
-          <div className="flex items-center">
-            <p className="text-[#191D23] opacity-[60%]">Order by</p>
-            <button
-              className="bg-[#FFFFFF] w-[165px] h-[47px] mx-3 rounded-[5px] px-[20px] items-center flex justify-between"
-              onClick={() => setSortOrder("ASC")}
-            >
-              Select
-              <img src="/imgs/dropdown.svg" alt="" />
-            </button>
-            <p className="text-[#191D23] opacity-[60%]">Sort by</p>
-            <button
-              className="bg-[#FFFFFF] w-[165px] h-[47px] mx-3 rounded-[5px] px-[20px] items-center flex justify-between"
-              onClick={() => setSortOrder("DESC")}
-            >
-              Choose
-              <img src="/imgs/dropdown.svg" alt="" />
-            </button>
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
+            <p className="text-[#191D23] opacity-[60% font-semibold]">Order by</p>
+            <DropdownMenu
+              options={optionsOrderedBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                },
+              }))}
+              open={isOpenOrderedBy}
+              width={"165px"}
+              label={"Select"}
+            />
+            <p className="text-[#191D23] opacity-[60%] font-semibold">Sort by</p>
+            <DropdownMenu
+              options={optionsSortBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                  console.log("label", label);
+                },
+              }))}
+              open={isOpenSortedBy}
+              width={"165px"}
+              label={"Select"}
+            />
           </div>
         </div>
 
@@ -295,25 +313,25 @@ export default function PatientPage({ patient }: { patient: any }) {
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody >
                 {patientList.map((patient, index) => (
                   <tr
                     key={index}
-                    className="cursor-pointer odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
+                    className="cursor-pointer  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
                     onClick={() => handlePatientClick(patient.uuid)}
                   >
                     <th
                       scope="row"
-                      className="truncate max-w-[286px] text-left px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                      className="truncate max-w-[286px] text-left px-6 py-5  font-medium text-gray-900 whitespace-nowrap"
                     >
                       {patient.uuid}
                     </th>
-                    <td className="px-6 py-4">
+                    <td className="px-6">
                       {patient.firstName} {patient.lastName}
                     </td>
-                    <td className="px-6 py-4">{patient.age}</td>
-                    <td className="px-6 py-4">{patient.gender}</td>
-                    <td className="px-[50px] py-4">
+                    <td className="px-6">{patient.age}</td>
+                    <td className="px-6">{patient.gender}</td>
+                    <td className="px-[50px]">
                       <button className="btn-view">Edit</button>
                     </td>
                   </tr>
