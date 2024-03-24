@@ -5,12 +5,11 @@ import { getAccessToken, setAccessToken } from "../login-api/accessToken";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 // Function to get the access token from local storage
 
-export async function fetchCountryList(
+export async function fetchPatientDetails(
+patientId: string,
   router: any // Pass router instance as a parameter
 ): Promise<any> {
-  const requestData = {
-  };
-
+const patientUuid = patientId.toUpperCase();
   try {
     const accessToken = getAccessToken(); // Retrieve access token from local storage
     if (!accessToken) {
@@ -24,15 +23,15 @@ export async function fetchCountryList(
 
     // Make the API request to fetch the patient list
     const response = await axios.get(
-      `${apiUrl}/countries`,
+      `${apiUrl}/patient-information/fullInfo/${patientUuid}`,
       { headers }
     );
 
     // Handle the response data
-    const countryList = response.data;
+    const patientDetails = response;
 
-    console.log("api coutnry list", countryList);
-    return countryList;
+    console.log("api patientDetails", patientDetails);
+    return patientDetails;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401) {
       // Unauthorized access, navigate to login page and clear headers

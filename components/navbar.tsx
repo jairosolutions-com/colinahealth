@@ -26,8 +26,14 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[105px]">
-      <Image src={"/imgs/colina-logo.png"} alt={""} width={200} height={37} />
+    <div className="fixed select-none  bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[105px]">
+      <Image
+        className="pointer-events-none"
+        src={"/imgs/colina-logo.png"}
+        alt={""}
+        width={200}
+        height={37}
+      />
       <div className="flex gap-[20px] items-center">
         <div className="flex gap-[20px]">
           {routes.map((route, index) => (
@@ -41,8 +47,21 @@ export const Navbar = () => {
           ))}
         </div>
         <div className="flex gap-3 items-center" onClick={handleLogOut}>
-          <Image src={"/imgs/dennis.svg"} alt={""} width={30} height={30} />
-          <Image src={"/svgs/arrow-down.svg"} alt={""} width={15} height={15} />
+          <Image
+            className="!cursor-pointer"
+            src={"/imgs/dennis.svg"}
+            alt={""}
+            width={30}
+            height={30}
+            draggable={false}
+          />
+          <Image
+            className="pointer-events-none"
+            src={"/svgs/arrow-down.svg"}
+            alt={""}
+            width={15}
+            height={15}
+          />
         </div>
       </div>
     </div>

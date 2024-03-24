@@ -56,6 +56,7 @@ export default function PatientOverviewLayout({
   ];
 
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
+    setIsLoading(true);
     onNavigate(router, url);
     setActiveTab(-1);
     setDetailsClicked(true);
@@ -67,6 +68,7 @@ export default function PatientOverviewLayout({
   //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
   // };
   const handleTabClick = (url: string) => {
+    setIsLoading(true);
     onNavigate(router, url);
     setDetailsClicked(false);
   };
@@ -85,7 +87,15 @@ console.log(pathname,'pathname')
     };
 
     fetchData();
-  }, [patientId, router]);
+  }, [patientId, router, params]);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
+  }
   console.log(patientData, "patientData");
 
   const pathParts = pathname.split('/');
@@ -124,7 +134,12 @@ console.log(pathname,'pathname')
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
                       className="underline text-sm font-semibold text-[#07143799] text-right"
-                      onClick={() => handleSeeMoreDetails("/patient-overview/patientId/patient-details", -1)}
+                      onClick={() =>
+                        handleSeeMoreDetails(
+                          `/patient-overview/${params.id}/patient-details`,
+                          -1
+                        )
+                      }
                     >
                       See more details
                     </p>
@@ -178,8 +193,10 @@ console.log(pathname,'pathname')
                     <div className="flex">
                       <div>
                         <p className="flex items-center mr-11">
-                          Allergy: {patientData[0]?.allergies ? patientData[0]?.allergies : "None"}
-                   
+                          Allergy:{" "}
+                          {patientData[0]?.allergies
+                            ? patientData[0]?.allergies
+                            : "None"}
                         </p>
                       </div>
                     </div>

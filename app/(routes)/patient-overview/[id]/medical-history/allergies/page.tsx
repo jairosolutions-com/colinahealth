@@ -9,7 +9,7 @@ import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { Modal } from "@/components/shared/modals";
-import { fetchAllergiesByPatient } from "@/app/api/medical-history-api/allergies-api";
+import { fetchAllergiesByPatient } from "@/app/api/medical-history-api/allergies.api";
 
 const Allergies = () => {
   const router = useRouter();
@@ -164,8 +164,15 @@ const Allergies = () => {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, sortBy, term]);
-
+  }, [currentPage, sortOrder, sortBy, term, isOpen]);
+  
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
+  }
   return (
     <div className="  w-full">
       <div className="flex justify-between ">

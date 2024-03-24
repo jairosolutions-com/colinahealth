@@ -118,3 +118,24 @@ export async function fetchSurgeriesByPatient(
   }
 }
 
+export async function createSurgeriesOfPatient(patientId: string, formData: any, router: any): Promise<any> {
+  try {
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("Access token not found in local storage");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    // Make the API request to create the allergy
+    const response = await axios.post(`${apiUrl}/surgeries/${patientId}`, formData, { headers });
+    const createdSurgery= response.data;
+
+    return createdSurgery;
+  } catch (error) {
+    console.error("Error creating allergy:", error);
+    throw error; // Rethrow the error to handle it in the component
+  }
+}
