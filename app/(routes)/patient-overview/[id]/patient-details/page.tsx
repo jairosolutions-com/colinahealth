@@ -1,10 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { fetchPatientDetails } from "@/app/api/patients-api/patientDetails.api";
 
 export default function PatientDetails() {
+  const [patientDetails, setPatientDetails] = useState<any>([])
   const [patientEditMode, setPatientEditMode] = useState(false);
   const [emergencyEditMode, setEmergencyEditMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("")
+  const router = useRouter();
+  const params = useParams<{
+    id: any;
+    tag: string;
+    item: string;
+  }>();
+
+  const patientId = params.id.toUpperCase();
 
   const handlePatientEditClick = () => {
     setPatientEditMode(!patientEditMode);
@@ -14,6 +27,24 @@ export default function PatientDetails() {
     setEmergencyEditMode(!emergencyEditMode);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchPatientDetails(
+          patientId,
+          router
+        );
+        setPatientDetails(response.data);
+        setIsLoading(false);
+      } catch (error: any) {
+        setError(error.message);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+console.log(patientDetails,"patientDetails")
   return (
     <div className="flex flex-col w-full">
       <div className="text-xl font-semibold px-16 w-full h-[50px] pt-3 ring-1 ring-gray-300 pl-[110px]">
@@ -34,7 +65,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-regular text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>Drake </span>
+                  <span>{patientDetails[0]?.firstName}</span>
                 </p>
               )}
             </div>
@@ -52,7 +83,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>Ramos</span>
+                  <span>{patientDetails[0]?.lastName}</span>
                 </p>
               )}
             </div>
@@ -70,7 +101,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-regular text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>K</span>
+                  <span>{patientDetails[0]?.middleName ? patientDetails[0]?.middleName : "N/A"}</span>
                 </p>
               )}
             </div>
@@ -88,7 +119,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>Male</span>
+                  <span>{patientDetails[0]?.gender}</span>
                 </p>
               )}
             </div>
@@ -106,7 +137,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>34</span>
+                  <span>{patientDetails[0]?.age}</span>
                 </p>
               )}
             </div>
@@ -124,7 +155,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>05/24/1990</span>
+                  <span>{patientDetails[0]?.dateOfBirth}</span>
                 </p>
               )}
             </div>
@@ -142,7 +173,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>(555)123456</span>
+                  <span>{patientDetails[0]?.phoneNo}</span>
                 </p>
               )}
             </div>
@@ -160,7 +191,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>123123</span>
+                  <span>{patientDetails[0]?.address1 ? patientDetails[0]?.address1 : "N/A"}</span>
                 </p>
               )}
             </div>
@@ -178,7 +209,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>California</span>
+                  <span>{patientDetails[0]?.city}</span>
                 </p>
               )}
             </div>
@@ -196,7 +227,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>3124234</span>
+                  <span>{patientDetails[0]?.address2 ? patientDetails[0]?.address2 : "N/A"}</span>
                 </p>
               )}
             </div>
@@ -214,7 +245,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>Sanford</span>
+                  <span>{patientDetails[0]?.state}</span>
                 </p>
               )}
             </div>
@@ -232,25 +263,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>Los Angeles</span>
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="grid  grid-rows-1 max-w-[736px] w-full">
-            <div className="mt-8 flex items-center ">
-              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[108px] text-nowrap">
-                Allergies:
-              </label>
-              {patientEditMode ? (
-                <input
-                  type="text"
-                  className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
-                  placeholder="Skin Allergy"
-                />
-              ) : (
-                <p className=" font-normal text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>Skin Allergy </span>
+                  <span>{patientDetails[0]?.country}</span>
                 </p>
               )}
             </div>
@@ -268,7 +281,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>9005</span>
+                  <span>{patientDetails[0]?.zip}</span>
                 </p>
               )}
             </div>
@@ -286,7 +299,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>02/26/2024</span>
+                  <span>{patientDetails[0]?.admissionDate}</span>
                 </p>
               )}
             </div>
@@ -304,7 +317,7 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>DNR</span>
+                  <span>{patientDetails[0]?.codeStatus}</span>
                 </p>
               )}
             </div>
@@ -322,30 +335,31 @@ export default function PatientDetails() {
                 />
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>drake@gmail.com</span>
+                  <span>{patientDetails[0]?.email}</span>
                 </p>
               )}
             </div>
           </div>
-          <div className="mb-4 ">
-          <div className="justify-end flex pt-5">
-          {patientEditMode && (
+          <div></div>
+          <div className="mb-4 w-full ">
+            <div className="justify-end flex pt-5">
+            {patientEditMode && (
+                <button
+                  type="button"
+                  className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3 "
+                  onClick={handlePatientEditClick}
+                >
+                  Cancel
+                </button>
+              )}
               <button
                 type="button"
-                className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3 "
+                className="bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8  "
                 onClick={handlePatientEditClick}
               >
-                Cancel
+                {patientEditMode? "Save" : "Edit"}
               </button>
-            )}
-            <button
-              type="button"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8  "
-              onClick={handlePatientEditClick}
-            >
-              {patientEditMode? "Save" : "Edit"}
-            </button>
-          </div>
+            </div>
           </div>
         </div>
       </div>

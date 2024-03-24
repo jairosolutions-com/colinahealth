@@ -103,7 +103,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
   return (
     <>
       <div
-        className={`absolute inset-[-100px] bg-[#76898A99] flex items-center justify-center`}
+        className={` absolute w-screen h-screen mt-1 ml-1 inset-[-100px] bg-[#76898A99] flex items-center justify-center`}
       >
         <div className="max-w-[1018px] w-full bg-[#FFFFFF]">
           <div className="bg-[#ffffff] w-full h-[50px] flex items-center justify-start ring-1 ring-gray-200">

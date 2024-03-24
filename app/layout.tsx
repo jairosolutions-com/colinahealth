@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
+import { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 const manrope = Manrope({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Colinahealth",
+  title: "ColinaHealth",
   description: "EMR Website",
 };
 
@@ -17,6 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/icons/colinahealthlogo3.png" />
+      </head>
       <body className={manrope.className}>{children}</body>
     </html>
   );
