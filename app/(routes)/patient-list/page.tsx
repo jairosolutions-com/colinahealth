@@ -6,6 +6,7 @@ import {
   searchPatientList,
 } from "@/app/api/patients-api/patientList.api";
 import DropdownMenu from "@/components/dropdown-menu";
+import Edit from "@/components/shared/buttons/view";
 
 import { Modal } from "@/components/shared/modal";
 import { useRouter } from "next/navigation";
@@ -174,7 +175,7 @@ export default function PatientPage({ patient }: { patient: any }) {
   console.log("patientList", patientList);
 
   return (
-    <div className="relative w-full mx-24 mt-24 select-none">
+    <div className="relative w-full mx-24 mt-24">
       <div className="flex justify-end">
         <p
           onClick={() => onNavigate(router, "/dashboard")}
@@ -317,8 +318,8 @@ export default function PatientPage({ patient }: { patient: any }) {
                 {patientList.map((patient, index) => (
                   <tr
                     key={index}
-                    className="cursor-pointer  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
-                    onClick={() => handlePatientClick(patient.uuid)}
+                    className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
+                    
                   >
                     <th
                       scope="row"
@@ -331,8 +332,10 @@ export default function PatientPage({ patient }: { patient: any }) {
                     </td>
                     <td className="px-6">{patient.age}</td>
                     <td className="px-6">{patient.gender}</td>
-                    <td className="px-[50px]">
-                      <button className="btn-view">Edit</button>
+                    <td className="px-[50px]"
+                    >
+                      <div onClick={() => handlePatientClick(patient.uuid)}><Edit></Edit></div>
+                    
                     </td>
                   </tr>
                 ))}
