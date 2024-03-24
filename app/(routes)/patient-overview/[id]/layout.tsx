@@ -70,7 +70,7 @@ export default function PatientOverviewLayout({
     onNavigate(router, url);
     setDetailsClicked(false);
   };
-
+console.log(pathname,'pathname')
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -87,6 +87,10 @@ export default function PatientOverviewLayout({
     fetchData();
   }, [patientId, router]);
   console.log(patientData, "patientData");
+
+  const pathParts = pathname.split('/');
+  const tabUrl = pathParts[pathParts.length - 1];
+
   return (
     <div className="flex flex-col w-full px-4 lg:px-28 mt-[100px]">
       <div className="flex flex-col gap-[3px]">
@@ -185,11 +189,11 @@ export default function PatientOverviewLayout({
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
                   <p
-                    className={`cursor-pointer font-semibold  ${
-                      pathname === tab.url
-                        ? "text-[#007C85] border-b-[3px] border-[#007C85]"
-                        : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
-                    }`}
+                  className={`cursor-pointer font-semibold ${
+                    pathname === tab.url || (tabUrl === "surgeries" && tab.label === "Medical History")
+                      ? "text-[#007C85] border-b-[3px] border-[#007C85]"
+                      : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
+                  }`}
                     key={index}
                     onClick={() => {
                       handleTabClick(tab.url);
