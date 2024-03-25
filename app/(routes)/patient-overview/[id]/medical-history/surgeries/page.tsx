@@ -2,7 +2,7 @@
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import Edit from "@/components/shared/buttons/view";
+import Edit from "@/components/shared/buttons/edit";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
@@ -22,9 +22,12 @@ export default function Surgeries() {
   const [gotoError, setGotoError] = useState(false);
   const [term, setTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("ASC");
+  const [surgeryUuid, setSurgeryUuid] = useState("");
   const router = useRouter();
   const [sortBy, setSortBy] = useState("typeOfSurgery");
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [surgeryToEdit, setSurgeryToEdit] = useState<any[]>([]);
   const params = useParams<{
     id: any;
     tag: string;
@@ -41,6 +44,7 @@ export default function Surgeries() {
       setSortOrder("DESC");
     }
   };
+
 
   const handleSortOptionClick = (option: string) => {
     setIsOpenSortedBy(false);
@@ -62,7 +66,7 @@ export default function Surgeries() {
     { label: "Surgery", onClick: handleSortOptionClick },
     { label: "Notes", onClick: handleSortOptionClick },
   ];
-  const [isOpen, setIsOpen] = useState(false);
+  
 
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
@@ -70,6 +74,8 @@ export default function Surgeries() {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
+      setIsEdit(false)
+      setSurgeryToEdit([])
     }
   };
 
@@ -321,7 +327,7 @@ export default function Surgeries() {
                   </td>
                   <td className="px-6 py-4">{surgery.surgeries_notes}</td>
                   <td className="px-[50px] py-4 flex items-center justify-center  ">
-                    <Edit></Edit>
+                    <div onClick={() => {isModalOpen(true); setIsEdit(true); setSurgeryUuid(surgery.surgeries_uuid); setSurgeryToEdit([surgery.surgeries_dateOfSurgery,surgery.surgeries_typeOfSurgery,surgery.surgeries_surgery,surgery.surgeries_notes]) }}><Edit></Edit></div>
                   </td>
                 </tr>
               ))}
@@ -397,7 +403,7 @@ export default function Surgeries() {
         </div>
       )}
       {isOpen && (
-        <Modal isModalOpen={isModalOpen} isOpen={isOpen} label="sample label" />
+        <Modal isModalOpen={isModalOpen} isEdit={isEdit} surgeryUuid={surgeryUuid} surgeryToEdit={surgeryToEdit} isOpen={isOpen} label="sample label" />
       )}
     </div>
   );
