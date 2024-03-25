@@ -1,22 +1,32 @@
 "use client";
 
-import { createAllergiesOfPatient } from "@/app/api/medical-history-api/allergies.api";
+import { createAllergiesOfPatient, updateAllergyOfPatient } from "@/app/api/medical-history-api/allergies.api";
 import { X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 interface Modalprops {
+  isEdit: boolean;
+  allergy: any;
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
 }
 
-export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
+export const Modal = ({
+  isEdit,
+  allergy,
+  label,
+  isOpen,
+  isModalOpen,
+}: Modalprops) => {
   const params = useParams<{
     id: any;
     tag: string;
     item: string;
   }>();
+
+  console.log(allergy, "allergy");
 
   const patientId = params.id.toUpperCase();
   // const patientId = params.id;
@@ -24,11 +34,11 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     patientUuid: patientId,
-    type: "",
-    allergen: "",
-    severity: "",
-    reaction: "",
-    notes: "",
+    type: allergy.allergies_type,
+    allergen: allergy.allergies_allergen,
+    severity: allergy.allergies_severity,
+    reaction: allergy.allergies_reaction,
+    notes: allergy.allergies_notes,
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -40,23 +50,28 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
 
   const handleSubmit = async () => {
     try {
-      // Call the createAllergiesOfPatient API function
-      const allergy = await createAllergiesOfPatient(
-        patientId,
-        formData,
-        router
-      );
-      console.log("Allergy added successfully:", allergy);
+      if (isEdit) {
+        await updateAllergyOfPatient(allergy.allergies_uuid, formData, router);
+        isModalOpen(false);
+        return;
+      } else {
+        const allergy = await createAllergiesOfPatient(
+          patientId,
+          formData,
+          router
+        );
+        console.log("Allergy added successfully:", allergy);
 
-      // Reset the form data after successful submission
-      setFormData({
-        patientUuid: patientId,
-        type: "",
-        allergen: "",
-        severity: "",
-        reaction: "",
-        notes: "",
-      });
+        // Reset the form data after successful submission
+        setFormData({
+          patientUuid: patientId,
+          type: "",
+          allergen: "",
+          severity: "",
+          reaction: "",
+          notes: "",
+        });
+      }
     } catch (error) {
       console.error("Error adding allergy:", error);
       setError("Failed to add allergy");
@@ -157,7 +172,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               type="button"
               className="bg-blue-500 hover:bg-blue-700 text-[#ffff] font-semibold font-manrope py-1 px-4 rounded w-24 h-8 mr-3"
             >
-              Submit
+              {isEdit ? "Update" : "Submit"}
             </button>
           </div>
         </div>

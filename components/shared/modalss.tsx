@@ -1,6 +1,6 @@
 "use client";
 
-import { createSurgeriesOfPatient } from "@/app/api/medical-history-api/surgeries.api";
+import { createSurgeriesOfPatient, updateSurgeryOfPatient } from "@/app/api/medical-history-api/surgeries.api";
 import { X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -40,24 +40,31 @@ console.log(surgeryToEdit, "surgery uuid")
       [name]: value,
     }));
   };
-
+console.log(surgeryUuid, "surgery uuid")
   const handleSubmit = async () => {
     try {
-      // Call the createAllergiesOfPatient API function
-      const surgery = await createSurgeriesOfPatient(
-        patientId,
-        formData,
-        router
-      );
-      console.log("surgery added successfully:", surgery);
+      if (isEdit) {
+        await updateSurgeryOfPatient(surgeryUuid, formData, router);
+        isModalOpen(false);
+        return;
+      }
+      else {
+        // Call the createAllergiesOfPatient API function
+        const surgery = await createSurgeriesOfPatient(
+          patientId,
+          formData,
+          router
+        );
+        console.log("surgery added successfully:", surgery);
 
-      // Reset the form data after successful submission
-      setFormData({
-        typeOfSurgery: "",
-        dateOfSurgery: "",
-        surgery: "",
-        notes: "",
-      });
+        // Reset the form data after successful submission
+        setFormData({
+          typeOfSurgery: "",
+          dateOfSurgery: "",
+          surgery: "",
+          notes: "",
+        });
+      }
     } catch (error) {
       console.error("Error adding surgery:", error);
       setError("Failed to add allergy");
