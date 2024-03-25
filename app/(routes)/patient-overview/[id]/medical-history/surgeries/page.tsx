@@ -327,7 +327,11 @@ export default function Surgeries() {
                   </td>
                   <td className="px-6 py-4">{surgery.surgeries_notes}</td>
                   <td className="px-[50px] py-4 flex items-center justify-center  ">
-                    <div onClick={() => {isModalOpen(true); setIsEdit(true); setSurgeryUuid(surgery.surgeries_uuid); setSurgeryToEdit([surgery.surgeries_dateOfSurgery,surgery.surgeries_typeOfSurgery,surgery.surgeries_surgery,surgery.surgeries_notes]) }}><Edit></Edit></div>
+                    <div onClick={() => {
+                      isModalOpen(true); setIsEdit(true); setSurgeryUuid(surgery.surgeries_uuid); setSurgeryToEdit([surgery.surgeries_dateOfSurgery,surgery.surgeries_typeOfSurgery,surgery.surgeries_surgery,surgery.surgeries_notes]) 
+                      }}>
+                      <Edit></Edit>
+                    </div>
                   </td>
                 </tr>
               ))}

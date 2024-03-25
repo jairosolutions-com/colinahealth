@@ -139,3 +139,40 @@ export async function createAllergiesOfPatient(patientId: string, formData: any,
   }
 }
 
+
+export async function updateAllergyOfPatient(
+  allergyUuid: string, 
+  formData: any, 
+  router: any): 
+  Promise<any> {
+  try {
+    console.log(formData, "formdata")
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("Access token not found in local storage");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    // Make the API request to create the allergy
+    const response = await axios.patch(
+      `${apiUrl}/allergies/update/${allergyUuid}`, 
+    formData, 
+    { headers });
+    const updatedSurgery= response.data;
+
+    return updatedSurgery;
+  } catch (error) {
+    if ((error as AxiosError).response?.status === 401) {
+      setAccessToken("");
+      onNavigate(router, "/login");
+      return Promise.reject(new Error("Unauthorized access"));
+    }
+    console.error(
+      (error as AxiosError).message
+    );
+  }
+}
+
