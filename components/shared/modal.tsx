@@ -281,9 +281,9 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
                       handleCountryChange(event.target.value)
                     }
                   >
-                    <option disabled>Select a country</option>
+                    <option >Select a country</option>
                     {countryList.map((country) => (
-                      <option key={country.id} value={country.id}>
+                      <option key={country.countryId} value={country.id}>
                         {country.name}
                       </option>
                     ))}

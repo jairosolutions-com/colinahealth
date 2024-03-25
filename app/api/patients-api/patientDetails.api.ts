@@ -6,10 +6,10 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 // Function to get the access token from local storage
 
 export async function fetchPatientDetails(
-patientId: string,
+  patientId: string,
   router: any // Pass router instance as a parameter
 ): Promise<any> {
-const patientUuid = patientId.toUpperCase();
+  const patientUuid = patientId.toUpperCase();
   try {
     const accessToken = getAccessToken(); // Retrieve access token from local storage
     if (!accessToken) {
@@ -44,5 +44,40 @@ const patientUuid = patientId.toUpperCase();
       "Error fetching patient list:",
       (error as AxiosError).message
     );
+  }
+}
+
+export async function updatePatient(
+  patientId: string,
+  formData: any,
+  router: any
+): Promise<any> {
+  try {
+    console.log(formData, "formdata");
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("Access token not found in local storage");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    // Make the API request to create the allergy
+    const response = await axios.patch(
+      `${apiUrl}/patient-information/update/${patientId}`,
+      formData,
+      { headers }
+    );
+    const updatedSurgery = response.data;
+
+    return updatedSurgery;
+  } catch (error) {
+    if ((error as AxiosError).response?.status === 401) {
+      setAccessToken("");
+      onNavigate(router, "/login");
+      return Promise.reject(new Error("Unauthorized access"));
+    }
+    console.error((error as AxiosError).message);
   }
 }
