@@ -12,7 +12,15 @@ export default function Laboratoryresults() {
   const router = useRouter();
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [pageNumber, setPageNumber] = useState("");
+  const [gotoError, setGotoError] = useState(false);
+  const [term, setTerm] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState<string>("ASC");
   const [sortBy, setSortBy] = useState("Type");
@@ -22,6 +30,74 @@ export default function Laboratoryresults() {
     } else {
       setSortOrder("DESC");
     }
+  };
+  const isModalOpen = (isOpen: boolean) => {
+    setIsOpen(isOpen);
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else if (!isOpen) {
+      document.body.style.overflow = "scroll";
+      // setIsEdit(false)
+      // setSurgeryToEdit([])
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Function to handle going to next page
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const pageNumberInt = parseInt(pageNumber, 10);
+
+    // Check if pageNumber is a valid number and greater than 0
+    if (
+      !isNaN(pageNumberInt) &&
+      pageNumberInt <= totalPages &&
+      pageNumberInt > 0
+    ) {
+      setCurrentPage(pageNumberInt);
+
+      console.log("Navigate to page:", pageNumberInt);
+    } else {
+      setGotoError(true);
+      setTimeout(() => {
+        setGotoError(false);
+      }, 3000);
+      console.error("Invalid page number:", pageNumber);
+    }
+  };
+
+  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPageNumber(e.target.value);
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          className={`flex border border-px items-center justify-center  w-[49px]  ${
+            currentPage === i ? "btn-pagination" : ""
+          }`}
+          onClick={() => setCurrentPage(i)}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
   };
 
   const handleSortOptionClick = (option: string) => {
@@ -40,7 +116,6 @@ export default function Laboratoryresults() {
     { label: "Notes", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
-
   return (
     <div className="  w-full">
       <div className="flex justify-between items-center">
@@ -52,7 +127,7 @@ export default function Laboratoryresults() {
           </p>
         </div>
         <div className="flex flex-row justify-end">
-          <Add></Add>
+          <Add onClick={() => isModalOpen(true)} />
           <DownloadPDF></DownloadPDF>
         </div>
       </div>
