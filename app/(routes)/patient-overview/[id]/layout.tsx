@@ -30,7 +30,7 @@ export default function PatientOverviewLayout({
       url: `/patient-overview/${params.id}/medical-history/allergies`,
     },
     {
-      label: "Medication",
+      label: "Medication Log",
       url: `/patient-overview/${params.id}/medication`,
     },
     {
@@ -72,7 +72,7 @@ export default function PatientOverviewLayout({
     onNavigate(router, url);
     setDetailsClicked(false);
   };
-console.log(pathname,'pathname')
+  console.log(pathname, "pathname");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -98,7 +98,7 @@ console.log(pathname,'pathname')
   }
   console.log(patientData, "patientData");
 
-  const pathParts = pathname.split('/');
+  const pathParts = pathname.split("/");
   const tabUrl = pathParts[pathParts.length - 1];
 
   return (
@@ -187,9 +187,15 @@ console.log(pathname,'pathname')
                     />
                     <div>
                       <h1 className={`flex items-center mr-11`}>
-                        Code Status: 
-                        <p className={` 
-                          ${patientData[0]?.codeStatus === 'DNR' ? 'text-red-500' : 'text-blue-500'} ml-1`}>
+                        Code Status:
+                        <p
+                          className={` 
+                          ${
+                            patientData[0]?.codeStatus === "DNR"
+                              ? "text-red-500"
+                              : "text-blue-500"
+                          } ml-1`}
+                        >
                           {patientData[0]?.codeStatus}
                         </p>
                       </h1>
@@ -211,7 +217,9 @@ console.log(pathname,'pathname')
                 {tabs.map((tab, index) => (
                   <p
                     className={`cursor-pointer font-semibold ${
-                      pathname === tab.url || (tabUrl === "surgeries" && tab.label === "Medical History")
+                      pathname === tab.url ||
+                      (tabUrl === "surgeries" &&
+                        tab.label === "Medical History")
                         ? "text-[#007C85] border-b-[3px] border-[#007C85]"
                         : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
                     }`}

@@ -165,7 +165,7 @@ const Allergies = () => {
 
     fetchData();
   }, [currentPage, sortOrder, sortBy, term, isOpen]);
-  
+
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -200,25 +200,8 @@ const Allergies = () => {
           </p>
         </div>
         <div className="flex flex-row justify-end mt-[15px]">
-          <button
-            onClick={() => isModalOpen(true)}
-            className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu"
-          >
-            <img
-              src="/imgs/add.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Add
-          </button>
-          <button className="btn-pdfs hover:bg-[#007C85] h-[42px] hover:border-[#007C85] hover:text-white flex items-center justify-center rounded-lg font-manrope text-black text-lg px-8 py-4 border-2 border-gray-300 text-center w-64 relative ">
-            <img
-              src="/imgs/downloadpdf.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Download PDF
-          </button>
+          <Add onClick={() => isModalOpen(true)} />
+          <DownloadPDF></DownloadPDF>
         </div>
       </div>
 
@@ -307,39 +290,43 @@ const Allergies = () => {
             </thead>
             {patientAllergies.length === 0 ? (
               <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                <p className="text-xl font-semibold text-gray-700">No Allergies</p>
+                <p className="text-xl font-semibold text-gray-700">
+                  No Allergies
+                </p>
               </div>
-            ):(
+            ) : (
               <tbody>
-              {patientAllergies.map((allergy, index) => (
-                <tr key={index} className="  even:bg-gray-50  border-b ">
-                  <th
-                    scope="row"
-                    className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    {allergy.allergies_uuid}
-                  </th>
-                  <td className="px-2 py-4">
-                    {" "}
-                    {formatDate(allergy.allergies_createdAt)}
-                  </td>
-                  <td className="px-6 py-4">{allergy.allergies_type}</td>
-                  <td className=" max-w-[552px] px-6 py-4">
-                    {allergy.allergies_allergen}
-                  </td>
+                {patientAllergies.map((allergy, index) => (
+                  <tr key={index} className="  even:bg-gray-50  border-b ">
+                    <th
+                      scope="row"
+                      className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                    >
+                      {allergy.allergies_uuid}
+                    </th>
+                    <td className="px-2 py-4">
+                      {" "}
+                      {formatDate(allergy.allergies_createdAt)}
+                    </td>
+                    <td className="px-6 py-4">{allergy.allergies_type}</td>
+                    <td className=" max-w-[552px] px-6 py-4">
+                      {allergy.allergies_allergen}
+                    </td>
 
-                  <td className="px-6 py-4">{allergy.allergies_severity}</td>
-                  <td className="px-6 py-4">{allergy.allergies_reaction}</td>
-                  <td className="px-2 py-4">
-                    {allergy.allergies_notes ? allergy.allergies_notes : "None"}
-                  </td>
+                    <td className="px-6 py-4">{allergy.allergies_severity}</td>
+                    <td className="px-6 py-4">{allergy.allergies_reaction}</td>
+                    <td className="px-2 py-4">
+                      {allergy.allergies_notes
+                        ? allergy.allergies_notes
+                        : "None"}
+                    </td>
 
-                  <td className="px-[50px] py-4 flex items-center justify-center">
-                    <Edit></Edit>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+                    <td className="px-[50px] py-4 flex items-center justify-center">
+                      <Edit></Edit>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             )}
           </table>
         </div>
