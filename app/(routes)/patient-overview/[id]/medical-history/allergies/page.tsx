@@ -240,7 +240,7 @@ const Allergies = () => {
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Select"}
+              label={"Ascending"}
             />
 
             <p className="text-[#191D23] opacity-[60%] font-semibold">

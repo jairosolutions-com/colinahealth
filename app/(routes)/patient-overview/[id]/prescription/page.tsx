@@ -190,6 +190,10 @@ export default function prescription() {
                 className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
                 type="text"
                 placeholder="Search by reference no. or name..."
+                onChange={(event) => {
+                  setTerm(event.target.value);
+                  setCurrentPage(1);
+                }}
               />
             </div>
           </form>
@@ -207,7 +211,7 @@ export default function prescription() {
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Select"}
+              label={"Ascending"}
             />
 
             <p className="text-[#191D23] opacity-[60%] font-semibold">

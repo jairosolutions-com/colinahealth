@@ -4,15 +4,18 @@ import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/view";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { fetchLabResultsByPatient } from "@/app/api/lab-results-api/lab-results.api";
 
 export default function Laboratoryresults() {
   const router = useRouter();
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [patientLabResults, setPatientLabResults] = useState<any[]>([]);
+  const [totalLabResults, setTotalLabResults] = useState<number>(0);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -23,7 +26,7 @@ export default function Laboratoryresults() {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState<string>("ASC");
-  const [sortBy, setSortBy] = useState("Type");
+  const [sortBy, setSortBy] = useState("date");
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -31,6 +34,13 @@ export default function Laboratoryresults() {
       setSortOrder("DESC");
     }
   };
+  const params = useParams<{
+    id: any;
+    tag: string;
+    item: string;
+  }>();
+  const patientId = params.id.toUpperCase();
+
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
     if (isOpen) {
@@ -100,9 +110,52 @@ export default function Laboratoryresults() {
     return pageNumbers;
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchLabResultsByPatient(
+          patientId,
+          term,
+          currentPage,
+          sortBy,
+          sortOrder as "ASC" | "DESC",
+          router
+        );
+
+        //convert date to ISO string
+
+        setPatientLabResults(response.data);
+        console.log("Patient list after setting state:", response.data);
+        setTotalPages(response.totalPages);
+        setTotalLabResults(response.totalCount);
+        setIsLoading(false);
+      } catch (error: any) {
+        setError(error.message);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [currentPage, sortOrder, sortBy, term, isOpen]);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
+  }
   const handleSortOptionClick = (option: string) => {
-    setSortBy(option);
-    console.log("option", option);
+    setIsOpenSortedBy(false);
+    if (option === "Date") {
+      setSortBy("date");
+    } else if (option === "Total Cholesterol") {
+      setSortBy("totalCholesterol");
+    } else if (option === "LDL-C") {
+      setSortBy("ldlCholesterol");
+    } else {
+      setSortBy("hdlCholesterol");
+    }
   };
 
   const optionsOrderedBy = [
@@ -110,10 +163,10 @@ export default function Laboratoryresults() {
     { label: "Descending", onClick: handleOrderOptionClick },
   ];
   const optionsSortBy = [
-    { label: "Type", onClick: handleSortOptionClick },
-    { label: "Severity", onClick: handleSortOptionClick },
-    { label: "Reaction", onClick: handleSortOptionClick },
-    { label: "Notes", onClick: handleSortOptionClick },
+    { label: "Date", onClick: handleSortOptionClick },
+    { label: "Total Cholesterol", onClick: handleSortOptionClick },
+    { label: "LDL-C", onClick: handleSortOptionClick },
+    { label: "HDL-C", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
   return (
@@ -123,7 +176,7 @@ export default function Laboratoryresults() {
           <h1 className="p-title">Laboratory Results </h1>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
-            Total of 6 Patients
+            Total of {totalLabResults} Lab Results
           </p>
         </div>
         <div className="flex flex-row justify-end">
@@ -142,6 +195,10 @@ export default function Laboratoryresults() {
                 className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
                 type="text"
                 placeholder="Search by reference no. or name..."
+                onChange={(event) => {
+                  setTerm(event.target.value);
+                  setCurrentPage(1);
+                }}
               />
             </div>
           </form>
@@ -158,7 +215,7 @@ export default function Laboratoryresults() {
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Select"}
+              label={"Ascending"}
             />
 
             <p className="text-[#191D23] opacity-[60%] font-semibold">
@@ -185,6 +242,9 @@ export default function Laboratoryresults() {
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
                 <th scope="col" className="px-6 py-3 w-[200px] h-[70px]">
+                  LAB RESULT ID
+                </th>
+                <th scope="col" className="px-6 py-3 w-[200px] h-[70px]">
                   DATE
                 </th>
                 <th scope="col" className="px-0 py-3 w-[200px]">
@@ -203,10 +263,10 @@ export default function Laboratoryresults() {
                   TOTAL CHOLESTEROL
                 </th>
                 <th scope="col" className="px-6 py-3 w-[200px]">
-                  LDL CHOLESTEROL
+                  LDL-C
                 </th>
                 <th scope="col" className="px-6 py-3 w-[200px]">
-                  HDL CHOLESTEROL
+                  HDL-C
                 </th>
                 <th scope="col" className="px-6  py-3 w-[200px]">
                   TRIGLYCERIDES
@@ -217,172 +277,129 @@ export default function Laboratoryresults() {
               </tr>
             </thead>
             <tbody>
-              <tr className="odd:bg-white   border-b hover:bg-[#f4f4f4] group ">
-                <th
-                  scope="row"
-                  className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                >
-                  10/12/2024
-                </th>
-                <td className="px-0 py-4">70%</td>
-                <td className="truncate max-w-[286px] px-3 py-4 tb-med">
-                  120mg/dl
-                </td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="px-6 py-4">Given</td>
-                <td className="px-[70px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr className="odd:bg-white   border-b hover:bg-[#f4f4f4] group ">
-                <th
-                  scope="row"
-                  className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                >
-                  10/12/2024
-                </th>
-                <td className="px-0 py-4">70%</td>
-                <td className="truncate max-w-[286px] px-3 py-4 tb-med">
-                  120mg/dl
-                </td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="px-6 py-4">Given</td>
-                <td className="px-[70px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr className="odd:bg-white   border-b hover:bg-[#f4f4f4] group ">
-                <th
-                  scope="row"
-                  className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                >
-                  10/12/2024
-                </th>
-                <td className="px-0 py-4">70%</td>
-                <td className="truncate max-w-[286px] px-3 py-4 tb-med">
-                  120mg/dl
-                </td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="px-6 py-4">Given</td>
-                <td className="px-[70px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr className="odd:bg-white   border-b hover:bg-[#f4f4f4] group ">
-                <th
-                  scope="row"
-                  className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                >
-                  10/12/2024
-                </th>
-                <td className="px-0 py-4">70%</td>
-                <td className="truncate max-w-[286px] px-3 py-4 tb-med">
-                  120mg/dl
-                </td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="px-6 py-4">Given</td>
-                <td className="px-[70px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr className="odd:bg-white   hover:bg-[#f4f4f4] group ">
-                <th
-                  scope="row"
-                  className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                >
-                  10/12/2024
-                </th>
-                <td className="px-0 py-4">70%</td>
-                <td className="truncate max-w-[286px] px-3 py-4 tb-med">
-                  120mg/dl
-                </td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="truncate max-w-[286px] px-6 py-4"> 120mg/dl</td>
-                <td className="px-6 py-4">Given</td>
-                <td className="px-[70px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
+              {patientLabResults.length === 0 && (
+                <tr>
+                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                    <p className="text-xl font-semibold text-gray-700">
+                      No Lab Results
+                    </p>
+                  </td>
+                </tr>
+              )}
+              {patientLabResults.length > 0 && (
+                <>
+                  {patientLabResults.map((labResult, index) => (
+                    <tr key={index} className="  even:bg-gray-50  border-b ">
+                      <th
+                        scope="row"
+                        className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                      >
+                        {labResult.labResults_uuid}
+                      </th>
+                      <th
+                        scope="row"
+                        className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                      >
+                        {labResult.labResults_date}
+                      </th>
+                      <td className="px-0 py-4">
+                        {labResult.labResults_hemoglobinA1c}%
+                      </td>
+                      <td className="truncate max-w-[286px] px-3 py-4 tb-med">
+                        {labResult.labResults_fastingBloodGlucose}
+                      </td>
+                      <td className="truncate max-w-[286px] px-6 py-4">
+                        {labResult.labResults_totalCholesterol}
+                      </td>
+                      <td className="truncate max-w-[286px] px-6 py-4">
+                        {labResult.labResults_ldlCholesterol}
+                      </td>
+                      <td className="truncate max-w-[286px] px-6 py-4">
+                        {labResult.labResults_hdlCholesterol}
+                      </td>
+                      <td className="px-6 py-4">
+                        {labResult.labResults_triglycerides}
+                      </td>
+                      <td className="px-[70px] py-4">
+                        <Edit></Edit>
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              )}
             </tbody>
           </table>
         </div>
         {/* END OF TABLE */}
       </div>
       {/* pagination */}
-      <div className="mt-5 pb-5">
-        <div className="flex justify-between">
-          <p className="font-medium text-[14px] w-[138px] items-center">
-            Page 1 of 10
-          </p>
-          <div>
-            <nav>
-              <div className="flex -space-x-px text-sm">
-                <div>
-                  <a
-                    href="#"
-                    className="flex border border-px items-center justify-center  w-[77px] h-full"
-                  >
-                    Prev
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="#"
-                    className="flex border border-px items-center justify-center  w-[49px] h-full"
-                  >
-                    1
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="#"
-                    className="flex border border-px items-center justify-center  w-[49px] h-full"
-                  >
-                    2
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="#"
-                    aria-current="page"
-                    className="flex border border-px items-center justify-center  w-[49px] h-full"
-                  >
-                    3
-                  </a>
-                </div>
-
-                <div className="">
-                  <a
-                    href="#"
-                    className="flex border border-px items-center justify-center  w-[77px] h-full mr-5"
-                  >
-                    Next
-                  </a>
-                </div>
-                <div className="flex">
-                  <input
-                    className="ipt-pagination border text-center"
-                    type="text"
-                    placeholder="-"
-                  />
-                  <div className="">
-                    <button className="btn-pagination ">Go </button>
+      {totalPages <= 1 ? (
+        <div></div>
+      ) : (
+        <div className="mt-5 pb-5">
+          <div className="flex justify-between">
+            <p className="font-medium size-[18px] w-[138px] items-center">
+              Page {currentPage} of {totalPages}
+            </p>
+            <div>
+              <nav>
+                <div className="flex -space-x-px text-sm">
+                  <div>
+                    <button
+                      onClick={goToPreviousPage}
+                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                    >
+                      Prev
+                    </button>
                   </div>
+                  {renderPageNumbers()}
+
+                  <div className="ml-5">
+                    <button
+                      onClick={goToNextPage}
+                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                    >
+                      Next
+                    </button>
+                  </div>
+                  <form onSubmit={handleGoToPage}>
+                    <div className="flex px-5 ">
+                      <input
+                        className={`ipt-pagination appearance-none  text-center border ring-1 ${
+                          gotoError ? "ring-red-500" : "ring-gray-300"
+                        } border-gray-100`}
+                        type="text"
+                        placeholder="-"
+                        pattern="\d*"
+                        value={pageNumber}
+                        onChange={handlePageNumberChange}
+                        onKeyPress={(e) => {
+                          // Allow only numeric characters (0-9), backspace, and arrow keys
+                          if (
+                            !/[0-9\b]/.test(e.key) &&
+                            e.key !== "ArrowLeft" &&
+                            e.key !== "ArrowRight"
+                          ) {
+                            e.preventDefault();
+                          }
+                        }}
+                      />
+                      <div className="px-5">
+                        <button type="submit" className="btn-pagination ">
+                          Go{" "}
+                        </button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              </div>
-            </nav>
+              </nav>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+      {/* {isOpen && (
+        <Modal isModalOpen={isModalOpen} isEdit={isEdit} surgeryUuid={surgeryUuid} surgeryToEdit={surgeryToEdit} isOpen={isOpen} label="sample label" />
+      )} */}
     </div>
   );
 }
