@@ -34,8 +34,8 @@ export default function Surgeries() {
     tag: string;
     item: string;
   }>();
-
   const patientId = params.id.toUpperCase();
+
   // const patientId = params.id;
   const handleOrderOptionClick = (option: string) => {
     setIsOpenOrderedBy(false);
@@ -45,7 +45,6 @@ export default function Surgeries() {
       setSortOrder("DESC");
     }
   };
-
 
   const handleSortOptionClick = (option: string) => {
     setIsOpenSortedBy(false);
@@ -74,8 +73,8 @@ export default function Surgeries() {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
-      setIsEdit(false)
-      setSurgeryToEdit([])
+      setIsEdit(false);
+      setSurgeryToEdit([]);
     }
   };
 
@@ -203,7 +202,6 @@ export default function Surgeries() {
         <div className="flex flex-row justify-end">
           <Add onClick={() => isModalOpen(true)} />
           <DownloadPDF></DownloadPDF>
-
         </div>
       </div>
 
@@ -239,7 +237,7 @@ export default function Surgeries() {
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Select"}
+              label={"Ascending"}
             />
 
             <p className="text-[#191D23] opacity-[60%] font-semibold">
@@ -286,14 +284,16 @@ export default function Surgeries() {
                 </th>
               </tr>
             </thead>
-            {patientSurgeries.length === 0 ? (
-              <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                <p className="text-xl font-semibold text-gray-700">
-                  No Surgeries
-                </p>
-              </div>
-            ):(
             <tbody>
+              {patientSurgeries.length === 0 && (
+                <tr>
+                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                    <p className="text-xl font-semibold text-gray-700">
+                      No Prescription
+                    </p>
+                  </td>
+                </tr>
+              )}
               {patientSurgeries.map((surgery, index) => (
                 <tr key={index} className="  even:bg-gray-50  border-b ">
                   <th
@@ -313,16 +313,25 @@ export default function Surgeries() {
                   </td>
                   <td className="px-6 py-4">{surgery.surgeries_notes}</td>
                   <td className="px-[50px] py-4 flex items-center justify-center  ">
-                    <div onClick={() => {
-                      isModalOpen(true); setIsEdit(true); setSurgeryUuid(surgery.surgeries_uuid); setSurgeryToEdit([surgery.surgeries_dateOfSurgery,surgery.surgeries_typeOfSurgery,surgery.surgeries_surgery,surgery.surgeries_notes]) 
-                      }}>
+                    <div
+                      onClick={() => {
+                        isModalOpen(true);
+                        setIsEdit(true);
+                        setSurgeryUuid(surgery.surgeries_uuid);
+                        setSurgeryToEdit([
+                          surgery.surgeries_dateOfSurgery,
+                          surgery.surgeries_typeOfSurgery,
+                          surgery.surgeries_surgery,
+                          surgery.surgeries_notes,
+                        ]);
+                      }}
+                    >
                       <Edit></Edit>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
-            )}
           </table>
         </div>
         {/* END OF TABLE */}
@@ -393,7 +402,14 @@ export default function Surgeries() {
         </div>
       )}
       {isOpen && (
-        <Modal isModalOpen={isModalOpen} isEdit={isEdit} surgeryUuid={surgeryUuid} surgeryToEdit={surgeryToEdit} isOpen={isOpen} label="sample label" />
+        <Modal
+          isModalOpen={isModalOpen}
+          isEdit={isEdit}
+          surgeryUuid={surgeryUuid}
+          surgeryToEdit={surgeryToEdit}
+          isOpen={isOpen}
+          label="sample label"
+        />
       )}
     </div>
   );
