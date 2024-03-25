@@ -1,32 +1,37 @@
 "use client";
 
-import { createSurgeriesOfPatient } from "@/app/api/medical-history-api/surgeries.api";
+import { createSurgeriesOfPatient, updateSurgeryOfPatient } from "@/app/api/medical-history-api/surgeries.api";
 import { X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 interface Modalprops {
+  isEdit: boolean;
+  surgeryUuid: string;
+  surgeryToEdit:any
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
 }
 
-export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
+export const Modal = ({isEdit,surgeryToEdit, surgeryUuid ,label, isOpen, isModalOpen }: Modalprops) => {
   const params = useParams<{
     id: any;
     tag: string;
     item: string;
   }>();
 
+ 
+console.log(surgeryToEdit, "surgery uuid")
   const patientId = params.id.toUpperCase();
   // const patientId = params.id;
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    typeOfSurgery: "",
-    dateOfSurgery: "",
-    surgery: "",
-    notes: "",
+    typeOfSurgery: surgeryToEdit[1],
+    dateOfSurgery: surgeryToEdit[0],
+    surgery: surgeryToEdit[2],
+    notes: surgeryToEdit[3],
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,24 +40,31 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
       [name]: value,
     }));
   };
-
+console.log(surgeryUuid, "surgery uuid")
   const handleSubmit = async () => {
     try {
-      // Call the createAllergiesOfPatient API function
-      const surgery = await createSurgeriesOfPatient(
-        patientId,
-        formData,
-        router
-      );
-      console.log("surgery added successfully:", surgery);
+      if (isEdit) {
+        await updateSurgeryOfPatient(surgeryUuid, formData, router);
+        isModalOpen(false);
+        return;
+      }
+      else {
+        // Call the createAllergiesOfPatient API function
+        const surgery = await createSurgeriesOfPatient(
+          patientId,
+          formData,
+          router
+        );
+        console.log("surgery added successfully:", surgery);
 
-      // Reset the form data after successful submission
-      setFormData({
-        typeOfSurgery: "",
-        dateOfSurgery: "",
-        surgery: "",
-        notes: "",
-      });
+        // Reset the form data after successful submission
+        setFormData({
+          typeOfSurgery: "",
+          dateOfSurgery: "",
+          surgery: "",
+          notes: "",
+        });
+      }
     } catch (error) {
       console.error("Error adding surgery:", error);
       setError("Failed to add allergy");
@@ -79,7 +91,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               </label>
               <input
                 type="text"
-                className="h-12 w-[500px]  px-3 py-2 text-sm text-gray-400 text-normal rounded-lg border border-gray-200"
+                className="h-12 w-[500px]  px-3 py-2 text-sm  text-normal rounded-lg border border-gray-200"
                 placeholder="input type of allergy"
                 name="typeOfSurgery"
                 value={formData.typeOfSurgery}
@@ -94,7 +106,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               </label>
               <input
                 type="date"
-                className="h-12 w-[500px]  px-3 py-2 text-sm text-gray-400 text-normal rounded-lg border border-gray-200"
+                className="h-12 w-[500px]  px-3 py-2 text-sm  text-normal rounded-lg border border-gray-200"
                 placeholder="input type of allergy"
                 name="dateOfSurgery"
                 value={formData.dateOfSurgery}
@@ -109,7 +121,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               </label>
               <input
                 type="text"
-                className="h-12 w-[500px]  px-3 py-2 text-sm  text-gray-400 text-normal rounded-lg border border-gray-200"
+                className="h-12 w-[500px]  px-3 py-2 text-sm   text-normal rounded-lg border border-gray-200"
                 placeholder="input severity"
                 name="surgery"
                 value={formData.surgery}
@@ -124,7 +136,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               </label>
               <input
                 type="text"
-                className="pb-[100px]   w-[500px]  px-3 py-2 text-sm  text-gray-400 text-normal rounded-lg border border-gray-200"
+                className="pb-[100px]   w-[500px]  px-3 py-2 text-sm   text-normal rounded-lg border border-gray-200"
                 placeholder="input notes"
                 name="notes"
                 value={formData.notes}
@@ -138,7 +150,7 @@ export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
               onClick={handleSubmit}
               className="bg-blue-500 hover:bg-blue-700 text-[#ffff] font-semibold font-manrope py-1 px-4 rounded w-24 h-8 mr-3"
             >
-              Submit
+              {isEdit ? "Update" : "Submit"}
             </button>
           </div>
         </div>

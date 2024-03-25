@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import Edit from "@/components/shared/buttons/view";
+import Edit from "@/components/shared/buttons/edit";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
@@ -26,6 +26,8 @@ const Allergies = () => {
   const [error, setError] = useState<string | null>("");
   const [term, setTerm] = useState<string>("");
   const [sortBy, setSortBy] = useState("Type");
+  const [isEdit, setIsEdit] = useState(false);
+  const [allergyToEdit, setAllergyToEdit] = useState<any[]>([]);
 
   const params = useParams<{
     id: any;
@@ -69,6 +71,8 @@ const Allergies = () => {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
+      setIsEdit(false)
+      setAllergyToEdit([])
     }
   };
 
@@ -166,6 +170,7 @@ const Allergies = () => {
     fetchData();
   }, [currentPage, sortOrder, sortBy, term, isOpen]);
 
+  console.log(allergyToEdit, "allergy uuid")
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -321,12 +326,16 @@ const Allergies = () => {
                         : "None"}
                     </td>
 
-                    <td className="px-[50px] py-4 flex items-center justify-center">
+                  <td className="px-[50px] py-4 flex items-center justify-center">
+                    <div onClick={()=>{
+                      isModalOpen(true); setIsEdit(true); setAllergyToEdit(allergy)
+                      }}>
                       <Edit></Edit>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
             )}
           </table>
         </div>
@@ -398,7 +407,7 @@ const Allergies = () => {
         </div>
       )}
       {isOpen && (
-        <Modal isModalOpen={isModalOpen} isOpen={isOpen} label="sample label" />
+        <Modal isModalOpen={isModalOpen} isOpen={isOpen} isEdit={isEdit} allergy={allergyToEdit} label="sample label" />
       )}
     </div>
   );
