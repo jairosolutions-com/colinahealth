@@ -74,6 +74,7 @@ export default function PatientDetails() {
   };
 
   const handlePatientEditClick = () => {
+    window.history.pushState(null, '', '#edit');
     setPatientEditMode(!patientEditMode);
   };
 
@@ -126,6 +127,7 @@ export default function PatientDetails() {
       await updatePatient(patientId, formData, router);
       setIsSuccessFul(true);
       setPatientEditMode(false);
+      window.history.pushState(null, '', '#saved');
       return;
     } catch (error) {
       console.error("Error adding allergy:", error);
