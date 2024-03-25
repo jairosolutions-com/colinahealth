@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useRouter, useParams } from "next/navigation";
 import { fetchPrescriptionByPatient as fetchPrescriptionsByPatient } from "@/app/api/prescription-api/prescription.api";
-import { Modal } from "@/components/shared/modalss";
+// import { Modal } from "@/components/shared/modalss";
 
 export default function prescription() {
   const router = useRouter();
@@ -363,9 +363,9 @@ export default function prescription() {
           </div>
         </div>
       )}
-      {isOpen && (
-        <Modal isModalOpen={isModalOpen} isOpen={isOpen} label="sample label" />
-      )}
+      {/* {isOpen && (
+        <Modal isModalOpen={isModalOpen} isOpen={isOpen} label="sample label" isEdit={false} prescriptionUuid={""} prescriptionToEdit={undefined} />
+      )} */}
     </div>
   );
 }
