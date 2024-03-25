@@ -179,7 +179,7 @@ const Allergies = () => {
     );
   }
   return (
-    <div className="  w-full">
+    <div className="   w-full">
       <div className="flex justify-between ">
         <div className="flex flex-col">
           <div className="flex flex-row items-center">

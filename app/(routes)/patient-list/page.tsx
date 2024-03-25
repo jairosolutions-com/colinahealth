@@ -179,7 +179,7 @@ export default function PatientPage({ patient }: { patient: any }) {
       <div className="flex justify-end">
         <p
           onClick={() => onNavigate(router, "/dashboard")}
-          className="text-[#64748B] underline"
+          className="text-[#64748B] underline cursor-pointer"
         >
           Back to Dashboard
         </p>

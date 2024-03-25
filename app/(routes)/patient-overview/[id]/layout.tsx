@@ -102,7 +102,7 @@ export default function PatientOverviewLayout({
   const tabUrl = pathParts[pathParts.length - 1];
 
   return (
-    <div className="flex flex-col w-full px-4 lg:px-28 mt-[100px]">
+    <div className="flex flex-col w-full  px-4 lg:px-28 mt-[100px]">
       <div className="flex flex-col gap-[3px]">
         <div className="text-2xl font-bold">
           <h1>Patient Overview</h1>

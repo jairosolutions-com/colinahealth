@@ -40,18 +40,24 @@ const DropdownMenu = ({ open, width, label, options }: DropdownMenuProps) => {
       </button>
 
       {isOpen && (
-        <div className=" bg-white w-[165px] absolute mt-2 rounded-md p-4 shadow-xl cursor-pointer">
+        <div className=" bg-white w-[165px] flex flex-col absolute mt-2 rounded-md p-4 shadow-xl cursor-pointer">
           {options.map((option, index) => (
-            <p
-              className="hover:text-[#007C85] font-semibold"
-              key={index}
-              onClick={() => {
-                handleOptionClick(option.onClick);
-                setOptionLabel(option.label);
-              }}
-            >
-              {option.label}
-            </p>
+            <div className="flex flex-row gap-2 "
+            onClick={() => {
+              handleOptionClick(option.onClick);
+              setOptionLabel(option.label);
+            }}>
+              {option.label === "Ascending" || option.label === "Descending" ? (
+              <img 
+              className=""
+              src={`/icons/${option.label==='Ascending'?'orderByAsc.svg':''}${option.label==='Descending'?'orderByDesc.svg':''}`} alt="orderBy" />):(<div></div>)}
+              <p
+                className="hover:text-[#007C85] font-semibold"
+                key={index}
+              >
+                {option.label}
+              </p>
+            </div>
           ))}
         </div>
       )}
