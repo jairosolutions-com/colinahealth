@@ -421,8 +421,6 @@ export default function prescription() {
             isEdit={isEdit}
           />
         )}
-        />
-      )}
     </div>
   );
 }
