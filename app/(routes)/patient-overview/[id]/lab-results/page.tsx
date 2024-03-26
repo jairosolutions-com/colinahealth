@@ -3,7 +3,7 @@
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import Edit from "@/components/shared/buttons/view";
+import Edit from "@/components/shared/buttons/edit";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
@@ -18,7 +18,8 @@ export default function Laboratoryresults() {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [patientLabResults, setPatientLabResults] = useState<any[]>([]);
   const [totalLabResults, setTotalLabResults] = useState<number>(0);
-
+  const [labResultData, setLabResultData] = useState<any[]>([]);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +31,7 @@ export default function Laboratoryresults() {
   const [sortOrder, setSortOrder] = useState<string>("ASC");
   const [sortBy, setSortBy] = useState("date");
   const [isEdit, setIsEdit] = useState(false);
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -51,8 +52,8 @@ export default function Laboratoryresults() {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
-      // setIsEdit(false)
-      // setSurgeryToEdit([])
+      setIsEdit(false);
+      setLabResultData([]);
     }
   };
 
@@ -173,12 +174,13 @@ export default function Laboratoryresults() {
     { label: "HDL-C", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
- 
+
 
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
   };
+
 
   return (
     <div className="  w-full">
@@ -191,7 +193,11 @@ export default function Laboratoryresults() {
           </p>
         </div>
         <div className="flex flex-row justify-end">
-          <Add onClick={() => isModalOpen(true)} />
+          <Add
+            onClick={() => {
+              isModalOpen(true);
+            }}
+          ></Add>
           <DownloadPDF></DownloadPDF>
         </div>
       </div>
@@ -332,7 +338,15 @@ export default function Laboratoryresults() {
                         {labResult.labResults_triglycerides}
                       </td>
                       <td className="px-[70px] py-4">
-                        <Edit></Edit>
+                        <p
+                          onClick={() => {
+                            isModalOpen(true);
+                            setIsEdit(true);
+                            setLabResultData(labResult);
+                          }}
+                        >
+                          <Edit></Edit>
+                        </p>
                       </td>
                     </tr>
                   ))}
