@@ -236,43 +236,44 @@ export default function vitalsigns() {
 
         {/* START OF TABLE */}
         <div>
-          <table className="w-full text-left rtl:text-right">
-            <thead className="">
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
-                  VITAL SIGN ID
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
-                  DATE
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                  TIME
-                </th>
-                <th scope="col" className="px-6 py-3 truncate max-w-[300px]">
-                  BLOOD PRESSURE
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  HEART RATE
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  TEMPERATURE
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  RESPIRATORY
-                </th>
+          {patientVitalSign.length == 0 ? (
+            <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+              <p className="text-xl font-semibold text-gray-700">
+                No Vital Sign/s
+              </p>
+            </div>
+          ) : (
+            <table className="w-full text-left rtl:text-right">
+              <thead className="">
+                <tr className="uppercase text-[#64748B] border-y  ">
+                  <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
+                    VITAL SIGN ID
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
+                    DATE
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                    TIME
+                  </th>
+                  <th scope="col" className="px-6 py-3 truncate max-w-[300px]">
+                    BLOOD PRESSURE
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[400px]">
+                    HEART RATE
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[400px]">
+                    TEMPERATURE
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[300px]">
+                    RESPIRATORY
+                  </th>
 
-                <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            {patientVitalSign.length == 0 ? (
-              <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                <p className="text-xl font-semibold text-gray-700">
-                  No Vital Sign/s
-                </p>
-              </div>
-            ) : (
+                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+
               <tbody>
                 {patientVitalSign.map((vitalSign, index) => (
                   <tr
@@ -339,8 +340,8 @@ export default function vitalsigns() {
                   </tr>
                 ))}
               </tbody>
-            )}
-          </table>
+            </table>
+          )}
         </div>
         {/* END OF TABLE */}
       </div>
@@ -411,7 +412,7 @@ export default function vitalsigns() {
       )}
       {isOpen && (
         <VitalSignModal
-          isEdit={true}
+          isEdit={isEdit}
           isModalOpen={isModalOpen}
           isOpen={isOpen}
           label="sample label"
