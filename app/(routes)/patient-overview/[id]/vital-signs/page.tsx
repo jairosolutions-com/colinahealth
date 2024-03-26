@@ -39,6 +39,8 @@ export default function vitalsigns() {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
+      setVitalSignData([])
+      setIsEdit(false);
     }
   };
 
