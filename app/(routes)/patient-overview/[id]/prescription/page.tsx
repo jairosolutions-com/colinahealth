@@ -77,11 +77,13 @@ export default function prescription() {
   };
   const handleSortOptionClick = (option: string) => {
     setIsOpenSortedBy(false);
-    if (option === "Medication") {
-      setSortBy("name");
-    } else if (option === "Status") {
-      setSortBy("status");
-    } else {
+    if (option === "Medicine Name") {
+      setSortBy("medicationName");
+    } else if (option === "Frequency") {
+      setSortBy("frequency");
+    } else if (option === "Interval") {
+      setSortBy("interval");
+    }else {
       setSortBy("dosage");
     }
     console.log("option", option);
@@ -91,8 +93,9 @@ export default function prescription() {
     { label: "Descending", onClick: handleOrderOptionClick },
   ];
   const optionsSortBy = [
-    { label: "Medication", onClick: handleSortOptionClick },
-    { label: "Status", onClick: handleSortOptionClick },
+    { label: "Medicine Name", onClick: handleSortOptionClick },
+    { label: "Frequency", onClick: handleSortOptionClick },
+    { label: "Interval", onClick: handleSortOptionClick },
     { label: "Dosage", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
@@ -243,6 +246,7 @@ export default function prescription() {
 
         {/* START OF TABLE */}
         <div>
+          
           <table className="w-full text-left rtl:text-right">
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
@@ -270,15 +274,7 @@ export default function prescription() {
               </tr>
             </thead>
             <tbody>
-              {patientPrescriptions.length === 0 && (
-                <tr>
-                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-xl font-semibold text-gray-700">
-                      No Prescription
-                    </p>
-                  </td>
-                </tr>
-              )}
+              
               {patientPrescriptions.length > 0 && (
                 <>
                   {patientPrescriptions.map((prescription, index) => (

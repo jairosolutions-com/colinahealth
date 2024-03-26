@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/icons/colinahealthlogo3.png" />
+        <link rel="icon" href="/icons/colinahealthlogo.png" />
       </head>
       <body className={manrope.className}>{children}</body>
     </html>
