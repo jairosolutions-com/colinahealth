@@ -7,7 +7,7 @@ import Edit from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useRouter, useParams } from "next/navigation";
-import { fetchPrescriptionByPatient as fetchPrescriptionsByPatient } from "@/app/api/prescription-api/prescription.api";
+import { fetchPrescriptionsByPatient as fetchPrescriptionsByPatient } from "@/app/api/prescription-api/prescription.api";
 // import { Modal } from "@/components/shared/modalss";
 
 export default function prescription() {

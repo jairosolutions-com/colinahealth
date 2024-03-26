@@ -4,7 +4,7 @@ import { getAccessToken, setAccessToken } from "../login-api/accessToken";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export async function fetchPrescriptionByPatient(
+export async function fetchPrescriptionsByPatient(
   patientUuid: string,
   term: string,
   currentPage: number,

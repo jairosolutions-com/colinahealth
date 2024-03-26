@@ -1,24 +1,32 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/view";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Modal } from "@/components/shared/modals";
+import { fetchAppointmentsByPatient as fetchAppointmentsByPatient } from "@/app/api/appointments-api/appointments.api";
 
 const Appointment = () => {
   const router = useRouter();
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
+  const [patientAppointments, setPatientAppointments] = useState<any[]>([]);
+  const [term, setTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortBy, setSortBy] = useState("appointmentDate");
+  const [pageNumber, setPageNumber] = useState("");
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalPrescription, setTotalPrescription] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-
-  const [sortOrder, setSortOrder] = useState<string>("ASC");
-  const [sortBy, setSortBy] = useState("Type");
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -27,6 +35,26 @@ const Appointment = () => {
     }
   };
 
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Function to handle going to next page
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const params = useParams<{
+    id: any;
+    tag: string;
+    item: string;
+  }>();
+
+  const patientId = params.id.toUpperCase();
   const handleSortOptionClick = (option: string) => {
     setSortBy(option);
     console.log("option", option);
@@ -53,6 +81,33 @@ const Appointment = () => {
       document.body.style.overflow = "scroll";
     }
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchAppointmentsByPatient(
+          patientId,
+          term,
+          currentPage,
+          sortBy,
+          sortOrder as "ASC" | "DESC",
+          router
+        );
+
+        //convert date to ISO string
+
+        setPatientAppointments(response.data);
+        console.log("Patient list after setting state:", response.data);
+        setTotalPages(response.totalPages);
+        setTotalPrescription(response.totalCount);
+        setIsLoading(false);
+      } catch (error: any) {
+        setError(error.message);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [currentPage, sortOrder, sortBy, term, isOpen]);
 
   return (
     <div className="  w-full">
@@ -148,7 +203,10 @@ const Appointment = () => {
                   DATE
                 </th>
                 <th scope="col" className="px-6 py-3 w-[300px]">
-                  TIME
+                  START TIME
+                </th>
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  END TIME
                 </th>
                 <th scope="col" className=" px-[90px] py-3 w-10">
                   ACTION
@@ -156,86 +214,38 @@ const Appointment = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group">
-                <th
-                  scope="row"
-                  className=" text-[#2A7D15] font-large text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
-                >
-                  <span className="pr-1 text-[#2A7D15]">●</span>
-                  Upcoming Schedule
-                </th>
-                <td className="truncate max-w-[552px] px-6 py-3">
-                  March 22, 2024
-                </td>
-                <td className="px-6 py-3">8:00 - 10:00 am </td>
-                <td className="px-[90px] py-3">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr className="odd:bg-white  border-b hover:bg-[#f4f4f4] group">
-                <th
-                  scope="row"
-                  className=" text-[#B81C1C] font-large text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
-                >
-                  <span className="pr-1 text-[#B81C1C]">●</span>
-                  Cancelled Appointment
-                </th>
-                <td className="truncate max-w-[552px] px-6 py-3">
-                  March 22, 2024
-                </td>
-                <td className="px-6 py-3">8:00 - 10:00 am </td>
-                <td className="px-[90px] py-3">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group">
-                <th
-                  scope="row"
-                  className=" text-[#3C3C3C] font-large text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
-                >
-                  <span className="pr-1 text-[#3C3C3C]">●</span>
-                  Done Appointment
-                </th>
-                <td className="truncate max-w-[552px] px-6 py-3">
-                  March 22, 2024
-                </td>
-                <td className="px-6 py-3">8:00 - 10:00 am </td>
-                <td className="px-[90px] py-3">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr className="odd:bg-white  border-b hover:bg-[#f4f4f4] group">
-                <th
-                  scope="row"
-                  className=" text-[#3C3C3C] font-large text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
-                >
-                  <span className="pr-1 text-[#3C3C3C]">●</span>
-                  Done Appointment
-                </th>
-                <td className="truncate max-w-[552px] px-6 py-3">
-                  March 22, 2024
-                </td>
-                <td className="px-6 py-3">8:00 - 10:00 am </td>
-                <td className="px-[90px] py-3">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr className="odd:bg-white  even:bg-gray-50  hover:bg-[#f4f4f4] group">
-                <th
-                  scope="row"
-                  className=" text-[#B81C1C] font-large text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
-                >
-                  <span className="pr-1 text-[#B81C1C]">●</span>
-                  Cancelled Appointment
-                </th>
-                <td className="truncate max-w-[552px] px-6 py-3">
-                  March 22, 2024
-                </td>
-                <td className="px-6 py-3">8:00 - 10:00 am </td>
-                <td className="px-[90px] py-3">
-                  <Edit></Edit>
-                </td>
-              </tr>
+              {patientAppointments.length === 0 && (
+                <tr>
+                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                    <p className="text-xl font-semibold text-gray-700">
+                      No Appointments
+                    </p>
+                  </td>
+                </tr>
+              )}
+              {patientAppointments.length > 0 && (
+                <>
+                  {patientAppointments.map((appointments, index) => (
+                    <tr className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group">
+                      <th
+                        scope="row"
+                        className=" text-[#2A7D15] font-large text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
+                      >
+                        <span className="pr-1 text-[#2A7D15]">●</span>
+                        Upcoming Schedule
+                      </th>
+                      <td className="truncate max-w-[552px] px-6 py-3">
+                        March 22, 2024
+                      </td>
+                      <td className="px-6 py-3">8:00am </td>
+                      <td className="px-6 py-3">10:00am </td>
+                      <td className="px-[90px] py-3">
+                        <Edit></Edit>
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              )}
             </tbody>
           </table>
         </div>
@@ -306,13 +316,13 @@ const Appointment = () => {
             </nav>
           </div>
         </div>
-        {isOpen && (
+        {/* {isOpen && (
           <Modal
             isModalOpen={isModalOpen}
             isOpen={isOpen}
             label="sample label"
           />
-        )}
+        )} */}
       </div>
     </div>
   );
