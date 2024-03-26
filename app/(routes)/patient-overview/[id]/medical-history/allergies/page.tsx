@@ -260,43 +260,44 @@ const Allergies = () => {
 
         {/* START OF TABLE */}
         <div>
-          <table className="w-full text-left rtl:text-right">
-            <thead className="">
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                  Allergy ID
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  Date
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  Type
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  Allergen
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  Severity
-                </th>
+          {patientAllergies.length === 0 ? (
+            <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+              <p className="text-xl font-semibold text-gray-700">
+                No Allergies
+              </p>
+            </h1>
+          ) : (
+            <table className="w-full text-left rtl:text-right">
+              <thead className="">
+                <tr className="uppercase text-[#64748B] border-y  ">
+                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                    Allergy ID
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[400px]">
+                    Date
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[400px]">
+                    Type
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[400px]">
+                    Allergen
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[300px]">
+                    Severity
+                  </th>
 
-                <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                  Reaction
-                </th>
-                <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                  Notes
-                </th>
-                <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                  ACtions
-                </th>
-              </tr>
-            </thead>
-            {patientAllergies.length === 0 ? (
-              <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                <p className="text-xl font-semibold text-gray-700">
-                  No Allergies
-                </p>
-              </h1>
-            ) : (
+                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                    Reaction
+                  </th>
+                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                    Notes
+                  </th>
+                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                    ACtions
+                  </th>
+                </tr>
+              </thead>
+
               <tbody>
                 {patientAllergies.map((allergy, index) => (
                   <tr key={index} className="  even:bg-gray-50  border-b ">
@@ -337,8 +338,8 @@ const Allergies = () => {
                   </tr>
                 ))}
               </tbody>
-            )}
-          </table>
+            </table>
+          )}
         </div>
         {/* END OF TABLE */}
       </div>
