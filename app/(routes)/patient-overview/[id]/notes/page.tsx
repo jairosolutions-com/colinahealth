@@ -8,7 +8,7 @@ import Edit from "@/components/shared/buttons/view";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useRouter } from "next/navigation";
-import { Modal } from "@/components/shared/modals";
+import { Modal } from "@/components/modals/modals";
 
 const Notes = () => {
   const router = useRouter();

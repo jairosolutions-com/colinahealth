@@ -7,10 +7,10 @@ import {
 } from "@/app/api/patients-api/patientList.api";
 import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
-
-import { Modal } from "@/components/shared/modal";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { DemographicModal } from "@/components/modals/demographic.modal";
+import { Modal } from "@/components/modals/modal";
 
 export default function PatientPage({ patient }: { patient: any }) {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -40,14 +40,14 @@ export default function PatientPage({ patient }: { patient: any }) {
   };
 
   const handleSortOptionClick = (option: string) => {
-    if(option=='Age'){
+    if (option == "Age") {
       setSortBy("age");
-    } else if (option=="Name"){
-      setSortBy('firstName')
-    } else if (option=="Gender"){
-      setSortBy('gender')
+    } else if (option == "Name") {
+      setSortBy("firstName");
+    } else if (option == "Gender") {
+      setSortBy("gender");
     }
-    console.log(sortBy,'ooption')
+    console.log(sortBy, "ooption");
   };
 
   const optionsOrderedBy = [
@@ -154,7 +154,7 @@ export default function PatientPage({ patient }: { patient: any }) {
 
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
-    setIsLoading(true)
+    setIsLoading(true);
     onNavigate(
       router,
       `/patient-overview/${lowercasePatientId}/medical-history/allergies`
@@ -234,7 +234,9 @@ export default function PatientPage({ patient }: { patient: any }) {
             </div>
           </form>
           <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-            <p className="text-[#191D23] opacity-[60% font-semibold]">Order by</p>
+            <p className="text-[#191D23] opacity-[60% font-semibold]">
+              Order by
+            </p>
             <DropdownMenu
               options={optionsOrderedBy.map(({ label, onClick }) => ({
                 label,
@@ -246,7 +248,9 @@ export default function PatientPage({ patient }: { patient: any }) {
               width={"165px"}
               label={"Select"}
             />
-            <p className="text-[#191D23] opacity-[60%] font-semibold">Sort by</p>
+            <p className="text-[#191D23] opacity-[60%] font-semibold">
+              Sort by
+            </p>
             <DropdownMenu
               options={optionsSortBy.map(({ label, onClick }) => ({
                 label,
@@ -314,12 +318,11 @@ export default function PatientPage({ patient }: { patient: any }) {
                   </th>
                 </tr>
               </thead>
-              <tbody >
+              <tbody>
                 {patientList.map((patient, index) => (
                   <tr
                     key={index}
                     className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
-                    
                   >
                     <th
                       scope="row"
@@ -332,10 +335,10 @@ export default function PatientPage({ patient }: { patient: any }) {
                     </td>
                     <td className="px-6">{patient.age}</td>
                     <td className="px-6">{patient.gender}</td>
-                    <td className="px-[50px]"
-                    >
-                      <div onClick={() => handlePatientClick(patient.uuid)}><Edit></Edit></div>
-                    
+                    <td className="px-[50px]">
+                      <div onClick={() => handlePatientClick(patient.uuid)}>
+                        <Edit></Edit>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -411,7 +414,7 @@ export default function PatientPage({ patient }: { patient: any }) {
         </div>
       )}
       {isOpen && (
-        <Modal isModalOpen={isModalOpen} isOpen={isOpen} label="sample label" />
+        <DemographicModal isModalOpen={isModalOpen} isOpen={isOpen} label="sample label" />
       )}
     </div>
   );
