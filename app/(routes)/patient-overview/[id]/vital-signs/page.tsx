@@ -4,20 +4,165 @@ import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/view";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { VitalSignModal } from "@/components/modals/vitalsign.modal";
+import { fetchVitalSignsByPatient } from "@/app/api/vital-sign-api/vital-sign-api";
 
 export default function vitalsigns() {
+
   const router = useRouter();
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
+  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortBy, setSortBy] = useState("createdAt");
+  const [pageNumber, setPageNumber] = useState("");
+  const [patientVitalSign, setVitalSign] = useState<any[]>([]);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalVitalSigns, setTotalVitalSigns] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [vitalSignData, setVitalSignData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [gotoError, setGotoError] = useState(false);
+  const [term, setTerm] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  interface Modalprops {
+    label: string;
+    isOpen: boolean;
+    isModalOpen: (isOpen: boolean) => void;
+  }
+  const isModalOpen = (isOpen: boolean) => {
+    setIsOpen(isOpen);
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else if (!isOpen) {
+      document.body.style.overflow = "scroll";
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Function to handle going to next page
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const params = useParams<{
+    id: any;
+    tag: string;
+    item: string;
+  }>();
+
+  const patientId = params.id.toUpperCase();
 
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
+  const handleOrderOptionClick = (option: string) => {
+    setIsOpenOrderedBy(false);
+    if (option === "Ascending") {
+      setSortOrder("ASC");
+    } else {
+      setSortOrder("DESC");
+    }
+  };
+  const handleSortOptionClick = (option: string) => {
+    setIsOpenSortedBy(false);
+    if (option === "Medication") {
+      setSortBy("name");
+    } else if (option === "Status") {
+      setSortBy("status");
+    } else {
+      setSortBy("dosage");
+    }
+    console.log("option", option);
+  };
+  const optionsOrderedBy = [
+    { label: "Ascending", onClick: handleOrderOptionClick },
+    { label: "Descending", onClick: handleOrderOptionClick },
+  ];
+  const optionsSortBy = [
+    { label: "Medication", onClick: handleSortOptionClick },
+    { label: "Status", onClick: handleSortOptionClick },
+    { label: "Dosage", onClick: handleSortOptionClick },
+  ]; // end of orderby & sortby function
 
-  const optionsOrderedBy = ["Accending", "Decending"];
-  const optionsSortBy = ["Medication", "Notes", "Status"];
-  // end of orderby & sortby function
+  const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const pageNumberInt = parseInt(pageNumber, 10);
+
+    // Check if pageNumber is a valid number and greater than 0
+    if (
+      !isNaN(pageNumberInt) &&
+      pageNumberInt <= totalPages &&
+      pageNumberInt > 0
+    ) {
+      setCurrentPage(pageNumberInt);
+
+      console.log("Navigate to page:", pageNumberInt);
+    } else {
+      setGotoError(true);
+      setTimeout(() => {
+        setGotoError(false);
+      }, 3000);
+      console.error("Invalid page number:", pageNumber);
+    }
+  };
+
+  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPageNumber(e.target.value);
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          className={`flex border border-px items-center justify-center  w-[49px]  ${
+            currentPage === i ? "btn-pagination" : ""
+          }`}
+          onClick={() => setCurrentPage(i)}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchVitalSignsByPatient(
+          patientId,
+          term,
+          currentPage,
+          sortBy,
+          sortOrder as "ASC" | "DESC",
+          router
+        );
+        setVitalSignData(response.data);
+        setTotalPages(response.totalPages);
+        setTotalVitalSigns(response.totalCount);
+        setIsLoading(false);
+      } catch (error: any) {
+        setError(error.message);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [currentPage, sortOrder, sortBy, term, isOpen]);
+
 
   return (
     <div className="  w-full">
@@ -30,8 +175,10 @@ export default function vitalsigns() {
           </p>
         </div>
         <div className="flex flex-row justify-end">
-          <Add></Add>
+        <div className="flex flex-row justify-end">
+          <Add onClick={() => isModalOpen(true)} />
           <DownloadPDF></DownloadPDF>
+        </div>
         </div>
       </div>
 
@@ -53,17 +200,29 @@ export default function vitalsigns() {
               Order by
             </p>
             <DropdownMenu
-              options={optionsOrderedBy}
+               options={optionsOrderedBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                  console.log("label", label);
+                },
+              }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Select"}
+              label={"Ascending"}
             />
 
             <p className="text-[#191D23] opacity-[60%] font-semibold">
               Sort by
             </p>
             <DropdownMenu
-              options={optionsSortBy}
+              options={optionsSortBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                  console.log("label", label);
+                },
+              }))}
               open={isOpenSortedBy}
               width={"165px"}
               label={"Select"}
@@ -76,17 +235,26 @@ export default function vitalsigns() {
           <table className="w-full text-left rtl:text-right">
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+              <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
+                  VITAL SIGN ID
+                </th>
+                <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
                   DATE
                 </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  TYPE
+                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                  TIME
+                </th>
+                <th scope="col" className="px-6 py-3 truncate max-w-[300px]">
+                  BLOOD PRESSURE
                 </th>
                 <th scope="col" className="px-6 py-3 w-[400px]">
-                  SURGERY
+                  HEART RATE
+                </th>
+                <th scope="col" className="px-6 py-3 w-[400px]">
+                  TEMPERATURE
                 </th>
                 <th scope="col" className="px-6 py-3 w-[300px]">
-                  NOTES
+                  RESPIRATORY
                 </th>
 
                 <th scope="col" className="px-[80px] py-3 w-[10px] ">
@@ -94,155 +262,114 @@ export default function vitalsigns() {
                 </th>
               </tr>
             </thead>
-            <tbody>
-              <tr className="odd:bg-white hover:bg-[#f4f4f4] group">
+            {vitalSignData.length==0?(
+              <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+              <p className="text-xl font-semibold text-gray-700">
+                No Vital Sign/s
+              </p>
+            </h1>
+            ):(
+              <tbody>
+              {vitalSignData.map((vitalSign, index) => (
+                <tr className="odd:bg-white border-b hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
                   className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  10/12/2024
+                  VSL-7890124567891
                 </th>
                 <td className="truncate max-w-[552px] px-6 py-4">
-                  Skin Allergy
+                  10/20/99
                 </td>
-                <td className="px-6 py-4">Major</td>
-                <td className="px-6 py-4">Irritated</td>
+                <td className="px-6 py-4">6:20am</td>
+                <td className="px-6 py-4">110/90</td>
+                <td className="px-6 py-4">72 bpm</td>
+                <td className="px-6 py-4">37°C</td>
+                <td className="px-6 py-4">98 breaths per minute </td>
 
                 <td className="px-[70px] py-4">
                   <Edit></Edit>
                 </td>
-              </tr>
-              <tr className="odd:bg-white hover:bg-[#f4f4f4] group">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  10/12/2024
-                </th>
-                <td className="px-6 py-4">Skin Allergy</td>
-                <td className="px-6 py-4">Major</td>
-                <td className="px-6 py-4">Irritated</td>
-
-                <td className="px-[70px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr className="odd:bg-white hover:bg-[#f4f4f4] group">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  10/12/2024
-                </th>
-                <td className="px-6 py-4">Skin Allergy</td>
-                <td className="px-6 py-4">Major</td>
-                <td className="px-6 py-4">Irritated</td>
-
-                <td className="px-[70px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr className="odd:bg-white hover:bg-[#f4f4f4] group">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  10/12/2024
-                </th>
-                <td className="px-6 py-4">Skin Allergy</td>
-                <td className="px-6 py-4">Major</td>
-                <td className="px-6 py-4">Irritated</td>
-
-                <td className="px-[70px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
-              <tr>
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white "
-                >
-                  10/12/2024
-                </th>
-                <td className="px-6 py-4">Skin Allergy</td>
-                <td className="px-6 py-4">Major</td>
-                <td className="px-6 py-4">Irritated</td>
-
-                <td className="px-[70px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>
+              </tr>      
+              ))}
             </tbody>
+            )}
           </table>
         </div>
         {/* END OF TABLE */}
       </div>
       {/* pagination */}
-      <div className="mt-5 pb-5">
-        <div className="flex justify-between">
-          <p className="font-medium text-[14px] w-[138px] items-center">
-            Page 1 of 10
-          </p>
-          <div>
-            <nav>
-              <div className="flex -space-x-px text-sm">
-                <div>
-                  <a
-                    href="#"
-                    className="flex border border-px items-center justify-center  w-[77px] h-full"
-                  >
-                    Prev
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="#"
-                    className="flex border border-px items-center justify-center  w-[49px] h-full"
-                  >
-                    1
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="#"
-                    className="flex border border-px items-center justify-center  w-[49px] h-full"
-                  >
-                    2
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="#"
-                    aria-current="page"
-                    className="flex border border-px items-center justify-center  w-[49px] h-full"
-                  >
-                    3
-                  </a>
-                </div>
-
-                <div className="">
-                  <a
-                    href="#"
-                    className="flex border border-px items-center justify-center  w-[77px] h-full mr-5"
-                  >
-                    Next
-                  </a>
-                </div>
-                <div className="flex">
-                  <input
-                    className="ipt-pagination border text-center"
-                    type="text"
-                    placeholder="-"
-                  />
-                  <div className="">
-                    <button className="btn-pagination ">Go </button>
+      {totalPages <= 1 ? (
+        <div></div>
+      ) : (
+        <div className="mt-5 pb-5">
+          <div className="flex justify-between">
+            <p className="font-medium size-[18px] w-[138px] items-center">
+              Page {currentPage} of {totalPages}
+            </p>
+            <div>
+              <nav>
+                <div className="flex -space-x-px text-sm">
+                  <div>
+                    <button
+                      onClick={goToPreviousPage}
+                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                    >
+                      Prev
+                    </button>
                   </div>
+                  {renderPageNumbers()}
+
+                  <div className="ml-5">
+                    <button
+                      onClick={goToNextPage}
+                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                    >
+                      Next
+                    </button>
+                  </div>
+                  <form onSubmit={handleGoToPage}>
+                    <div className="flex px-5 ">
+                      <input
+                        className={`ipt-pagination appearance-none  text-center border ring-1 ${
+                          gotoError ? "ring-red-500" : "ring-gray-300"
+                        } border-gray-100`}
+                        type="text"
+                        placeholder="-"
+                        pattern="\d*"
+                        value={pageNumber}
+                        onChange={handlePageNumberChange}
+                        onKeyPress={(e) => {
+                          // Allow only numeric characters (0-9), backspace, and arrow keys
+                          if (
+                            !/[0-9\b]/.test(e.key) &&
+                            e.key !== "ArrowLeft" &&
+                            e.key !== "ArrowRight"
+                          ) {
+                            e.preventDefault();
+                          }
+                        }}
+                      />
+                      <div className="px-5">
+                        <button type="submit" className="btn-pagination ">
+                          Go{" "}
+                        </button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              </div>
-            </nav>
+              </nav>
+            </div>
           </div>
         </div>
+      )}
+        {isOpen && (
+          <VitalSignModal
+            isModalOpen={isModalOpen}
+            isOpen={isOpen}
+            label="sample label"
+          />
+        )}
       </div>
-    </div>
   );
 }

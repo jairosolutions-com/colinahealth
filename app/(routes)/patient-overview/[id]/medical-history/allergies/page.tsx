@@ -8,8 +8,9 @@ import Edit from "@/components/shared/buttons/edit";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { Modal } from "@/components/shared/modals";
 import { fetchAllergiesByPatient } from "@/app/api/medical-history-api/allergies.api";
+import Loading from "./loading";
+import { AllergyModal } from "@/components/modals/allergies.modal";
 
 const Allergies = () => {
   const router = useRouter();
@@ -71,8 +72,8 @@ const Allergies = () => {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
-      setIsEdit(false)
-      setAllergyToEdit([])
+      setIsEdit(false);
+      setAllergyToEdit([]);
     }
   };
 
@@ -170,13 +171,9 @@ const Allergies = () => {
     fetchData();
   }, [currentPage, sortOrder, sortBy, term, isOpen]);
 
-  console.log(allergyToEdit, "allergy uuid")
+  console.log(allergyToEdit, "allergy uuid");
   if (isLoading) {
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-      </div>
-    );
+    <Loading></Loading>;
   }
   return (
     <div className="   w-full">
@@ -294,11 +291,11 @@ const Allergies = () => {
               </tr>
             </thead>
             {patientAllergies.length === 0 ? (
-              <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+              <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                 <p className="text-xl font-semibold text-gray-700">
                   No Allergies
                 </p>
-              </div>
+              </h1>
             ) : (
               <tbody>
                 {patientAllergies.map((allergy, index) => (
@@ -326,16 +323,20 @@ const Allergies = () => {
                         : "None"}
                     </td>
 
-                  <td className="px-[50px] py-4 flex items-center justify-center">
-                    <div onClick={()=>{
-                      isModalOpen(true); setIsEdit(true); setAllergyToEdit(allergy)
-                      }}>
-                      <Edit></Edit>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+                    <td className="px-[50px] py-4 flex items-center justify-center">
+                      <p
+                        onClick={() => {
+                          isModalOpen(true);
+                          setIsEdit(true);
+                          setAllergyToEdit(allergy);
+                        }}
+                      >
+                        <Edit></Edit>
+                      </p>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             )}
           </table>
         </div>
@@ -407,7 +408,13 @@ const Allergies = () => {
         </div>
       )}
       {isOpen && (
-        <Modal isModalOpen={isModalOpen} isOpen={isOpen} isEdit={isEdit} allergy={allergyToEdit} label="sample label" />
+        <AllergyModal
+          isModalOpen={isModalOpen}
+          isOpen={isOpen}
+          isEdit={isEdit}
+          allergy={allergyToEdit}
+          label="sample label"
+        />
       )}
     </div>
   );

@@ -6,8 +6,9 @@ import Edit from "@/components/shared/buttons/edit";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { Modal } from "@/components/shared/modalss";
+import { Modal } from "@/components/modals/modalss";
 import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries.api";
+
 
 export default function Surgeries() {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);

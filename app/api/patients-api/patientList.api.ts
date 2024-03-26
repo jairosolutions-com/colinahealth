@@ -122,7 +122,7 @@ export async function addPatient(
 
     // Make the API request to fetch the patient list
     const response = await axios.post(
-      `${apiUrl}/patient-information/list`,
+      `${apiUrl}/patient-information/`,
       patientData.patient,
       { headers }
     );

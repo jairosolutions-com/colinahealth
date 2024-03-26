@@ -4,7 +4,7 @@ import { getAccessToken, setAccessToken } from "../login-api/accessToken";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export async function fetchPrescriptionByPatient(
+export async function fetchVitalSignsByPatient(
   patientUuid: string,
   term: string,
   currentPage: number,
@@ -31,15 +31,15 @@ export async function fetchPrescriptionByPatient(
     };
 
     const response = await axios.post(
-      `${apiUrl}/prescriptions/list/${patientUuid}`,
+      `${apiUrl}/vital-signs/list/${patientUuid}`,
       requestData,
       { headers }
     );
 
     console.log(response.data);
-    const { patientId, id, ...patientPrescriptionsNoId } = response.data;
-    console.log(patientPrescriptionsNoId, "patient prescription after search");
-    return patientPrescriptionsNoId;
+    const patientVitalSigns = response.data;
+    console.log(patientVitalSigns, "patient vital-signs after search");
+    return patientVitalSigns;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401) {
       setAccessToken("");
@@ -47,14 +47,14 @@ export async function fetchPrescriptionByPatient(
       return Promise.reject(new Error("Unauthorized access"));
     }
     console.error(
-      "Error searching patient prescription:",
+      "Error searching patient vital-signs:",
       (error as AxiosError).message
     );
   }
 }
 
 
-export async function createPrescriptionOfPatient(patientId: string, formData: any, router: any): Promise<any> {
+export async function createVitalSignsOfPatient(patientId: string, formData: any, router: any): Promise<any> {
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
@@ -66,7 +66,7 @@ export async function createPrescriptionOfPatient(patientId: string, formData: a
     };
 
     // Make the API request to create the allergy
-    const response = await axios.post(`${apiUrl}/prescriptions/${patientId}`, formData, { headers });
+    const response = await axios.post(`${apiUrl}/vital-signs/${patientId}`, formData, { headers });
     const createdAllergy = response.data;
 
     return createdAllergy;
@@ -77,7 +77,7 @@ export async function createPrescriptionOfPatient(patientId: string, formData: a
 }
 
 
-export async function updatePrescriptionOfPatient(
+export async function updateVitalSignsOfPatient(
   prescriptionUuid: string, 
   formData: any, 
   router: any): 
@@ -95,7 +95,7 @@ export async function updatePrescriptionOfPatient(
 
     // Make the API request to create the allergy
     const response = await axios.patch(
-      `${apiUrl}/prescriptions/update/${prescriptionUuid}`, 
+      `${apiUrl}/vital-signs/update/${prescriptionUuid}`, 
     formData, 
     { headers });
     const updatedSurgery= response.data;
