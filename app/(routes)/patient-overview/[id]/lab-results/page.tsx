@@ -51,8 +51,8 @@ export default function Laboratoryresults() {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
-      // setIsEdit(false)
-      // setSurgeryToEdit([])
+      setIsEdit(false);
+      setLabResultData([]);
     }
   };
 
@@ -187,7 +187,6 @@ export default function Laboratoryresults() {
           <Add
             onClick={() => {
               isModalOpen(true);
-              setIsEdit(false);
             }}
           ></Add>
           <DownloadPDF></DownloadPDF>
