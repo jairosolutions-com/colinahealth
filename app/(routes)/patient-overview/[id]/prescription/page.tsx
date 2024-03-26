@@ -41,6 +41,8 @@ export default function prescription() {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
+      setPrescriptionData([]);
+      setIsEdit(false);
     }
   };
 
@@ -190,7 +192,11 @@ export default function prescription() {
           </p>
         </div>
         <div className="flex flex-row justify-end">
-          <Add onClick={() => isModalOpen(true)} />
+          <Add
+            onClick={() => {
+              isModalOpen(true);
+            }}
+          ></Add>{" "}
           <DownloadPDF></DownloadPDF>
         </div>
       </div>
@@ -259,7 +265,7 @@ export default function prescription() {
           <table className="w-full text-left rtl:text-right">
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
-              <th scope="col" className="px-0 py-3 w-[300px]">
+                <th scope="col" className="px-0 py-3 w-[300px]">
                   PRESCRIPTION ID
                 </th>
                 <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
@@ -288,7 +294,7 @@ export default function prescription() {
                 <>
                   {patientPrescriptions.map((prescription, index) => (
                     <tr key={index} className="  even:bg-gray-50  border-b ">
-                       <td className="truncate max-w-[286px] px-0 py-4">
+                      <td className="truncate max-w-[286px] px-0 py-4">
                         {prescription.prescriptions_uuid}
                       </td>
                       <th
@@ -311,15 +317,15 @@ export default function prescription() {
                         {prescription.prescriptions_status}
                       </td>
                       <td className="px-[70px] py-4">
-                      <p
-                        onClick={() => {
-                          isModalOpen(true);
-                          setIsEdit(true);
-                          setPrescriptionData(prescription);
-                        }}
-                      >
-                        <Edit></Edit>
-                      </p>
+                        <p
+                          onClick={() => {
+                            isModalOpen(true);
+                            setIsEdit(true);
+                            setPrescriptionData(prescription);
+                          }}
+                        >
+                          <Edit></Edit>
+                        </p>
                       </td>
                     </tr>
                   ))}
@@ -415,6 +421,8 @@ export default function prescription() {
             isEdit={isEdit}
           />
         )}
+        />
+      )}
     </div>
   );
 }

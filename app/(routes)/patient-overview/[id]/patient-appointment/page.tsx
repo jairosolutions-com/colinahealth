@@ -306,13 +306,13 @@ const Appointment = () => {
             </nav>
           </div>
         </div>
-        {isOpen && (
+        {/* {isOpen && (
           <Modal
             isModalOpen={isModalOpen}
             isOpen={isOpen}
             label="sample label"
           />
-        )}
+        )} */}
       </div>
     </div>
   );

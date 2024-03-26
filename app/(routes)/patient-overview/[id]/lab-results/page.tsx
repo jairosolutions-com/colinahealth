@@ -9,7 +9,9 @@ import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchLabResultsByPatient } from "@/app/api/lab-results-api/lab-results.api";
 import { LabResultModal } from "@/components/modals/labresults.modal";
+
 import { SuccessModal } from "@/components/shared/success";
+
 
 export default function Laboratoryresults() {
   const router = useRouter();
@@ -19,7 +21,9 @@ export default function Laboratoryresults() {
   const [patientLabResults, setPatientLabResults] = useState<any[]>([]);
   const [totalLabResults, setTotalLabResults] = useState<number>(0);
   const [labResultData, setLabResultData] = useState<any[]>([]);
+
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -441,6 +445,10 @@ export default function Laboratoryresults() {
             isEdit={isEdit}
           />
         )}
+
+        />
+      )}
+
     </div>
   );
 }
