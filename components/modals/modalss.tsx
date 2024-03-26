@@ -12,9 +12,10 @@ interface Modalprops {
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
 }
 
-export const Modal = ({isEdit,surgeryToEdit, surgeryUuid ,label, isOpen, isModalOpen }: Modalprops) => {
+export const Modal = ({isEdit,surgeryToEdit, surgeryUuid ,label, isOpen, isModalOpen, onSuccess }: Modalprops) => {
   const params = useParams<{
     id: any;
     tag: string;
@@ -45,6 +46,7 @@ console.log(surgeryUuid, "surgery uuid")
     try {
       if (isEdit) {
         await updateSurgeryOfPatient(surgeryUuid, formData, router);
+        onSuccess()
         isModalOpen(false);
         return;
       }
@@ -64,6 +66,7 @@ console.log(surgeryUuid, "surgery uuid")
           surgery: "",
           notes: "",
         });
+        onSuccess()
       }
     } catch (error) {
       console.error("Error adding surgery:", error);

@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchLabResultsByPatient } from "@/app/api/lab-results-api/lab-results.api";
+import { LabResultModal } from "@/components/modals/labresults.modal";
+import { SuccessModal } from "@/components/shared/success";
 
 export default function Laboratoryresults() {
   const router = useRouter();
@@ -27,6 +29,8 @@ export default function Laboratoryresults() {
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState<string>("ASC");
   const [sortBy, setSortBy] = useState("date");
+  const [isEdit, setIsEdit] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -168,6 +172,13 @@ export default function Laboratoryresults() {
     { label: "LDL-C", onClick: handleSortOptionClick },
     { label: "HDL-C", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
+
+ 
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+    setIsEdit(false);
+  };
 
   return (
     <div className="  w-full">
@@ -397,9 +408,25 @@ export default function Laboratoryresults() {
           </div>
         </div>
       )}
-      {/* {isOpen && (
-        <Modal isModalOpen={isModalOpen} isEdit={isEdit} surgeryUuid={surgeryUuid} surgeryToEdit={surgeryToEdit} isOpen={isOpen} label="sample label" />
-      )} */}
+      {isOpen && (
+        <LabResultModal
+          isModalOpen={isModalOpen}
+          isEdit={isEdit}
+          labResultData={labResultData}
+          isOpen={isOpen}
+          label="sample label"
+          onSuccess={onSuccess}
+          />
+        )}
+  
+        {isSuccessOpen && (
+          <SuccessModal
+            label="Success"
+            isAlertOpen={isSuccessOpen}
+            toggleModal={setIsSuccessOpen}
+            isEdit={isEdit}
+          />
+        )}
     </div>
   );
 }

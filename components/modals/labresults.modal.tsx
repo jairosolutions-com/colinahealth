@@ -6,10 +6,86 @@ interface Modalprops {
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
 }
 
-export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
-  
+export const LabResultModal = ({
+  isEdit,
+  labResultData,
+  label,
+  isOpen,
+  isModalOpen,
+  onSuccess
+}: Modalprops) => {
+  const params = useParams<{
+    id: any;
+    tag: string;
+    item: string;
+  }>();
+
+  const patientId = params.id.toUpperCase();
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    date: labResultData.labResults_date || "",
+    hemoglobinA1c: labResultData.labResults_hemoglobinA1c || "",
+    fastingBloodGlucose: labResultData.labResults_fastingBloodGlucose || "",
+    totalCholesterol: labResultData.labResults_totalCholesterol || "",
+    ldlCholesterol: labResultData.labResults_ldlCholesterol || "",
+    hdlCholesterol: labResultData.labResults_hdlCholesterol || "",
+    triglycerides: labResultData.labResults_triglycerides || "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  console.log(isEdit, "EDIT STATUS");
+  console.log(labResultData.labResults_uuid, "labResultData.labResults_uuid");
+  const handleSubmit = async (e: any) => {
+    console.log(isEdit, "edit stat");
+
+    e.preventDefault();
+    try {
+      if (isEdit) {
+        await updateLabResultOfPatient(
+          labResultData.labResults_uuid,
+          formData,
+          router
+        );
+        onSuccess()
+        isModalOpen(false);
+        return;
+      } else {
+        const labResult = await createLabResultOfPatient(
+          patientId,
+          formData,
+          router
+        );
+        console.log("Lab Result added successfully:", labResult);
+
+        // Reset the form data after successful submission
+        setFormData({
+          date: "",
+          hemoglobinA1c: "",
+          fastingBloodGlucose: "",
+          totalCholesterol: "",
+          ldlCholesterol: "",
+          hdlCholesterol: "",
+          triglycerides: "",
+        });
+        onSuccess()
+      }
+    } catch (error) {
+      console.error("Error adding Lab Result:", error);
+      setError("Failed to add Lab Result");
+    }
+  };
+  console.log(labResultData, "labResultData");
+  console.log(formData, "formData");
   return (
     
 

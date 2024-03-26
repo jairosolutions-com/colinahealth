@@ -11,6 +11,7 @@ import { useParams, useRouter } from "next/navigation";
 import { fetchAllergiesByPatient } from "@/app/api/medical-history-api/allergies.api";
 import Loading from "./loading";
 import { AllergyModal } from "@/components/modals/allergies.modal";
+import { SuccessModal } from "@/components/shared/success";
 
 const Allergies = () => {
   const router = useRouter();
@@ -175,6 +176,13 @@ const Allergies = () => {
   if (isLoading) {
     <Loading></Loading>;
   }
+
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+    setIsEdit(false);
+  };
   return (
     <div className="   w-full">
       <div className="flex justify-between ">
@@ -415,6 +423,15 @@ const Allergies = () => {
           isEdit={isEdit}
           allergy={allergyToEdit}
           label="sample label"
+          onSuccess={onSuccess}
+        />
+      )}
+      {isSuccessOpen && (
+        <SuccessModal
+          label="Success"
+          isAlertOpen={isSuccessOpen}
+          toggleModal={setIsSuccessOpen}
+          isEdit={isEdit}
         />
       )}
     </div>

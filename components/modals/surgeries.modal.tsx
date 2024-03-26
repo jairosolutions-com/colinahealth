@@ -6,9 +6,10 @@ interface Modalprops {
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
 }
 
-export const Modal = ({ label, isOpen, isModalOpen }: Modalprops) => {
+export const <Surgeries></Surgeries>Modal = ({ label, isOpen, isModalOpen, onSuccess }: Modalprops) => {
   
   return (
     
