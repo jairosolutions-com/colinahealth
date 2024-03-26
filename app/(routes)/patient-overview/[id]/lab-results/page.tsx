@@ -445,10 +445,6 @@ export default function Laboratoryresults() {
             isEdit={isEdit}
           />
         )}
-
-        />
-      )}
-
     </div>
   );
 }
