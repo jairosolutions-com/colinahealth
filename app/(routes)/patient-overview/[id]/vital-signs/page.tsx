@@ -3,7 +3,7 @@
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import Edit from "@/components/shared/buttons/view";
+import Edit from "@/components/shared/buttons/edit";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
@@ -11,14 +11,13 @@ import { VitalSignModal } from "@/components/modals/vitalsign.modal";
 import { fetchVitalSignsByPatient } from "@/app/api/vital-sign-api/vital-sign-api";
 
 export default function vitalsigns() {
-
   const router = useRouter();
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState("ASC");
   const [sortBy, setSortBy] = useState("createdAt");
   const [pageNumber, setPageNumber] = useState("");
-  const [patientVitalSign, setVitalSign] = useState<any[]>([]);
+  const [patientVitalSign, setPatientVitalSign] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalVitalSigns, setTotalVitalSigns] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -75,12 +74,12 @@ export default function vitalsigns() {
   };
   const handleSortOptionClick = (option: string) => {
     setIsOpenSortedBy(false);
-    if (option === "Medication") {
-      setSortBy("name");
+    if (option === "Date") {
+      setSortBy("createdAt");
     } else if (option === "Status") {
-      setSortBy("status");
+      setSortBy("bloodPressure");
     } else {
-      setSortBy("dosage");
+      setSortBy("heartRate");
     }
     console.log("option", option);
   };
@@ -89,9 +88,9 @@ export default function vitalsigns() {
     { label: "Descending", onClick: handleOrderOptionClick },
   ];
   const optionsSortBy = [
-    { label: "Medication", onClick: handleSortOptionClick },
-    { label: "Status", onClick: handleSortOptionClick },
-    { label: "Dosage", onClick: handleSortOptionClick },
+    { label: "Date", onClick: handleSortOptionClick },
+    { label: "Blood Pressure", onClick: handleSortOptionClick },
+    { label: "Heart Rate", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
   const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
@@ -150,7 +149,7 @@ export default function vitalsigns() {
           sortOrder as "ASC" | "DESC",
           router
         );
-        setVitalSignData(response.data);
+        setPatientVitalSign(response.data);
         setTotalPages(response.totalPages);
         setTotalVitalSigns(response.totalCount);
         setIsLoading(false);
@@ -163,6 +162,7 @@ export default function vitalsigns() {
     fetchData();
   }, [currentPage, sortOrder, sortBy, term, isOpen]);
 
+  console.log(patientVitalSign, "patientVitalSign");
 
   return (
     <div className="  w-full">
@@ -171,14 +171,14 @@ export default function vitalsigns() {
           <h1 className="p-title">Vital Signs</h1>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
-            Total of 6 Patients
+            Total of {totalVitalSigns} Vital Sign/s
           </p>
         </div>
         <div className="flex flex-row justify-end">
-        <div className="flex flex-row justify-end">
-          <Add onClick={() => isModalOpen(true)} />
-          <DownloadPDF></DownloadPDF>
-        </div>
+          <div className="flex flex-row justify-end">
+            <Add onClick={() => isModalOpen(true)} />
+            <DownloadPDF></DownloadPDF>
+          </div>
         </div>
       </div>
 
@@ -192,6 +192,10 @@ export default function vitalsigns() {
                 className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
                 type="text"
                 placeholder="Search by reference no. or name..."
+                onChange={(event) => {
+                  setTerm(event.target.value);
+                  setCurrentPage(1);
+                }}
               />
             </div>
           </form>
@@ -200,7 +204,7 @@ export default function vitalsigns() {
               Order by
             </p>
             <DropdownMenu
-               options={optionsOrderedBy.map(({ label, onClick }) => ({
+              options={optionsOrderedBy.map(({ label, onClick }) => ({
                 label,
                 onClick: () => {
                   onClick(label);
@@ -235,7 +239,7 @@ export default function vitalsigns() {
           <table className="w-full text-left rtl:text-right">
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
-              <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
+                <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
                   VITAL SIGN ID
                 </th>
                 <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
@@ -262,37 +266,79 @@ export default function vitalsigns() {
                 </th>
               </tr>
             </thead>
-            {vitalSignData.length==0?(
-              <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700">
-                No Vital Sign/s
-              </p>
-            </h1>
-            ):(
+            {patientVitalSign.length == 0 ? (
+              <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                <p className="text-xl font-semibold text-gray-700">
+                  No Vital Sign/s
+                </p>
+              </div>
+            ) : (
               <tbody>
-              {vitalSignData.map((vitalSign, index) => (
-                <tr className="odd:bg-white border-b hover:bg-[#f4f4f4] group">
-                <th
-                  scope="row"
-                  className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  VSL-7890124567891
-                </th>
-                <td className="truncate max-w-[552px] px-6 py-4">
-                  10/20/99
-                </td>
-                <td className="px-6 py-4">6:20am</td>
-                <td className="px-6 py-4">110/90</td>
-                <td className="px-6 py-4">72 bpm</td>
-                <td className="px-6 py-4">37°C</td>
-                <td className="px-6 py-4">98 breaths per minute </td>
+                {patientVitalSign.map((vitalSign, index) => (
+                  <tr
+                    key={index}
+                    className="odd:bg-white border-b hover:bg-[#f4f4f4] group"
+                  >
+                    <th
+                      scope="row"
+                      className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                    >
+                      {vitalSign.vitalsign_uuid}
+                    </th>
+                    <td className="px-6 py-4">
+                      {new Date(
+                        vitalSign.vitalsign_createdAt
+                      ).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4">
+                      {new Date(
+                        Date.UTC(
+                          new Date(
+                            vitalSign.vitalsign_createdAt
+                          ).getUTCFullYear(),
+                          new Date(vitalSign.vitalsign_createdAt).getUTCMonth(),
+                          new Date(vitalSign.vitalsign_createdAt).getUTCDate(),
+                          new Date(vitalSign.vitalsign_createdAt).getUTCHours(),
+                          new Date(
+                            vitalSign.vitalsign_createdAt
+                          ).getUTCMinutes(),
+                          new Date(
+                            vitalSign.vitalsign_createdAt
+                          ).getUTCSeconds()
+                        )
+                      ).toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
+                    </td>
+                    <td className="px-6 py-4">
+                      {vitalSign.vitalsign_bloodPressure}
+                    </td>
+                    <td className="px-6 py-4">
+                      {vitalSign.vitalsign_heartRate}
+                    </td>
+                    <td className="px-6 py-4">
+                      {vitalSign.vitalsign_temperature}°C
+                    </td>
+                    <td className="px-6 py-4">
+                      {vitalSign.vitalsign_respiratoryRate}{" "}
+                    </td>
 
-                <td className="px-[70px] py-4">
-                  <Edit></Edit>
-                </td>
-              </tr>      
-              ))}
-            </tbody>
+                    <td className="px-[70px] py-4">
+                      <p
+                        onClick={() => {
+                          isModalOpen(true);
+                          setIsEdit(true);
+                          setVitalSignData(vitalSign);
+                        }}
+                      >
+                        <Edit></Edit>
+                      </p>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             )}
           </table>
         </div>
@@ -363,13 +409,15 @@ export default function vitalsigns() {
           </div>
         </div>
       )}
-        {isOpen && (
-          <VitalSignModal
-            isModalOpen={isModalOpen}
-            isOpen={isOpen}
-            label="sample label"
-          />
-        )}
-      </div>
+      {isOpen && (
+        <VitalSignModal
+          isEdit={true}
+          isModalOpen={isModalOpen}
+          isOpen={isOpen}
+          label="sample label"
+          vitalSignData={vitalSignData}
+        />
+      )}
+    </div>
   );
 }

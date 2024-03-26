@@ -32,21 +32,13 @@ export const VitalSignModal = ({
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    bloodPressure: "",
-    hearRate: "",
-    temperature: "",
-    respiratory: "",
+    bloodPressure: vitalSignData.vitalsign_bloodPressure || "",
+    heartRate: vitalSignData.vitalsign_heartRate || "",
+    temperature: vitalSignData.vitalsign_temperature || "",
+    respiratoryRate: vitalSignData.vitalsign_respiratoryRate ||"",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -71,14 +63,14 @@ export const VitalSignModal = ({
           formData,
           router
         );
-        console.log("Prescription added successfully:", vitalSign);
+        console.log("vital sign added successfully:", vitalSign);
 
         // Reset the form data after successful submission
         setFormData({
           bloodPressure: "",
-          hearRate: "",
+          heartRate: "",
           temperature: "",
-          respiratory: "",
+          respiratoryRate: "",
         });
       }
     } catch (error) {
@@ -96,7 +88,7 @@ export const VitalSignModal = ({
       <div className="max-w-[550px] bg-[#FFFFFF] rounded-md">
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <h2 className="p-title text-left text-[#071437] pl-9 mt-7">
-            Add Add Vital Sign
+            {isEdit?"Update": "Add"} Vital Sign
           </h2>
           <p className="text-sm pl-9 text-gray-600 pb-10 pt-2">
             Submit your log details.
@@ -104,7 +96,7 @@ export const VitalSignModal = ({
         </div>
         <div className=" mb-9 pt-4">
           <div className="h-[600px] max-h-[250px] md:px-10 mt-5">
-            <form className="">
+            <form className="" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
                 <div>
                   <label
@@ -119,6 +111,9 @@ export const VitalSignModal = ({
                       required
                       className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                       placeholder="input blood pressure"
+                      name="bloodPressure"
+                      value={formData.bloodPressure}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -135,6 +130,9 @@ export const VitalSignModal = ({
                       required
                       className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                       placeholder="input heart rate"
+                      name="heartRate"
+                      value={formData.heartRate}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -151,6 +149,9 @@ export const VitalSignModal = ({
                       required
                       className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                       placeholder="input temperature"
+                      name="temperature"
+                      value={formData.temperature}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -167,6 +168,9 @@ export const VitalSignModal = ({
                       required
                       className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
                       placeholder="input respiratory"
+                      name="respiratoryRate"
+                      value={formData.respiratoryRate}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -181,10 +185,10 @@ export const VitalSignModal = ({
                 </div>
                 <div className="mt-5 pb-3  ">
                   <button
-                    type="button"
+                    type="submit"
                     className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
                   >
-                    Submit
+                    {isEdit?"Update" :"Add"}
                   </button>
                 </div>
               </div>
