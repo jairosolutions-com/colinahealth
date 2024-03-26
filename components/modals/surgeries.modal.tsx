@@ -9,7 +9,7 @@ interface Modalprops {
   onSuccess: () => void;
 }
 
-export const <Surgeries></Surgeries>Modal = ({ label, isOpen, isModalOpen, onSuccess }: Modalprops) => {
+export const SurgeriesModal = ({ label, isOpen, isModalOpen, onSuccess }: Modalprops) => {
   
   return (
     
