@@ -3,11 +3,12 @@
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import Edit from "@/components/shared/buttons/view";
+import Edit from "@/components/shared/buttons/edit";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchLabResultsByPatient } from "@/app/api/lab-results-api/lab-results.api";
+import { LabResultModal } from "@/components/modals/labresults.modal";
 
 export default function Laboratoryresults() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function Laboratoryresults() {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [patientLabResults, setPatientLabResults] = useState<any[]>([]);
   const [totalLabResults, setTotalLabResults] = useState<number>(0);
+  const [labResultData, setLabResultData] = useState<any[]>([]);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -27,6 +29,8 @@ export default function Laboratoryresults() {
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState<string>("ASC");
   const [sortBy, setSortBy] = useState("date");
+  const [isEdit, setIsEdit] = useState(false);
+
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -180,7 +184,12 @@ export default function Laboratoryresults() {
           </p>
         </div>
         <div className="flex flex-row justify-end">
-          <Add onClick={() => isModalOpen(true)} />
+          <Add
+            onClick={() => {
+              isModalOpen(true);
+              setIsEdit(false);
+            }}
+          ></Add>
           <DownloadPDF></DownloadPDF>
         </div>
       </div>
@@ -321,7 +330,15 @@ export default function Laboratoryresults() {
                         {labResult.labResults_triglycerides}
                       </td>
                       <td className="px-[70px] py-4">
-                        <Edit></Edit>
+                        <p
+                          onClick={() => {
+                            isModalOpen(true);
+                            setIsEdit(true);
+                            setLabResultData(labResult);
+                          }}
+                        >
+                          <Edit></Edit>
+                        </p>
                       </td>
                     </tr>
                   ))}
@@ -397,9 +414,15 @@ export default function Laboratoryresults() {
           </div>
         </div>
       )}
-      {/* {isOpen && (
-        <Modal isModalOpen={isModalOpen} isEdit={isEdit} surgeryUuid={surgeryUuid} surgeryToEdit={surgeryToEdit} isOpen={isOpen} label="sample label" />
-      )} */}
+      {isOpen && (
+        <LabResultModal
+          isModalOpen={isModalOpen}
+          isEdit={isEdit}
+          labResultData={labResultData}
+          isOpen={isOpen}
+          label="sample label"
+        />
+      )}
     </div>
   );
 }
