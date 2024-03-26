@@ -9,6 +9,7 @@ import { onNavigate } from "@/actions/navigation";
 import { useRouter, useParams } from "next/navigation";
 import { fetchPrescriptionByPatient as fetchPrescriptionsByPatient } from "@/app/api/prescription-api/prescription.api";
 import { PrescriptionModal } from "@/components/modals/prescription.modal";
+import { SuccessModal } from "@/components/shared/success";
 // import { Modal } from "@/components/shared/modalss";
 
 export default function prescription() {
@@ -171,6 +172,14 @@ export default function prescription() {
 
     fetchData();
   }, [currentPage, sortOrder, sortBy, term, isOpen]);
+
+  
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+    setIsEdit(false);
+  };
 
   return (
     <div className="  w-full">
@@ -400,6 +409,18 @@ export default function prescription() {
           label="sample label"
           isEdit={isEdit}
           prescriptionData={prescriptionData}
+          onSuccess={onSuccess}
+          />
+        )}
+  
+        {isSuccessOpen && (
+          <SuccessModal
+            label="Success"
+            isAlertOpen={isSuccessOpen}
+            toggleModal={setIsSuccessOpen}
+            isEdit={isEdit}
+          />
+        )}
         />
       )}
     </div>

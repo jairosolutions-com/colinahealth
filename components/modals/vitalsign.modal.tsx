@@ -6,6 +6,7 @@ import {
 } from "@/app/api/vital-sign-api/vital-sign-api";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { SuccessModal } from "../shared/success";
 
 interface Modalprops {
   isEdit: boolean;
@@ -13,6 +14,7 @@ interface Modalprops {
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
 }
 
 export const VitalSignModal = ({
@@ -21,6 +23,7 @@ export const VitalSignModal = ({
   label,
   isOpen,
   isModalOpen,
+  onSuccess
 }: Modalprops) => {
   const params = useParams<{
     id: any;
@@ -35,7 +38,7 @@ export const VitalSignModal = ({
     bloodPressure: vitalSignData.vitalsign_bloodPressure || "",
     heartRate: vitalSignData.vitalsign_heartRate || "",
     temperature: vitalSignData.vitalsign_temperature || "",
-    respiratoryRate: vitalSignData.vitalsign_respiratoryRate ||"",
+    respiratoryRate: vitalSignData.vitalsign_respiratoryRate || "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +58,7 @@ export const VitalSignModal = ({
           formData,
           router
         );
+        onSuccess();
         isModalOpen(false);
         return;
       } else {
@@ -72,6 +76,8 @@ export const VitalSignModal = ({
           temperature: "",
           respiratoryRate: "",
         });
+
+        onSuccess();
       }
     } catch (error) {
       console.error("Error adding Prescription:", error);
@@ -88,7 +94,7 @@ export const VitalSignModal = ({
       <div className="max-w-[550px] bg-[#FFFFFF] rounded-md">
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <h2 className="p-title text-left text-[#071437] pl-9 mt-7">
-            {isEdit?"Update": "Add"} Vital Sign
+            {isEdit ? "Update" : "Add"} Vital Sign
           </h2>
           <p className="text-sm pl-9 text-gray-600 pb-10 pt-2">
             Submit your log details.
@@ -188,7 +194,7 @@ export const VitalSignModal = ({
                     type="submit"
                     className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
                   >
-                    {isEdit?"Update" :"Add"}
+                    {isEdit ? "Update" : "Add"}
                   </button>
                 </div>
               </div>

@@ -8,6 +8,7 @@ import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { Modal } from "@/components/modals/modalss";
 import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries.api";
+import { SuccessModal } from "@/components/shared/success";
 
 
 export default function Surgeries() {
@@ -27,7 +28,7 @@ export default function Surgeries() {
   const router = useRouter();
   const [sortBy, setSortBy] = useState("typeOfSurgery");
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [surgeryToEdit, setSurgeryToEdit] = useState<any[]>([]);
   const params = useParams<{
@@ -173,6 +174,11 @@ export default function Surgeries() {
     );
   }
 
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+    setIsEdit(false);
+  };
   console.log(patientSurgeries, "PatientSurgeries");
   return (
     <div className="  w-full">
@@ -409,8 +415,18 @@ export default function Surgeries() {
           surgeryToEdit={surgeryToEdit}
           isOpen={isOpen}
           label="sample label"
-        />
-      )}
+          onSuccess={onSuccess}
+          />
+        )}
+  
+        {isSuccessOpen && (
+          <SuccessModal
+            label="Success"
+            isAlertOpen={isSuccessOpen}
+            toggleModal={setIsSuccessOpen}
+            isEdit={isEdit}
+          />
+        )}
     </div>
   );
 }

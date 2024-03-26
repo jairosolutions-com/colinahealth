@@ -4,10 +4,6 @@ import {
   updateLabResultOfPatient,
   createLabResultOfPatient,
 } from "@/app/api/lab-results-api/lab-results.api";
-import {
-  updatePrescriptionOfPatient,
-  createPrescriptionOfPatient,
-} from "@/app/api/prescription-api/prescription.api";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -17,6 +13,7 @@ interface Modalprops {
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
 }
 
 export const LabResultModal = ({
@@ -25,6 +22,7 @@ export const LabResultModal = ({
   label,
   isOpen,
   isModalOpen,
+  onSuccess
 }: Modalprops) => {
   const params = useParams<{
     id: any;
@@ -65,6 +63,7 @@ export const LabResultModal = ({
           formData,
           router
         );
+        onSuccess()
         isModalOpen(false);
         return;
       } else {
@@ -85,6 +84,7 @@ export const LabResultModal = ({
           hdlCholesterol: "",
           triglycerides: "",
         });
+        onSuccess()
       }
     } catch (error) {
       console.error("Error adding Lab Result:", error);

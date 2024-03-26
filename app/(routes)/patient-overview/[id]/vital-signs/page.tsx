@@ -9,6 +9,7 @@ import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { VitalSignModal } from "@/components/modals/vitalsign.modal";
 import { fetchVitalSignsByPatient } from "@/app/api/vital-sign-api/vital-sign-api";
+import { SuccessModal } from "@/components/shared/success";
 
 export default function vitalsigns() {
   const router = useRouter();
@@ -165,6 +166,13 @@ export default function vitalsigns() {
   }, [currentPage, sortOrder, sortBy, term, isOpen]);
 
   console.log(patientVitalSign, "patientVitalSign");
+
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+    setIsEdit(false);
+  };
 
   return (
     <div className="  w-full">
@@ -419,6 +427,16 @@ export default function vitalsigns() {
           isOpen={isOpen}
           label="sample label"
           vitalSignData={vitalSignData}
+          onSuccess={onSuccess}
+        />
+      )}
+
+      {isSuccessOpen && (
+        <SuccessModal
+          label="Success"
+          isAlertOpen={isSuccessOpen}
+          toggleModal={setIsSuccessOpen}
+          isEdit={isEdit}
         />
       )}
     </div>

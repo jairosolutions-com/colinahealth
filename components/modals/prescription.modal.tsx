@@ -13,6 +13,7 @@ interface Modalprops {
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
 }
 
 export const PrescriptionModal = ({
@@ -21,6 +22,7 @@ export const PrescriptionModal = ({
   label,
   isOpen,
   isModalOpen,
+  onSuccess
 }: Modalprops) => {
   const params = useParams<{
     id: any;
@@ -64,6 +66,7 @@ export const PrescriptionModal = ({
           formData,
           router
         );
+        onSuccess()
         isModalOpen(false);
         return;
       } else {
@@ -82,6 +85,7 @@ export const PrescriptionModal = ({
           dosage: "",
           status: "",
         });
+        onSuccess()
       }
     } catch (error) {
       console.error("Error adding Prescription:", error);

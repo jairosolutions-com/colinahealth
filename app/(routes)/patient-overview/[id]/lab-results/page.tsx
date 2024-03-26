@@ -10,6 +10,9 @@ import { useParams, useRouter } from "next/navigation";
 import { fetchLabResultsByPatient } from "@/app/api/lab-results-api/lab-results.api";
 import { LabResultModal } from "@/components/modals/labresults.modal";
 
+import { SuccessModal } from "@/components/shared/success";
+
+
 export default function Laboratoryresults() {
   const router = useRouter();
   // start of orderby & sortby function
@@ -18,6 +21,8 @@ export default function Laboratoryresults() {
   const [patientLabResults, setPatientLabResults] = useState<any[]>([]);
   const [totalLabResults, setTotalLabResults] = useState<number>(0);
   const [labResultData, setLabResultData] = useState<any[]>([]);
+
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -172,6 +177,14 @@ export default function Laboratoryresults() {
     { label: "LDL-C", onClick: handleSortOptionClick },
     { label: "HDL-C", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
+
+
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+    setIsEdit(false);
+  };
+
 
   return (
     <div className="  w-full">
@@ -420,8 +433,22 @@ export default function Laboratoryresults() {
           labResultData={labResultData}
           isOpen={isOpen}
           label="sample label"
+          onSuccess={onSuccess}
+          />
+        )}
+  
+        {isSuccessOpen && (
+          <SuccessModal
+            label="Success"
+            isAlertOpen={isSuccessOpen}
+            toggleModal={setIsSuccessOpen}
+            isEdit={isEdit}
+          />
+        )}
+
         />
       )}
+
     </div>
   );
 }

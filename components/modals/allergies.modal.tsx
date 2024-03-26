@@ -11,6 +11,7 @@ interface Modalprops {
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
 }
 
 export const AllergyModal = ({
@@ -19,6 +20,7 @@ export const AllergyModal = ({
   label,
   isOpen,
   isModalOpen,
+  onSuccess
 }: Modalprops) => {
   const params = useParams<{
     id: any;
@@ -61,6 +63,7 @@ export const AllergyModal = ({
     try {
       if (isEdit) {
         await updateAllergyOfPatient(allergy.allergies_uuid, formData, router);
+        onSuccess()
         isModalOpen(false);
         return;
       } else {
@@ -80,6 +83,7 @@ export const AllergyModal = ({
           reaction: "",
           notes: "",
         });
+        onSuccess()
       }
     } catch (error) {
       console.error("Error adding allergy:", error);
