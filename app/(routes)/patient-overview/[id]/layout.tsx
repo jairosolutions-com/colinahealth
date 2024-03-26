@@ -5,6 +5,7 @@ import { Navbar } from "@/components/navbar";
 import { useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
+import Loading from "./loading";
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
@@ -23,6 +24,15 @@ export default function PatientOverviewLayout({
   const [detailsClicked, setDetailsClicked] = useState<boolean>(false); // State to track if "See more details" is clicked
   const patientId = params.id.toUpperCase();
   const pathname = usePathname();
+  const [isAllergy, setIsAllergy] = useState(true)
+  const [isSurgery, setIsSurgery] = useState(false)
+  const [isMedicationLog, setIsMedicationLog] = useState(false)
+  const [isPrescription, setIsPrescription] = useState(false)
+  const [isVitalSign, setIsVitalSign] = useState(false)
+  const [isLabRes, setIsLabRes] = useState(false)
+  const [isAppointment, setIsAppointment] = useState(false)
+  const [isNotes, setIsNotes] = useState(false)
+  const [loads, setLoads] = useState(0);
 
   const tabs = [
     {
@@ -57,6 +67,7 @@ export default function PatientOverviewLayout({
 
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
     setIsLoading(true);
+    setLoads(loads + 1);
     onNavigate(router, url);
     setActiveTab(-1);
     setDetailsClicked(true);
@@ -68,12 +79,32 @@ export default function PatientOverviewLayout({
   //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
   // };
   const handleTabClick = (url: string) => {
-    setIsLoading(true);
+  
     onNavigate(router, url);
     setDetailsClicked(false);
   };
   console.log(pathname, "pathname");
   useEffect(() => {
+    const pathParts = pathname.split("/");
+    const tabUrl = pathParts[pathParts.length - 1];
+
+    if(tabUrl === "allergies"){
+      setIsAllergy(true)
+    } else if(tabUrl === "surgeries"){
+      setIsSurgery(true)
+    } else if(tabUrl === "medication"){
+      setIsMedicationLog(true)
+    } else if(tabUrl === "prescription"){
+      setIsPrescription(true)
+    } else if(tabUrl === "vital-signs"){
+      setIsVitalSign(true)
+    } else if(tabUrl === "lab-results"){
+      setIsLabRes(true)
+    } else if(tabUrl === "patient-appointment"){
+      setIsAppointment(true)
+    } else if(tabUrl === "notes"){
+      setIsNotes(true)
+    }
     const fetchData = async () => {
       try {
         const response = await fetchPatientOverview(patientId, router);
@@ -89,17 +120,17 @@ export default function PatientOverviewLayout({
     fetchData();
   }, [patientId, router, params]);
 
-  if (isLoading) {
+  if (isLoading && (isAllergy==false || isSurgery==false || isMedicationLog==false || isPrescription==false || isVitalSign==false || isLabRes==false || isAppointment==false || isNotes==false)) {
     return (
-      <div className="w-full h-full flex justify-center items-center">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-      </div>
+      <Loading></Loading>
     );
   }
   console.log(patientData, "patientData");
 
   const pathParts = pathname.split("/");
   const tabUrl = pathParts[pathParts.length - 1];
+
+
 
   return (
     <div className="flex flex-col w-full  px-4 lg:px-28 mt-[100px]">

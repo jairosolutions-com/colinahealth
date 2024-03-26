@@ -3,11 +3,12 @@
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import Edit from "@/components/shared/buttons/view";
+import Edit from "@/components/shared/buttons/edit";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useRouter, useParams } from "next/navigation";
-import { fetchPrescriptionsByPatient as fetchPrescriptionsByPatient } from "@/app/api/prescription-api/prescription.api";
+import { fetchPrescriptionByPatient as fetchPrescriptionsByPatient } from "@/app/api/prescription-api/prescription.api";
+import { PrescriptionModal } from "@/components/modals/prescription.modal";
 // import { Modal } from "@/components/shared/modalss";
 
 export default function prescription() {
@@ -21,10 +22,12 @@ export default function prescription() {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalPrescription, setTotalPrescription] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [prescriptionData, setPrescriptionData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [gotoError, setGotoError] = useState(false);
   const [term, setTerm] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   interface Modalprops {
     label: string;
@@ -237,6 +240,9 @@ export default function prescription() {
           <table className="w-full text-left rtl:text-right">
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
+              <th scope="col" className="px-0 py-3 w-[300px]">
+                  PRESCRIPTION ID
+                </th>
                 <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
                   MEDICINE NAME
                 </th>
@@ -271,6 +277,9 @@ export default function prescription() {
                 <>
                   {patientPrescriptions.map((prescription, index) => (
                     <tr key={index} className="  even:bg-gray-50  border-b ">
+                       <td className="truncate max-w-[286px] px-0 py-4">
+                        {prescription.prescriptions_uuid}
+                      </td>
                       <th
                         scope="row"
                         className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
@@ -291,7 +300,15 @@ export default function prescription() {
                         {prescription.prescriptions_status}
                       </td>
                       <td className="px-[70px] py-4">
+                      <p
+                        onClick={() => {
+                          isModalOpen(true);
+                          setIsEdit(true);
+                          setPrescriptionData(prescription);
+                        }}
+                      >
                         <Edit></Edit>
+                      </p>
                       </td>
                     </tr>
                   ))}
@@ -367,9 +384,9 @@ export default function prescription() {
           </div>
         </div>
       )}
-      {/* {isOpen && (
-        <Modal isModalOpen={isModalOpen} isOpen={isOpen} label="sample label" isEdit={false} prescriptionUuid={""} prescriptionToEdit={undefined} />
-      )} */}
+      {isOpen && (
+        <PrescriptionModal isModalOpen={isModalOpen} isOpen={isOpen} label="sample label" isEdit={true} prescriptionData={prescriptionData} />
+      )}
     </div>
   );
 }
