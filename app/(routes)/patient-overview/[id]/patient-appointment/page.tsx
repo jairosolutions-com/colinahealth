@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import Edit from "@/components/shared/buttons/view";
+import View from "@/components/shared/buttons/view";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
@@ -16,7 +16,7 @@ const Appointment = () => {
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEdit, setIsView] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
   const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
@@ -129,6 +129,8 @@ const Appointment = () => {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
+      setIsView(false);
+      setAppointmentData([]);
     }
   };
   useEffect(() => {
@@ -309,7 +311,15 @@ const Appointment = () => {
                         {appointments.appointments_details}{" "}
                       </td>
                       <td className="px-[90px] py-3">
-                        <Edit></Edit>
+                        <p
+                          onClick={() => {
+                            isModalOpen(true);
+                            setIsView(true);
+                            setAppointmentData(appointments);
+                          }}
+                        >
+                          <View></View>
+                        </p>
                       </td>
                     </tr>
                   ))}
@@ -389,7 +399,7 @@ const Appointment = () => {
         <AppointmentsModal
           isModalOpen={isModalOpen}
           isOpen={isOpen}
-          isEdit={isEdit}
+          isView={isEdit}
           appointmentData={appointmentData}
           label="sample label"
         />
