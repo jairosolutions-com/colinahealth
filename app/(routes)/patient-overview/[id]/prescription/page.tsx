@@ -246,7 +246,13 @@ export default function prescription() {
 
         {/* START OF TABLE */}
         <div>
-          
+        {patientPrescriptions.length == 0 ? (
+            <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+              <p className="text-xl font-semibold text-gray-700">
+                No Prescription/s
+              </p>
+            </div>
+          ) : (
           <table className="w-full text-left rtl:text-right">
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
@@ -274,7 +280,7 @@ export default function prescription() {
               </tr>
             </thead>
             <tbody>
-              
+             
               {patientPrescriptions.length > 0 && (
                 <>
                   {patientPrescriptions.map((prescription, index) => (
@@ -318,6 +324,7 @@ export default function prescription() {
               )}
             </tbody>
           </table>
+          )}
         </div>
         {/* END OF TABLE */}
       </div>

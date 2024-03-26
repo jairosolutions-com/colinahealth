@@ -261,6 +261,13 @@ export default function Surgeries() {
 
         {/* START OF TABLE */}
         <div>
+        {patientSurgeries.length == 0 ? (
+            <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+              <p className="text-xl font-semibold text-gray-700">
+                No Surgeries
+              </p>
+            </div>
+          ) : (
           <table className="w-full text-left rtl:text-right">
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
@@ -286,15 +293,6 @@ export default function Surgeries() {
               </tr>
             </thead>
             <tbody>
-              {patientSurgeries.length === 0 && (
-                <tr>
-                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-xl font-semibold text-gray-700">
-                      No Prescription
-                    </p>
-                  </td>
-                </tr>
-              )}
               {patientSurgeries.map((surgery, index) => (
                 <tr key={index} className="  even:bg-gray-50  border-b ">
                   <th
@@ -334,6 +332,7 @@ export default function Surgeries() {
               ))}
             </tbody>
           </table>
+          )}
         </div>
         {/* END OF TABLE */}
       </div>
