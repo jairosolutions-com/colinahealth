@@ -19,9 +19,18 @@ export const AppointmentsModal = ({
   isOpen,
   isModalOpen,
 }: Modalprops) => {
-  const [selectedTime, setSelectedTime] = useState("");
-  const [selectedDate, setSelectedDate] = useState(new Date()); // State to hold the selected date and time
-  const [selectedStatus, setSelectedStatus] = useState(""); // State to hold the selected status
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [isEditable, setIsEditable] = useState(false);
+  const [date, setDate] = useState("March 26, 2024");
+  const [day, setDay] = useState("Tuesday");
+  const [time, setTime] = useState("1:30pm");
+  const [endTime, setEndTime] = useState("2:00pm");
+  const [details, setDetails] = useState("Input details");
+
+  const handleEditToggle = () => {
+    setIsEditable(!isEditable);
+  };
+
   const [formData, setFormData] = useState({
     date: appointmentData.appointments_appointmentDate,
     time: appointmentData.appointments_appointmentTime,
@@ -44,7 +53,7 @@ export const AppointmentsModal = ({
                 <div className="w-1 h-1 my-2 mx-1 mt-2 bg-green-500 rounded-full"></div>
                 Upcoming Schedule
                 <button
-                  onClick={() => isModalOpen(false)}
+                  onClick={() => setIsEditable(!isEditable)}
                   type="button"
                   className="w-24 h-8 hover:bg-[#D9D9D9] font-medium rounded text-[#000] ring-1 ring-gray-200 ml-[180px] "
                 >
@@ -60,24 +69,32 @@ export const AppointmentsModal = ({
           </p>
         </div>
         {isView === true && (
-          <div className=" mb-9 pt-4">
-            <div className="h-[600px] max-h-[470px] md:px-10 mt-5">
+          <div className="mb-9 pt-4">
+            <div className="h-[600px] max-h-[520px] md:px-10 mt-5">
               <form className="">
-                <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
                   <div>
                     <label
-                      htmlFor="first-name"
-                      className="block text-sm font-semibold leading-6 text-gray-9</div>00 required-field"
+                      htmlFor="date"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
                     >
                       DATE
                     </label>
                     <div className="mt-2.5">
-                      <input
-                        type="text"
-                        required
-                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                        placeholder={formData.date}
-                      />
+                      {isEditable ? (
+                        <input
+                          id="date"
+                          type="text"
+                          value={date}
+                          onChange={(e) => setDate(e.target.value)}
+                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                          placeholder="March 26, 2024"
+                        />
+                      ) : (
+                        <p className="font-regular text-gray-400 text-md h-[48px] flex items-center ml-3">
+                          <span>{date}</span>
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div>
@@ -88,12 +105,20 @@ export const AppointmentsModal = ({
                       DAY
                     </label>
                     <div className="mt-2.5">
-                      <input
-                        type="text"
-                        required
-                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                        placeholder="AUTOGEN TUESDAY"
-                      />
+                      {isEditable ? (
+                        <input
+                          id="day"
+                          type="text"
+                          value={day}
+                          onChange={(e) => setDate(e.target.value)}
+                          className="block w-full h-12  rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                          placeholder="March 26, 2024"
+                        />
+                      ) : (
+                        <p className=" font-regular text-gray-400 text-md h-[48px] flex items-center ml-3">
+                          <span>Tuesday</span>
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div>
@@ -104,12 +129,20 @@ export const AppointmentsModal = ({
                       TIME
                     </label>
                     <div className="mt-2.5">
-                      <input
-                        type="text"
-                        required
-                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                        placeholder="input time"
-                      />
+                      {isEditable ? (
+                        <input
+                          id="time"
+                          type="time"
+                          value={time}
+                          onChange={(e) => setDate(e.target.value)}
+                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                          placeholder="1:30pm"
+                        />
+                      ) : (
+                        <p className=" font-regular text-gray-400 text-md h-[48px] flex items-center ml-3">
+                          <span>1:30pm</span>
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div>
@@ -120,12 +153,20 @@ export const AppointmentsModal = ({
                       END TIME
                     </label>
                     <div className="mt-2.5">
-                      <input
-                        type="text"
-                        required
-                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
-                        placeholder="input end time"
-                      />
+                      {isEditable ? (
+                        <input
+                          type="time"
+                          required
+                          onChange={(e) => setDate(e.target.value)}
+                          value={endTime}
+                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
+                          placeholder="2:00pm"
+                        />
+                      ) : (
+                        <p className=" font-regular text-gray-400 text-md h-[48px] flex items-center ml-3">
+                          <span>2:00pm</span>
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="sm:col-span-2">
@@ -138,7 +179,7 @@ export const AppointmentsModal = ({
                     <div className="mt-2.5">
                       <textarea
                         rows={4}
-                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 resize-none placeholder:text-gray-400 sm:text-sm sm:leading-6"
                         placeholder="input details"
                       />
                     </div>
@@ -153,29 +194,29 @@ export const AppointmentsModal = ({
                     <div className="mt-2.5">
                       <select
                         id="status"
-                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                        className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                         value={selectedStatus}
                         onChange={(e) => setSelectedStatus(e.target.value)}
-                        defaultValue="select status"
+                        defaultValue="select satus"
                       >
                         <option value="">select status</option>
-                        <option value="">SUCCESSFUL</option>
+                        <option value="dad">SUCCESSFUL</option>
                         <option value="Pending">CANCELED</option>
                       </select>
                     </div>
                   </div>
                 </div>
-                <div className="mt-6 pb-3 flex flex-row">
+                <div className="mt-8 pb-3  grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
                   <button
                     onClick={() => isModalOpen(false)}
                     type="button"
-                    className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200 mr-8"
+                    className="w-[250px] h-12 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200 mr-8"
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
-                    className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
+                    className="w-[250px] h-12 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
                   >
                     Submit
                   </button>
@@ -188,71 +229,73 @@ export const AppointmentsModal = ({
           <div className=" mb-9 pt-4">
             <div className="h-[400px] max-h-[400px] md:px-10 mt-5">
               <form className="">
-                <div className=" grid gap-2 grid-cols-12  mt-6 ">
-                  {/* Date Picker */}
-                  <div className="w-full col-span-6 mb-4 md:mb-0">
-                    <DatePicker
-                      selected={selectedDate}
-                      onChange={(date: Date) => setSelectedDate(date)}
-                      dateFormat="MM/dd/yyyy"
-                      placeholderText="Select Date"
-                      className="w-full pl-2 pr-40 py-4 border-0 shadow-sm ring-1 ring-inset ring-gray-300 rounded-[5px] text-xs"
-                      popperClassName="z-50" // Set a high z-index directly
+                <div className="flex flex-col mt-6 pb-3">
+                  <div className="flex flex-col w-full">
+                    <input
+                      type="date"
+                      required
+                      className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
+                      placeholder="input reaction"
                     />
                   </div>
-                  {/* Time Pickers and Details */}
-                  <div className="col-span-6 flex flex-col ">
-                    {/* Time From */}
-                    <div className="grid grid-rows-2">
-                      <p className="text-xs font-bold text-black self-end">
-                        Time From:
-                      </p>
-                      <DatePicker
-                        selected={selectedDate}
-                        onChange={(date) => setSelectedDate(date!)}
-                        timeFormat="hh:mm aa"
-                        timeIntervals={15}
-                        placeholderText="Select time from"
-                        className="w-full h-full px-3 py-4 text-xs border-0 shadow-sm ring-1 ring-inset ring-gray-300 rounded-[5px]"
-                      />
-                    </div>
-                    {/* Time To */}
-                    <div className="flex col-span-3 content-end grid grid-rows-2 ">
-                      <p className="text-xs font-bold text-black pt-7">
-                        Time To:
-                      </p>
-                      {/* onChange={(time: null) =>
-                          setSelectedTime())
-                                                              timeIntervals={15}
-            placeholderText="Select time to"
-
-                        } */}
-                      <TimePicker />
-                    </div>
-                    {/* Details */}
-                    <div className=" col-span-3  ">
-                      <p className="text-xs font-bold text-black pt-7 ">
-                        Details
-                      </p>
+                </div>
+                <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="first-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      Time From:
+                    </label>
+                    <input
+                      type="time"
+                      required
+                      className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
+                      placeholder="input reaction"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="last-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      Time to:
+                    </label>
+                    <input
+                      type="time"
+                      required
+                      className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
+                      placeholder="input reaction"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      Details
+                    </label>
+                    <div className="mt-2.5">
                       <textarea
-                        rows={4}
-                        className=" w-full px-3 py-4 text-gray-900 border-0 shadow-sm ring-1 ring-inset ring-gray-300 rounded-[5px]  resize-none placeholder:text-gray-400  text-xs  "
-                        placeholder="input notes"
+                        rows={5}
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                        placeholder="input details"
+                        style={{ resize: "none" }}
                       />
                     </div>
                   </div>
                 </div>
-                <div className="mt-6 pb-3 flex justify-center flex-row">
+                <div className="mt-8 pb-3 grid grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-2">
                   <button
                     onClick={() => isModalOpen(false)}
                     type="button"
-                    className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200 mr-8"
+                    className="w-[250px] h-12 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200 mr-8"
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
-                    className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
+                    className="w-[250px] h-12 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
                   >
                     Submit
                   </button>
@@ -261,37 +304,6 @@ export const AppointmentsModal = ({
             </div>
           </div>
         )}
-        <form className="max-w-[8rem] mx-auto">
-          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Select time:
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-              <svg
-                className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </div>
-            <input
-              type="time"
-              id="time"
-              className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              min="09:00"
-              max="18:00"
-              value="00:00"
-              required
-            />
-          </div>
-        </form>
       </div>
     </div>
   );
