@@ -120,10 +120,40 @@ export default function PatientOverviewLayout({
     fetchData();
   }, [patientId, router, params]);
 
-  if (isLoading && (isAllergy==false || isSurgery==false || isMedicationLog==false || isPrescription==false || isVitalSign==false || isLabRes==false || isAppointment==false || isNotes==false)) {
-    return (
-      <Loading></Loading>
-    );
+  if (isLoading){
+    if(!isAllergy){
+      return (
+        <Loading></Loading>
+      );
+    } else if(!isSurgery){
+      return (
+        <Loading></Loading>
+      )
+    } else if(!isMedicationLog){
+      return (
+        <Loading></Loading>
+      );
+    } else if(!isPrescription){
+      return (
+        <Loading></Loading>
+      );
+    }else if(!isVitalSign){
+      return (
+        <Loading></Loading>
+      );
+    } else if(!isLabRes){
+      return (
+        <Loading></Loading>
+      );
+    } else if(!isAppointment){
+      return (
+        <Loading></Loading>
+      );
+    } else if(!isNotes){
+      return (
+        <Loading></Loading>
+      );
+    }
   }
   console.log(patientData, "patientData");
 
