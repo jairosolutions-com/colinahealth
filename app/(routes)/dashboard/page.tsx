@@ -6,7 +6,11 @@ import React from "react";
 const Dashboard = () => {
   const router = useRouter();
   return (
-    <main className="overflow-x-hidden">
+    <main className="overflow-x-hidden w-full h-full">
+      <div className="absolute flex w-full h-full justify-center items-center -z-50">
+          <img src="/imgs/colinahealthlogo3.png" alt="logo" width={500} 
+          className="opacity-15 items-center"/>
+      </div>
       <div className="mt-20 w-full justify-center items-center  px-28">
         <div>
           <p className="font-bold text-[24px]">Dashboard</p>
@@ -18,7 +22,7 @@ const Dashboard = () => {
           </div>
           {/* {/ {/ {/ Start of content /} /} /} */}
           <div className=" flex flex-row gap-3 h-[162px]">
-            <div className=" w-full rounded-xl border-[2px] border-[#E4E4E7]">
+            <div className=" w-full bg-white rounded-xl border-[2px] border-[#E4E4E7]">
               <div className="px-5">
                 <div className="text-[#71717A] font-medium text-[20px] mt-5 mb-10">
                   Total Patients
@@ -31,7 +35,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div className=" w-full rounded-xl border-[2px] border-[#E4E4E7]">
+            <div className=" w-full bg-white rounded-xl border-[2px] border-[#E4E4E7]">
               <div className="px-5">
                 <div className="text-[#71717A] font-medium text-[20px] mt-5 mb-10">
                   New Patients
@@ -44,7 +48,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div className=" w-full rounded-xl border-[2px] border-[#E4E4E7]">
+            <div className=" w-full bg-white rounded-xl border-[2px] border-[#E4E4E7]">
               <div className="px-5">
                 <div className="text-[#71717A] font-medium text-[20px] mt-5 mb-10">
                   Average Daily Visit
@@ -62,13 +66,13 @@ const Dashboard = () => {
           <div className="flex w-full justify-between gap-3 my-3">
             <div className="flex flex-col w-[1000px] gap-3">
               {/* {/ {/ {/ Start of Appointments /} /} /} */}
-              <div className="  rounded-xl border-[2px] border-[#E4E4E7]">
+              <div className="  rounded-xl border-[2px] bg-white border-[#E4E4E7]">
                 <div className="mt-2">
                   <div className="font-bold text-[20px] px-5">
                     Upcoming Appointments
                   </div>
                   <div className="px-5">Total of 3 Appointments</div>
-                  <div className="flex flex-col h-[190px] border-b-1 border-b-gray-950">
+                  <div className="flex flex-col h-auto pb-2 border-b-1 border-b-gray-950">
                     <div className="flex justify-evenly items-center h-[60px]">
                       <div className="px-6 py-4">
                         <p className="bg-[#FEF9C3] text-[#713F12] font-medium text-[14px] me-2 px-2.5 py-0.5 rounded-full flex items-center">
@@ -120,20 +124,20 @@ const Dashboard = () => {
                       <div className="px-6 py-4">New Patient</div>
                       <div className="px-6 py-4 cursor-pointer">●●●</div>
                     </div>
-                  </div>
+                  </div> 
                 </div>
               </div>
               {/* {/ {/ End of Appointments /} /}
             {/ {/ Start of Average Patient List /} /} */}
               <div className=" bg-slate-500 rounded-xl flex">
                 <div className="font-bold text-[20px] px-5">
-                  Average Patient List
+                  Monthly Patient List
                 </div>
               </div>
               {/* {/ {/ {/ End of Average Patient List /} /} /} */}
             </div>
             {/* {/ {/ {/ Start of Due Medicaitons /} /} /} */}
-            <div className="w-[700px] rounded-xl border-[2px] py-5 px-2 border-[#E4E4E7]">
+            <div className="w-[700px] bg-white rounded-xl border-[2px] py-5 px-2 border-[#E4E4E7]">
               <div className="font-bold text-[20px] px-5">Due Medications</div>
               <div className="px-5 mb-5">Total of 10 Due</div>
               <div className="w-full items-center">

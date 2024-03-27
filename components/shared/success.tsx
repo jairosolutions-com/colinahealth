@@ -8,6 +8,7 @@ interface AlertProps {
 }
 
 export const SuccessModal = ({ label, isAlertOpen, toggleModal, isEdit }: AlertProps) => {
+  console.log(label, "label")
   return (
     <div>
       {isAlertOpen && (

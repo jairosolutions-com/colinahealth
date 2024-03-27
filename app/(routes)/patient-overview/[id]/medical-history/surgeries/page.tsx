@@ -6,7 +6,7 @@ import Edit from "@/components/shared/buttons/edit";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { Modal } from "@/components/modals/modalss";
+// import { Modal } from "@/components/modals/modalss";
 import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries.api";
 import { SuccessModal } from "@/components/shared/success";
 
@@ -407,7 +407,7 @@ export default function Surgeries() {
           </div>
         </div>
       )}
-      {isOpen && (
+      {/* {isOpen && (
         <Modal
           isModalOpen={isModalOpen}
           isEdit={isEdit}
@@ -417,7 +417,7 @@ export default function Surgeries() {
           label="sample label"
           onSuccess={onSuccess}
           />
-        )}
+        )} */}
   
         {isSuccessOpen && (
           <SuccessModal

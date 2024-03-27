@@ -29,11 +29,13 @@ export const ErrorModal = ({ label,  toggleModal, isEdit, isAlertOpen , errorMes
                 <img src="/icons/error-icon.svg" alt="" />
               </div>
               <h1 className="text-[34px] font-bold text-lg text-gray-500 mb-4">
-              {errorMessage === 'Allergy already exist' ? 'Allergy already exists!' : errorMessage === 'Patient already exist' ? 'Patient already exists!' : "There was a problem with your request." 
+              {label === 'Allergy already exist' ? 'Allergy already exists!' : label === 'Patient already exist' ? 'Patient already exists!' : 
+              label === 'prescriptionFailed' ? 'Prescription already exists!' : "There was a problem with your request." 
               }
               </h1>
               <p className="text-[24px] text-sm text-gray-400 mb-10">
-                {errorMessage === 'Allergy already exist' ? 'Please check and try again.' : errorMessage === 'Patient already exist' ? 'Please check and try again.' : "There was a problem with your request." }
+                {label === 'Allergy already exist' ? 'Please check and try again.' : label === 'Patient already exist' ? 'Please check and try again.' : 
+                label === 'prescriptionFailed' ? 'Please check and try again.' : "There was a problem with your request." }
               </p>
               <button
                 onClick={() => toggleModal(false)} // Close modal

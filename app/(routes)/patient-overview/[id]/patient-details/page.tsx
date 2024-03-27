@@ -120,7 +120,7 @@ export default function PatientDetails() {
     };
 
     fetchData();
-  }, []);
+  }, [patientEditMode]);
 
   const handleSubmit = async () => {
     try {
