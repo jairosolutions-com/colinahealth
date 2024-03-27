@@ -179,6 +179,8 @@ export default function prescription() {
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
+    isModalOpen(false);
+
   };
 
   return (

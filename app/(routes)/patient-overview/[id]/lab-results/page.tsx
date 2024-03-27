@@ -183,6 +183,8 @@ export default function Laboratoryresults() {
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
+    isModalOpen(false);
+
   };
 
 
