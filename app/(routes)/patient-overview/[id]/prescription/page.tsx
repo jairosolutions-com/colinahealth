@@ -181,6 +181,8 @@ export default function prescription() {
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
+    isModalOpen(false);
+
   };
   const onFailed = () => {
     setIsErrorOpen(true);

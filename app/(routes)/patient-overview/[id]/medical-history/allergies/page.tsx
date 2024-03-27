@@ -171,6 +171,8 @@ const Allergies = () => {
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
+    isModalOpen(false);
+
   };
   const onFailed = () => {
     setIsErrorOpen(true);

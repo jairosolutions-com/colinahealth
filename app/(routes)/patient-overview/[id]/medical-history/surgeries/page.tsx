@@ -6,10 +6,9 @@ import Edit from "@/components/shared/buttons/edit";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-// import { Modal } from "@/components/modals/modalss";
+import { SurgeriesModal } from "@/components/modals/surgeries.modal";
 import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries.api";
 import { SuccessModal } from "@/components/shared/success";
-
 
 export default function Surgeries() {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -30,7 +29,7 @@ export default function Surgeries() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [surgeryToEdit, setSurgeryToEdit] = useState<any[]>([]);
+  const [surgeryData, setSurgeryData] = useState<any[]>([]);
   const params = useParams<{
     id: any;
     tag: string;
@@ -76,7 +75,7 @@ export default function Surgeries() {
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
       setIsEdit(false);
-      setSurgeryToEdit([]);
+      setSurgeryData([]);
     }
   };
 
@@ -115,7 +114,19 @@ export default function Surgeries() {
       console.error("Invalid page number:", pageNumber);
     }
   };
+  const formatDate = (dateOfSurgery: string | number | Date) => {
+    // Create a new Date object from the provided createdAt date string
+    const date = new Date(dateOfSurgery);
 
+    // Get the month, day, and year
+    const month = date.toLocaleString("default", { month: "short" });
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    const formattedDate = `${month} ${day}, ${year}`;
+
+    return formattedDate;
+  };
   const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPageNumber(e.target.value);
   };
@@ -174,10 +185,10 @@ export default function Surgeries() {
     );
   }
 
-
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
+    isModalOpen(false);
   };
   console.log(patientSurgeries, "PatientSurgeries");
   return (
@@ -267,77 +278,71 @@ export default function Surgeries() {
 
         {/* START OF TABLE */}
         <div>
-        {patientSurgeries.length == 0 ? (
+          {patientSurgeries.length == 0 ? (
             <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
               <p className="text-xl font-semibold text-gray-700">
                 No Surgeries
               </p>
             </div>
           ) : (
-          <table className="w-full text-left rtl:text-right">
-            <thead className="">
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                  Surgery ID
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                  DATE
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  TYPE
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  SURGERY
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  NOTES
-                </th>
-
-                <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {patientSurgeries.map((surgery, index) => (
-                <tr key={index} className="  even:bg-gray-50  border-b ">
-                  <th
-                    scope="row"
-                    className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    {surgery.surgeries_uuid}
+            <table className="w-full text-left rtl:text-right">
+              <thead className="">
+                <tr className="uppercase text-[#64748B] border-y  ">
+                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                    Surgery ID
                   </th>
-                  <td className="px-2 py-4">
-                    {surgery.surgeries_dateOfSurgery}
-                  </td>
-                  <td className="px-6 py-4">
-                    {surgery.surgeries_typeOfSurgery}
-                  </td>
-                  <td className=" max-w-[552px] px-6 py-4">
-                    {surgery.surgeries_surgery}
-                  </td>
-                  <td className="px-6 py-4">{surgery.surgeries_notes}</td>
-                  <td className="px-[50px] py-4 flex items-center justify-center  ">
-                    <div
-                      onClick={() => {
-                        isModalOpen(true);
-                        setIsEdit(true);
-                        setSurgeryUuid(surgery.surgeries_uuid);
-                        setSurgeryToEdit([
-                          surgery.surgeries_dateOfSurgery,
-                          surgery.surgeries_typeOfSurgery,
-                          surgery.surgeries_surgery,
-                          surgery.surgeries_notes,
-                        ]);
-                      }}
-                    >
-                      <Edit></Edit>
-                    </div>
-                  </td>
+                  <th scope="col" className="px-2 py-3 w-[300px] h-[70px]">
+                    DATE OF SURGERY
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[400px]">
+                    TYPE
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[400px]">
+                    SURGERY
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[300px]">
+                    NOTES
+                  </th>
+
+                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                    Action
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {patientSurgeries.map((surgery, index) => (
+                  <tr key={index} className="  even:bg-gray-50  border-b ">
+                    <th
+                      scope="row"
+                      className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                    >
+                      {surgery.surgeries_uuid}
+                    </th>
+                    <td className="px-2 py-4">
+                      {formatDate(surgery.surgeries_dateOfSurgery)}
+                    </td>
+                    <td className="px-6 py-4">
+                      {surgery.surgeries_typeOfSurgery}
+                    </td>
+                    <td className=" max-w-[552px] px-6 py-4">
+                      {surgery.surgeries_surgery}
+                    </td>
+                    <td className="px-6 py-4">{surgery.surgeries_notes}</td>
+                    <td className="px-[50px] py-4 flex items-center justify-center  ">
+                      <div
+                        onClick={() => {
+                          isModalOpen(true);
+                          setIsEdit(true);
+                          setSurgeryData(surgery);
+                        }}
+                      >
+                        <Edit></Edit>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
         {/* END OF TABLE */}
@@ -407,26 +412,25 @@ export default function Surgeries() {
           </div>
         </div>
       )}
-      {/* {isOpen && (
-        <Modal
+      {isOpen && (
+        <SurgeriesModal
           isModalOpen={isModalOpen}
           isEdit={isEdit}
-          surgeryUuid={surgeryUuid}
-          surgeryToEdit={surgeryToEdit}
+          surgeryData={surgeryData}
           isOpen={isOpen}
           label="sample label"
           onSuccess={onSuccess}
-          />
-        )} */}
-  
-        {isSuccessOpen && (
-          <SuccessModal
-            label="Success"
-            isAlertOpen={isSuccessOpen}
-            toggleModal={setIsSuccessOpen}
-            isEdit={isEdit}
-          />
-        )}
+        />
+      )}
+
+      {isSuccessOpen && (
+        <SuccessModal
+          label="Success"
+          isAlertOpen={isSuccessOpen}
+          toggleModal={setIsSuccessOpen}
+          isEdit={isEdit}
+        />
+      )}
     </div>
   );
 }
