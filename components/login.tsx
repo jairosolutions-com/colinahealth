@@ -64,6 +64,9 @@ export const Login = () => {
     setRememberMe(!rememberMe); // Toggle rememberMe state
   };
 
+  console.log("email", email);
+  console.log(getAccessToken(), "getAccessToken");
+
   return (
     <div>
       <section>
@@ -88,35 +91,51 @@ export const Login = () => {
                   name="wf-form-password"
                   method="get"
                 >
-                  <div className="relative">
+                  <div className="relative mb-4 flex">
                     <input
                       id="email"
                       type="email"
                       className={`${
                         isInvalid ? "ring-1 ring-red-400" : ""
-                      } mb-4 h-9 w-full bg-opacity-60 bg-[#D9D9D9] px-3 py-6 pl-5 text-sm text-[#333333]`}
+                      }  h-9 w-full bg-opacity-60 bg-[#D9D9D9] px-3 py-6 pl-5 text-sm text-[#333333]`}
                       placeholder={`${
                         isInvalid ? "Invalid Email!" : "Email Address"
                       }`}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      autoComplete=" new-email"
+                      required
                     />
+                    <div className={`${isInvalid? "block":"hidden"} absolute right-3 flex items-center justify-center h-full `}>
+                      <img
+                        className=""
+                        src="/icons/invalidIcon.svg"
+                        alt="invalid"
+                        width={25}
+                      />
+                    </div>
                   </div>
-                  <div className="relative mb-4">
+                  <div className="relative mb-4 flex">
                     <input
                       id="password"
                       type="password"
                       className={`${
                         isInvalid ? "ring-1 ring-red-400" : ""
-                      } mb-4 h-9 w-full bg-opacity-60 bg-[#D9D9D9] px-3 py-6 pl-5 text-sm text-[#333333]`}
+                      }  h-9 w-full bg-opacity-60 bg-[#D9D9D9] px-3 py-6 pl-5 text-sm text-[#333333]`}
                       placeholder={`${
                         isInvalid ? "Invalid Password!" : "Password"
                       }`}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      autoComplete="new-password"
+                      required
                     />
+                    <div className={`${isInvalid? "block":"hidden"} absolute right-3 flex items-center justify-center h-full `}>
+                      <img
+                        className=""
+                        src="/icons/invalidIcon.svg"
+                        alt="invalid"
+                        width={25}
+                      />
+                    </div>
                   </div>
 
                   {/* COMMENT MUNA KAY DILI PA WORKING */}
@@ -143,7 +162,6 @@ export const Login = () => {
                     <button
                       className="inline-block w-full cursor-pointer items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out"
                       type="submit"
-                      onClick={() => onNavigate(router, "/dashboard")}
                     >
                       Sign In
                     </button>

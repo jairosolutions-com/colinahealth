@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
 import Loading from "./loading";
+import { getAccessToken } from "@/app/api/login-api/accessToken";
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
@@ -17,6 +18,9 @@ export default function PatientOverviewLayout({
     tag: string;
     item: string;
   }>();
+  if (!getAccessToken()) {
+    onNavigate(router, "/login");
+  }
   const [patientData, setPatientData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -24,16 +28,17 @@ export default function PatientOverviewLayout({
   const [detailsClicked, setDetailsClicked] = useState<boolean>(false); // State to track if "See more details" is clicked
   const patientId = params.id.toUpperCase();
   const pathname = usePathname();
-  const [isAllergy, setIsAllergy] = useState(true)
-  const [isSurgery, setIsSurgery] = useState(false)
-  const [isMedicationLog, setIsMedicationLog] = useState(false)
-  const [isPrescription, setIsPrescription] = useState(false)
-  const [isVitalSign, setIsVitalSign] = useState(false)
-  const [isLabRes, setIsLabRes] = useState(false)
-  const [isAppointment, setIsAppointment] = useState(false)
-  const [isNotes, setIsNotes] = useState(false)
+  const [isAllergy, setIsAllergy] = useState(true);
+  const [isSurgery, setIsSurgery] = useState(false);
+  const [isMedicationLog, setIsMedicationLog] = useState(false);
+  const [isPrescription, setIsPrescription] = useState(false);
+  const [isVitalSign, setIsVitalSign] = useState(false);
+  const [isLabRes, setIsLabRes] = useState(false);
+  const [isAppointment, setIsAppointment] = useState(false);
+  const [isNotes, setIsNotes] = useState(false);
   const [loads, setLoads] = useState(0);
 
+  console.log(getAccessToken, "getAccessToken");
   const tabs = [
     {
       label: "Medical History",
@@ -78,7 +83,7 @@ export default function PatientOverviewLayout({
   //   onNavigate(router, url);
   //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
   // };
-  const handleTabClick = (url: string,  tabIndex: number) => {
+  const handleTabClick = (url: string, tabIndex: number) => {
     setIsLoading(true);
     onNavigate(router, url);
     setActiveTab(tabIndex);
@@ -89,22 +94,22 @@ export default function PatientOverviewLayout({
     const pathParts = pathname.split("/");
     const tabUrl = pathParts[pathParts.length - 1];
 
-    if(tabUrl === "allergies"){
-      setIsAllergy(true)
-    } else if(tabUrl === "surgeries"){
-      setIsSurgery(true)
-    } else if(tabUrl === "medication"){
-      setIsMedicationLog(true)
-    } else if(tabUrl === "prescription"){
-      setIsPrescription(true)
-    } else if(tabUrl === "vital-signs"){
-      setIsVitalSign(true)
-    } else if(tabUrl === "lab-results"){
-      setIsLabRes(true)
-    } else if(tabUrl === "patient-appointment"){
-      setIsAppointment(true)
-    } else if(tabUrl === "notes"){
-      setIsNotes(true)
+    if (tabUrl === "allergies") {
+      setIsAllergy(true);
+    } else if (tabUrl === "surgeries") {
+      setIsSurgery(true);
+    } else if (tabUrl === "medication") {
+      setIsMedicationLog(true);
+    } else if (tabUrl === "prescription") {
+      setIsPrescription(true);
+    } else if (tabUrl === "vital-signs") {
+      setIsVitalSign(true);
+    } else if (tabUrl === "lab-results") {
+      setIsLabRes(true);
+    } else if (tabUrl === "patient-appointment") {
+      setIsAppointment(true);
+    } else if (tabUrl === "notes") {
+      setIsNotes(true);
     }
     const fetchData = async () => {
       try {
@@ -121,47 +126,29 @@ export default function PatientOverviewLayout({
     fetchData();
   }, [patientId, router, params]);
 
-  if (isLoading){
-    if(!isAllergy){
-      return (
-        <Loading></Loading>
-      );
-    } else if(!isSurgery){
-      return (
-        <Loading></Loading>
-      )
-    } else if(!isMedicationLog){
-      return (
-        <Loading></Loading>
-      );
-    } else if(!isPrescription){
-      return (
-        <Loading></Loading>
-      );
-    }else if(!isVitalSign){
-      return (
-        <Loading></Loading>
-      );
-    } else if(!isLabRes){
-      return (
-        <Loading></Loading>
-      );
-    } else if(!isAppointment){
-      return (
-        <Loading></Loading>
-      );
-    } else if(!isNotes){
-      return (
-        <Loading></Loading>
-      );
+  if (isLoading) {
+    if (!isAllergy) {
+      return <Loading></Loading>;
+    } else if (!isSurgery) {
+      return <Loading></Loading>;
+    } else if (!isMedicationLog) {
+      return <Loading></Loading>;
+    } else if (!isPrescription) {
+      return <Loading></Loading>;
+    } else if (!isVitalSign) {
+      return <Loading></Loading>;
+    } else if (!isLabRes) {
+      return <Loading></Loading>;
+    } else if (!isAppointment) {
+      return <Loading></Loading>;
+    } else if (!isNotes) {
+      return <Loading></Loading>;
     }
   }
   console.log(patientData, "patientData");
 
   const pathParts = pathname.split("/");
   const tabUrl = pathParts[pathParts.length - 1];
-
-
 
   return (
     <div className="flex flex-col w-full  px-4 lg:px-28 mt-[100px]">

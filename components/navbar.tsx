@@ -5,10 +5,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import NavBarDropdown from "./shared/navbardropdown";
+import { getAccessToken } from "@/app/api/login-api/accessToken";
 
 export const Navbar = () => {
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+ 
 
   const routes = [
     {

@@ -2,7 +2,6 @@
 
 import { onNavigate } from "@/actions/navigation";
 import {
-  fetchPatientList,
   searchPatientList,
 } from "@/app/api/patients-api/patientList.api";
 import DropdownMenu from "@/components/dropdown-menu";
@@ -12,6 +11,7 @@ import { useEffect, useState } from "react";
 import { DemographicModal } from "@/components/modals/demographic.modal";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
+import { getAccessToken } from "@/app/api/login-api/accessToken";
 
 export default function PatientPage({ patient }: { patient: any }) {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -33,7 +33,9 @@ export default function PatientPage({ patient }: { patient: any }) {
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const isEdit=false;
   const router = useRouter();
-
+  if (!getAccessToken()) {
+    onNavigate(router, "/login");
+  }
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");

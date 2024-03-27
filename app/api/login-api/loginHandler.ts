@@ -8,7 +8,7 @@ export async function validateUser(
   try {
     const expiresIn = rememberMe ? "30d" : "1d"; 
     const requestData = {
-      email: email,
+      username: email,
       password: password,
       tokenExpiresIn: expiresIn,
     };
@@ -19,7 +19,7 @@ export async function validateUser(
       },
       body: JSON.stringify(requestData),
     });
-
+    
     if (response.ok) {
       const data = await response.json();
       const accessToken = data.expiryToken;

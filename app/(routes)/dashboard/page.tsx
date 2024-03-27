@@ -1,15 +1,25 @@
 "use client";
 
+import { onNavigate } from "@/actions/navigation";
+import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 const Dashboard = () => {
   const router = useRouter();
+  if (!getAccessToken()) {
+    onNavigate(router, "/login");
+  }
+  console.log(getAccessToken(), "getAccessToken");
   return (
     <main className="overflow-x-hidden w-full h-full">
       <div className="absolute flex w-full h-full justify-center items-center -z-50">
-          <img src="/imgs/colinahealthlogo3.png" alt="logo" width={500} 
-          className="opacity-15 items-center"/>
+        <img
+          src="/imgs/colinahealthlogo3.png"
+          alt="logo"
+          width={500}
+          className="opacity-15 items-center"
+        />
       </div>
       <div className="mt-20 w-full justify-center items-center  px-28">
         <div>
@@ -124,7 +134,7 @@ const Dashboard = () => {
                       <div className="px-6 py-4">New Patient</div>
                       <div className="px-6 py-4 cursor-pointer">●●●</div>
                     </div>
-                  </div> 
+                  </div>
                 </div>
               </div>
               {/* {/ {/ End of Appointments /} /}
