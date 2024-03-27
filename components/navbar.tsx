@@ -26,7 +26,7 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="fixed select-none  bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[105px]">
+    <div className="fixed select-none z-5 bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[105px]">
       <Image
         className="pointer-events-none"
         src={"/imgs/colina-logo.png"}

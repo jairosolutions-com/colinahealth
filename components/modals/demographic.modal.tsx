@@ -9,12 +9,18 @@ interface Modalprops {
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
+  setErrorMessage: any
+  onSuccess: () => void;
+  onFailed: () => void;
 }
 
 export const DemographicModal = ({
   label,
   isOpen,
   isModalOpen,
+  setErrorMessage,
+  onSuccess,
+  onFailed,
 }: Modalprops) => {
   const [countryList, setCountryList] = useState<any[]>([]);
   const router = useRouter();
@@ -51,7 +57,6 @@ export const DemographicModal = ({
     e.preventDefault();
     try {
       const patientList = await addPatient(formData, router);
-      <SuccessModal isOpen={true} isModalOpen={isModalOpen} label="Patient added successfully" />
       console.log("Patient added successfully:", patientList);
       // Optionally, you can reset the form data after successful submission
       setFormData({
@@ -72,15 +77,16 @@ export const DemographicModal = ({
         codeStatus: "",
         email: "",
       });
+      onSuccess()
     } catch (error: any) {
-      if (error.message === "Patient already exist") {
-        console.error("Error adding patient: Patient already exists");
-        // Handle specific error message (e.g., display an error message to the user)
-        setError("Patient already exists");
-      } else {
-        console.error("Error adding patient:", error);
-        // Handle other errors (e.g., display a generic error message to the user)
+      if(error.message === "Patient already exist"){
+        setErrorMessage("Patient already exist")
+        onFailed()
+        isModalOpen(false);
+        console.log("conflict error")
       }
+      console.log(error.message)
+      setError("Failed to add Patient");
     }
   };
 
@@ -156,7 +162,7 @@ export const DemographicModal = ({
                   </div>
 
                   <div className="flex flex-row gap-x-[53px] mb-4">
-                    <label className="mb-1 font-medium font-manrope text-nowrap mt-2 required-field">
+                    <label className="mb-1 font-medium font-manrope text-nowrap mt-2">
                       Middle Name
                     </label>
                     <input
@@ -166,7 +172,7 @@ export const DemographicModal = ({
                     placeholder="input middle name"
                     value={formData.middleName}
                     onChange={handleChange}
-                    required
+                    
                   />
                   </div>
                   <div className="flex flex-row gap-x-[94px] mb-4">
@@ -212,7 +218,7 @@ export const DemographicModal = ({
                   />
                   </div>
                   <div className="flex flex-row gap-x-[25px] mb-4">
-                    <label className="mb-1 font-medium font-manrope text-nowrap mt-2 required-field">
+                    <label className="mb-1 font-medium font-manrope text-nowrap mt-2">
                       Contact Number
                     </label>
                     <input
@@ -222,7 +228,7 @@ export const DemographicModal = ({
                     placeholder="input contact phone"
                     value={formData.phoneNo}
                     onChange={handleChange}
-                    required
+                  
                   />
                   </div>
                   <div className="flex flex-row gap-x-[81px] mb-4">
@@ -254,7 +260,7 @@ export const DemographicModal = ({
                   />
                   </div>
                   <div className="flex flex-row gap-x-[79px] mb-4">
-                    <label className="mb-1 font-medium font-manrope mt-2 required-field">
+                    <label className="mb-1 font-medium font-manrope mt-2">
                       Address2
                     </label>
                     <input
@@ -264,7 +270,6 @@ export const DemographicModal = ({
                     placeholder="input Addres2"
                     value={formData.address2}
                     onChange={handleChange}
-                    required
                   />
                   </div>
                   <div className="flex flex-row gap-x-[108px] mb-4">
@@ -347,14 +352,13 @@ export const DemographicModal = ({
                     />
                   </div>
                   <div className="flex flex-row gap-x-[110px] mb-4">
-                    <label className="mb-1 font-medium font-manrope mt-2 required-field">
+                    <label className="mb-1 font-medium font-manrope mt-2">
                       Email
                     </label>
                     <input
                       type="text"
                       id=""
                       name="email"
-                      required
                       className="h-10 w-80 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                       placeholder="input email"
                       value={formData.email}

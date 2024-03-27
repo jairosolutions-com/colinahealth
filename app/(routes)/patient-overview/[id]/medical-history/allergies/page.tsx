@@ -12,6 +12,7 @@ import { fetchAllergiesByPatient } from "@/app/api/medical-history-api/allergies
 import Loading from "./loading";
 import { AllergyModal } from "@/components/modals/allergies.modal";
 import { SuccessModal } from "@/components/shared/success";
+import { ErrorModal } from "@/components/shared/error";
 
 const Allergies = () => {
   const router = useRouter();
@@ -25,11 +26,13 @@ const Allergies = () => {
   const [pageNumber, setPageNumber] = useState("");
   const [gotoError, setGotoError] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>("");
+  const [error, setError] = useState("");
   const [term, setTerm] = useState<string>("");
   const [sortBy, setSortBy] = useState("Type");
   const [isEdit, setIsEdit] = useState(false);
   const [allergyToEdit, setAllergyToEdit] = useState<any[]>([]);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
 
   const params = useParams<{
     id: any;
@@ -170,19 +173,22 @@ const Allergies = () => {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, sortBy, term, isOpen]);
+  }, [currentPage, sortOrder, sortBy, term, isSuccessOpen]);
 
   console.log(allergyToEdit, "allergy uuid");
   if (isLoading) {
     <Loading></Loading>;
   }
 
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
-
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
   };
+  const onFailed = () => {
+    setIsErrorOpen(true);
+    setIsEdit(false);
+  };
+  console.log(error, "error")
   return (
     <div className="   w-full">
       <div className="flex justify-between ">
@@ -424,6 +430,8 @@ const Allergies = () => {
           allergy={allergyToEdit}
           label="sample label"
           onSuccess={onSuccess}
+          onFailed={onFailed}
+          setErrorMessage={setError}
         />
       )}
       {isSuccessOpen && (
@@ -432,6 +440,15 @@ const Allergies = () => {
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
           isEdit={isEdit}
+        />
+      )}
+      {isErrorOpen && (
+        <ErrorModal
+          label="Failed"
+          isAlertOpen={isErrorOpen}
+          toggleModal={setIsErrorOpen}
+          isEdit={isEdit}
+          errorMessage={error}
         />
       )}
     </div>
