@@ -190,10 +190,10 @@ const Allergies = () => {
             <h1 className="p-title mx-2">{">"} </h1>
             <h1
               onClick={() =>
-                onNavigate(
+                {onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/medical-history/surgeries`
-                )
+                ); setIsLoading(true)}
               }
               className="p-title cursor-pointer text-gray-600"
             >
