@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import TimePicker from "../shared/timepicker";
 interface Modalprops {
   isView: boolean;
   appointmentData: any;
@@ -19,7 +19,8 @@ export const AppointmentsModal = ({
   isOpen,
   isModalOpen,
 }: Modalprops) => {
-  const [selectedDateTime, setSelectedDateTime] = useState<Date | null>(null); // State to hold the selected date and time
+  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date()); // State to hold the selected date and time
   const [selectedStatus, setSelectedStatus] = useState(""); // State to hold the selected status
   const [formData, setFormData] = useState({
     date: appointmentData.appointments_appointmentDate,
@@ -191,10 +192,8 @@ export const AppointmentsModal = ({
                   {/* Date Picker */}
                   <div className="w-full col-span-6 mb-4 md:mb-0">
                     <DatePicker
-                      selected={selectedDateTime}
-                      onChange={(date: Date | null) =>
-                        setSelectedDateTime(date)
-                      }
+                      selected={selectedDate}
+                      onChange={(date: Date) => setSelectedDate(date)}
                       dateFormat="MM/dd/yyyy"
                       placeholderText="Select Date"
                       className="w-full pl-2 pr-40 py-4 border-0 shadow-sm ring-1 ring-inset ring-gray-300 rounded-[5px] text-xs"
@@ -209,12 +208,8 @@ export const AppointmentsModal = ({
                         Time From:
                       </p>
                       <DatePicker
-                        selected={selectedDateTime}
-                        onChange={(date: Date | null) =>
-                          setSelectedDateTime(date)
-                        }
-                        dateFormat="MM/dd/yyyy hh:mm aa"
-                        showTimeSelect
+                        selected={selectedDate}
+                        onChange={(date) => setSelectedDate(date!)}
                         timeFormat="hh:mm aa"
                         timeIntervals={15}
                         placeholderText="Select time from"
@@ -226,18 +221,13 @@ export const AppointmentsModal = ({
                       <p className="text-xs font-bold text-black pt-7">
                         Time To:
                       </p>
-                      <DatePicker
-                        selected={selectedDateTime}
-                        onChange={(date: Date | null) =>
-                          setSelectedDateTime(date)
-                        }
-                        dateFormat="MM/dd/yyyy hh:mm aa"
-                        showTimeSelect
-                        placeholderText="Select time to"
-                        timeFormat="hh:mm aa"
-                        timeIntervals={15}
-                        className="w-full h-full px-3 py-4 text-xs border-0 shadow-sm ring-1 ring-inset ring-gray-300 rounded-[5px]"
-                      />
+                      {/* onChange={(time: null) =>
+                          setSelectedTime())
+                                                              timeIntervals={15}
+            placeholderText="Select time to"
+
+                        } */}
+                      <TimePicker />
                     </div>
                     {/* Details */}
                     <div className=" col-span-3  ">
@@ -271,6 +261,37 @@ export const AppointmentsModal = ({
             </div>
           </div>
         )}
+        <form className="max-w-[8rem] mx-auto">
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            Select time:
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
+              <svg
+                className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <input
+              type="time"
+              id="time"
+              className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              min="09:00"
+              max="18:00"
+              value="00:00"
+              required
+            />
+          </div>
+        </form>
       </div>
     </div>
   );
