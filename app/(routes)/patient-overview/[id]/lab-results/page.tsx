@@ -12,7 +12,6 @@ import { LabResultModal } from "@/components/modals/labresults.modal";
 
 import { SuccessModal } from "@/components/shared/success";
 
-
 export default function Laboratoryresults() {
   const router = useRouter();
   // start of orderby & sortby function
@@ -145,7 +144,7 @@ export default function Laboratoryresults() {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, sortBy, term, isOpen]);
+  }, [currentPage, sortOrder, sortBy, term, isSuccessOpen]);
 
   if (isLoading) {
     return (
@@ -178,13 +177,12 @@ export default function Laboratoryresults() {
     { label: "HDL-C", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
-
-
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
-  };
+    isModalOpen(false);
 
+  };
 
   return (
     <div className="  w-full">
@@ -321,7 +319,9 @@ export default function Laboratoryresults() {
                         scope="row"
                         className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                       >
-                        {labResult.labResults_date}
+                        {new Date(
+                          labResult.labResults_createdAt
+                        ).toLocaleDateString()}
                       </th>
                       <td className="px-0 py-4">
                         {labResult.labResults_hemoglobinA1c}%
@@ -434,17 +434,17 @@ export default function Laboratoryresults() {
           isOpen={isOpen}
           label="sample label"
           onSuccess={onSuccess}
-          />
-        )}
-  
-        {isSuccessOpen && (
-          <SuccessModal
-            label="Success"
-            isAlertOpen={isSuccessOpen}
-            toggleModal={setIsSuccessOpen}
-            isEdit={isEdit}
-          />
-        )}
+        />
+      )}
+
+      {isSuccessOpen && (
+        <SuccessModal
+          label="Success"
+          isAlertOpen={isSuccessOpen}
+          toggleModal={setIsSuccessOpen}
+          isEdit={isEdit}
+        />
+      )}
     </div>
   );
 }

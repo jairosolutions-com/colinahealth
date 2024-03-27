@@ -78,9 +78,10 @@ export default function PatientOverviewLayout({
   //   onNavigate(router, url);
   //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
   // };
-  const handleTabClick = (url: string) => {
-  
+  const handleTabClick = (url: string,  tabIndex: number) => {
+    setIsLoading(true);
     onNavigate(router, url);
+    setActiveTab(tabIndex);
     setDetailsClicked(false);
   };
   console.log(pathname, "pathname");
@@ -286,7 +287,7 @@ export default function PatientOverviewLayout({
                     }`}
                     key={index}
                     onClick={() => {
-                      handleTabClick(tab.url);
+                      handleTabClick(tab.url, index);
                     }}
                   >
                     {tab.label}

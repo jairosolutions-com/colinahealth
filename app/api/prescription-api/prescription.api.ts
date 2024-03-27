@@ -71,7 +71,7 @@ export async function createPrescriptionOfPatient(patientId: string, formData: a
 
     return createdAllergy;
   } catch (error) {
-    console.error("Error creating allergy:", error);
+    console.error("Error creating prescription:", error);
     throw error; // Rethrow the error to handle it in the component
   }
 }

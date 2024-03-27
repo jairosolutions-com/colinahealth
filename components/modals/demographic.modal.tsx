@@ -163,7 +163,7 @@ export const DemographicModal = ({
                     </div>
 
                     <div className="flex flex-row gap-x-[53px] mb-4">
-                      <label className="mb-1 font-medium font-manrope text-nowrap mt-2">
+                      <label className="mb-1 ml-3 font-medium font-manrope text-nowrap mt-2">
                         Middle Name
                       </label>
                       <input
@@ -218,7 +218,7 @@ export const DemographicModal = ({
                       />
                     </div>
                     <div className="flex flex-row gap-x-[25px] mb-4">
-                      <label className="mb-1 font-medium font-manrope text-nowrap mt-2">
+                      <label className="mb-1 ml-3 font-medium font-manrope text-nowrap mt-2">
                         Contact Number
                       </label>
                       <input
@@ -259,13 +259,13 @@ export const DemographicModal = ({
                       />
                     </div>
                     <div className="flex flex-row gap-x-[79px] mb-4">
-                      <label className="mb-1 font-medium font-manrope mt-2">
+                      <label className="mb-1 ml-3 font-medium font-manrope mt-2">
                         Address2
                       </label>
                       <input
                         type="text"
                         name="address2"
-                        className="h-10 w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
+                        className="h-10  w-96 bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333]  text-normal rounded border border-gray-200"
                         placeholder="input Addres2"
                         value={formData.address2}
                         onChange={handleChange}
@@ -351,7 +351,7 @@ export const DemographicModal = ({
                       />
                     </div>
                     <div className="flex flex-row gap-x-[110px] mb-4">
-                      <label className="mb-1 font-medium font-manrope mt-2">
+                      <label className="mb-1 ml-3 font-medium font-manrope mt-2">
                         Email
                       </label>
                       <input

@@ -10,7 +10,6 @@ import Edit from "@/components/shared/buttons/view";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DemographicModal } from "@/components/modals/demographic.modal";
-import { Modal } from "@/components/modals/modal";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
 
@@ -223,7 +222,7 @@ export default function PatientPage({ patient }: { patient: any }) {
         </div>
       </div>
 
-      <div className="w-full shadow-md sm:rounded-lg items-center">
+      <div className="w-full sm:rounded-lg items-center">
         <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
           <form className=" mr-5">
             {/* search bar */}
@@ -419,7 +418,7 @@ export default function PatientPage({ patient }: { patient: any }) {
       )}
       {isErrorOpen && (
         <ErrorModal
-          label="Failed"
+          label="Patient already exist"
           isAlertOpen={isErrorOpen}
           toggleModal={setIsErrorOpen}
           isEdit={isEdit}

@@ -4,7 +4,7 @@ import { getAccessToken, setAccessToken } from "../login-api/accessToken";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export async function fetchVitalSignsByPatient(
+export async function fetchNotesByPatient(
   patientUuid: string,
   term: string,
   currentPage: number,
@@ -31,15 +31,15 @@ export async function fetchVitalSignsByPatient(
     };
 
     const response = await axios.post(
-      `${apiUrl}/vital-signs/list/${patientUuid}`,
+      `${apiUrl}/notes/list/${patientUuid}`,
       requestData,
       { headers }
     );
 
     console.log(response.data);
-    const patientVitalSigns = response.data;
-    console.log(patientVitalSigns, "patient vital-signs after search");
-    return patientVitalSigns;
+    const patientNotes = response.data;
+    console.log(patientNotes, "patient notes after search");
+    return patientNotes;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401) {
       setAccessToken("");
@@ -47,14 +47,14 @@ export async function fetchVitalSignsByPatient(
       return Promise.reject(new Error("Unauthorized access"));
     }
     console.error(
-      "Error searching patient vital-signs:",
+      "Error searching patient notes:",
       (error as AxiosError).message
     );
   }
 }
 
 
-export async function createVitalSignsOfPatient(patientId: string, formData: any, router: any): Promise<any> {
+export async function createNotesOfPatient(patientId: string, formData: any, router: any): Promise<any> {
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
@@ -65,19 +65,19 @@ export async function createVitalSignsOfPatient(patientId: string, formData: any
       Authorization: `Bearer ${accessToken}`,
     };
 
-    // Make the API request to create the VitalSign
-    const response = await axios.post(`${apiUrl}/vital-signs/${patientId}`, formData, { headers });
-    const createdVitalSign = response.data;
+    // Make the API request to create the Notes
+    const response = await axios.post(`${apiUrl}/notes/${patientId}`, formData, { headers });
+    const createdNotes = response.data;
 
-    return createdVitalSign;
+    return createdNotes;
   } catch (error) {
-    console.error("Error creating VitalSign:", error);
+    console.error("Error creating Notes:", error);
     throw error; // Rethrow the error to handle it in the component
   }
 }
 
 
-export async function updateVitalSignsOfPatient(
+export async function updateNotesOfPatient(
   prescriptionUuid: string, 
   formData: any, 
   router: any): 
@@ -93,14 +93,14 @@ export async function updateVitalSignsOfPatient(
       Authorization: `Bearer ${accessToken}`,
     };
 
-    // Make the API request to create the VitalSign
+    // Make the API request to create the Notes
     const response = await axios.patch(
-      `${apiUrl}/vital-signs/update/${prescriptionUuid}`, 
+      `${apiUrl}/notes/update/${prescriptionUuid}`, 
     formData, 
     { headers });
-    const updatedVitalSign= response.data;
+    const updatedSurgery= response.data;
 
-    return updatedVitalSign;
+    return updatedSurgery;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401) {
       setAccessToken("");
