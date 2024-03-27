@@ -10,6 +10,7 @@ import { useRouter, useParams } from "next/navigation";
 import { fetchPrescriptionByPatient as fetchPrescriptionsByPatient } from "@/app/api/prescription-api/prescription.api";
 import { PrescriptionModal } from "@/components/modals/prescription.modal";
 import { SuccessModal } from "@/components/shared/success";
+import { ErrorModal } from "@/components/shared/error";
 // import { Modal } from "@/components/shared/modalss";
 
 export default function prescription() {
@@ -25,11 +26,13 @@ export default function prescription() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [prescriptionData, setPrescriptionData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>("");
   const [gotoError, setGotoError] = useState(false);
   const [term, setTerm] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
   interface Modalprops {
     label: string;
     isOpen: boolean;
@@ -171,10 +174,9 @@ export default function prescription() {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, sortBy, term, isOpen]);
+  }, [currentPage, sortOrder, sortBy, term, isSuccessOpen]);
 
-  
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+
 
   const onSuccess = () => {
     setIsSuccessOpen(true);
@@ -182,9 +184,12 @@ export default function prescription() {
     isModalOpen(false);
 
   };
-
+  const onFailed = () => {
+    setIsErrorOpen(true);
+    setIsEdit(false);
+  };
   return (
-    <div className="  w-full">
+    <div className=" w-full">
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="p-title">Prescription </h1>
@@ -412,6 +417,8 @@ export default function prescription() {
           isEdit={isEdit}
           prescriptionData={prescriptionData}
           onSuccess={onSuccess}
+          onFailed={onFailed}
+          setErrorMessage={setError}
           />
         )}
   
@@ -423,6 +430,15 @@ export default function prescription() {
             isEdit={isEdit}
           />
         )}
+        {isErrorOpen && (
+        <ErrorModal
+          label="prescriptionFailed"
+          isAlertOpen={isErrorOpen}
+          toggleModal={setIsErrorOpen}
+          isEdit={isEdit}
+          errorMessage={error}
+        />
+      )}
     </div>
   );
 }

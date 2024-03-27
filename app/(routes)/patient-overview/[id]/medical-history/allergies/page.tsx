@@ -93,19 +93,7 @@ const Allergies = () => {
       setCurrentPage(currentPage + 1);
     }
   };
-  const formatDate = (createdAt: string | number | Date) => {
-    // Create a new Date object from the provided createdAt date string
-    const date = new Date(createdAt);
 
-    // Get the month, day, and year
-    const month = date.toLocaleString("default", { month: "short" });
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    const formattedDate = `${month} ${day}, ${year}`;
-
-    return formattedDate;
-  };
   const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -190,7 +178,7 @@ const Allergies = () => {
     setIsErrorOpen(true);
     setIsEdit(false);
   };
-  console.log(error, "error")
+  console.log(error, "error");
   return (
     <div className="   w-full">
       <div className="flex justify-between ">
@@ -325,7 +313,9 @@ const Allergies = () => {
                     </th>
                     <td className="px-2 py-4">
                       {" "}
-                      {formatDate(allergy.allergies_createdAt)}
+                      {new Date(
+                        allergy.allergies_createdAt
+                      ).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4">{allergy.allergies_type}</td>
                     <td className=" max-w-[552px] px-6 py-4">
@@ -446,7 +436,7 @@ const Allergies = () => {
       )}
       {isErrorOpen && (
         <ErrorModal
-          label="Failed"
+          label="Allergy already exist"
           isAlertOpen={isErrorOpen}
           toggleModal={setIsErrorOpen}
           isEdit={isEdit}

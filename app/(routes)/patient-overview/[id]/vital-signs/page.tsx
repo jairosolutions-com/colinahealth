@@ -29,6 +29,7 @@ export default function vitalsigns() {
   const [term, setTerm] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   interface Modalprops {
     label: string;
     isOpen: boolean;
@@ -163,11 +164,11 @@ export default function vitalsigns() {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, sortBy, term, isOpen]);
+  }, [currentPage, sortOrder, sortBy, term, isSuccessOpen]);
 
   console.log(patientVitalSign, "patientVitalSign");
 
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+ 
 
   const onSuccess = () => {
     setIsSuccessOpen(true);

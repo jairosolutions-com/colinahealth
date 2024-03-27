@@ -12,8 +12,10 @@ interface Modalprops {
   prescriptionData: any;
   label: string;
   isOpen: boolean;
+  setErrorMessage: any
   isModalOpen: (isOpen: boolean) => void;
   onSuccess: () => void;
+  onFailed: () => void;
 }
 
 export const PrescriptionModal = ({
@@ -21,8 +23,10 @@ export const PrescriptionModal = ({
   prescriptionData,
   label,
   isOpen,
+  setErrorMessage,
   isModalOpen,
-  onSuccess
+  onSuccess,
+  onFailed
 }: Modalprops) => {
   const params = useParams<{
     id: any;
@@ -40,7 +44,7 @@ export const PrescriptionModal = ({
     dosage: prescriptionData.prescriptions_dosage || "",
     status: prescriptionData.prescriptions_status || "",
   });
-
+console.log(label,'label')
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -87,8 +91,13 @@ export const PrescriptionModal = ({
         });
         onSuccess()
       }
-    } catch (error) {
-      console.error("Error adding Prescription:", error);
+    } catch (error:any) {
+      if(error.message === "Request failed with status code 409"){
+        setErrorMessage("Allergy already exist")
+        onFailed()
+        isModalOpen(false);
+        console.log("conflict error")
+      }
       setError("Failed to add Prescription");
     }
   };
@@ -201,6 +210,7 @@ export const PrescriptionModal = ({
                       value={formData.status}
                       name="status"
                       onChange={handleStatusChange}
+                      required
                     >
                       <option value="">select status</option>
                       <option value="active">ACTIVE</option>
