@@ -6,8 +6,8 @@ import React from "react";
 const Dashboard = () => {
   const router = useRouter();
   return (
-    <main>
-      <div className="mt-20 w-full justify-center items-center  mx-28">
+    <main className="overflow-x-hidden">
+      <div className="mt-20 w-full justify-center items-center  px-28">
         <div>
           <p className="font-bold text-[24px]">Dashboard</p>
           <div className="font-bold text-[17px] flex ">
@@ -34,11 +34,11 @@ const Dashboard = () => {
             <div className=" w-full rounded-xl border-[2px] border-[#E4E4E7]">
               <div className="px-5">
                 <div className="text-[#71717A] font-medium text-[20px] mt-5 mb-10">
-                  Old Patients
+                  New Patients
                 </div>
               </div>
               <div className="flex justify-between mx-5 items-center ">
-                <div className="font-bold text-[37px] ">2,380,485</div>
+                <div className="font-bold text-[37px] ">2,380</div>
                 <div className="text-[#EF4444] font-medium text-[23px]">
                   +14%
                 </div>
@@ -47,11 +47,11 @@ const Dashboard = () => {
             <div className=" w-full rounded-xl border-[2px] border-[#E4E4E7]">
               <div className="px-5">
                 <div className="text-[#71717A] font-medium text-[20px] mt-5 mb-10">
-                  New Patients
+                  Average Daily Visit
                 </div>
               </div>
               <div className="flex justify-between mx-5">
-                <div className="font-bold text-[37px]">84,382</div>
+                <div className="font-bold text-[37px]">201</div>
                 <div className="text-[#22C55E] font-medium text-[23px]">
                   +36%
                 </div>
@@ -69,57 +69,57 @@ const Dashboard = () => {
                   </div>
                   <div className="px-5">Total of 3 Appointments</div>
                   <div className="flex flex-col h-[190px] border-b-1 border-b-gray-950">
-                    <th className="flex justify-evenly items-center h-[60px]">
-                      <td className="px-6 py-4">
+                    <div className="flex justify-evenly items-center h-[60px]">
+                      <div className="px-6 py-4">
                         <p className="bg-[#FEF9C3] text-[#713F12] font-medium text-[14px] me-2 px-2.5 py-0.5 rounded-full flex items-center">
                           <span className="pr-1 text-[#FACC15]">●</span>
                           Pending
                         </p>
-                      </td>
-                      <td className="px-6 py-4 font-bold text-[18px] items-center justify-center">
+                      </div>
+                      <div className="px-6 py-4 font-bold text-[18px] items-center justify-center">
                         Drake Ramos
-                      </td>
-                      <td className="px-6 py-4 ">
+                      </div>
+                      <div className="px-6 py-4 ">
                         <p>March 26, 2024</p>
                         <p className="text-gray-400">8:00 - 9:00 PM</p>
-                      </td>
-                      <td className="px-6 py-4">New Patient</td>
-                      <td className="px-6 py-4 cursor-pointer">●●●</td>
-                    </th>
-                    <th className="flex justify-evenly items-center h-[60px]">
-                      <td className="px-6 py-4">
+                      </div>
+                      <div className="px-6 py-4">New Patient</div>
+                      <div className="px-6 py-4 cursor-pointer">●●●</div>
+                    </div>
+                    <div className="flex justify-evenly items-center h-[60px]">
+                      <div className="px-6 py-4">
                         <p className="bg-[#FEF9C3] text-[#713F12] font-medium text-[14px] me-2 px-2.5 py-0.5 rounded-full flex items-center">
                           <span className="pr-1 text-[#FACC15]">●</span>
                           Pending
                         </p>
-                      </td>
-                      <td className="px-6 py-4 font-bold text-[18px] items-center justify-center">
+                      </div>
+                      <div className="px-6 py-4 font-bold text-[18px] items-center justify-center">
                         Jenny Wilson
-                      </td>
-                      <td className="px-6 py-4 ">
+                      </div>
+                      <div className="px-6 py-4 ">
                         <p>March 26, 2024</p>
                         <p className="text-gray-400">8:00 - 9:00 PM</p>
-                      </td>
-                      <td className="px-6 py-4">New Patient</td>
-                      <td className="px-6 py-4 cursor-pointer">●●●</td>
-                    </th>
-                    <th className="flex justify-evenly items-center h-[60px]">
-                      <td className="px-6 py-4">
+                      </div>
+                      <div className="px-6 py-4">New Patient</div>
+                      <div className="px-6 py-4 cursor-pointer">●●●</div>
+                    </div>
+                    <div className="flex justify-evenly items-center h-[60px]">
+                      <div className="px-6 py-4">
                         <p className="bg-[#FEF9C3] text-[#713F12] font-medium text-[14px] me-2 px-2.5 py-0.5 rounded-full flex items-center">
                           <span className="pr-1 text-[#FACC15]">●</span>
                           Pending
                         </p>
-                      </td>
-                      <td className="px-6 py-4 font-bold text-[18px] items-center justify-center">
+                      </div>
+                      <div className="px-6 py-4 font-bold text-[18px] items-center justify-center">
                         Guy Hawkins
-                      </td>
-                      <td className="px-6 py-4 ">
+                      </div>
+                      <div className="px-6 py-4 ">
                         <p>March 26, 2024</p>
                         <p className="text-gray-400">8:00 - 9:00 PM</p>
-                      </td>
-                      <td className="px-6 py-4">New Patient</td>
-                      <td className="px-6 py-4 cursor-pointer">●●●</td>
-                    </th>
+                      </div>
+                      <div className="px-6 py-4">New Patient</div>
+                      <div className="px-6 py-4 cursor-pointer">●●●</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -133,7 +133,7 @@ const Dashboard = () => {
               {/* {/ {/ {/ End of Average Patient List /} /} /} */}
             </div>
             {/* {/ {/ {/ Start of Due Medicaitons /} /} /} */}
-            <div className="w-[700px] rounded-xl border-[2px] border-[#E4E4E7]">
+            <div className="w-[700px] rounded-xl border-[2px] py-5 px-2 border-[#E4E4E7]">
               <div className="font-bold text-[20px] px-5">Due Medications</div>
               <div className="px-5 mb-5">Total of 10 Due</div>
               <div className="w-full items-center">

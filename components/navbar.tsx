@@ -1,13 +1,14 @@
-"use client";
+'use client'
 
 import { onNavigate } from "@/actions/navigation";
-import { FaUser, FaBell } from "react-icons/fa";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { setAccessToken } from "@/app/api/login-api/accessToken";
+import NavBarBropdown from "./shared/navbardropdown";
+import { useEffect, useRef, useState } from "react";
 
 export const Navbar = () => {
   const router = useRouter();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const routes = [
     {
@@ -20,20 +21,25 @@ export const Navbar = () => {
     },
   ];
 
-  const handleLogOut = () => {
-    setAccessToken("");
-    onNavigate(router, "/login");
-  };
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownOpen && !menuRef.current?.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownOpen]);
 
   return (
-    <div className="fixed select-none z-5 bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[105px]">
-      <Image
-        className="pointer-events-none"
-        src={"/imgs/colina-logo.png"}
-        alt={""}
-        width={200}
-        height={37}
-      />
+    <div className={`fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[105px] z-10 show` }>
+      <Image src={"/imgs/colina-logo.png"} alt={""} width={200} height={37} />
       <div className="flex gap-[20px] items-center">
         <div className="flex gap-[20px]">
           {routes.map((route, index) => (
@@ -46,17 +52,20 @@ export const Navbar = () => {
             </p>
           ))}
         </div>
-        <div className="flex gap-3 items-center" onClick={handleLogOut}>
+        <div className="flex gap-3 items-center">
           <Image
-            className="!cursor-pointer"
+            className="cursor-pointer select-none rounded-full"
+
+            onClick={() => setDropdownOpen((prev) => !prev)}
             src={"/imgs/dennis.svg"}
             alt={""}
             width={30}
             height={30}
-            draggable={false}
           />
+          {dropdownOpen && <NavBarBropdown ref={menuRef as React.RefObject<HTMLInputElement>} />}
           <Image
-            className="pointer-events-none"
+            className={`cursor-pointer select-none ${dropdownOpen ? "rotate-180" : ""} duration-300`}
+            onClick={() => setDropdownOpen((prev) => !prev)}
             src={"/svgs/arrow-down.svg"}
             alt={""}
             width={15}
