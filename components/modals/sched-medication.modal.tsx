@@ -135,10 +135,10 @@ export const ScheduledMedModal = ({
     fetchData();
   }, []);
 
-  const handleMedicationChange = (countryId: string) => {
+  const handleMedicationChange = (prescriptions_name: string) => {
     setFormData((prevData) => ({
       ...prevData,
-      country: countryId,
+      medicationLogsName: prescriptions_name,
     }));
   };
 
