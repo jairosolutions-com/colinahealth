@@ -3,8 +3,9 @@ import { onNavigate } from "@/actions/navigation";
 import { getAccessToken, setAccessToken } from "../login-api/accessToken";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+// Function to get the access token from local storage
 
-export async function fetchSurgeriesByPatient(
+export async function fetchPRNMedByPatient(
   patientUuid: string,
   term: string,
   currentPage: number,
@@ -13,7 +14,7 @@ export async function fetchSurgeriesByPatient(
   router: any // Pass router instance as a parameter
 ): Promise<any> {
   const requestData = {
-    patientUuid: patientUuid,
+    patientUuid: patientUuid.toUpperCase(),
     term: term,
     page: currentPage,
     sortBy: sortBy,
@@ -31,15 +32,15 @@ export async function fetchSurgeriesByPatient(
     };
 
     const response = await axios.post(
-      `${apiUrl}/surgeries/list/${patientUuid}`,
+      `${apiUrl}/medication-logs/${patientUuid}/prn`,
       requestData,
       { headers }
     );
 
     console.log(response.data);
-    const { patientId, id, ...patientSurgeries } = response.data;
-    console.log(patientSurgeries, "patient surgeries after search");
-    return patientSurgeries;
+    const { patientId, id, ...patientPRNMedNoId } = response.data;
+    console.log(patientPRNMedNoId, "patient PRNMed after search");
+    return patientPRNMedNoId;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401) {
       setAccessToken("");
@@ -47,13 +48,13 @@ export async function fetchSurgeriesByPatient(
       return Promise.reject(new Error("Unauthorized access"));
     }
     console.error(
-      "Error searching patient surgeries:",
+      "Error searching patient PRNMed:",
       (error as AxiosError).message
     );
   }
 }
 
-export async function createSurgeriesOfPatient(
+export async function createPRNMedOfPatient(
   patientId: string,
   formData: any,
   router: any
@@ -68,15 +69,15 @@ export async function createSurgeriesOfPatient(
       Authorization: `Bearer ${accessToken}`,
     };
 
-    // Make the API request to create the allergy
+    // Make the API request to create the PRN
     const response = await axios.post(
-      `${apiUrl}/surgeries/${patientId}`,
+      `${apiUrl}/medication-logs/${patientId}`,
       formData,
       { headers }
     );
-    const createdSurgery = response.data;
+    const createdPRN = response.data;
 
-    return createdSurgery;
+    return createdPRN;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401) {
       setAccessToken("");
@@ -89,8 +90,8 @@ export async function createSurgeriesOfPatient(
   }
 }
 
-export async function updateSurgeryOfPatient(
-  surgeryUuid: string,
+export async function updatePRNMedOfPatient(
+  PRNUuid: string,
   formData: any,
   router: any
 ): Promise<any> {
@@ -105,9 +106,9 @@ export async function updateSurgeryOfPatient(
       Authorization: `Bearer ${accessToken}`,
     };
 
-    // Make the API request to create the allergy
+    // Make the API request to create the PRN
     const response = await axios.patch(
-      `${apiUrl}/surgeries/update/${surgeryUuid}`,
+      `${apiUrl}/medication-logs/update/${PRNUuid}`,
       formData,
       { headers }
     );

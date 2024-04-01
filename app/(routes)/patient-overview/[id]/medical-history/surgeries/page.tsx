@@ -9,6 +9,8 @@ import { useParams, useRouter } from "next/navigation";
 import { SurgeriesModal } from "@/components/modals/surgeries.modal";
 import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries.api";
 import { SuccessModal } from "@/components/shared/success";
+import { ErrorModal } from "@/components/shared/error";
+import Loading from "./loading";
 
 export default function Surgeries() {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -30,6 +32,7 @@ export default function Surgeries() {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [surgeryData, setSurgeryData] = useState<any[]>([]);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
   const params = useParams<{
     id: any;
     tag: string;
@@ -179,9 +182,7 @@ export default function Surgeries() {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex justify-center items-center">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-      </div>
+      <Loading></Loading>
     );
   }
 
@@ -189,6 +190,11 @@ export default function Surgeries() {
     setIsSuccessOpen(true);
     setIsEdit(false);
     isModalOpen(false);
+  };
+
+  const onFailed = () => {
+    setIsErrorOpen(true);
+    setIsEdit(false);
   };
   console.log(patientSurgeries, "PatientSurgeries");
   return (
@@ -415,11 +421,13 @@ export default function Surgeries() {
       {isOpen && (
         <SurgeriesModal
           isModalOpen={isModalOpen}
+          isOpen={isOpen}
           isEdit={isEdit}
           surgeryData={surgeryData}
-          isOpen={isOpen}
           label="sample label"
           onSuccess={onSuccess}
+          onFailed={onFailed}
+          setErrorMessage={setError}
         />
       )}
 
@@ -429,6 +437,15 @@ export default function Surgeries() {
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
           isEdit={isEdit}
+        />
+      )}
+      {isErrorOpen && (
+        <ErrorModal
+          label="Surgery already exist"
+          isAlertOpen={isErrorOpen}
+          toggleModal={setIsErrorOpen}
+          isEdit={isEdit}
+          errorMessage={error}
         />
       )}
     </div>

@@ -6,10 +6,16 @@ interface ErrorProps {
   toggleModal: (isOpen: boolean) => void;
   isEdit: boolean;
   isAlertOpen: boolean;
-  errorMessage: any
+  errorMessage: any;
 }
 
-export const ErrorModal = ({ label,  toggleModal, isEdit, isAlertOpen , errorMessage }: ErrorProps) => {
+export const ErrorModal = ({
+  label,
+  toggleModal,
+  isEdit,
+  isAlertOpen,
+  errorMessage,
+}: ErrorProps) => {
   return (
     <div>
       {isAlertOpen && (
@@ -21,21 +27,42 @@ export const ErrorModal = ({ label,  toggleModal, isEdit, isAlertOpen , errorMes
                 type="button"
                 className="text-gray-400 hover:text-gray-800 focus:outline-none"
                 onClick={() => toggleModal(false)} // Close modal
-              >             
-              </button>
+              ></button>
             </div>
             <div className="text-center">
               <div className="mx-auto mb-5 text-gray-400 w-[110px] h-[110px]">
                 <img src="/icons/error-icon.svg" alt="" />
               </div>
               <h1 className="text-[34px] font-bold text-lg text-gray-500 mb-4">
-              {label === 'Allergy already exist' ? 'Allergy already exists!' : label === 'Patient already exist' ? 'Patient already exists!' : 
-              label === 'prescriptionFailed' ? 'Prescription already exists!' : "There was a problem with your request." 
-              }
+                {label === "Allergy already exist"
+                  ? "Allergy already exists!"
+                  : label === "Surgery already exist"
+                  ? "Surgery already exists!"
+                  : label === "Scheduled Log already exist"
+                  ? "Scheduled Log already exist!"
+                  : label === "PRN Log already exist"
+                  ? "PRN Log already exist!"
+                  : label === "Patient already exist"
+                  ? "Patient already exists!"
+                  : label === "prescriptionFailed"
+                  ? "Prescription already exists!"
+                  : "There was a problem with your request."}
+                  
               </h1>
               <p className="text-[24px] text-sm text-gray-400 mb-10">
-                {label === 'Allergy already exist' ? 'Please check and try again.' : label === 'Patient already exist' ? 'Please check and try again.' : 
-                label === 'prescriptionFailed' ? 'Please check and try again.' : "There was a problem with your request." }
+                {label === "Allergy already exist"
+                  ? "Please check and try again."
+                  : label === "Surgery already exist"
+                  ? "Please check and try again."
+                  : label === "Patient already exist"
+                  ? "Please check and try again."
+                  : label === "Scheduled Log already exist"
+                  ? "Please check and try again."
+                  : label === "PRN Log already exist"
+                  ? "Please check and try again."
+                  : label === "prescriptionFailed"
+                  ? "Please check and try again."
+                  : "There was a problem with your request."}
               </p>
               <button
                 onClick={() => toggleModal(false)} // Close modal

@@ -46,7 +46,7 @@ export default function PatientOverviewLayout({
     },
     {
       label: "Medication Log",
-      url: `/patient-overview/${params.id}/medication`,
+      url: `/patient-overview/${params.id}/medication/scheduled`,
     },
     {
       label: "Prescription",
@@ -71,11 +71,11 @@ export default function PatientOverviewLayout({
   ];
 
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
-    setIsLoading(true);
     setLoads(loads + 1);
     onNavigate(router, url);
     setActiveTab(-1);
     setDetailsClicked(true);
+    setIsLoading(true);
   };
 
   // const handleTabClick = (index: number, url: string) => {
@@ -84,10 +84,10 @@ export default function PatientOverviewLayout({
   //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
   // };
   const handleTabClick = (url: string, tabIndex: number) => {
-    setIsLoading(true);
     onNavigate(router, url);
     setActiveTab(tabIndex);
     setDetailsClicked(false);
+    setIsLoading(true);
   };
   console.log(pathname, "pathname");
   useEffect(() => {
@@ -226,30 +226,32 @@ export default function PatientOverviewLayout({
                     </div>
                   </div>
                   <div className="mb-5"></div>
-                  <div className="flex flex-row w-full">
-                    <img
-                      src="/imgs/codestatus.svg"
-                      className="px-1"
-                      alt="codestatus"
-                      width="26"
-                      height="26"
-                    />
-                    <div>
-                      <h1 className={`flex items-center mr-11`}>
-                        Code Status:
-                        <p
-                          className={` 
+                  <div className="flex flex-row w-full ">
+                    <div className="w-1/6 flex">
+                      <img
+                        src="/imgs/codestatus.svg"
+                        className="px-1"
+                        alt="codestatus"
+                        width="26"
+                        height="26"
+                      />
+                      <div className="">
+                        <h1 className={`flex items-center mr-11`}>
+                          Code Status:
+                          <p
+                            className={` 
                           ${
                             patientData[0]?.codeStatus === "DNR"
                               ? "text-red-500"
                               : "text-blue-500"
                           } ml-1`}
-                        >
-                          {patientData[0]?.codeStatus}
-                        </p>
-                      </h1>
+                          >
+                            {patientData[0]?.codeStatus}
+                          </p>
+                        </h1>
+                      </div>
                     </div>
-                    <div className="flex">
+                    <div className="flex w-5/6">
                       <div>
                         <p className="flex items-center mr-11">
                           Allergy:{" "}
@@ -268,7 +270,8 @@ export default function PatientOverviewLayout({
                     className={`cursor-pointer font-semibold ${
                       pathname === tab.url ||
                       (tabUrl === "surgeries" &&
-                        tab.label === "Medical History")
+                        tab.label === "Medical History") ||
+                      (tabUrl === "prorenata" && tab.label === "Medication Log")
                         ? "text-[#007C85] border-b-[3px] border-[#007C85]"
                         : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
                     }`}
