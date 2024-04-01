@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
 import Loading from "./loading";
+import { getAccessToken } from "@/app/api/login-api/accessToken";
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
@@ -17,6 +18,9 @@ export default function PatientOverviewLayout({
     tag: string;
     item: string;
   }>();
+  if (!getAccessToken()) {
+    onNavigate(router, "/login");
+  }
   const [patientData, setPatientData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -24,16 +28,17 @@ export default function PatientOverviewLayout({
   const [detailsClicked, setDetailsClicked] = useState<boolean>(false); // State to track if "See more details" is clicked
   const patientId = params.id.toUpperCase();
   const pathname = usePathname();
-  const [isAllergy, setIsAllergy] = useState(true)
-  const [isSurgery, setIsSurgery] = useState(false)
-  const [isMedicationLog, setIsMedicationLog] = useState(false)
-  const [isPrescription, setIsPrescription] = useState(false)
-  const [isVitalSign, setIsVitalSign] = useState(false)
-  const [isLabRes, setIsLabRes] = useState(false)
-  const [isAppointment, setIsAppointment] = useState(false)
-  const [isNotes, setIsNotes] = useState(false)
+  const [isAllergy, setIsAllergy] = useState(true);
+  const [isSurgery, setIsSurgery] = useState(false);
+  const [isMedicationLog, setIsMedicationLog] = useState(false);
+  const [isPrescription, setIsPrescription] = useState(false);
+  const [isVitalSign, setIsVitalSign] = useState(false);
+  const [isLabRes, setIsLabRes] = useState(false);
+  const [isAppointment, setIsAppointment] = useState(false);
+  const [isNotes, setIsNotes] = useState(false);
   const [loads, setLoads] = useState(0);
 
+  console.log(getAccessToken, "getAccessToken");
   const tabs = [
     {
       label: "Medical History",
@@ -41,7 +46,7 @@ export default function PatientOverviewLayout({
     },
     {
       label: "Medication Log",
-      url: `/patient-overview/${params.id}/medication`,
+      url: `/patient-overview/${params.id}/medication/scheduled`,
     },
     {
       label: "Prescription",
@@ -66,11 +71,11 @@ export default function PatientOverviewLayout({
   ];
 
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
-    setIsLoading(true);
     setLoads(loads + 1);
     onNavigate(router, url);
     setActiveTab(-1);
     setDetailsClicked(true);
+    setIsLoading(true);
   };
 
   // const handleTabClick = (index: number, url: string) => {
@@ -78,32 +83,33 @@ export default function PatientOverviewLayout({
   //   onNavigate(router, url);
   //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
   // };
-  const handleTabClick = (url: string) => {
-  
+  const handleTabClick = (url: string, tabIndex: number) => {
     onNavigate(router, url);
+    setActiveTab(tabIndex);
     setDetailsClicked(false);
+    setIsLoading(true);
   };
   console.log(pathname, "pathname");
   useEffect(() => {
     const pathParts = pathname.split("/");
     const tabUrl = pathParts[pathParts.length - 1];
 
-    if(tabUrl === "allergies"){
-      setIsAllergy(true)
-    } else if(tabUrl === "surgeries"){
-      setIsSurgery(true)
-    } else if(tabUrl === "medication"){
-      setIsMedicationLog(true)
-    } else if(tabUrl === "prescription"){
-      setIsPrescription(true)
-    } else if(tabUrl === "vital-signs"){
-      setIsVitalSign(true)
-    } else if(tabUrl === "lab-results"){
-      setIsLabRes(true)
-    } else if(tabUrl === "patient-appointment"){
-      setIsAppointment(true)
-    } else if(tabUrl === "notes"){
-      setIsNotes(true)
+    if (tabUrl === "allergies") {
+      setIsAllergy(true);
+    } else if (tabUrl === "surgeries") {
+      setIsSurgery(true);
+    } else if (tabUrl === "medication") {
+      setIsMedicationLog(true);
+    } else if (tabUrl === "prescription") {
+      setIsPrescription(true);
+    } else if (tabUrl === "vital-signs") {
+      setIsVitalSign(true);
+    } else if (tabUrl === "lab-results") {
+      setIsLabRes(true);
+    } else if (tabUrl === "patient-appointment") {
+      setIsAppointment(true);
+    } else if (tabUrl === "notes") {
+      setIsNotes(true);
     }
     const fetchData = async () => {
       try {
@@ -120,17 +126,29 @@ export default function PatientOverviewLayout({
     fetchData();
   }, [patientId, router, params]);
 
-  if (isLoading && (isAllergy==false || isSurgery==false || isMedicationLog==false || isPrescription==false || isVitalSign==false || isLabRes==false || isAppointment==false || isNotes==false)) {
-    return (
-      <Loading></Loading>
-    );
+  if (isLoading) {
+    if (!isAllergy) {
+      return <Loading></Loading>;
+    } else if (!isSurgery) {
+      return <Loading></Loading>;
+    } else if (!isMedicationLog) {
+      return <Loading></Loading>;
+    } else if (!isPrescription) {
+      return <Loading></Loading>;
+    } else if (!isVitalSign) {
+      return <Loading></Loading>;
+    } else if (!isLabRes) {
+      return <Loading></Loading>;
+    } else if (!isAppointment) {
+      return <Loading></Loading>;
+    } else if (!isNotes) {
+      return <Loading></Loading>;
+    }
   }
   console.log(patientData, "patientData");
 
   const pathParts = pathname.split("/");
   const tabUrl = pathParts[pathParts.length - 1];
-
-
 
   return (
     <div className="flex flex-col w-full  px-4 lg:px-28 mt-[100px]">
@@ -208,30 +226,32 @@ export default function PatientOverviewLayout({
                     </div>
                   </div>
                   <div className="mb-5"></div>
-                  <div className="flex flex-row w-full">
-                    <img
-                      src="/imgs/codestatus.svg"
-                      className="px-1"
-                      alt="codestatus"
-                      width="26"
-                      height="26"
-                    />
-                    <div>
-                      <h1 className={`flex items-center mr-11`}>
-                        Code Status:
-                        <p
-                          className={` 
+                  <div className="flex flex-row w-full ">
+                    <div className="w-1/6 flex">
+                      <img
+                        src="/imgs/codestatus.svg"
+                        className="px-1"
+                        alt="codestatus"
+                        width="26"
+                        height="26"
+                      />
+                      <div className="">
+                        <h1 className={`flex items-center mr-11`}>
+                          Code Status:
+                          <p
+                            className={` 
                           ${
                             patientData[0]?.codeStatus === "DNR"
                               ? "text-red-500"
                               : "text-blue-500"
                           } ml-1`}
-                        >
-                          {patientData[0]?.codeStatus}
-                        </p>
-                      </h1>
+                          >
+                            {patientData[0]?.codeStatus}
+                          </p>
+                        </h1>
+                      </div>
                     </div>
-                    <div className="flex">
+                    <div className="flex w-5/6">
                       <div>
                         <p className="flex items-center mr-11">
                           Allergy:{" "}
@@ -250,13 +270,14 @@ export default function PatientOverviewLayout({
                     className={`cursor-pointer font-semibold ${
                       pathname === tab.url ||
                       (tabUrl === "surgeries" &&
-                        tab.label === "Medical History")
+                        tab.label === "Medical History") ||
+                      (tabUrl === "prorenata" && tab.label === "Medication Log")
                         ? "text-[#007C85] border-b-[3px] border-[#007C85]"
                         : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
                     }`}
                     key={index}
                     onClick={() => {
-                      handleTabClick(tab.url);
+                      handleTabClick(tab.url, index);
                     }}
                   >
                     {tab.label}

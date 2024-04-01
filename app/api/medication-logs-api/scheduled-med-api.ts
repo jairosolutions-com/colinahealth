@@ -3,8 +3,9 @@ import { onNavigate } from "@/actions/navigation";
 import { getAccessToken, setAccessToken } from "../login-api/accessToken";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+// Function to get the access token from local storage
 
-export async function fetchLabResultsByPatient(
+export async function fetchScheduledMedByPatient(
   patientUuid: string,
   term: string,
   currentPage: number,
@@ -31,15 +32,15 @@ export async function fetchLabResultsByPatient(
     };
 
     const response = await axios.post(
-      `${apiUrl}/lab-results/list/${patientUuid}`,
+      `${apiUrl}/medication-logs/${patientUuid}/asch`,
       requestData,
       { headers }
     );
 
     console.log(response.data);
-    const { patientId, id, ...patientPrescriptionsNoId } = response.data;
-    console.log(patientPrescriptionsNoId, "patient prescription after search");
-    return patientPrescriptionsNoId;
+    const { patientId, id, ...patientScheduledMedNoId } = response.data;
+    console.log(patientScheduledMedNoId, "patient ScheduledMed after search");
+    return patientScheduledMedNoId;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401) {
       setAccessToken("");
@@ -47,44 +48,18 @@ export async function fetchLabResultsByPatient(
       return Promise.reject(new Error("Unauthorized access"));
     }
     console.error(
-      "Error searching patient prescription:",
+      "Error searching patient ScheduledMed:",
       (error as AxiosError).message
     );
   }
 }
 
-
-
-export async function createLabResultOfPatient(patientId: string, formData: any, router: any): Promise<any> {
-  try {
-    const accessToken = getAccessToken();
-    if (!accessToken) {
-      throw new Error("Access token not found in local storage");
-    }
-
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-    };
-
-    // Make the API request to create the allergy
-    const response = await axios.post(`${apiUrl}/lab-results/${patientId}`, formData, { headers });
-    const createdLabResult = response.data;
-
-    return createdLabResult;
-  } catch (error) {
-    console.error("Error creating LabResult:", error);
-    throw error; // Rethrow the error to handle it in the component
-  }
-}
-
-
-export async function updateLabResultOfPatient(
-  labResultUuid: string,
+export async function createScheduledMedOfPatient(
+  patientId: string,
   formData: any,
-  router: any):
-  Promise<any> {
+  router: any
+): Promise<any> {
   try {
-    console.log(formData, "formdata")
     const accessToken = getAccessToken();
     if (!accessToken) {
       throw new Error("Access token not found in local storage");
@@ -94,24 +69,58 @@ export async function updateLabResultOfPatient(
       Authorization: `Bearer ${accessToken}`,
     };
 
-    // Make the API request to create the allergy
-    const response = await axios.patch(
-      `${apiUrl}/lab-results/update/${labResultUuid}`,
+    // Make the API request to create the SchedMed
+    const response = await axios.post(
+      `${apiUrl}/medication-logs/${patientId}`,
       formData,
-      { headers });
-    const updatedLabResult = response.data;
+      { headers }
+    );
+    const createdSchedMed = response.data;
 
-    return updatedLabResult ;
+    return createdSchedMed;
+  } catch (error) {
+    if ((error as AxiosError).response?.status === 401) {
+      setAccessToken("");
+      onNavigate(router, "/login");
+      return Promise.reject(new Error("Unauthorized access"));
+    } else {
+      console.error((error as AxiosError).message);
+      throw error;
+    }
+  }
+}
+
+export async function updateScheduledMedOfPatient(
+  SchedMedUuid: string,
+  formData: any,
+  router: any
+): Promise<any> {
+  try {
+    console.log(formData, "formdata");
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("Access token not found in local storage");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    // Make the API request to create the SchedMed
+    const response = await axios.patch(
+      `${apiUrl}/medication-logs/update/${SchedMedUuid}`,
+      formData,
+      { headers }
+    );
+    const updatedSurgery = response.data;
+
+    return updatedSurgery;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401) {
       setAccessToken("");
       onNavigate(router, "/login");
       return Promise.reject(new Error("Unauthorized access"));
     }
-    console.error(
-      (error as AxiosError).message
-    );
+    console.error((error as AxiosError).message);
   }
 }
-
-

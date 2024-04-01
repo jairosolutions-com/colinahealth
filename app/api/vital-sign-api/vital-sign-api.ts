@@ -65,13 +65,13 @@ export async function createVitalSignsOfPatient(patientId: string, formData: any
       Authorization: `Bearer ${accessToken}`,
     };
 
-    // Make the API request to create the allergy
+    // Make the API request to create the VitalSign
     const response = await axios.post(`${apiUrl}/vital-signs/${patientId}`, formData, { headers });
-    const createdAllergy = response.data;
+    const createdVitalSign = response.data;
 
-    return createdAllergy;
+    return createdVitalSign;
   } catch (error) {
-    console.error("Error creating allergy:", error);
+    console.error("Error creating VitalSign:", error);
     throw error; // Rethrow the error to handle it in the component
   }
 }
@@ -93,14 +93,14 @@ export async function updateVitalSignsOfPatient(
       Authorization: `Bearer ${accessToken}`,
     };
 
-    // Make the API request to create the allergy
+    // Make the API request to create the VitalSign
     const response = await axios.patch(
       `${apiUrl}/vital-signs/update/${prescriptionUuid}`, 
     formData, 
     { headers });
-    const updatedSurgery= response.data;
+    const updatedVitalSign= response.data;
 
-    return updatedSurgery;
+    return updatedVitalSign;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401) {
       setAccessToken("");

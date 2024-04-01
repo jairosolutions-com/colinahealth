@@ -11,6 +11,8 @@ import { useParams, useRouter } from "next/navigation";
 import { fetchAllergiesByPatient } from "@/app/api/medical-history-api/allergies.api";
 import Loading from "./loading";
 import { AllergyModal } from "@/components/modals/allergies.modal";
+import { SuccessModal } from "@/components/shared/success";
+import { ErrorModal } from "@/components/shared/error";
 
 const Allergies = () => {
   const router = useRouter();
@@ -24,11 +26,13 @@ const Allergies = () => {
   const [pageNumber, setPageNumber] = useState("");
   const [gotoError, setGotoError] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>("");
+  const [error, setError] = useState("");
   const [term, setTerm] = useState<string>("");
   const [sortBy, setSortBy] = useState("Type");
   const [isEdit, setIsEdit] = useState(false);
   const [allergyToEdit, setAllergyToEdit] = useState<any[]>([]);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
 
   const params = useParams<{
     id: any;
@@ -89,19 +93,7 @@ const Allergies = () => {
       setCurrentPage(currentPage + 1);
     }
   };
-  const formatDate = (createdAt: string | number | Date) => {
-    // Create a new Date object from the provided createdAt date string
-    const date = new Date(createdAt);
 
-    // Get the month, day, and year
-    const month = date.toLocaleString("default", { month: "short" });
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    const formattedDate = `${month} ${day}, ${year}`;
-
-    return formattedDate;
-  };
   const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -169,12 +161,24 @@ const Allergies = () => {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, sortBy, term, isOpen]);
+  }, [currentPage, sortOrder, sortBy, term, isSuccessOpen]);
 
   console.log(allergyToEdit, "allergy uuid");
   if (isLoading) {
     <Loading></Loading>;
   }
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+    setIsEdit(false);
+    isModalOpen(false);
+
+  };
+  const onFailed = () => {
+    setIsErrorOpen(true);
+    setIsEdit(false);
+  };
+  console.log(error, "error");
   return (
     <div className="   w-full">
       <div className="flex justify-between ">
@@ -186,10 +190,10 @@ const Allergies = () => {
             <h1 className="p-title mx-2">{">"} </h1>
             <h1
               onClick={() =>
-                onNavigate(
+                {onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/medical-history/surgeries`
-                )
+                ); setIsLoading(true)}
               }
               className="p-title cursor-pointer text-gray-600"
             >
@@ -260,43 +264,44 @@ const Allergies = () => {
 
         {/* START OF TABLE */}
         <div>
-          <table className="w-full text-left rtl:text-right">
-            <thead className="">
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                  Allergy ID
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  Date
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  Type
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  Allergen
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  Severity
-                </th>
+          {patientAllergies.length === 0 ? (
+            <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+              <p className="text-xl font-semibold text-gray-700">
+                No Allergies
+              </p>
+            </h1>
+          ) : (
+            <table className="w-full text-left rtl:text-right">
+              <thead className="">
+                <tr className="uppercase text-[#64748B] border-y  ">
+                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                    Allergy ID
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[400px]">
+                    Date
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[400px]">
+                    Type
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[400px]">
+                    Allergen
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[300px]">
+                    Severity
+                  </th>
 
-                <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                  Reaction
-                </th>
-                <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                  Notes
-                </th>
-                <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                  ACtions
-                </th>
-              </tr>
-            </thead>
-            {patientAllergies.length === 0 ? (
-              <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                <p className="text-xl font-semibold text-gray-700">
-                  No Allergies
-                </p>
-              </h1>
-            ) : (
+                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                    Reaction
+                  </th>
+                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                    Notes
+                  </th>
+                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                    ACtions
+                  </th>
+                </tr>
+              </thead>
+
               <tbody>
                 {patientAllergies.map((allergy, index) => (
                   <tr key={index} className="  even:bg-gray-50  border-b ">
@@ -308,7 +313,9 @@ const Allergies = () => {
                     </th>
                     <td className="px-2 py-4">
                       {" "}
-                      {formatDate(allergy.allergies_createdAt)}
+                      {new Date(
+                        allergy.allergies_createdAt
+                      ).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4">{allergy.allergies_type}</td>
                     <td className=" max-w-[552px] px-6 py-4">
@@ -337,8 +344,8 @@ const Allergies = () => {
                   </tr>
                 ))}
               </tbody>
-            )}
-          </table>
+            </table>
+          )}
         </div>
         {/* END OF TABLE */}
       </div>
@@ -414,6 +421,26 @@ const Allergies = () => {
           isEdit={isEdit}
           allergy={allergyToEdit}
           label="sample label"
+          onSuccess={onSuccess}
+          onFailed={onFailed}
+          setErrorMessage={setError}
+        />
+      )}
+      {isSuccessOpen && (
+        <SuccessModal
+          label="Success"
+          isAlertOpen={isSuccessOpen}
+          toggleModal={setIsSuccessOpen}
+          isEdit={isEdit}
+        />
+      )}
+      {isErrorOpen && (
+        <ErrorModal
+          label="Allergy already exist"
+          isAlertOpen={isErrorOpen}
+          toggleModal={setIsErrorOpen}
+          isEdit={isEdit}
+          errorMessage={error}
         />
       )}
     </div>

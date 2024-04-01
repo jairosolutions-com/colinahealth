@@ -12,6 +12,8 @@ export async function fetchPatientOverview(
   try {
     const accessToken = getAccessToken(); // Retrieve access token from local storage
     if (!accessToken) {
+      onNavigate(router, "/login");
+      setAccessToken("");
       throw new Error("Access token not found in local storage");
     }
 

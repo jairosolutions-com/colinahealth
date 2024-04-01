@@ -1,53 +1,45 @@
 "use client";
 
+import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import Edit from "@/components/shared/buttons/edit";
-import { useEffect, useState } from "react";
+import Edit from "@/components/shared/buttons/view";
+import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { fetchLabResultsByPatient } from "@/app/api/lab-results-api/lab-results.api";
-import { LabResultModal } from "@/components/modals/labresults.modal";
-
+import { PRNMedModal } from "@/components/modals/prn-medication.modal";
+import Loading from "../loading";
+import { fetchPRNMedByPatient } from "@/app/api/medication-logs-api/prn-med-api";
 import { SuccessModal } from "@/components/shared/success";
+import { ErrorModal } from "@/components/shared/error";
 
-export default function Laboratoryresults() {
+const Prorenata = () => {
   const router = useRouter();
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
+  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortBy, setSortBy] = useState("createdAt");
+  const [pageNumber, setPageNumber] = useState("");
+  const [patientPRNMed, setPatientPRNMed] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [patientLabResults, setPatientLabResults] = useState<any[]>([]);
-  const [totalLabResults, setTotalLabResults] = useState<number>(0);
-  const [labResultData, setLabResultData] = useState<any[]>([]);
-
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
-
+  const [totalPRNMeds, setTotalPRNMeds] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [PRNData, setPRNData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [pageNumber, setPageNumber] = useState("");
   const [gotoError, setGotoError] = useState(false);
   const [term, setTerm] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-  const [sortOrder, setSortOrder] = useState<string>("ASC");
-  const [sortBy, setSortBy] = useState("date");
   const [isEdit, setIsEdit] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
 
-  const handleOrderOptionClick = (option: string) => {
-    if (option === "Ascending") {
-      setSortOrder("ASC");
-    } else {
-      setSortOrder("DESC");
-    }
-  };
-  const params = useParams<{
-    id: any;
-    tag: string;
-    item: string;
-  }>();
-  const patientId = params.id.toUpperCase();
+  interface Modalprops {
+    label: string;
+    isOpen: boolean;
+    isModalOpen: (isOpen: boolean) => void;
+  }
 
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
@@ -55,8 +47,7 @@ export default function Laboratoryresults() {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
-      setIsEdit(false);
-      setLabResultData([]);
+      setPRNData([]);
     }
   };
 
@@ -72,6 +63,44 @@ export default function Laboratoryresults() {
       setCurrentPage(currentPage + 1);
     }
   };
+
+  const params = useParams<{
+    id: any;
+    tag: string;
+    item: string;
+  }>();
+
+  const patientId = params.id.toUpperCase();
+
+  const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
+  const handleOrderOptionClick = (option: string) => {
+    setIsOpenOrderedBy(false);
+    if (option === "Ascending") {
+      setSortOrder("ASC");
+    } else {
+      setSortOrder("DESC");
+    }
+  };
+  const handleSortOptionClick = (option: string) => {
+    setIsOpenSortedBy(false);
+    if (option === "Date") {
+      setSortBy("medicationLogsDate");
+    } else if (option === "Time") {
+      setSortBy("medicationLogsTime");
+    } else {
+      setSortBy("medicationLogsName");
+    }
+    console.log("option", option);
+  };
+  const optionsOrderedBy = [
+    { label: "Ascending", onClick: handleOrderOptionClick },
+    { label: "Descending", onClick: handleOrderOptionClick },
+  ];
+  const optionsSortBy = [
+    { label: "Date", onClick: handleSortOptionClick },
+    { label: "Time", onClick: handleSortOptionClick },
+    { label: "Medication", onClick: handleSortOptionClick },
+  ]; // end of orderby & sortby function
 
   const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -121,7 +150,7 @@ export default function Laboratoryresults() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchLabResultsByPatient(
+        const response = await fetchPRNMedByPatient(
           patientId,
           term,
           currentPage,
@@ -129,13 +158,10 @@ export default function Laboratoryresults() {
           sortOrder as "ASC" | "DESC",
           router
         );
-
-        //convert date to ISO string
-
-        setPatientLabResults(response.data);
-        console.log("Patient list after setting state:", response.data);
+        setPatientPRNMed(response.data);
         setTotalPages(response.totalPages);
-        setTotalLabResults(response.totalCount);
+        console.log(response.totalPages, "total");
+        setTotalPRNMeds(response.totalCount);
         setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
@@ -146,65 +172,56 @@ export default function Laboratoryresults() {
     fetchData();
   }, [currentPage, sortOrder, sortBy, term, isSuccessOpen]);
 
-  if (isLoading) {
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-      </div>
-    );
-  }
-  const handleSortOptionClick = (option: string) => {
-    setIsOpenSortedBy(false);
-    if (option === "Date") {
-      setSortBy("date");
-    } else if (option === "Total Cholesterol") {
-      setSortBy("totalCholesterol");
-    } else if (option === "LDL-C") {
-      setSortBy("ldlCholesterol");
-    } else {
-      setSortBy("hdlCholesterol");
-    }
-  };
-
-  const optionsOrderedBy = [
-    { label: "Ascending", onClick: handleOrderOptionClick },
-    { label: "Descending", onClick: handleOrderOptionClick },
-  ];
-  const optionsSortBy = [
-    { label: "Date", onClick: handleSortOptionClick },
-    { label: "Total Cholesterol", onClick: handleSortOptionClick },
-    { label: "LDL-C", onClick: handleSortOptionClick },
-    { label: "HDL-C", onClick: handleSortOptionClick },
-  ]; // end of orderby & sortby function
-
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
     isModalOpen(false);
-
   };
+  const onFailed = () => {
+    setIsErrorOpen(true);
+    setIsEdit(false);
+  };
+
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
+
+  console.log(patientPRNMed, "prn med");
 
   return (
     <div className="  w-full">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between ">
         <div className="flex flex-col">
-          <h1 className="p-title">Laboratory Results </h1>
+          <div className="flex flex-row items-center">
+            <h1 className="p-title">Medication Logs</h1>
+            <h1 className="p-title mx-2">{">"} </h1>
+            <h1
+              onClick={() => {
+                onNavigate(
+                  router,
+                  `/patient-overview/${patientId.toLowerCase()}/medication/scheduled`
+                );
+                setIsLoading(true);
+              }}
+              className="p-title cursor-pointer text-gray-600"
+            >
+              Scheduled
+            </h1>
+            <h1 className="p-title mx-2">{">"} </h1>
+            <h1 className="p-title cursor-pointer text-[#007C85]">PRN</h1>
+          </div>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
-            Total of {totalLabResults} Lab Results
+            Total of {totalPRNMeds} PRN Medication Logs
           </p>
         </div>
-        <div className="flex flex-row justify-end">
-          <Add
-            onClick={() => {
-              isModalOpen(true);
-            }}
-          ></Add>
+        <div className="flex flex-row justify-end mt-[15px]">
+          <Add onClick={() => isModalOpen(true)} />
           <DownloadPDF></DownloadPDF>
         </div>
       </div>
 
-      <div className="w-full sm:rounded-lg items-center">
+      <div className="w-full m:rounded-lg items-center">
         <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
           <form className="">
             {/* search bar */}
@@ -214,10 +231,8 @@ export default function Laboratoryresults() {
                 className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
                 type="text"
                 placeholder="Search by reference no. or name..."
-                onChange={(event) => {
-                  setTerm(event.target.value);
-                  setCurrentPage(1);
-                }}
+                value={term}
+                onChange={(e) => {setTerm(e.target.value)}}
               />
             </div>
           </form>
@@ -230,11 +245,12 @@ export default function Laboratoryresults() {
                 label,
                 onClick: () => {
                   onClick(label);
+                  console.log("label", label);
                 },
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Ascending"}
+              label={"Select"}
             />
 
             <p className="text-[#191D23] opacity-[60%] font-semibold">
@@ -260,102 +276,93 @@ export default function Laboratoryresults() {
           <table className="w-full text-left rtl:text-right">
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[200px] h-[70px]">
-                  LAB RESULT ID
+                <th scope="col" className="px-6 py-3 w-[300px] h-[60px] ">
+                  Medication ID
                 </th>
-                <th scope="col" className="px-6 py-3 w-[200px] h-[70px]">
-                  DATE
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  Date
                 </th>
-                <th scope="col" className="px-0 py-3 w-[200px]">
-                  HEMOGLOBIN A1c
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  Time
                 </th>
-                <th
-                  scope="col"
-                  className="truncate max-w-[286px] px-3 py-3 w-[200px]"
-                >
-                  FASTING BLOOD GLUCOSE
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  Medication
                 </th>
-                <th
-                  scope="col"
-                  className="truncate max-w-[286px] px-6  py-3 w-[200px]"
-                >
-                  TOTAL CHOLESTEROL
+                <th scope="col" className="px-5 py-3 w-[400px]">
+                  Notes
                 </th>
-                <th scope="col" className="px-6 py-3 w-[200px]">
-                  LDL-C
+                <th scope="col" className="px-6 py-3 w-[100px]">
+                  Status
                 </th>
-                <th scope="col" className="px-6 py-3 w-[200px]">
-                  HDL-C
-                </th>
-                <th scope="col" className="px-6  py-3 w-[200px]">
-                  TRIGLYCERIDES
-                </th>
-                <th scope="col" className="pl-[80px] py-3 w-[10px] ">
-                  ACTION
+                <th scope="col" className=" px-20 py-4 w-[10px]">
+                  Action
                 </th>
               </tr>
             </thead>
             <tbody>
-              {patientLabResults.length === 0 && (
+              {patientPRNMed.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="text-xl font-semibold text-gray-700">
-                      No Lab Results
+                      No PRN Medication Log/s
                     </p>
                   </td>
                 </tr>
               )}
-              {patientLabResults.length > 0 && (
+              {patientPRNMed.map((prnMed, index) => (
                 <>
-                  {patientLabResults.map((labResult, index) => (
-                    <tr key={index} className="  even:bg-gray-50  border-b ">
-                      <th
-                        scope="row"
-                        className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                  <tr
+                    key={index}
+                    className="odd:bg-white border-b hover:bg-[#f4f4f4] group"
+                  >
+                    <th
+                      scope="row"
+                      className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                    >
+                      {prnMed.medicationlogs_uuid}
+                    </th>
+                    <td className="truncate max-w-[552px] px-6 py-4">
+                      {prnMed.medicationlogs_medicationLogsDate}
+                    </td>
+                    <td className="px-6 py-4">
+                      {new Date(
+                        new Date().getFullYear(), // Use current year as default
+                        new Date().getMonth(), // Use current month as default
+                        new Date().getDate(), // Use current day as default
+                        parseInt(
+                          prnMed.medicationlogs_medicationLogsTime.split(":")[0]
+                        ), // Extract hours
+                        parseInt(
+                          prnMed.medicationlogs_medicationLogsTime.split(":")[1]
+                        ) // Extract minutes
+                      ).toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
+                    </td>
+                    <td className="truncate max-w-[400px] px-6 py-4">
+                      {prnMed.medicationlogs_medicationLogsName}
+                    </td>
+                    <td className="px-5 py-4">{prnMed.medicationlogs_notes}</td>
+                    <td className="px-6 py-4">
+                      {prnMed.medicationlogs_medicationLogStatus}
+                    </td>
+
+                    <td className="px-[70px] py-4">
+                      <p
+                        onClick={() => {
+                          isModalOpen(true);
+                          setIsEdit(true);
+                          setPRNData(prnMed);
+                        }}
                       >
-                        {labResult.labResults_uuid}
-                      </th>
-                      <th
-                        scope="row"
-                        className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                      >
-                        {new Date(
-                          labResult.labResults_createdAt
-                        ).toLocaleDateString()}
-                      </th>
-                      <td className="px-0 py-4">
-                        {labResult.labResults_hemoglobinA1c}%
-                      </td>
-                      <td className="truncate max-w-[286px] px-3 py-4 tb-med">
-                        {labResult.labResults_fastingBloodGlucose}
-                      </td>
-                      <td className="truncate max-w-[286px] px-6 py-4">
-                        {labResult.labResults_totalCholesterol}
-                      </td>
-                      <td className="truncate max-w-[286px] px-6 py-4">
-                        {labResult.labResults_ldlCholesterol}
-                      </td>
-                      <td className="truncate max-w-[286px] px-6 py-4">
-                        {labResult.labResults_hdlCholesterol}
-                      </td>
-                      <td className="px-6 py-4">
-                        {labResult.labResults_triglycerides}
-                      </td>
-                      <td className="px-[70px] py-4">
-                        <p
-                          onClick={() => {
-                            isModalOpen(true);
-                            setIsEdit(true);
-                            setLabResultData(labResult);
-                          }}
-                        >
-                          <Edit></Edit>
-                        </p>
-                      </td>
-                    </tr>
-                  ))}
+                        <Edit></Edit>
+                      </p>
+                    </td>
+                  </tr>
                 </>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
@@ -427,16 +434,17 @@ export default function Laboratoryresults() {
         </div>
       )}
       {isOpen && (
-        <LabResultModal
+        <PRNMedModal
           isModalOpen={isModalOpen}
-          isEdit={isEdit}
-          labResultData={labResultData}
           isOpen={isOpen}
+          isEdit={isEdit}
+          PRNData={PRNData}
           label="sample label"
           onSuccess={onSuccess}
+          onFailed={onFailed}
+          setErrorMessage={setError}
         />
       )}
-
       {isSuccessOpen && (
         <SuccessModal
           label="Success"
@@ -445,6 +453,17 @@ export default function Laboratoryresults() {
           isEdit={isEdit}
         />
       )}
+      {isErrorOpen && (
+        <ErrorModal
+          label="PRN Log already exist"
+          isAlertOpen={isErrorOpen}
+          toggleModal={setIsErrorOpen}
+          isEdit={isEdit}
+          errorMessage={error}
+        />
+      )}
     </div>
   );
-}
+};
+
+export default Prorenata;

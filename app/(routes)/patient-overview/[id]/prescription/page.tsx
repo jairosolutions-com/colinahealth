@@ -9,6 +9,8 @@ import { onNavigate } from "@/actions/navigation";
 import { useRouter, useParams } from "next/navigation";
 import { fetchPrescriptionByPatient as fetchPrescriptionsByPatient } from "@/app/api/prescription-api/prescription.api";
 import { PrescriptionModal } from "@/components/modals/prescription.modal";
+import { SuccessModal } from "@/components/shared/success";
+import { ErrorModal } from "@/components/shared/error";
 // import { Modal } from "@/components/shared/modalss";
 
 export default function prescription() {
@@ -24,11 +26,13 @@ export default function prescription() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [prescriptionData, setPrescriptionData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>("");
   const [gotoError, setGotoError] = useState(false);
   const [term, setTerm] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
   interface Modalprops {
     label: string;
     isOpen: boolean;
@@ -40,6 +44,8 @@ export default function prescription() {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
+      setPrescriptionData([]);
+      setIsEdit(false);
     }
   };
 
@@ -75,11 +81,13 @@ export default function prescription() {
   };
   const handleSortOptionClick = (option: string) => {
     setIsOpenSortedBy(false);
-    if (option === "Medication") {
-      setSortBy("name");
-    } else if (option === "Status") {
-      setSortBy("status");
-    } else {
+    if (option === "Medicine Name") {
+      setSortBy("medicationName");
+    } else if (option === "Frequency") {
+      setSortBy("frequency");
+    } else if (option === "Interval") {
+      setSortBy("interval");
+    }else {
       setSortBy("dosage");
     }
     console.log("option", option);
@@ -89,8 +97,9 @@ export default function prescription() {
     { label: "Descending", onClick: handleOrderOptionClick },
   ];
   const optionsSortBy = [
-    { label: "Medication", onClick: handleSortOptionClick },
-    { label: "Status", onClick: handleSortOptionClick },
+    { label: "Medicine Name", onClick: handleSortOptionClick },
+    { label: "Frequency", onClick: handleSortOptionClick },
+    { label: "Interval", onClick: handleSortOptionClick },
     { label: "Dosage", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
@@ -165,10 +174,22 @@ export default function prescription() {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, sortBy, term, isOpen]);
+  }, [currentPage, sortOrder, sortBy, term, isSuccessOpen]);
 
+
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+    setIsEdit(false);
+    isModalOpen(false);
+
+  };
+  const onFailed = () => {
+    setIsErrorOpen(true);
+    setIsEdit(false);
+  };
   return (
-    <div className="  w-full">
+    <div className=" w-full">
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="p-title">Prescription </h1>
@@ -178,7 +199,11 @@ export default function prescription() {
           </p>
         </div>
         <div className="flex flex-row justify-end">
-          <Add onClick={() => isModalOpen(true)} />
+          <Add
+            onClick={() => {
+              isModalOpen(true);
+            }}
+          ></Add>{" "}
           <DownloadPDF></DownloadPDF>
         </div>
       </div>
@@ -237,6 +262,13 @@ export default function prescription() {
 
         {/* START OF TABLE */}
         <div>
+        {patientPrescriptions.length == 0 ? (
+            <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+              <p className="text-xl font-semibold text-gray-700">
+                No Prescription/s
+              </p>
+            </div>
+          ) : (
           <table className="w-full text-left rtl:text-right">
             <thead className="">
               <tr className="uppercase text-[#64748B] border-y  ">
@@ -264,15 +296,7 @@ export default function prescription() {
               </tr>
             </thead>
             <tbody>
-              {patientPrescriptions.length === 0 && (
-                <tr>
-                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-xl font-semibold text-gray-700">
-                      No Prescription
-                    </p>
-                  </td>
-                </tr>
-              )}
+             
               {patientPrescriptions.length > 0 && (
                 <>
                   {patientPrescriptions.map((prescription, index) => (
@@ -316,6 +340,7 @@ export default function prescription() {
               )}
             </tbody>
           </table>
+          )}
         </div>
         {/* END OF TABLE */}
       </div>
@@ -389,8 +414,29 @@ export default function prescription() {
           isModalOpen={isModalOpen}
           isOpen={isOpen}
           label="sample label"
-          isEdit={false}
+          isEdit={isEdit}
           prescriptionData={prescriptionData}
+          onSuccess={onSuccess}
+          onFailed={onFailed}
+          setErrorMessage={setError}
+          />
+        )}
+  
+        {isSuccessOpen && (
+          <SuccessModal
+            label="Success"
+            isAlertOpen={isSuccessOpen}
+            toggleModal={setIsSuccessOpen}
+            isEdit={isEdit}
+          />
+        )}
+        {isErrorOpen && (
+        <ErrorModal
+          label="prescriptionFailed"
+          isAlertOpen={isErrorOpen}
+          toggleModal={setIsErrorOpen}
+          isEdit={isEdit}
+          errorMessage={error}
         />
       )}
     </div>

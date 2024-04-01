@@ -10,7 +10,11 @@ interface Modalprops {
   allergy: any;
   label: string;
   isOpen: boolean;
+  setErrorMessage: any
   isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
+  onFailed: () => void;
+  
 }
 
 export const AllergyModal = ({
@@ -18,7 +22,11 @@ export const AllergyModal = ({
   allergy,
   label,
   isOpen,
+  setErrorMessage,
   isModalOpen,
+  onSuccess,
+  onFailed,
+  
 }: Modalprops) => {
   const params = useParams<{
     id: any;
@@ -61,6 +69,7 @@ export const AllergyModal = ({
     try {
       if (isEdit) {
         await updateAllergyOfPatient(allergy.allergies_uuid, formData, router);
+        onSuccess()
         isModalOpen(false);
         return;
       } else {
@@ -80,9 +89,15 @@ export const AllergyModal = ({
           reaction: "",
           notes: "",
         });
+        onSuccess()
       }
-    } catch (error) {
-      console.error("Error adding allergy:", error);
+    } catch (error: any) {
+      if(error.message === "Request failed with status code 409"){
+        setErrorMessage("Allergy already exist")
+        onFailed()
+        isModalOpen(false);
+        console.log("conflict error")
+      }
       setError("Failed to add allergy");
     }
   };

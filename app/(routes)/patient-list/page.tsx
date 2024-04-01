@@ -2,7 +2,6 @@
 
 import { onNavigate } from "@/actions/navigation";
 import {
-  fetchPatientList,
   searchPatientList,
 } from "@/app/api/patients-api/patientList.api";
 import DropdownMenu from "@/components/dropdown-menu";
@@ -10,7 +9,9 @@ import Edit from "@/components/shared/buttons/view";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DemographicModal } from "@/components/modals/demographic.modal";
-import { Modal } from "@/components/modals/modal";
+import { ErrorModal } from "@/components/shared/error";
+import { SuccessModal } from "@/components/shared/success";
+import { getAccessToken } from "@/app/api/login-api/accessToken";
 
 export default function PatientPage({ patient }: { patient: any }) {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -22,15 +23,19 @@ export default function PatientPage({ patient }: { patient: any }) {
   const [totalPatient, setTotalPatient] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>("");
   const [pageNumber, setPageNumber] = useState("");
   const [gotoError, setGotoError] = useState(false);
   const [term, setTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("ASC");
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const isEdit=false;
   const router = useRouter();
-
+  if (!getAccessToken()) {
+    onNavigate(router, "/login");
+  }
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -150,7 +155,7 @@ export default function PatientPage({ patient }: { patient: any }) {
     };
 
     fetchData();
-  }, [term, sortOrder, currentPage, sortBy, isOpen]);
+  }, [term, sortOrder, currentPage, sortBy, isSuccessOpen]);
 
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
@@ -168,14 +173,18 @@ export default function PatientPage({ patient }: { patient: any }) {
       </div>
     );
   }
-
-  if (error) {
-    onNavigate(router, "/login");
-  }
   console.log("patientList", patientList);
 
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+  };
+  const onFailed = () => {
+    setIsErrorOpen(true);
+  };
+
+
   return (
-    <div className="relative w-full mx-24 mt-24">
+    <div className="relative w-full mx-24 mt-24 z-1">
       <div className="flex justify-end">
         <p
           onClick={() => onNavigate(router, "/dashboard")}
@@ -194,7 +203,7 @@ export default function PatientPage({ patient }: { patient: any }) {
         </div>
         <div className="flex flex-row justify-end">
           <button
-            className=" mr-2 btn-add h-12"
+            className=" mr-2 btn-add h-12 cursor-pointer"
             onClick={() => isModalOpen(true)}
           >
             <img
@@ -215,7 +224,7 @@ export default function PatientPage({ patient }: { patient: any }) {
         </div>
       </div>
 
-      <div className="w-full shadow-md sm:rounded-lg items-center">
+      <div className="w-full sm:rounded-lg items-center">
         <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
           <form className=" mr-5">
             {/* search bar */}
@@ -270,28 +279,6 @@ export default function PatientPage({ patient }: { patient: any }) {
         <div className="w-full h-full">
           {patientList.length === 0 ? (
             <div>
-              <table className="w-full h-full justify-center items-start ">
-                <thead className=" text-left rtl:text-right">
-                  <tr className="uppercase text-[#64748B] border border-[#E7EAEE]">
-                    <th scope="col" className="px-6 py-3 w-[286px] h-[70px]">
-                      Patient ID
-                    </th>
-                    <th scope="col" className="px-6 py-3 w-[552px]">
-                      Name
-                    </th>
-                    <th scope="col" className="px-6 py-3 w-[277px]">
-                      Age
-                    </th>
-                    <th scope="col" className="px-6 py-3 w-[277px]">
-                      Gender
-                    </th>
-
-                    <th scope="col" className="px-[70px] py-3 w-[210px] ">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-              </table>
               <div className="w-full flex justify-center text-xl py-5">
                 No Patient Found!
               </div>
@@ -336,9 +323,9 @@ export default function PatientPage({ patient }: { patient: any }) {
                     <td className="px-6">{patient.age}</td>
                     <td className="px-6">{patient.gender}</td>
                     <td className="px-[50px]">
-                      <div onClick={() => handlePatientClick(patient.uuid)}>
+                      <p onClick={() => handlePatientClick(patient.uuid)}>
                         <Edit></Edit>
-                      </div>
+                      </p>
                     </td>
                   </tr>
                 ))}
@@ -414,7 +401,31 @@ export default function PatientPage({ patient }: { patient: any }) {
         </div>
       )}
       {isOpen && (
-        <DemographicModal isModalOpen={isModalOpen} isOpen={isOpen} label="sample label" />
+        <DemographicModal
+          isModalOpen={isModalOpen}
+          isOpen={isOpen}
+          label="sample label"
+          onSuccess={onSuccess}
+          onFailed={onFailed}
+          setErrorMessage={setError}
+        />
+      )}
+      {isSuccessOpen && (
+        <SuccessModal
+          label="Success"
+          isAlertOpen={isSuccessOpen}
+          toggleModal={setIsSuccessOpen}
+          isEdit={isEdit}
+        />
+      )}
+      {isErrorOpen && (
+        <ErrorModal
+          label="Patient already exist"
+          isAlertOpen={isErrorOpen}
+          toggleModal={setIsErrorOpen}
+          isEdit={isEdit}
+          errorMessage={error}
+        />
       )}
     </div>
   );
