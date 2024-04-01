@@ -54,25 +54,62 @@ export async function fetchAppointmentsByPatient(
 }
 
 
-// export async function createAllergiesOfPatient(patientId: string, formData: any, router: any): Promise<any> {
-//   try {
-//     const accessToken = getAccessToken();
-//     if (!accessToken) {
-//       throw new Error("Access token not found in local storage");
-//     }
+export async function createAppointmentOfPatient(patientId: string, formData: any, router: any): Promise<any> {
+  try {
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("Access token not found in local storage");
+    }
 
-//     const headers = {
-//       Authorization: `Bearer ${accessToken}`,
-//     };
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
 
-//     // Make the API request to create the allergy
-//     const response = await axios.post(`${apiUrl}/allergies/${patientId}`, formData, { headers });
-//     const createdAllergy = response.data;
+    // Make the API request to create the allergy
+    const response = await axios.post(`${apiUrl}/appointments/${patientId}`, formData, { headers });
+    const createdAppointment = response.data;
 
-//     return createdAllergy;
-//   } catch (error) {
-//     console.error("Error creating allergy:", error);
-//     throw error; // Rethrow the error to handle it in the component
-//   }
-// }
+    return createdAppointment;
+  } catch (error) {
+    console.error("Error creating appointment:", error);
+    throw error; // Rethrow the error to handle it in the component
+  }
+}
 
+
+export async function updateAppointmentOfPatient(
+    appointmentUuid: string, 
+    formData: any, 
+    router: any): 
+    Promise<any> {
+    try {
+      console.log(formData, "formdata")
+      const accessToken = getAccessToken();
+      if (!accessToken) {
+        throw new Error("Access token not found in local storage");
+      }
+  
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+  
+      // Make the API request to create the allergy
+      const response = await axios.patch(
+        `${apiUrl}/appointments/update/${appointmentUuid}`, 
+      formData, 
+      { headers });
+      const updatedAppointment= response.data;
+  
+      return updatedAppointment;
+    } catch (error) {
+      if ((error as AxiosError).response?.status === 401) {
+        setAccessToken("");
+        onNavigate(router, "/login");
+        return Promise.reject(new Error("Unauthorized access"));
+      }
+      console.error(
+        (error as AxiosError).message
+      );
+    }
+  }
+  

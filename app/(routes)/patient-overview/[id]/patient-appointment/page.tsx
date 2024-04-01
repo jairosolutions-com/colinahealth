@@ -17,7 +17,34 @@ const Appointment = () => {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isEdit, setIsView] = useState(false);
+  const formatDate = (createdAt: string | number | Date) => {
+    // Create a new Date object from the provided createdAt date string
+    const date = new Date(createdAt);
 
+    // Get the month, day, and year
+    const month = date.toLocaleString("default", { month: "short" });
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    const formattedDate = `${month} ${day}, ${year}`;
+
+    return formattedDate;
+  };
+  const formatTime = (timeString: string) => {
+    // Split the time string into hours and minutes
+    const [hours, minutes] = timeString.split(":").map(Number);
+
+    // Format the hours part into 12-hour format
+    let formattedHours = hours % 12 || 12; // Convert 0 to 12
+    const ampm = hours < 12 ? "am" : "pm"; // Determine if it's AM or PM
+
+    // If minutes is undefined or null, set it to 0
+    const formattedMinutes =
+      minutes !== undefined ? minutes.toString().padStart(2, "0") : "00";
+
+    // Return the formatted time string
+    return `${formattedHours}:${formattedMinutes}${ampm}`;
+  };
   const [error, setError] = useState<string | null>(null);
   const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -290,25 +317,38 @@ const Appointment = () => {
                       className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                     >
                       <th
-                        scope="row"
-                        className=" text-[#2A7D15] font-large text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
+                        className={`font-large text-16px me-1 px-6 py-5 rounded-full flex justify-start ${
+                          appointments.appointments_appointmentStatus ===
+                          "Scheduled"
+                            ? "text-[#2A7D15]" // Green color for Scheduled
+                            : appointments.appointments_appointmentStatus ===
+                              "Done"
+                            ? "text-[#3C3C3C]" // Dark color for Done
+                            : appointments.appointments_appointmentStatus ===
+                            "Patient-IN" && "On-going"
+                          ? "text-[#E0BD03]" // Yellow for On Going
+                            : appointments.appointments_appointmentStatus ===
+                              "Missed"
+                            ? "text-[#B81C1C]" // Red color for Missed
+                            : ""
+                        }`}
                       >
-                        <span className="pr-1 text-[#2A7D15]">●</span>
+                        <span className="pr-1">●</span>
                         {appointments.appointments_appointmentStatus}
                       </th>
                       <td className="px-6 py-3">
-                        {appointments.appointments_appointmentDate}
+                        {formatDate(appointments.appointments_appointmentDate)}
                       </td>
                       <td className="px-6 py-3">
-                        {appointments.appointments_appointmentTime}
+                        {formatTime(appointments.appointments_appointmentTime)}
                       </td>
                       <td className="px-6 py-3">
-                        {" "}
-                        {appointments.appointments_appointmentEndTime}{" "}
+                        {formatTime(
+                          appointments.appointments_appointmentEndTime
+                        )}
                       </td>
                       <td className="px-6 py-3">
-                        {" "}
-                        {appointments.appointments_details}{" "}
+                        {appointments.appointments_details}
                       </td>
                       <td className="px-[90px] py-3">
                         <p
