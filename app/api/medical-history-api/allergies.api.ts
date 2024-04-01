@@ -134,8 +134,14 @@ export async function createAllergiesOfPatient(patientId: string, formData: any,
 
     return createdAllergy;
   } catch (error) {
-    console.error("Error creating allergy:", error);
-    throw error; // Rethrow the error to handle it in the component
+    if ((error as AxiosError).response?.status === 401) {
+      setAccessToken("");
+      onNavigate(router, "/login");
+      return Promise.reject(new Error("Unauthorized access"));
+    } else {
+      console.error((error as AxiosError).message);
+      throw error;
+    }
   }
 }
 

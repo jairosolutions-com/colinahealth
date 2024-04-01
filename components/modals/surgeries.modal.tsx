@@ -14,8 +14,10 @@ interface Modalprops {
   surgeryData: any;
   label: string;
   isOpen: boolean;
+  setErrorMessage: any;
   isModalOpen: (isOpen: boolean) => void;
   onSuccess: () => void;
+  onFailed: () => void;
 }
 
 export const SurgeriesModal = ({
@@ -23,8 +25,10 @@ export const SurgeriesModal = ({
   surgeryData,
   label,
   isOpen,
+  setErrorMessage,
   isModalOpen,
   onSuccess,
+  onFailed,
 }: Modalprops) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -88,8 +92,14 @@ export const SurgeriesModal = ({
         });
         onSuccess();
       }
-    } catch (error) {
-      console.error("Error adding Surgery:", error);
+    } catch (error: any) {
+      console.log(error.message, "error");
+      if (error.message === "Request failed with status code 409") {
+        setErrorMessage("Surgery already exist");
+        onFailed();
+        isModalOpen(false);
+        console.log("conflict error");
+      }
       setError("Failed to add Surgery");
     }
   };
@@ -102,7 +112,7 @@ export const SurgeriesModal = ({
       <div className="w-[676px] h-[570px] bg-[#FFFFFF] rounded-md">
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <h2 className="p-title text-left text-[#071437] pl-9 mt-7">
-            Add Medical History Surgeries Log
+          {isEdit ? "Update" : "Add"} Medical History Surgeries Log
           </h2>
           <p className="text-sm pl-9 text-gray-600 pb-10 pt-2">
             Submit your log details.
