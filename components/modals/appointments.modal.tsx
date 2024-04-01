@@ -37,9 +37,9 @@ export const AppointmentsModal = ({
   const [error, setError] = useState<string | null>(null);
 
   const [day, setDay] = useState("Tuesday");
-  // const [time, setTime] = useState("1:30pm");
-  // const [endTime, setEndTime] = useState("2:00pm");
-  // const [details, setDetails] = useState("Input details");
+  const [time, setTime] = useState("1:30pm");
+  const [endTime, setEndTime] = useState("2:00pm");
+  const [details, setDetails] = useState("Input details");
 
   const handleEditToggle = () => {
     setIsEditable(!isEditable);
@@ -66,6 +66,18 @@ export const AppointmentsModal = ({
       setDate(value);
       appointmentData.appointments_appointmentDate = value;
       console.log(value, "date");
+    }
+
+    if (name === "appointmentTime") {
+      setEndTime(value);
+      appointmentData.appointments_appointmentEndTime = value;
+      console.log(value, "appointmentTime");
+    }
+
+    if (name === "appointmentEndTime") {
+      setTime(value);
+      appointmentData.appointments_appointmentTime = value;
+      console.log(value, "appointmentEndTime");
     }
     setFormData((prevData) => ({
       ...prevData,
@@ -231,6 +243,7 @@ export const AppointmentsModal = ({
                           id="time"
                           required
                           type="time"
+                          name="appointmentTime"
                           value={formData.appointmentTime}
                           onChange={handleChange}
                           className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
@@ -255,6 +268,7 @@ export const AppointmentsModal = ({
                         <input
                           type="time"
                           required
+                          name="appointmentEndTime"
                           onChange={handleChange}
                           value={formData.appointmentEndTime}
                           className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
@@ -344,6 +358,7 @@ export const AppointmentsModal = ({
                     <input
                       type="date"
                       required
+                      min={Date.now().toString()}
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
                       placeholder="input date"
                       name="appointmentDate"

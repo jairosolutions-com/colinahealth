@@ -72,8 +72,8 @@ const Appointment = () => {
 
   const [patientAppointments, setPatientAppointments] = useState<any[]>([]);
   const [term, setTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("ASC");
-  const [sortBy, setSortBy] = useState("appointmentDate");
+  const [sortOrder, setSortOrder] = useState("DESC");
+  const [sortBy, setSortBy] = useState("appointmentTime");
   const [pageNumber, setPageNumber] = useState("");
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalAppointments, setTotalAppointments] = useState<number>(0);
@@ -325,8 +325,10 @@ const Appointment = () => {
                               "Done"
                             ? "text-[#3C3C3C]" // Dark color for Done
                             : appointments.appointments_appointmentStatus ===
-                            "Patient-IN" && "On-going"
-                          ? "text-[#E0BD03]" // Yellow for On Going
+                                "Patient-IN" ||
+                              appointments.appointments_appointmentStatus ===
+                                "On-going"
+                            ? "text-[#E0BD03]" // Yellow for On Going
                             : appointments.appointments_appointmentStatus ===
                               "Missed"
                             ? "text-[#B81C1C]" // Red color for Missed
