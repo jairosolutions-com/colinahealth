@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import Edit from "@/components/shared/buttons/view";
+import Edit from "@/components/shared/buttons/edit";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
@@ -187,6 +187,7 @@ const Scheduled = () => {
   }
 
   console.log("patientScheduledMed", patientScheduledMed);
+  console.log(patientScheduledMed)
   return (
     <div className="  w-full">
       <div className="flex justify-between ">

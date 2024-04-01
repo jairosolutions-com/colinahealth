@@ -71,7 +71,6 @@ export default function PatientOverviewLayout({
   ];
 
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
-    setLoads(loads + 1);
     onNavigate(router, url);
     setActiveTab(-1);
     setDetailsClicked(true);
@@ -127,22 +126,25 @@ export default function PatientOverviewLayout({
   }, [patientId, router, params]);
 
   if (isLoading) {
-    if (!isAllergy) {
-      return <Loading></Loading>;
-    } else if (!isSurgery) {
-      return <Loading></Loading>;
-    } else if (!isMedicationLog) {
-      return <Loading></Loading>;
-    } else if (!isPrescription) {
-      return <Loading></Loading>;
-    } else if (!isVitalSign) {
-      return <Loading></Loading>;
-    } else if (!isLabRes) {
-      return <Loading></Loading>;
-    } else if (!isAppointment) {
-      return <Loading></Loading>;
-    } else if (!isNotes) {
-      return <Loading></Loading>;
+    switch (true) {
+      case !isAllergy:
+        return <Loading></Loading>;
+      case !isSurgery:
+        return <Loading></Loading>;
+      case !isMedicationLog:
+        return <Loading></Loading>;
+      case !isPrescription:
+        return <Loading></Loading>;
+      case !isVitalSign:
+        return <Loading></Loading>;
+      case !isLabRes:
+        return <Loading></Loading>;
+      case !isAppointment:
+        return <Loading></Loading>;
+      case !isNotes:
+        return <Loading></Loading>;
+      default:
+        break;
     }
   }
   console.log(patientData, "patientData");

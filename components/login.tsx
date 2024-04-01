@@ -10,32 +10,18 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export const Login = () => {
+  const router = useRouter();
+  if(getAccessToken()){
+    onNavigate(router, "/dashboard");
+  }
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const router = useRouter();
+  
 
-  useEffect(() => {
-    const accessToken = getAccessToken();
-    if (accessToken) {
-      onNavigate(router, "/dashboard");
-    }
-  }, []);
 
-  useEffect(() => {
-    // Load saved email and password from local storage if available
-    const savedEmail = localStorage.getItem("savedEmail");
-    const savedPassword = localStorage.getItem("savedPassword");
-
-    if (savedEmail) {
-      setEmail(savedEmail);
-    }
-
-    if (savedPassword) {
-      setPassword(savedPassword);
-    }
-  }, []);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,7 +51,7 @@ export const Login = () => {
   };
 
   console.log("email", email);
-  console.log(getAccessToken(), "getAccessToken");
+
 
   return (
     <div>

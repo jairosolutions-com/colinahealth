@@ -300,7 +300,7 @@ export default function prescription() {
               {patientPrescriptions.length > 0 && (
                 <>
                   {patientPrescriptions.map((prescription, index) => (
-                    <tr key={index} className="  even:bg-gray-50  border-b ">
+                    <tr key={index} className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4]">
                       <td className="truncate max-w-[286px] px-0 py-4">
                         {prescription.prescriptions_uuid}
                       </td>

@@ -1,9 +1,10 @@
 import {
   createScheduledMedOfPatient,
+  fetchPrescriptionsOfPatient,
   updateScheduledMedOfPatient,
 } from "@/app/api/medication-logs-api/scheduled-med-api";
 import { useParams, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -36,6 +37,7 @@ export const ScheduledMedModal = ({
   const patientId = params.id.toUpperCase();
   console.log(patientId, "patientId");
   const router = useRouter();
+  const [prescriptionList, setPrescriptionList] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     medicationLogsName:
@@ -117,6 +119,31 @@ export const ScheduledMedModal = ({
   };
   console.log(formData, "formData");
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const prescriptionList = await fetchPrescriptionsOfPatient(
+          patientId,
+          router
+        );
+        setPrescriptionList(prescriptionList.data);
+      } catch (error) {
+        console.error("Error fetching prescription list:");
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleMedicationChange = (countryId: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      country: countryId,
+    }));
+  };
+
+  console.log(prescriptionList, "prescriptionList");
+
   return (
     <div
       className={`absolute inset-[-100px] bg-[#76898A99] flex items-center justify-center pb-[150px]`}
@@ -124,7 +151,7 @@ export const ScheduledMedModal = ({
       <div className="w-[676px] h-[660px] bg-[#FFFFFF] rounded-md">
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <h2 className="p-title text-left text-[#071437] pl-9 mt-7">
-          {isEdit ? "Update" : "Add"} Scheduled Medication Log
+            {isEdit ? "Update" : "Add"} Scheduled Medication Log
           </h2>
           <p className="text-sm pl-9 text-gray-600 pb-10 pt-2">
             Submit your log details.
@@ -142,15 +169,18 @@ export const ScheduledMedModal = ({
                     MEDICATION
                   </label>
                   <div className="mt-2.5">
-                    <input
-                      type="text"
-                      className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                      placeholder="Input medication"
-                      name="medicationLogsName"
-                      value={formData.medicationLogsName}
-                      onChange={handleChange}
-                      required
-                    />
+                    <select name="medicationLogsName" className="w-full"
+                    onChange={(event) =>handleMedicationChange(event.target.value)}>
+                      <option>Prescription Med Name</option>
+                      {prescriptionList.map((prescription) => (
+                        <option
+                          key={prescription.prescriptions_uuid}
+                          value={prescription.prescriptions_name}
+                        >
+                          {prescription.prescriptions_name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 <div className="sm:col-span-2">

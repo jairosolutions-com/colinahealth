@@ -317,7 +317,7 @@ export default function Surgeries() {
               </thead>
               <tbody>
                 {patientSurgeries.map((surgery, index) => (
-                  <tr key={index} className="  even:bg-gray-50  border-b ">
+                  <tr key={index} className="group hover:bg-[#f4f4f4]  even:bg-gray-50  border-b ">
                     <th
                       scope="row"
                       className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
