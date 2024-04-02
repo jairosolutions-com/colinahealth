@@ -21,9 +21,13 @@
     "react-datepicker": "^6.6.0",
     "react-dom": "^18",
     "react-icons": "^5.0.1",
+
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7"
+
+    "react-time-picker": "^6.6.0"
+
   },
   "devDependencies": {
     "@types/chart.js": "^2.9.41",
