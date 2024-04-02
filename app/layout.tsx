@@ -1,6 +1,7 @@
 import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
 import { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,7 +24,8 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/icons/colinahealthlogo.png"/>
       </head>
-      <body className={manrope.className}>{children}</body>
+      <body className={manrope.className}>{children}
+      <Toaster /></body>
     </html>
   );
 }

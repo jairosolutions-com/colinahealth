@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
+
+  html,
 body,
 :root {
   height: 100%;
@@ -198,3 +199,4 @@ body,
   background-color: white;
   box-shadow: #000000;
 }
+
