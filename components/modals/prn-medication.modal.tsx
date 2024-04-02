@@ -230,7 +230,7 @@ export const PRNMedModal = ({
                   </div>
                 </div>
               </div>
-              <div className="mt-8 pb-3 flex grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+              <div className="mt-8 pb-3  grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
                 <button
                   onClick={() => isModalOpen(false)}
                   type="button"
