@@ -7,10 +7,9 @@ import React from "react";
 
 const Dashboard = () => {
   const router = useRouter();
-  if (!getAccessToken()) {
+  if(!getAccessToken()){
     onNavigate(router, "/login");
   }
-  console.log(getAccessToken(), "getAccessToken");
   return (
     <main className="overflow-x-hidden w-full h-full">
       <div className="absolute flex w-full h-full justify-center items-center -z-50">

@@ -1,9 +1,7 @@
 "use client";
 
 import { onNavigate } from "@/actions/navigation";
-import {
-  searchPatientList,
-} from "@/app/api/patients-api/patientList.api";
+import { searchPatientList } from "@/app/api/patients-api/patientList.api";
 import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
 import { useRouter } from "next/navigation";
@@ -14,6 +12,10 @@ import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 
 export default function PatientPage({ patient }: { patient: any }) {
+  const router = useRouter();
+  if(!getAccessToken()){
+    onNavigate(router, "/dashboard");
+  }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortBy, setSortBy] = useState("firstName");
@@ -31,11 +33,7 @@ export default function PatientPage({ patient }: { patient: any }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
-  const isEdit=false;
-  const router = useRouter();
-  if (!getAccessToken()) {
-    onNavigate(router, "/login");
-  }
+  const isEdit = false;
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -181,7 +179,6 @@ export default function PatientPage({ patient }: { patient: any }) {
   const onFailed = () => {
     setIsErrorOpen(true);
   };
-
 
   return (
     <div className="relative w-full mx-24 mt-24 z-1">

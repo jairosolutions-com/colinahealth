@@ -304,7 +304,7 @@ const Allergies = () => {
 
               <tbody>
                 {patientAllergies.map((allergy, index) => (
-                  <tr key={index} className="  even:bg-gray-50  border-b ">
+                  <tr key={index} className=" group even:bg-gray-50 hover:bg-[#f4f4f4]  border-b ">
                     <th
                       scope="row"
                       className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"

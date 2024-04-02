@@ -247,10 +247,48 @@ export default function vitalsigns() {
         {/* START OF TABLE */}
         <div>
           {patientVitalSign.length == 0 ? (
-            <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700">
-                No Vital Sign/s
-              </p>
+            <div>
+              <div className="border-1 min-w-[180vh] py-5  flex-col justify-center items-center">
+                <table className="w-full block text-left rtl:text-right">
+                  <thead className="">
+                    <tr className=" text-[#64748B] border-y  ">
+                      <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
+                        VITAL SIGN ID
+                      </th>
+                      <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
+                        DATE
+                      </th>
+                      <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                        TIME
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 truncate max-w-[300px]"
+                      >
+                        BLOOD PRESSURE (mmHg)
+                      </th>
+                      <th scope="col" className="px-6 py-3 w-[400px]">
+                        HEART RATE (bpm)
+                      </th>
+                      <th scope="col" className="px-6 py-3 w-[400px]">
+                        TEMPERATURE (°C)
+                      </th>
+                      <th scope="col" className="px-1 py-3 w-[400px]">
+                        RESPIRATORY (brths/min)
+                      </th>
+
+                      <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                </table>
+                <div className="py-5 flex justify-center items-center">
+                  <p className="text-xl font-semibold text-gray-700">
+                    No Vital Sign/s
+                  </p>
+                </div>
+              </div>
             </div>
           ) : (
             <table className="w-full text-left rtl:text-right">
@@ -266,7 +304,7 @@ export default function vitalsigns() {
                     TIME
                   </th>
                   <th scope="col" className="px-6 py-3 truncate max-w-[300px]">
-                    BLOOD PRESSURE
+                    BLOOD PRESSURE (mmHg)
                   </th>
                   <th scope="col" className="px-6 py-3 w-[400px]">
                     HEART RATE

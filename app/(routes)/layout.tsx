@@ -1,7 +1,6 @@
 'use client'
 import { Navbar } from "@/components/navbar";
 import { getAccessToken } from "../api/login-api/accessToken";
-import { onNavigate } from "@/actions/navigation";
 import { useRouter } from "next/navigation";
 
 export default function Layout({

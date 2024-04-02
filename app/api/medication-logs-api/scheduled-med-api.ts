@@ -124,3 +124,43 @@ export async function updateScheduledMedOfPatient(
     console.error((error as AxiosError).message);
   }
 }
+
+// for dropdown med list
+
+export async function fetchPrescriptionsOfPatient(
+  patientUuid: string,
+
+  router: any // Pass router instance as a parameter
+): Promise<any> {
+  try {
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("Access token not found in local storage");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    const response = await axios.post(
+      `${apiUrl}/prescriptions/sched-meds-name/${patientUuid}`,
+      {},
+      { headers }
+    );
+
+    console.log(response.data, "response.data");
+    const  prescriptionList  = response.data;
+    console.log(prescriptionList, "patient prescriptionList after search");
+    return prescriptionList;
+  } catch (error) {
+    if ((error as AxiosError).response?.status === 401) {
+      setAccessToken("");
+      onNavigate(router, "/login");
+      return Promise.reject(new Error("Unauthorized access"));
+    }
+    console.error(
+      "Error searching patient ScheduledMed:",
+      (error as AxiosError).message
+    );
+  }
+}
