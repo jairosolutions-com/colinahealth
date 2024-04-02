@@ -78,6 +78,7 @@ export const DemographicModal = ({
         email: "",
       });
       onSuccess();
+      isModalOpen(false)
     } catch (error: any) {
       if (error.message === "Patient already exist") {
         setErrorMessage("Patient already exist");
