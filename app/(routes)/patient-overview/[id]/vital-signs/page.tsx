@@ -119,7 +119,34 @@ export default function vitalsigns() {
       console.error("Invalid page number:", pageNumber);
     }
   };
+  const formatTime = (timeString: string) => {
+    // Split the time string into hours and minutes
+    const [hours, minutes] = timeString.split(":").map(Number);
 
+    // Format the hours part into 12-hour format
+    let formattedHours = hours % 12 || 12; // Convert 0 to 12
+    const ampm = hours < 12 ? "am" : "pm"; // Determine if it's AM or PM
+
+    // If minutes is undefined or null, set it to 0
+    const formattedMinutes =
+      minutes !== undefined ? minutes.toString().padStart(2, "0") : "00";
+
+    // Return the formatted time string
+    return `${formattedHours}:${formattedMinutes}${ampm}`;
+  };
+  const formatDate = (dateOfSurgery: string | number | Date) => {
+    // Create a new Date object from the provided createdAt date string
+    const date = new Date(dateOfSurgery);
+
+    // Get the month, day, and year
+    const month = date.toLocaleString("default", { month: "short" });
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    const formattedDate = `${month} ${day}, ${year}`;
+
+    return formattedDate;
+  };
   const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPageNumber(e.target.value);
   };
@@ -293,7 +320,7 @@ export default function vitalsigns() {
           ) : (
             <table className="w-full text-left rtl:text-right">
               <thead className="">
-                <tr className="uppercase text-[#64748B] border-y  ">
+                <tr className=" text-[#64748B] border-y  ">
                   <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
                     VITAL SIGN ID
                   </th>
@@ -307,13 +334,13 @@ export default function vitalsigns() {
                     BLOOD PRESSURE (mmHg)
                   </th>
                   <th scope="col" className="px-6 py-3 w-[400px]">
-                    HEART RATE
+                    HEART RATE (bpm)
                   </th>
                   <th scope="col" className="px-6 py-3 w-[400px]">
-                    TEMPERATURE
+                    TEMPERATURE (°C)
                   </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    RESPIRATORY
+                  <th scope="col" className="px-1 py-3 w-[400px]">
+                    RESPIRATORY (brths/min)
                   </th>
 
                   <th scope="col" className="px-[80px] py-3 w-[10px] ">
@@ -335,43 +362,22 @@ export default function vitalsigns() {
                       {vitalSign.vitalsign_uuid}
                     </th>
                     <td className="px-6 py-4">
-                      {new Date(
-                        vitalSign.vitalsign_createdAt
-                      ).toLocaleDateString()}
+                      {formatDate(vitalSign.vitalsign_date)}
                     </td>
                     <td className="px-6 py-4">
-                      {new Date(
-                        Date.UTC(
-                          new Date(
-                            vitalSign.vitalsign_createdAt
-                          ).getUTCFullYear(),
-                          new Date(vitalSign.vitalsign_createdAt).getUTCMonth(),
-                          new Date(vitalSign.vitalsign_createdAt).getUTCDate(),
-                          new Date(vitalSign.vitalsign_createdAt).getUTCHours(),
-                          new Date(
-                            vitalSign.vitalsign_createdAt
-                          ).getUTCMinutes(),
-                          new Date(
-                            vitalSign.vitalsign_createdAt
-                          ).getUTCSeconds()
-                        )
-                      ).toLocaleTimeString("en-US", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                      })}
+                      {formatTime(vitalSign.vitalsign_time)}
                     </td>
                     <td className="px-6 py-4">
-                      {vitalSign.vitalsign_bloodPressure}
+                      {vitalSign.vitalsign_bloodPressure}mmHg
                     </td>
                     <td className="px-6 py-4">
-                      {vitalSign.vitalsign_heartRate}
+                      {vitalSign.vitalsign_heartRate}bpm
                     </td>
                     <td className="px-6 py-4">
                       {vitalSign.vitalsign_temperature}°C
                     </td>
                     <td className="px-6 py-4">
-                      {vitalSign.vitalsign_respiratoryRate}{" "}
+                      {vitalSign.vitalsign_respiratoryRate}breaths/min
                     </td>
 
                     <td className="px-[70px] py-4">

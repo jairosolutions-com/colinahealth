@@ -23,7 +23,7 @@ export const VitalSignModal = ({
   label,
   isOpen,
   isModalOpen,
-  onSuccess
+  onSuccess,
 }: Modalprops) => {
   const params = useParams<{
     id: any;
@@ -35,6 +35,8 @@ export const VitalSignModal = ({
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
+    date: vitalSignData.vitalsign_date || "",
+    time: vitalSignData.vitalsign_time || "",
     bloodPressure: vitalSignData.vitalsign_bloodPressure || "",
     heartRate: vitalSignData.vitalsign_heartRate || "",
     temperature: vitalSignData.vitalsign_temperature || "",
@@ -71,6 +73,8 @@ export const VitalSignModal = ({
 
         // Reset the form data after successful submission
         setFormData({
+          date: "",
+          time: "",
           bloodPressure: "",
           heartRate: "",
           temperature: "",
@@ -91,7 +95,7 @@ export const VitalSignModal = ({
     <div
       className={`absolute inset-[-200px] bg-[#76898A99] flex items-center justify-center pb-[310px]`}
     >
-      <div className="max-w-[550px] bg-[#FFFFFF] rounded-md">
+      <div className="max-w-[550px] pb-20  bg-[#FFFFFF] rounded-md">
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <h2 className="p-title text-left text-[#071437] pl-9 mt-7">
             {isEdit ? "Update" : "Add"} Vital Sign
@@ -104,6 +108,44 @@ export const VitalSignModal = ({
           <div className="h-[600px] max-h-[250px] md:px-10 mt-5">
             <form className="" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="first-name"
+                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                  >
+                    DATE
+                  </label>
+                  <div className="mt-2.5">
+                    <input
+                      type="date"
+                      className=" w-[200px] h-10 block rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      placeholder="Input medication"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label
+                    htmlFor="first-name"
+                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                  >
+                    TIME
+                  </label>
+                  <div className="mt-2.5">
+                    <input
+                      type="time"
+                      className=" w-[200px] h-10 block rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      placeholder="Input medication"
+                      name="time"
+                      value={formData.time}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
                 <div>
                   <label
                     htmlFor="first-name"
