@@ -181,7 +181,6 @@ export default function Laboratoryresults() {
     setIsSuccessOpen(true);
     setIsEdit(false);
     isModalOpen(false);
-
   };
 
   return (
@@ -267,28 +266,28 @@ export default function Laboratoryresults() {
                   DATE
                 </th>
                 <th scope="col" className="px-0 py-3 w-[200px]">
-                  HEMOGLOBIN A1c
+                  HEMOGLOBIN A1c (%)
                 </th>
                 <th
                   scope="col"
                   className="truncate max-w-[286px] px-3 py-3 w-[200px]"
                 >
-                  FASTING BLOOD GLUCOSE
+                  FASTING BLOOD GLUCOSE (mg/dL)
                 </th>
                 <th
                   scope="col"
                   className="truncate max-w-[286px] px-6  py-3 w-[200px]"
                 >
-                  TOTAL CHOLESTEROL
+                  TOTAL CHOLESTEROL (mg/dL)
                 </th>
                 <th scope="col" className="px-6 py-3 w-[200px]">
-                  LDL-C
+                  LDL-C (mg/dL)
                 </th>
                 <th scope="col" className="px-6 py-3 w-[200px]">
-                  HDL-C
+                  HDL-C (mg/dL)
                 </th>
                 <th scope="col" className="px-6  py-3 w-[200px]">
-                  TRIGLYCERIDES
+                  TRIGLYCERIDES (mg/dL)
                 </th>
                 <th scope="col" className="pl-[80px] py-3 w-[10px] ">
                   ACTION
