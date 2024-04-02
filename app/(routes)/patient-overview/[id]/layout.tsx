@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { Navbar } from "@/components/navbar";
 import { useParams, useRouter } from "next/navigation";
@@ -7,6 +7,7 @@ import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api
 import { usePathname } from "next/navigation";
 import Loading from "./loading";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
+import { toast } from "sonner";
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
@@ -36,7 +37,7 @@ export default function PatientOverviewLayout({
   const [isLabRes, setIsLabRes] = useState(false);
   const [isAppointment, setIsAppointment] = useState(false);
   const [isNotes, setIsNotes] = useState(false);
-  const [loads, setLoads] = useState(0);
+  const inputRef = useRef<HTMLSpanElement>(null);
 
   console.log(getAccessToken, "getAccessToken");
   const tabs = [
@@ -71,10 +72,11 @@ export default function PatientOverviewLayout({
   ];
 
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
+    setIsLoading(true);
     onNavigate(router, url);
     setActiveTab(-1);
     setDetailsClicked(true);
-    setIsLoading(true);
+    
   };
 
   // const handleTabClick = (index: number, url: string) => {
@@ -83,10 +85,12 @@ export default function PatientOverviewLayout({
   //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
   // };
   const handleTabClick = (url: string, tabIndex: number) => {
+    setIsLoading(true);
     onNavigate(router, url);
     setActiveTab(tabIndex);
     setDetailsClicked(false);
-    setIsLoading(true);
+    console.log(url, "url")
+    
   };
   console.log(pathname, "pathname");
   useEffect(() => {
@@ -152,6 +156,19 @@ export default function PatientOverviewLayout({
   const pathParts = pathname.split("/");
   const tabUrl = pathParts[pathParts.length - 1];
 
+  const handleCopyClick = () => {
+    if (inputRef.current) {
+      toast.success("Patient ID copied to clipboard")
+      const range = document.createRange();
+      range.selectNodeContents(inputRef.current);
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+      document.execCommand("copy");
+      selection?.removeAllRanges();
+    }
+  };
+
   return (
     <div className="flex flex-col w-full  px-4 lg:px-28 mt-[100px]">
       <div className="flex flex-col gap-[3px]">
@@ -180,7 +197,7 @@ export default function PatientOverviewLayout({
                 <div className=" w-full justify-between text-2xl font-semibold flex">
                   <h1>
                     {" "}
-                    {patientData[0]?.firstName} {patientData[0]?.lastName}
+                    {patientData[0]?.firstName} {patientData[0]?.middleName} {patientData[0]?.lastName}
                   </h1>
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
@@ -221,9 +238,14 @@ export default function PatientOverviewLayout({
                       </div>
                       <div className="flex">
                         <p className="flex items-center">
-                          ID: {patientData[0]?.uuid}
+                          ID: <span ref={inputRef}>{patientData[0]?.uuid}</span>
                         </p>
-                        <img src="/imgs/id.svg" alt="copy" />
+                        <img
+                          src="/imgs/id.svg"
+                          alt="copy"
+                          className="cursor-pointer"
+                          onClick={handleCopyClick}
+                        />
                       </div>
                     </div>
                   </div>
