@@ -33,7 +33,6 @@ export const Login = () => {
         onNavigate(router, "/dashboard");
       } else {
         // Handle invalid login
-        setEmail("");
         setPassword("");
         setIsInvalid(true);
         setTimeout(() => {

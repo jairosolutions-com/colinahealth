@@ -298,7 +298,7 @@ export default function vitalsigns() {
                         HEART RATE (bpm)
                       </th>
                       <th scope="col" className="px-6 py-3 w-[400px]">
-                        TEMPERATURE (°C)
+                        TEMPERATURE (°F)
                       </th>
                       <th scope="col" className="px-1 py-3 w-[400px]">
                         RESPIRATORY (brths/min)
@@ -337,7 +337,7 @@ export default function vitalsigns() {
                     HEART RATE (bpm)
                   </th>
                   <th scope="col" className="px-6 py-3 w-[400px]">
-                    TEMPERATURE (°C)
+                    TEMPERATURE (°F)
                   </th>
                   <th scope="col" className="px-1 py-3 w-[400px]">
                     RESPIRATORY (brths/min)
@@ -374,7 +374,7 @@ export default function vitalsigns() {
                       {vitalSign.vitalsign_heartRate}bpm
                     </td>
                     <td className="px-6 py-4">
-                      {vitalSign.vitalsign_temperature}°C
+                      {vitalSign.vitalsign_temperature}°F
                     </td>
                     <td className="px-6 py-4">
                       {vitalSign.vitalsign_respiratoryRate}breaths/min

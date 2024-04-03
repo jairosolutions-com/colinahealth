@@ -181,7 +181,6 @@ export default function Laboratoryresults() {
     setIsSuccessOpen(true);
     setIsEdit(false);
     isModalOpen(false);
-
   };
 
   return (
@@ -257,107 +256,147 @@ export default function Laboratoryresults() {
 
         {/* START OF TABLE */}
         <div>
-          <table className="w-full text-left rtl:text-right">
-            <thead className="">
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[200px] h-[70px]">
-                  LAB RESULT ID
-                </th>
-                <th scope="col" className="px-6 py-3 w-[200px] h-[70px]">
-                  DATE
-                </th>
-                <th scope="col" className="px-0 py-3 w-[200px]">
-                  HEMOGLOBIN A1c
-                </th>
-                <th
-                  scope="col"
-                  className="truncate max-w-[286px] px-3 py-3 w-[200px]"
-                >
-                  FASTING BLOOD GLUCOSE
-                </th>
-                <th
-                  scope="col"
-                  className="truncate max-w-[286px] px-6  py-3 w-[200px]"
-                >
-                  TOTAL CHOLESTEROL
-                </th>
-                <th scope="col" className="px-6 py-3 w-[200px]">
-                  LDL-C
-                </th>
-                <th scope="col" className="px-6 py-3 w-[200px]">
-                  HDL-C
-                </th>
-                <th scope="col" className="px-6  py-3 w-[200px]">
-                  TRIGLYCERIDES
-                </th>
-                <th scope="col" className="pl-[80px] py-3 w-[10px] ">
-                  ACTION
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {patientLabResults.length === 0 && (
-                <tr>
-                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-xl font-semibold text-gray-700">
-                      No Lab Results
-                    </p>
-                  </td>
+          {patientLabResults.length === 0 ? (
+            <div>
+              <table className="w-full text-left rtl:text-right">
+                <thead className="">
+                  <tr className=" text-[#64748B] border-y  ">
+                    <th scope="col" className="px-6 py-3 w-[200px] h-[70px]">
+                      LAB RESULT ID
+                    </th>
+                    <th scope="col" className="px-6 py-3 w-[200px] h-[70px]">
+                      DATE
+                    </th>
+                    <th scope="col" className="px-0 py-3 w-[200px]">
+                      HEMOGLOBIN A1c (%)
+                    </th>
+                    <th
+                      scope="col"
+                      className="truncate max-w-[286px] px-3 py-3 w-[200px]"
+                    >
+                      FASTING BLOOD GLUCOSE (mg/dL)
+                    </th>
+                    <th
+                      scope="col"
+                      className="truncate max-w-[286px] px-6  py-3 w-[200px]"
+                    >
+                      TOTAL CHOLESTEROL (mg/dL)
+                    </th>
+                    <th scope="col" className="px-6 py-3 w-[200px]">
+                      LDL-C (mg/dL)
+                    </th>
+                    <th scope="col" className="px-6 py-3 w-[200px]">
+                      HDL-C (mg/dL)
+                    </th>
+                    <th scope="col" className="px-6  py-3 w-[200px]">
+                      TRIGLYCERIDES (mg/dL)
+                    </th>
+                    <th scope="col" className="pl-[80px] py-3 w-[10px] ">
+                      ACTION
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+              <div className="py-5 flex justify-center items-center">
+                <p className="text-xl font-semibold text-gray-700">
+                  No Lab Result/s
+                </p>
+              </div>
+            </div>
+          ) : (
+            <table className="w-full text-left rtl:text-right">
+              <thead className="">
+                <tr className=" text-[#64748B] border-y  ">
+                  <th scope="col" className="px-6 py-3 w-[200px] h-[70px]">
+                    LAB RESULT ID
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[200px] h-[70px]">
+                    DATE
+                  </th>
+                  <th scope="col" className="px-0 py-3 w-[200px]">
+                    HEMOGLOBIN A1c (%)
+                  </th>
+                  <th
+                    scope="col"
+                    className="truncate max-w-[286px] px-3 py-3 w-[200px]"
+                  >
+                    FASTING BLOOD GLUCOSE (mg/dL)
+                  </th>
+                  <th
+                    scope="col"
+                    className="truncate max-w-[286px] px-6  py-3 w-[200px]"
+                  >
+                    TOTAL CHOLESTEROL (mg/dL)
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[200px]">
+                    LDL-C (mg/dL)
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[200px]">
+                    HDL-C (mg/dL)
+                  </th>
+                  <th scope="col" className="px-6  py-3 w-[200px]">
+                    TRIGLYCERIDES (mg/dL)
+                  </th>
+                  <th scope="col" className="pl-[80px] py-3 w-[10px] ">
+                    ACTION
+                  </th>
                 </tr>
-              )}
-              {patientLabResults.length > 0 && (
-                <>
-                  {patientLabResults.map((labResult, index) => (
-                    <tr key={index} className="  even:bg-gray-50  border-b ">
-                      <th
-                        scope="row"
-                        className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                      >
-                        {labResult.labResults_uuid}
-                      </th>
-                      <th
-                        scope="row"
-                        className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                      >
-                        {new Date(
-                          labResult.labResults_createdAt
-                        ).toLocaleDateString()}
-                      </th>
-                      <td className="px-0 py-4">
-                        {labResult.labResults_hemoglobinA1c}%
-                      </td>
-                      <td className="truncate max-w-[286px] px-3 py-4 tb-med">
-                        {labResult.labResults_fastingBloodGlucose}
-                      </td>
-                      <td className="truncate max-w-[286px] px-6 py-4">
-                        {labResult.labResults_totalCholesterol}
-                      </td>
-                      <td className="truncate max-w-[286px] px-6 py-4">
-                        {labResult.labResults_ldlCholesterol}
-                      </td>
-                      <td className="truncate max-w-[286px] px-6 py-4">
-                        {labResult.labResults_hdlCholesterol}
-                      </td>
-                      <td className="px-6 py-4">
-                        {labResult.labResults_triglycerides}
-                      </td>
-                      <td className="px-[70px] py-4">
-                        <p
-                          onClick={() => {
-                            isModalOpen(true);
-                            setIsEdit(true);
-                            setLabResultData(labResult);
-                          }}
+              </thead>
+              <tbody>
+                {patientLabResults.length > 0 && (
+                  <>
+                    {patientLabResults.map((labResult, index) => (
+                      <tr key={index} className="  even:bg-gray-50  border-b ">
+                        <th
+                          scope="row"
+                          className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                         >
-                          <Edit></Edit>
-                        </p>
-                      </td>
-                    </tr>
-                  ))}
-                </>
-              )}
-            </tbody>
-          </table>
+                          {labResult.labResults_uuid}
+                        </th>
+                        <th
+                          scope="row"
+                          className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                        >
+                          {new Date(
+                            labResult.labResults_createdAt
+                          ).toLocaleDateString()}
+                        </th>
+                        <td className="px-0 py-4">
+                          {labResult.labResults_hemoglobinA1c}%
+                        </td>
+                        <td className="truncate max-w-[286px] px-3 py-4 tb-med">
+                          {labResult.labResults_fastingBloodGlucose}mg/dL
+                        </td>
+                        <td className="truncate max-w-[286px] px-6 py-4">
+                          {labResult.labResults_totalCholesterol}mg/dL
+                        </td>
+                        <td className="truncate max-w-[286px] px-6 py-4">
+                          {labResult.labResults_ldlCholesterol}mg/dL
+                        </td>
+                        <td className="truncate max-w-[286px] px-6 py-4">
+                          {labResult.labResults_hdlCholesterol}mg/dL
+                        </td>
+                        <td className="px-6 py-4">
+                          {labResult.labResults_triglycerides}mg/dL
+                        </td>
+                        <td className="px-[70px] py-4">
+                          <p
+                            onClick={() => {
+                              isModalOpen(true);
+                              setIsEdit(true);
+                              setLabResultData(labResult);
+                            }}
+                          >
+                            <Edit></Edit>
+                          </p>
+                        </td>
+                      </tr>
+                    ))}
+                  </>
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
         {/* END OF TABLE */}
       </div>
