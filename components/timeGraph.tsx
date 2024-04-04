@@ -103,14 +103,33 @@ const TimeGraph = ({
         {colData.map((col) => (
           <div key={col.name} className="text-lg text-center w-full">
             {col.name}
-
+            {patientWithMedicationLogsToday.map((data: any) => {
+              return data.medicationlogs.map((medLog: any, index: number) => {
+                const medicationLogsTime = parseInt(
+                  medLog.medicationLogsTime.replace(":", "")
+                );
+                const colTime = parseInt(col.time);
+                if (
+                  colTime <= medicationLogsTime &&
+                  colTime + 99 >= medicationLogsTime
+                ) {
+                  return (
+                    <div key={`${data.name}_${index}`} className="">
+                      {medLog.medicationLogsName}
+                    </div>
+                  );
+                } else {
+                  return null;
+                }
+              });
+            })}
             <div className="text-red-700">
               {patientList.map((data: any) => {
                 return data.prescriptions.map(
                   (prescription: any, index: number) => {
                     // Check frequency
-                    if (prescription.frequency === "Once Daily") {
-                      if (col.time === "0800") {
+                    if(prescription.frequency === "Once Daily"){
+                      if(col.time ==="0800"){
                         return (
                           <React.Fragment key={`${data.name}_${index}`}>
                             {col.time === "0800" && (
@@ -119,7 +138,8 @@ const TimeGraph = ({
                           </React.Fragment>
                         );
                       }
-                    } else if (prescription.frequency === "Twice Daily") {
+                    }
+                    else if (prescription.frequency === "Twice Daily") {
                       if (prescription.interval === "1") {
                         if (col.time === "0800" || col.time === "0900") {
                           return (
@@ -278,7 +298,7 @@ const TimeGraph = ({
                         }
                       }
                     }
-
+                    
                     // Add more conditions for other frequencies if needed
                     return null; // Return null for prescriptions not meeting the conditions
                   }
