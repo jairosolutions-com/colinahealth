@@ -2,20 +2,24 @@
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 
-const TimeGraph = () => {
+const TimeGraph = ({
+  patientWithMedicationLogsToday,
+  patientList,
+}: {
+  patientWithMedicationLogsToday: any;
+  patientList: any;
+}) => {
   const [currentTime, setCurrentTime] = useState(moment().format("HHmm"));
   const lineRef = useRef<HTMLDivElement>(null);
 
-
   useEffect(() => {
-    console.log("Updating currentTime:", currentTime);
     const intervalId = setInterval(() => {
       setCurrentTime(moment().format("HHmm"));
     }, 60000); // Update every minute
 
     return () => clearInterval(intervalId);
   }, [currentTime]);
-
+  console.log("Updating currentTime:", currentTime);
   const colData = [];
   for (let i = 0; i < 24; i++) {
     const hour = i.toString().padStart(2, "0");
@@ -25,12 +29,8 @@ const TimeGraph = () => {
       time: moment().set("hour", i).set("minute", 0).format("HHmm"),
     });
   }
-  const specificData = [
-    { name: "Data 1", startTime: "1400", endTime: "1499" },
-    { name: "Data 2", startTime: "0900", endTime: "0999" },
-    { name: "Data 3", startTime: "1400", endTime: "1499" },
-    // Add more data as needed
-  ];
+  console.log(patientWithMedicationLogsToday, "timegraph");
+  console.log(patientList, "patientlist");
 
   const currentDate = new Date();
   let hours = currentDate.getHours();
@@ -53,21 +53,25 @@ const TimeGraph = () => {
     const [hoursStr, minutesStr] = time.split(":");
 
     // Convert hours and minutes to numbers
-    const hours = parseInt(hoursStr);
+    let hours = parseInt(hoursStr);
     const minutes = parseInt(minutesStr);
 
-    // Adjust hours for PM
-    const adjustedHours = period.toUpperCase() === "PM" ? hours + 12 : hours;
+    // Adjust hours for PM, but not for 12:00 PM
+    if (period.toUpperCase() === "PM" && hours !== 12) {
+      hours += 12;
+    }
 
     // Calculate the total time in "hundreds"
-    const totalTimeInMinutes = adjustedHours * 60 + minutes;
+    const totalTimeInMinutes = hours * 60 + minutes;
     const totalTimeInHundreds = Math.round((totalTimeInMinutes * 100) / 60);
 
     // Adjust for 2400 if the time is 12:00 AM
     return totalTimeInHundreds === 0 ? 2400 : totalTimeInHundreds;
   }
+
+  console.log(timeStrings, "timeStrings");
   const hundredsTime = convertTimeToHundreds(timeStrings).toString();
-  console.log(hundredsTime); // Output: 1650
+  console.log(hundredsTime);
   const linePosition = {
     left: `${(parseInt(hundredsTime.substring(0, 10)) / 2400) * 100}%`,
   };
@@ -81,7 +85,7 @@ const TimeGraph = () => {
       lineRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
-        inline: "center"
+        inline: "center",
       });
     }
   }, [linePosition]);
@@ -99,14 +103,188 @@ const TimeGraph = () => {
         {colData.map((col) => (
           <div key={col.name} className="text-lg text-center w-full">
             {col.name}
-            {specificData.map((data) =>
-              parseInt(col.time) >= parseInt(data.startTime) &&
-              parseInt(col.time) <= parseInt(data.endTime) ? (
-                <div key={data.name} className="">
-                  {data.name}
-                </div>
-              ) : null
-            )}
+
+            <div className="text-red-700">
+              {patientList.map((data: any) => {
+                return data.prescriptions.map(
+                  (prescription: any, index: number) => {
+                    // Check frequency
+                    if (prescription.frequency === "Once Daily") {
+                      if (col.time === "0800") {
+                        return (
+                          <React.Fragment key={`${data.name}_${index}`}>
+                            {col.time === "0800" && (
+                              <div className="">{prescription.name}</div>
+                            )}
+                          </React.Fragment>
+                        );
+                      }
+                    } else if (prescription.frequency === "Twice Daily") {
+                      if (prescription.interval === "1") {
+                        if (col.time === "0800" || col.time === "0900") {
+                          return (
+                            <React.Fragment key={`${data.name}_${index}`}>
+                              {col.time === "0800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                              {col.time === "0900" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                            </React.Fragment>
+                          );
+                        }
+                      } else if (prescription.interval === "2") {
+                        if (col.time === "0800" || col.time === "1000") {
+                          return (
+                            <React.Fragment key={`${data.name}_${index}`}>
+                              {col.time === "0800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                              {col.time === "1000" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                            </React.Fragment>
+                          );
+                        }
+                      } else if (prescription.interval === "3") {
+                        if (col.time === "0800" || col.time === "1100") {
+                          return (
+                            <React.Fragment key={`${data.name}_${index}`}>
+                              {col.time === "0800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                              {col.time === "1100" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                            </React.Fragment>
+                          );
+                        }
+                      } else if (prescription.interval === "4") {
+                        if (col.time === "0800" || col.time === "1200") {
+                          return (
+                            <React.Fragment key={`${data.name}_${index}`}>
+                              {col.time === "0800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                              {col.time === "1200" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                            </React.Fragment>
+                          );
+                        }
+                      } else if (prescription.interval === "5") {
+                        if (col.time === "0800" || col.time === "1300") {
+                          return (
+                            <React.Fragment key={`${data.name}_${index}`}>
+                              {col.time === "0800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                              {col.time === "1300" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                            </React.Fragment>
+                          );
+                        }
+                      } else if (prescription.interval === "6") {
+                        if (col.time === "0800" || col.time === "1400") {
+                          return (
+                            <React.Fragment key={`${data.name}_${index}`}>
+                              {col.time === "0800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                              {col.time === "1400" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                            </React.Fragment>
+                          );
+                        }
+                      } else if (prescription.interval === "7") {
+                        if (col.time === "0800" || col.time === "1500") {
+                          return (
+                            <React.Fragment key={`${data.name}_${index}`}>
+                              {col.time === "0800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                              {col.time === "1500" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                            </React.Fragment>
+                          );
+                        }
+                      } else if (prescription.interval === "8") {
+                        if (col.time === "0800" || col.time === "1600") {
+                          return (
+                            <React.Fragment key={`${data.name}_${index}`}>
+                              {col.time === "0800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                              {col.time === "1600" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                            </React.Fragment>
+                          );
+                        }
+                      } else if (prescription.interval === "9") {
+                        if (col.time === "0800" || col.time === "1700") {
+                          return (
+                            <React.Fragment key={`${data.name}_${index}`}>
+                              {col.time === "0800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                              {col.time === "1700" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                            </React.Fragment>
+                          );
+                        }
+                      } else if (prescription.interval === "10") {
+                        if (col.time === "0800" || col.time === "1800") {
+                          return (
+                            <React.Fragment key={`${data.name}_${index}`}>
+                              {col.time === "0800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                              {col.time === "1800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                            </React.Fragment>
+                          );
+                        }
+                      } else if (prescription.interval === "11") {
+                        if (col.time === "0800" || col.time === "1900") {
+                          return (
+                            <React.Fragment key={`${data.name}_${index}`}>
+                              {col.time === "0800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                              {col.time === "1900" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                            </React.Fragment>
+                          );
+                        }
+                      } else if (prescription.interval === "12") {
+                        if (col.time === "0800" || col.time === "2000") {
+                          return (
+                            <React.Fragment key={`${data.name}_${index}`}>
+                              {col.time === "0800" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                              {col.time === "2000" && (
+                                <div className="">{prescription.name}</div>
+                              )}
+                            </React.Fragment>
+                          );
+                        }
+                      }
+                    }
+
+                    // Add more conditions for other frequencies if needed
+                    return null; // Return null for prescriptions not meeting the conditions
+                  }
+                );
+              })}
+            </div>
           </div>
         ))}
       </div>

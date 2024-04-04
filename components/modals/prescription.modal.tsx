@@ -94,7 +94,7 @@ console.log(label,'label')
       }
     } catch (error:any) {
       if(error.message === "Request failed with status code 409"){
-        setErrorMessage("Allergy already exist")
+        setErrorMessage("Prescription already exist")
         onFailed()
         isModalOpen(false);
         console.log("conflict error")
