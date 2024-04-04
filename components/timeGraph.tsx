@@ -1,4 +1,5 @@
 "use client";
+import { merge } from "chart.js/helpers";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -20,7 +21,7 @@ const TimeGraph = ({
     return () => clearInterval(intervalId);
   }, [currentTime]);
   console.log("Updating currentTime:", currentTime);
-  const colData = [];
+  const colData: { name: string; time: string }[] = [];
   for (let i = 0; i < 24; i++) {
     const hour = i.toString().padStart(2, "0");
     const timeLabel = hour + "00";
@@ -90,223 +91,235 @@ const TimeGraph = ({
     }
   }, [linePosition]);
 
+  const mergedPatientList = patientList.map((patient: any) => {
+    // Check if patient has medication logs available
+    const medicationLogs = patientWithMedicationLogsToday.find(
+      (p: any) => p.id === patient.id // Assuming there's an ID field for comparison
+    );
+
+    // If medication logs exist for this patient, replace the patient data with medication log data
+    if (medicationLogs) {
+      return {
+        ...patient,
+        prescriptions: medicationLogs.prescriptions,
+      };
+    } else {
+      return patient; // If no medication logs, return original patient data
+    }
+  });
+  console.log(mergedPatientList, "mergedPatientList");
   return (
-    <div className="w-[300vh] relative ">
-      <div className="relative h-full">
+    <div className="overflow-x-auto w-[300vh] h-full">
+      <table className="w-full ">
+        <thead>
+          <tr className="">
+            {colData.map((col, index) => (
+              <th
+                key={col.name}
+                className={`text-lg text-center border-b ${
+                  index !== colData.length - 1
+                    ? "border-r border-solid border-black border-b"
+                    : ""
+                }`}
+              >
+                {col.name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {patientList.map(
+            (data: { prescriptions: any[] }, dataIndex: number) => (
+              <tr key={`row_${dataIndex}`} className="truncate">
+                {colData.map((col, colIndex) => {
+                  const prescriptions = data.prescriptions.filter(
+                    (prescription) => {
+                      if (prescription.frequency === "Once Daily") {
+                        return col.time === "0800";
+                      } else if (prescription.frequency === "Twice Daily") {
+                        if (prescription.interval === "1") {
+                          return col.time === "0800" || col.time === "0900";
+                        } else if (prescription.interval === "2") {
+                          return col.time === "0800" || col.time === "1000";
+                        } else if (prescription.interval === "3") {
+                          return col.time === "0800" || col.time === "1100";
+                        } else if (prescription.interval === "4") {
+                          return col.time === "0800" || col.time === "1200";
+                        } else if (prescription.interval === "5") {
+                          return col.time === "0800" || col.time === "1300";
+                        } else if (prescription.interval === "6") {
+                          return col.time === "0800" || col.time === "1400";
+                        } else if (prescription.interval === "7") {
+                          return col.time === "0800" || col.time === "1500";
+                        } else if (prescription.interval === "8") {
+                          return col.time === "0800" || col.time === "1600";
+                        } else if (prescription.interval === "9") {
+                          return col.time === "0800" || col.time === "1700";
+                        } else if (prescription.interval === "10") {
+                          return col.time === "0800" || col.time === "1800";
+                        } else if (prescription.interval === "11") {
+                          return col.time === "0800" || col.time === "1900";
+                        } else if (prescription.interval === "12") {
+                          return col.time === "0800" || col.time === "2000";
+                        }
+                      } else if (prescription.frequency === "Thrice Daily") {
+                        if (prescription.interval === "1") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "0900" ||
+                            col.time === "1000"
+                          );
+                        } else if (prescription.interval === "2") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1000" ||
+                            col.time === "1200"
+                          );
+                        } else if (prescription.interval === "3") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1100" ||
+                            col.time === "1400"
+                          );
+                        } else if (prescription.interval === "4") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1200" ||
+                            col.time === "1600"
+                          );
+                        } else if (prescription.interval === "5") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1300" ||
+                            col.time === "1800"
+                          );
+                        } else if (prescription.interval === "6") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1400" ||
+                            col.time === "2000"
+                          );
+                        } else if (prescription.interval === "7") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1500" ||
+                            col.time === "2200"
+                          );
+                        } else if (prescription.interval === "8") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1600" ||
+                            col.time === "0000"
+                          );
+                        }
+                      } else if (
+                        prescription.frequency === "Four Times Daily"
+                      ) {
+                        if (prescription.interval === "1") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "0900" ||
+                            col.time === "1000" ||
+                            col.time === "1100"
+                          );
+                        } else if (prescription.interval === "2") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1000" ||
+                            col.time === "1200" ||
+                            col.time === "1400"
+                          );
+                        } else if (prescription.interval === "3") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1100" ||
+                            col.time === "1400" ||
+                            col.time === "1700"
+                          );
+                        } else if (prescription.interval === "4") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1200" ||
+                            col.time === "1600" ||
+                            col.time === "2000"
+                          );
+                        } else if (prescription.interval === "5") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1300" ||
+                            col.time === "1800" ||
+                            col.time === "2300"
+                          );
+                        }
+                      } else if (
+                        prescription.frequency === "Five Times Daily"
+                      ) {
+                        if (prescription.interval === "1") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "0900" ||
+                            col.time === "1000" ||
+                            col.time === "1100" ||
+                            col.time === "1200"
+                          );
+                        } else if (prescription.interval === "2") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1000" ||
+                            col.time === "1200" ||
+                            col.time === "1400" ||
+                            col.time === "1600"
+                          );
+                        } else if (prescription.interval === "3") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1100" ||
+                            col.time === "1400" ||
+                            col.time === "1700" ||
+                            col.time === "2000"
+                          );
+                        } else if (prescription.interval === "4") {
+                          return (
+                            col.time === "0800" ||
+                            col.time === "1200" ||
+                            col.time === "1600" ||
+                            col.time === "2000" ||
+                            col.time === "2400"
+                          );
+                        }
+                      }
+                      return false;
+                    }
+                  );
+
+                  return (
+                    <td
+                      key={`cell_${dataIndex}_${colIndex}`}
+                      className="text-lg text-center whitespace-nowrap overflow-hidden border-r border-solid border-black"
+                      style={{ width: "100px" }} // set a fixed width, for example 100px
+                    >
+                      {prescriptions.map((prescription, index) => (
+                        <div
+                          key={`${dataIndex}_${colIndex}_${index}`}
+                          className=" border-solid border-black"
+                        >
+                          {prescription.name}
+                        </div>
+                      ))}
+                    </td>
+                  );
+                })}
+              </tr>
+            )
+          )}
+        </tbody>
+      </table>
+      <div className="relative">
         <div
           ref={lineRef}
-          className="absolute  w-px h-screen bg-red-500 mt-[-5rem]"
+          className="absolute w-px h-screen bg-red-500 mt-[-12rem]"
           style={linePosition}
         ></div>
-      </div>
-      <div className="flex w-full justify-evenly divide-x divide-solid divide-black ">
-        {colData.map((col) => (
-          <div key={col.name} className="text-lg text-center w-full">
-            {col.name}
-            {patientWithMedicationLogsToday.map((data: any) => {
-              return data.medicationlogs.map((medLog: any, index: number) => {
-                const medicationLogsTime = parseInt(
-                  medLog.medicationLogsTime.replace(":", "")
-                );
-                const colTime = parseInt(col.time);
-                if (
-                  colTime <= medicationLogsTime &&
-                  colTime + 99 >= medicationLogsTime
-                ) {
-                  return (
-                    <div key={`${data.name}_${index}`} className="">
-                      {medLog.medicationLogsName}
-                    </div>
-                  );
-                } else {
-                  return null;
-                }
-              });
-            })}
-            <div className="text-red-700">
-              {patientList.map((data: any) => {
-                return data.prescriptions.map(
-                  (prescription: any, index: number) => {
-                    // Check frequency
-                    if(prescription.frequency === "Once Daily"){
-                      if(col.time ==="0800"){
-                        return (
-                          <React.Fragment key={`${data.name}_${index}`}>
-                            {col.time === "0800" && (
-                              <div className="">{prescription.name}</div>
-                            )}
-                          </React.Fragment>
-                        );
-                      }
-                    }
-                    else if (prescription.frequency === "Twice Daily") {
-                      if (prescription.interval === "1") {
-                        if (col.time === "0800" || col.time === "0900") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "0900" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "2") {
-                        if (col.time === "0800" || col.time === "1000") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1000" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "3") {
-                        if (col.time === "0800" || col.time === "1100") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1100" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "4") {
-                        if (col.time === "0800" || col.time === "1200") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1200" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "5") {
-                        if (col.time === "0800" || col.time === "1300") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1300" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "6") {
-                        if (col.time === "0800" || col.time === "1400") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1400" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "7") {
-                        if (col.time === "0800" || col.time === "1500") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1500" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "8") {
-                        if (col.time === "0800" || col.time === "1600") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1600" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "9") {
-                        if (col.time === "0800" || col.time === "1700") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1700" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "10") {
-                        if (col.time === "0800" || col.time === "1800") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "11") {
-                        if (col.time === "0800" || col.time === "1900") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1900" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "12") {
-                        if (col.time === "0800" || col.time === "2000") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "2000" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      }
-                    }
-                    
-                    // Add more conditions for other frequencies if needed
-                    return null; // Return null for prescriptions not meeting the conditions
-                  }
-                );
-              })}
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );
