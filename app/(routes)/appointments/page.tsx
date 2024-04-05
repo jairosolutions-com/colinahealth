@@ -16,7 +16,8 @@ export default function AppointmentsPage() {
 
   const patientWithMedicationLogsToday = patientList?.filter((patient) => {
     // Assuming medicationlogs is an array and you want to check if any of the logs were created today
-    return patient.medicationlogs.some((log: any) => { // Explicitly define the type of 'log' as 'any'
+    return patient.medicationlogs.some((log: any) => {
+      // Explicitly define the type of 'log' as 'any'
       // Check if the createdAt of any medication log is today's date
       const createdAtDate = new Date(log.createdAt);
       const today = new Date();
@@ -38,22 +39,25 @@ export default function AppointmentsPage() {
 
     fetchData();
   }, []);
-  console.log(new Date().toISOString(), "DATE")
+  console.log(new Date().toISOString(), "DATE");
   console.log(patientList, " PATIENT LIST");
   console.log(patientWithMedicationLogsToday, "patientWithMedicationLogsToday");
 
   return (
-    <div className="App w-full h-full pt-20 overflow-x-auto">
+    <div className="App w-full h-full pt-20 overflow-y-auto">
       <div className="w-full h-full flex">
-        <div className="w-1/4 h-full">
-          {/* Both components within the same scrolling container */}
+        <div className="w-1/4 h-full sticky top-0 pt-4">
+          {/* Making PatientCard sticky */}
           <PatientCard />
         </div>
         <p className="h-full ring-1 ring-black mr-2 -mt-2"></p>
-        <div className="w-full overflow-x-auto">
-          {/* Only the TimeGraph component has vertical scrolling */}
-          <div className=" h-full">
-            <TimeGraph patientWithMedicationLogsToday={patientWithMedicationLogsToday} patientList={patientList}/>
+        <div className="w-full h-full overflow-x-auto">
+          {/* Ensuring TimeGraph doesn't have vertical scrolling */}
+          <div className="h-full overflow-y-hidden">
+            <TimeGraph
+              patientWithMedicationLogsToday={patientWithMedicationLogsToday}
+              patientList={patientList}
+            />
           </div>
         </div>
       </div>
