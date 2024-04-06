@@ -2,9 +2,11 @@
 import { onNavigate } from "@/actions/navigation";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { fetchPatientPrescriptions } from "@/app/api/patients-api/patientTimeGraph";
+import { PRNMedModal } from "@/components/modals/prn-medication.modal";
 import PatientCard from "@/components/patientCard";
 import TimeGraph from "@/components/timeGraph";
-import { useRouter } from "next/navigation";
+import { formUrlQuery } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function AppointmentsPage() {
@@ -18,6 +20,15 @@ export default function AppointmentsPage() {
   const [pageNumber, setPageNumber] = useState("");
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalPrescriptions, setTotalPrescriptions] = useState<number>(1);
+  const [patientUuid, setPatientUuid] = useState<string>("");
+  const [PRNData, setPRNData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [term, setTerm] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
 
   const goToPreviousPage = () => {
     if (currentPage > 1) {
@@ -88,6 +99,16 @@ export default function AppointmentsPage() {
     });
   });
 
+  const isModalOpen = (isOpen: boolean) => {
+    setIsOpen(isOpen);
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else if (!isOpen) {
+      document.body.style.overflow = "scroll";
+      setPRNData([]);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -104,7 +125,41 @@ export default function AppointmentsPage() {
     };
 
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, isOpen]);
+
+
+
+  const [id, setId] = useState("");
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    if (id) {
+      isModalOpen(true);
+    }
+  }, [id]);
+  const handlePRNClicked = (patientId: string) => {
+    setId(patientId); // Update state first
+    const newUrl = formUrlQuery({
+      params: searchParams.toString(),
+      key: "id",
+      value: patientId,
+    });
+    router.push(newUrl, { scroll: true }); // Update URL immediately
+  };
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+    setIsEdit(false);
+    isModalOpen(false);
+  };
+  const onFailed = () => {
+    setIsErrorOpen(true);
+    setIsEdit(false);
+  };
+  interface Modalprops {
+    label: string;
+    isOpen: boolean;
+    isModalOpen: (isOpen: boolean) => void;
+  }
 
   return (
     <div className="App w-full h-full pt-20 overflow-y-hidden px-8">
@@ -117,6 +172,8 @@ export default function AppointmentsPage() {
             {/* Making PatientCard sticky */}
             <PatientCard
               patientWithMedicationLogsToday={patientWithMedicationLogsToday}
+              setPatientUuid={setPatientUuid}
+              isModalOpen={isModalOpen}
             />
           </div>
           <p className="h-full ring-1 ring-black mr-2 -mt-2"></p>
@@ -192,6 +249,19 @@ export default function AppointmentsPage() {
               </div>
             </div>
           </div>
+        )}
+        {isOpen && (
+          <PRNMedModal
+            isModalOpen={isModalOpen}
+            uuid={patientUuid}
+            isOpen={isOpen}
+            isEdit={isEdit}
+            PRNData={PRNData}
+            label="sample label"
+            onSuccess={onSuccess}
+            onFailed={onFailed}
+            setErrorMessage={setError}
+          />
         )}
       </div>
     </div>
