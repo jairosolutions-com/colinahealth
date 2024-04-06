@@ -1,7 +1,7 @@
 "use client";
 import { merge } from "chart.js/helpers";
 import moment from "moment";
-import React, { useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 
 import {
   HoverCard,
@@ -11,10 +11,8 @@ import {
 
 const TimeGraph = ({
   patientWithMedicationLogsToday,
-  patientList,
 }: {
   patientWithMedicationLogsToday: any;
-  patientList: any;
 }) => {
   const [currentTime, setCurrentTime] = useState(moment().format("HHmm"));
   const [tableHeight, setTableHeight] = useState<number>(0);
@@ -31,7 +29,6 @@ const TimeGraph = ({
     });
   }
   console.log(patientWithMedicationLogsToday, "timegraph");
-  console.log(patientList, "patientlist");
 
   const currentDate = new Date();
   let hours = currentDate.getHours();
@@ -78,9 +75,21 @@ const TimeGraph = ({
     height: tableHeight + "px",
   };
 
-  // Example usage:
+  const formatTime = (timeString: string) => {
+    // Split the time string into hours and minutes
+    const [hours, minutes] = timeString.split(":").map(Number);
 
-  console.log("linePosition:", linePosition);
+    // Format the hours part into 12-hour format
+    let formattedHours = hours % 12 || 12; // Convert 0 to 12
+    const ampm = hours < 12 ? "am" : "pm"; // Determine if it's AM or PM
+
+    // If minutes is undefined or null, set it to 0
+    const formattedMinutes =
+      minutes !== undefined ? minutes.toString().padStart(2, "0") : "00";
+
+    // Return the formatted time string
+    return `${formattedHours}:${formattedMinutes}${ampm}`;
+  };
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -123,8 +132,8 @@ const TimeGraph = ({
   }, [linePosition]);
 
   return (
-    <div className="w-[350vh] h-full">
-      <div className=" relative">
+    <div className="w-[350vh] h-full overflow-hidden">
+      <div className=" relative z-10">
         <div
           ref={lineRef}
           className="absolute w-px bg-red-500 "
@@ -136,17 +145,16 @@ const TimeGraph = ({
         style={{ tableLayout: "fixed" }}
       >
         <thead>
-          <tr>
+          <tr className="max-h-[20px]">
             {colData.map((col, index) => (
               <th
                 key={col.time}
-                className={`text-lg text-center border-b ${
+                className={`text-lg text-center border-b h-12 max-h-[20px] ${
                   index !== colData.length - 1
-                    ? "text-center border-x border-solid border-black border-b text-nowrap text-ellipsis overflow-hidden"
+                    ? "text-center border-x border-solid max-h-[20px] border-black border-b text-nowrap text-ellipsis overflow-hidden"
                     : ""
                 }`}
                 style={{
-                  maxWidth: "200px",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
@@ -168,6 +176,7 @@ const TimeGraph = ({
                         medLog.medicationLogsTime.replace(":", "")
                       );
                       const colTime = parseInt(col.time);
+
                       return (
                         colTime <= medicationLogsTime &&
                         medicationLogsTime < colTime + 100
@@ -178,28 +187,271 @@ const TimeGraph = ({
                   return (
                     <td
                       key={`${dataIndex}_${col.time}`}
-                      className="text-center border-x border-solid border-black border-b text-nowrap text-ellipsis overflow-hidden max-h-[50px] "
+                      className=" text-center border-x max-h-[15px] border-b border-solid border-black overflow text-nowrap text-ellipsis overflow-hidden"
+                      style={{ maxHeight: "20px" }} // Set fixed height for table cells
                     >
-                      {logsInColumn.map((log: any, logIndex: number) => (
-                        <div
-                          className="cursor-pointer"
-                          key={`${dataIndex}_${col.time}_${logIndex}`}
-                        >
+                      {logsInColumn.length > 1 ? (
+                        <div className="max-h-[15px] flex-row gap-2 text-ellipsis flex justify-center items-center">
                           <HoverCard>
                             <HoverCardTrigger>
-                              {log.medicationLogsName}
+                              <div className="flex">
+                                <div className="cursor-pointer relative flex items-center justify-center">
+                                  {logsInColumn.some(
+                                    (log: { medicationLogStatus: string }) =>
+                                      log.medicationLogStatus !== "pending"
+                                  ) && (
+                                    <img
+                                      src="/icons/success.svg"
+                                      alt="success"
+                                      width={50}
+                                    />
+                                  )}{" "}
+                                  {/* Calculate the count of logs where status is not pending */}
+                                  {/* Render the count */}
+                                  {logsInColumn.filter(
+                                    (log: { medicationLogStatus: string }) =>
+                                      log.medicationLogStatus !== "pending"
+                                  ).length !== 0 && (
+                                    <span className="relative -mt-10 right-0 text-sm font-semibold">
+                                      {
+                                        logsInColumn.filter(
+                                          (log: {
+                                            medicationLogStatus: string;
+                                          }) =>
+                                            log.medicationLogStatus !==
+                                            "pending"
+                                        ).length
+                                      }
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
                             </HoverCardTrigger>
-
-                            <HoverCardContent>
-                              {log.medicationLogsName}
-                              <br />
-                              {log.medicationLogsTime}
-                              <br />
-                              {log.medicationLogStatus}
-                            </HoverCardContent>
+                            {/* Conditionally render HoverCardContent if there are logs with status other than pending */}
+                            {logsInColumn.some(
+                              (log: { medicationLogStatus: string }) =>
+                                log.medicationLogStatus !== "pending"
+                            ) && (
+                              <HoverCardContent>
+                                {logsInColumn
+                                  .filter(
+                                    (log: { medicationLogStatus: string }) =>
+                                      log.medicationLogStatus !== "pending"
+                                  )
+                                  .map(
+                                    (
+                                      log: {
+                                        [x: string]: ReactNode;
+                                        medicationLogsName:
+                                          | string
+                                          | number
+                                          | boolean
+                                          | React.ReactElement<
+                                              any,
+                                              | string
+                                              | React.JSXElementConstructor<any>
+                                            >
+                                          | Iterable<React.ReactNode>
+                                          | React.ReactPortal
+                                          | React.PromiseLikeOfReactNode
+                                          | null
+                                          | undefined;
+                                        medicationType:
+                                          | string
+                                          | number
+                                          | boolean
+                                          | React.ReactElement<
+                                              any,
+                                              | string
+                                              | React.JSXElementConstructor<any>
+                                            >
+                                          | Iterable<React.ReactNode>
+                                          | React.ReactPortal
+                                          | React.PromiseLikeOfReactNode
+                                          | null
+                                          | undefined;
+                                      },
+                                      logIndex: React.Key | null | undefined
+                                    ) => (
+                                      <div key={logIndex}>
+                                        {log.medicationLogsName} -{" "}
+                                        {log.medicationType} -{" "}
+                                        {log.medicationLogStatus}
+                                      </div>
+                                    )
+                                  )}
+                              </HoverCardContent>
+                            )}
                           </HoverCard>
+
+                          {/* FOR PENDING PRESCRIPTIONS */}
+
+                          {logsInColumn.filter(
+                            (log: { medicationLogStatus: string }) =>
+                              log.medicationLogStatus === "pending"
+                          ).length !== 0 && (
+                            <HoverCard>
+                              <HoverCardTrigger>
+                                <div>
+                                  <div className="cursor-pointer relative flex items-center justify-center">
+                                    <img
+                                      src="/icons/checklist.png"
+                                      alt="list"
+                                      width={40}
+                                    />
+                                    {/* Calculate the count of logs where status is not pending */}
+                                    {/* Render the count */}
+                                    {logsInColumn.filter(
+                                      (log: { medicationLogStatus: string }) =>
+                                        log.medicationLogStatus === "pending"
+                                    ).length !== 0 && (
+                                      <span className="relative -mt-10  text-sm font-semibold">
+                                        {
+                                          logsInColumn.filter(
+                                            (log: {
+                                              medicationLogStatus: string;
+                                            }) =>
+                                              log.medicationLogStatus ===
+                                              "pending"
+                                          ).length
+                                        }
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </HoverCardTrigger>
+                              <HoverCardContent>
+                                {logsInColumn
+                                  .filter(
+                                    (log: { medicationLogStatus: string }) =>
+                                      log.medicationLogStatus === "pending"
+                                  )
+                                  .map(
+                                    (
+                                      log: {
+                                        [x: string]: ReactNode;
+                                        medicationLogsName:
+                                          | string
+                                          | number
+                                          | boolean
+                                          | React.ReactElement<
+                                              any,
+                                              | string
+                                              | React.JSXElementConstructor<any>
+                                            >
+                                          | Iterable<React.ReactNode>
+                                          | React.ReactPortal
+                                          | React.PromiseLikeOfReactNode
+                                          | null
+                                          | undefined;
+                                        medicationType:
+                                          | string
+                                          | number
+                                          | boolean
+                                          | React.ReactElement<
+                                              any,
+                                              | string
+                                              | React.JSXElementConstructor<any>
+                                            >
+                                          | Iterable<React.ReactNode>
+                                          | React.ReactPortal
+                                          | React.PromiseLikeOfReactNode
+                                          | null
+                                          | undefined;
+                                      },
+                                      logIndex: React.Key | null | undefined
+                                    ) => (
+                                      <div key={logIndex}>
+                                        {log.medicationLogsName} -{" "}
+                                        {log.medicationType} -{" "}
+                                        {log.medicationLogStatus}
+                                      </div>
+                                    )
+                                  )}
+                              </HoverCardContent>
+                            </HoverCard>
+                          )}
                         </div>
-                      ))}
+                      ) : (
+                        logsInColumn.map(
+                          (
+                            log: {
+                              medicationLogStatus:
+                                | string
+                                | number
+                                | boolean
+                                | React.ReactElement<
+                                    any,
+                                    string | React.JSXElementConstructor<any>
+                                  >
+                                | Iterable<React.ReactNode>
+                                | React.PromiseLikeOfReactNode
+                                | null
+                                | undefined;
+                              medicationLogsName:
+                                | string
+                                | number
+                                | boolean
+                                | React.ReactElement<
+                                    any,
+                                    string | React.JSXElementConstructor<any>
+                                  >
+                                | Iterable<React.ReactNode>
+                                | React.PromiseLikeOfReactNode
+                                | null
+                                | undefined;
+                              medicationLogsTime: string;
+                              medicationType:
+                                | string
+                                | number
+                                | boolean
+                                | React.ReactElement<
+                                    any,
+                                    string | React.JSXElementConstructor<any>
+                                  >
+                                | Iterable<React.ReactNode>
+                                | React.ReactPortal
+                                | React.PromiseLikeOfReactNode
+                                | null
+                                | undefined;
+                            },
+                            logIndex: React.Key | null | undefined
+                          ) => (
+                            //For single prescription logs
+
+                            <HoverCard key={logIndex}>
+                              <HoverCardTrigger>
+                                <div
+                                  className="cursor-pointer max-h-[15px] relative flex items-center justify-center"
+                                  key={`${dataIndex}_${col.time}_${logIndex}`}
+                                >
+                                  {log.medicationLogStatus === "pending" ? (
+                                    <span>{log.medicationLogsName}</span>
+                                  ) : (
+                                    <span>
+                                      <img
+                                        src="/icons/success.svg"
+                                        alt="done"
+                                        width={50}
+                                        //
+                                      />
+                                    </span>
+                                  )}
+                                </div>
+                              </HoverCardTrigger>
+                              <HoverCardContent>
+                                {log.medicationLogsName}
+                                <br />
+                                {formatTime(log.medicationLogsTime)}
+                                <br />
+                                {log.medicationLogStatus}
+                                <br />
+                                {log.medicationType}
+                              </HoverCardContent>
+                            </HoverCard>
+                          )
+                        )
+                      )}
                     </td>
                   );
                 })}

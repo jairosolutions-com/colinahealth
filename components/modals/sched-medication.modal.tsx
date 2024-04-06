@@ -90,12 +90,11 @@ export const ScheduledMedModal = ({
         isModalOpen(false);
         return;
       } else {
-        const prescription = await createScheduledMedOfPatient(
-          patientId,
+        await updateScheduledMedOfPatient(
+          formData.prescriptionUuid,
           formData,
           router
         );
-        console.log("Prescription added successfully:", prescription);
 
         // Reset the form data after successful submission
         setFormData({
@@ -155,6 +154,22 @@ export const ScheduledMedModal = ({
 
   console.log(prescriptionList, "prescriptionList");
 
+  const formatTime = (timeString: string) => {
+    // Split the time string into hours and minutes
+    const [hours, minutes] = timeString.split(":").map(Number);
+
+    // Format the hours part into 12-hour format
+    let formattedHours = hours % 12 || 12; // Convert 0 to 12
+    const ampm = hours < 12 ? "am" : "pm"; // Determine if it's AM or PM
+
+    // If minutes is undefined or null, set it to 0
+    const formattedMinutes =
+      minutes !== undefined ? minutes.toString().padStart(2, "0") : "00";
+
+    // Return the formatted time string
+    return `${formattedHours}:${formattedMinutes}${ampm}`;
+  };
+
   return (
     <div
       className={`absolute inset-[-100px] bg-[#76898A99] flex items-center justify-center pb-[150px]`}
@@ -184,15 +199,23 @@ export const ScheduledMedModal = ({
                       name="medicationLogsName"
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                       onChange={handleMedicationChange}
+                      required
                     >
-                      <option>Prescription Med Name</option>
-                      {prescriptionList.map((prescription) => (
+                      <option value="">
+                        {prescriptionList.length === 0
+                          ? "No Prescription"
+                          : "Select Medication"}
+                      </option>
+                      {prescriptionList.map((prescription, index) => (
                         <option
-                          key={prescription.prescriptions_uuid}
+                          key={index}
                           value={prescription.prescriptions_name}
-                          data-uuid={prescription.prescriptions_uuid}
+                          data-uuid={prescription.medicationlogs_uuid}
                         >
-                          {prescription.prescriptions_name}
+                          {prescription.prescriptions_name} @{" "}
+                          {formatTime(
+                            prescription.medicationlogs_medicationLogsTime
+                          )}
                         </option>
                       ))}
                     </select>
