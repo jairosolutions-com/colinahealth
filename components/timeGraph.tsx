@@ -1,26 +1,25 @@
 "use client";
+import { merge } from "chart.js/helpers";
 import moment from "moment";
-import React, { useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
+
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 const TimeGraph = ({
   patientWithMedicationLogsToday,
-  patientList,
 }: {
   patientWithMedicationLogsToday: any;
-  patientList: any;
 }) => {
   const [currentTime, setCurrentTime] = useState(moment().format("HHmm"));
+  const [tableHeight, setTableHeight] = useState<number>(0);
   const lineRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentTime(moment().format("HHmm"));
-    }, 60000); // Update every minute
-
-    return () => clearInterval(intervalId);
-  }, [currentTime]);
   console.log("Updating currentTime:", currentTime);
-  const colData = [];
+  const colData: { name: string; time: string }[] = [];
   for (let i = 0; i < 24; i++) {
     const hour = i.toString().padStart(2, "0");
     const timeLabel = hour + "00";
@@ -30,7 +29,6 @@ const TimeGraph = ({
     });
   }
   console.log(patientWithMedicationLogsToday, "timegraph");
-  console.log(patientList, "patientlist");
 
   const currentDate = new Date();
   let hours = currentDate.getHours();
@@ -74,11 +72,54 @@ const TimeGraph = ({
   console.log(hundredsTime);
   const linePosition = {
     left: `${(parseInt(hundredsTime.substring(0, 10)) / 2400) * 100}%`,
+    height: tableHeight + "px",
   };
 
-  // Example usage:
+  const formatTime = (timeString: string) => {
+    // Split the time string into hours and minutes
+    const [hours, minutes] = timeString.split(":").map(Number);
 
-  console.log("linePosition:", linePosition);
+    // Format the hours part into 12-hour format
+    let formattedHours = hours % 12 || 12; // Convert 0 to 12
+    const ampm = hours < 12 ? "am" : "pm"; // Determine if it's AM or PM
+
+    // If minutes is undefined or null, set it to 0
+    const formattedMinutes =
+      minutes !== undefined ? minutes.toString().padStart(2, "0") : "00";
+
+    // Return the formatted time string
+    return `${formattedHours}:${formattedMinutes}${ampm}`;
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(moment().format("HHmm"));
+    }, 60000); // Update every minute
+
+    return () => clearInterval(intervalId);
+  }, [currentTime]);
+
+  useEffect(() => {
+    const table = document.querySelector(".time-graph-table");
+    if (table) {
+      setTableHeight(table.clientHeight);
+      if (lineRef.current) {
+        // Here we directly set the height of the line position element
+        lineRef.current.style.height = table.clientHeight + "px";
+      }
+    }
+  }, [patientWithMedicationLogsToday]); // Re-calculate height when table content changes
+
+  useEffect(() => {
+    // Calculate line position height after the table height has been set
+    const table = document.querySelector(".time-graph-table");
+    if (table) {
+      setTableHeight(table.clientHeight);
+      if (lineRef.current) {
+        lineRef.current.style.height = table.clientHeight + "px";
+      }
+    }
+  }, []); // Run once after component is mounted
 
   useEffect(() => {
     if (lineRef.current) {
@@ -91,223 +132,334 @@ const TimeGraph = ({
   }, [linePosition]);
 
   return (
-    <div className="w-[300vh] relative ">
-      <div className="relative h-full">
+    <div className="w-[350vh] h-full overflow-hidden">
+      <div className=" relative z-10">
         <div
           ref={lineRef}
-          className="absolute  w-px h-screen bg-red-500 mt-[-5rem]"
+          className="absolute w-px bg-red-500 "
           style={linePosition}
         ></div>
       </div>
-      <div className="flex w-full justify-evenly divide-x divide-solid divide-black ">
-        {colData.map((col) => (
-          <div key={col.name} className="text-lg text-center w-full">
-            {col.name}
-            {patientWithMedicationLogsToday.map((data: any) => {
-              return data.medicationlogs.map((medLog: any, index: number) => {
-                const medicationLogsTime = parseInt(
-                  medLog.medicationLogsTime.replace(":", "")
-                );
-                const colTime = parseInt(col.time);
-                if (
-                  colTime <= medicationLogsTime &&
-                  colTime + 99 >= medicationLogsTime
-                ) {
-                  return (
-                    <div key={`${data.name}_${index}`} className="">
-                      {medLog.medicationLogsName}
-                    </div>
+      <table
+        className="w-full time-graph-table h-full   "
+        style={{ tableLayout: "fixed" }}
+      >
+        <thead>
+          <tr className="max-h-[20px]">
+            {colData.map((col, index) => (
+              <th
+                key={col.time}
+                className={`text-lg text-center border-b h-12 max-h-[20px] ${
+                  index !== colData.length - 1
+                    ? "text-center border-x border-solid max-h-[20px] border-black border-b text-nowrap text-ellipsis overflow-hidden"
+                    : ""
+                }`}
+                style={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {col.name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {patientWithMedicationLogsToday.map(
+            (data: any, dataIndex: number) => (
+              <tr key={dataIndex}>
+                {colData.map((col) => {
+                  const logsInColumn = data.medicationlogs.filter(
+                    (medLog: any) => {
+                      const medicationLogsTime = parseInt(
+                        medLog.medicationLogsTime.replace(":", "")
+                      );
+                      const colTime = parseInt(col.time);
+
+                      return (
+                        colTime <= medicationLogsTime &&
+                        medicationLogsTime < colTime + 100
+                      );
+                    }
                   );
-                } else {
-                  return null;
-                }
-              });
-            })}
-            <div className="text-red-700">
-              {patientList.map((data: any) => {
-                return data.prescriptions.map(
-                  (prescription: any, index: number) => {
-                    // Check frequency
-                    if(prescription.frequency === "Once Daily"){
-                      if(col.time ==="0800"){
-                        return (
-                          <React.Fragment key={`${data.name}_${index}`}>
-                            {col.time === "0800" && (
-                              <div className="">{prescription.name}</div>
+
+                  return (
+                    <td
+                      key={`${dataIndex}_${col.time}`}
+                      className=" text-center border-x max-h-[15px] border-b border-solid border-black overflow text-nowrap text-ellipsis overflow-hidden"
+                      style={{ maxHeight: "20px" }} // Set fixed height for table cells
+                    >
+                      {logsInColumn.length > 1 ? (
+                        <div className="max-h-[15px] flex-row gap-2 text-ellipsis flex justify-center items-center">
+                          <HoverCard>
+                            <HoverCardTrigger>
+                              <div className="flex">
+                                <div className="cursor-pointer relative flex items-center justify-center">
+                                  {logsInColumn.some(
+                                    (log: { medicationLogStatus: string }) =>
+                                      log.medicationLogStatus !== "pending"
+                                  ) && (
+                                    <img
+                                      src="/icons/success.svg"
+                                      alt="success"
+                                      width={50}
+                                    />
+                                  )}{" "}
+                                  {/* Calculate the count of logs where status is not pending */}
+                                  {/* Render the count */}
+                                  {logsInColumn.filter(
+                                    (log: { medicationLogStatus: string }) =>
+                                      log.medicationLogStatus !== "pending"
+                                  ).length !== 0 && (
+                                    <span className="relative -mt-10 right-0 text-sm font-semibold">
+                                      {
+                                        logsInColumn.filter(
+                                          (log: {
+                                            medicationLogStatus: string;
+                                          }) =>
+                                            log.medicationLogStatus !==
+                                            "pending"
+                                        ).length
+                                      }
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </HoverCardTrigger>
+                            {/* Conditionally render HoverCardContent if there are logs with status other than pending */}
+                            {logsInColumn.some(
+                              (log: { medicationLogStatus: string }) =>
+                                log.medicationLogStatus !== "pending"
+                            ) && (
+                              <HoverCardContent>
+                                {logsInColumn
+                                  .filter(
+                                    (log: { medicationLogStatus: string }) =>
+                                      log.medicationLogStatus !== "pending"
+                                  )
+                                  .map(
+                                    (
+                                      log: {
+                                        [x: string]: ReactNode;
+                                        medicationLogsName:
+                                          | string
+                                          | number
+                                          | boolean
+                                          | React.ReactElement<
+                                              any,
+                                              | string
+                                              | React.JSXElementConstructor<any>
+                                            >
+                                          | Iterable<React.ReactNode>
+                                          | React.ReactPortal
+                                          | React.PromiseLikeOfReactNode
+                                          | null
+                                          | undefined;
+                                        medicationType:
+                                          | string
+                                          | number
+                                          | boolean
+                                          | React.ReactElement<
+                                              any,
+                                              | string
+                                              | React.JSXElementConstructor<any>
+                                            >
+                                          | Iterable<React.ReactNode>
+                                          | React.ReactPortal
+                                          | React.PromiseLikeOfReactNode
+                                          | null
+                                          | undefined;
+                                      },
+                                      logIndex: React.Key | null | undefined
+                                    ) => (
+                                      <div key={logIndex}>
+                                        {log.medicationLogsName} -{" "}
+                                        {log.medicationType} -{" "}
+                                        {log.medicationLogStatus}
+                                      </div>
+                                    )
+                                  )}
+                              </HoverCardContent>
                             )}
-                          </React.Fragment>
-                        );
-                      }
-                    }
-                    else if (prescription.frequency === "Twice Daily") {
-                      if (prescription.interval === "1") {
-                        if (col.time === "0800" || col.time === "0900") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "0900" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "2") {
-                        if (col.time === "0800" || col.time === "1000") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1000" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "3") {
-                        if (col.time === "0800" || col.time === "1100") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1100" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "4") {
-                        if (col.time === "0800" || col.time === "1200") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1200" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "5") {
-                        if (col.time === "0800" || col.time === "1300") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1300" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "6") {
-                        if (col.time === "0800" || col.time === "1400") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1400" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "7") {
-                        if (col.time === "0800" || col.time === "1500") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1500" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "8") {
-                        if (col.time === "0800" || col.time === "1600") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1600" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "9") {
-                        if (col.time === "0800" || col.time === "1700") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1700" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "10") {
-                        if (col.time === "0800" || col.time === "1800") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "11") {
-                        if (col.time === "0800" || col.time === "1900") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "1900" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      } else if (prescription.interval === "12") {
-                        if (col.time === "0800" || col.time === "2000") {
-                          return (
-                            <React.Fragment key={`${data.name}_${index}`}>
-                              {col.time === "0800" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                              {col.time === "2000" && (
-                                <div className="">{prescription.name}</div>
-                              )}
-                            </React.Fragment>
-                          );
-                        }
-                      }
-                    }
-                    
-                    // Add more conditions for other frequencies if needed
-                    return null; // Return null for prescriptions not meeting the conditions
-                  }
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
+                          </HoverCard>
+
+                          {/* FOR PENDING PRESCRIPTIONS */}
+
+                          {logsInColumn.filter(
+                            (log: { medicationLogStatus: string }) =>
+                              log.medicationLogStatus === "pending"
+                          ).length !== 0 && (
+                            <HoverCard>
+                              <HoverCardTrigger>
+                                <div>
+                                  <div className="cursor-pointer relative flex items-center justify-center">
+                                    <img
+                                      src="/icons/checklist.png"
+                                      alt="list"
+                                      width={40}
+                                    />
+                                    {/* Calculate the count of logs where status is not pending */}
+                                    {/* Render the count */}
+                                    {logsInColumn.filter(
+                                      (log: { medicationLogStatus: string }) =>
+                                        log.medicationLogStatus === "pending"
+                                    ).length !== 0 && (
+                                      <span className="relative -mt-10  text-sm font-semibold">
+                                        {
+                                          logsInColumn.filter(
+                                            (log: {
+                                              medicationLogStatus: string;
+                                            }) =>
+                                              log.medicationLogStatus ===
+                                              "pending"
+                                          ).length
+                                        }
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </HoverCardTrigger>
+                              <HoverCardContent>
+                                {logsInColumn
+                                  .filter(
+                                    (log: { medicationLogStatus: string }) =>
+                                      log.medicationLogStatus === "pending"
+                                  )
+                                  .map(
+                                    (
+                                      log: {
+                                        [x: string]: ReactNode;
+                                        medicationLogsName:
+                                          | string
+                                          | number
+                                          | boolean
+                                          | React.ReactElement<
+                                              any,
+                                              | string
+                                              | React.JSXElementConstructor<any>
+                                            >
+                                          | Iterable<React.ReactNode>
+                                          | React.ReactPortal
+                                          | React.PromiseLikeOfReactNode
+                                          | null
+                                          | undefined;
+                                        medicationType:
+                                          | string
+                                          | number
+                                          | boolean
+                                          | React.ReactElement<
+                                              any,
+                                              | string
+                                              | React.JSXElementConstructor<any>
+                                            >
+                                          | Iterable<React.ReactNode>
+                                          | React.ReactPortal
+                                          | React.PromiseLikeOfReactNode
+                                          | null
+                                          | undefined;
+                                      },
+                                      logIndex: React.Key | null | undefined
+                                    ) => (
+                                      <div key={logIndex}>
+                                        {log.medicationLogsName} -{" "}
+                                        {log.medicationType} -{" "}
+                                        {log.medicationLogStatus}
+                                      </div>
+                                    )
+                                  )}
+                              </HoverCardContent>
+                            </HoverCard>
+                          )}
+                        </div>
+                      ) : (
+                        logsInColumn.map(
+                          (
+                            log: {
+                              medicationLogStatus:
+                                | string
+                                | number
+                                | boolean
+                                | React.ReactElement<
+                                    any,
+                                    string | React.JSXElementConstructor<any>
+                                  >
+                                | Iterable<React.ReactNode>
+                                | React.PromiseLikeOfReactNode
+                                | null
+                                | undefined;
+                              medicationLogsName:
+                                | string
+                                | number
+                                | boolean
+                                | React.ReactElement<
+                                    any,
+                                    string | React.JSXElementConstructor<any>
+                                  >
+                                | Iterable<React.ReactNode>
+                                | React.PromiseLikeOfReactNode
+                                | null
+                                | undefined;
+                              medicationLogsTime: string;
+                              medicationType:
+                                | string
+                                | number
+                                | boolean
+                                | React.ReactElement<
+                                    any,
+                                    string | React.JSXElementConstructor<any>
+                                  >
+                                | Iterable<React.ReactNode>
+                                | React.ReactPortal
+                                | React.PromiseLikeOfReactNode
+                                | null
+                                | undefined;
+                            },
+                            logIndex: React.Key | null | undefined
+                          ) => (
+                            //For single prescription logs
+
+                            <HoverCard key={logIndex}>
+                              <HoverCardTrigger>
+                                <div
+                                  className="cursor-pointer max-h-[15px] relative flex items-center justify-center"
+                                  key={`${dataIndex}_${col.time}_${logIndex}`}
+                                >
+                                  {log.medicationLogStatus === "pending" ? (
+                                    <span>{log.medicationLogsName}</span>
+                                  ) : (
+                                    <span>
+                                      <img
+                                        src="/icons/success.svg"
+                                        alt="done"
+                                        width={50}
+                                        //
+                                      />
+                                    </span>
+                                  )}
+                                </div>
+                              </HoverCardTrigger>
+                              <HoverCardContent>
+                                {log.medicationLogsName}
+                                <br />
+                                {formatTime(log.medicationLogsTime)}
+                                <br />
+                                {log.medicationLogStatus}
+                                <br />
+                                {log.medicationType}
+                              </HoverCardContent>
+                            </HoverCard>
+                          )
+                        )
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            )
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

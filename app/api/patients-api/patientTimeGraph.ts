@@ -5,9 +5,13 @@ import { getAccessToken, setAccessToken } from "../login-api/accessToken";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 // Function to get the access token from local storage
 
-export async function fetchPatientForTimeGraph(
+export async function fetchPatientPrescriptions(
+  currentPage: number,
   router: any // Pass router instance as a parameter
 ): Promise<any> {
+  const requestData = {
+    page: currentPage,
+  };
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
@@ -21,8 +25,8 @@ export async function fetchPatientForTimeGraph(
     };
 
     const response = await axios.post(
-      `${apiUrl}/patient-information/time-graph`,
-      [],
+      `${apiUrl}/patient-information/prescriptions`,
+      requestData,
       { headers }
     );
 

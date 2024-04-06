@@ -11,8 +11,6 @@ export const Navbar = () => {
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
- 
-
   const routes = [
     {
       label: "Patients List",
@@ -42,7 +40,7 @@ export const Navbar = () => {
 
   return (
     <div
-      className={`fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[105px] z-10 show`}
+      className={`fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[105px] z-50 show`}
     >
       <Image
         src={"/imgs/colina-logo.png"}
