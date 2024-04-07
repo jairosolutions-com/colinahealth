@@ -256,6 +256,7 @@ export default function Laboratoryresults() {
 
         {/* START OF TABLE */}
         <div>
+
           {patientLabResults.length === 0 ? (
             <div>
               <table className="w-full text-left rtl:text-right">
@@ -340,6 +341,7 @@ export default function Laboratoryresults() {
                   <th scope="col" className="pl-[80px] py-3 w-[10px] ">
                     ACTION
                   </th>
+
                 </tr>
               </thead>
               <tbody>
