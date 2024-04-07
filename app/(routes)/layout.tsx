@@ -2,6 +2,7 @@
 import { Navbar } from "@/components/navbar";
 import { getAccessToken } from "../api/login-api/accessToken";
 import { useRouter } from "next/navigation";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 export default function Layout({
   children,

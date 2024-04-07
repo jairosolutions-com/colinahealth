@@ -12,6 +12,7 @@ interface ModalProps {
   PRNData: any;
   label: string;
   isOpen: boolean;
+  uuid: string;
   setErrorMessage: any;
   isModalOpen: (isOpen: boolean) => void;
   onSuccess: () => void;
@@ -23,19 +24,22 @@ export const PRNMedModal = ({
   PRNData,
   label,
   isOpen,
+  uuid,
   setErrorMessage,
   isModalOpen,
   onSuccess,
   onFailed,
 }: ModalProps) => {
+  const router = useRouter();
   const params = useParams<{
     id: any;
     tag: string;
     item: string;
   }>();
-  const patientId = params.id.toUpperCase();
+
+  const patientId = params.id ? params.id.toUpperCase() : uuid.toUpperCase();
   console.log(patientId, "patientId");
-  const router = useRouter();
+
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     medicationLogsName: PRNData.medicationlogs_medicationLogsName || "",
@@ -114,7 +118,7 @@ export const PRNMedModal = ({
   console.log(formData, "formData");
   return (
     <div
-      className={`absolute inset-[-100px] bg-[#76898A99] flex items-center justify-center pb-[150px]`}
+      className={`absolute inset-[-100px] overflow-y-hidden overflow-x-hidden bg-[#76898A99] flex items-center justify-center pb-[150px] z-50`}
     >
       <div className="w-[676px] h-[660px] bg-[#FFFFFF] rounded-md">
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">

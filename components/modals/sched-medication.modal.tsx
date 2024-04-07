@@ -40,6 +40,7 @@ export const ScheduledMedModal = ({
   const [prescriptionList, setPrescriptionList] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
+    prescriptionUuid: scheduledMedData.medicationlogs_prescriptionUuid || "",
     medicationLogsName:
       scheduledMedData.medicationlogs_medicationLogsName || "",
     medicationLogsDate:
@@ -89,15 +90,15 @@ export const ScheduledMedModal = ({
         isModalOpen(false);
         return;
       } else {
-        const prescription = await createScheduledMedOfPatient(
-          patientId,
+        await updateScheduledMedOfPatient(
+          formData.prescriptionUuid,
           formData,
           router
         );
-        console.log("Prescription added successfully:", prescription);
 
         // Reset the form data after successful submission
         setFormData({
+          prescriptionUuid: "",
           medicationLogsName: "",
           medicationLogsDate: "",
           medicationLogsTime: "",
@@ -135,14 +136,39 @@ export const ScheduledMedModal = ({
     fetchData();
   }, []);
 
-  const handleMedicationChange = (prescriptions_name: string) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      medicationLogsName: prescriptions_name,
-    }));
+  const handleMedicationChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedOption = event.target.selectedOptions[0];
+    const prescriptions_name = selectedOption.value;
+    const prescriptions_uuid = selectedOption.getAttribute("data-uuid");
+
+    if (prescriptions_uuid) {
+      setFormData((prevData) => ({
+        ...prevData,
+        medicationLogsName: prescriptions_name,
+        prescriptionUuid: prescriptions_uuid,
+      }));
+    }
   };
 
   console.log(prescriptionList, "prescriptionList");
+
+  const formatTime = (timeString: string) => {
+    // Split the time string into hours and minutes
+    const [hours, minutes] = timeString.split(":").map(Number);
+
+    // Format the hours part into 12-hour format
+    let formattedHours = hours % 12 || 12; // Convert 0 to 12
+    const ampm = hours < 12 ? "am" : "pm"; // Determine if it's AM or PM
+
+    // If minutes is undefined or null, set it to 0
+    const formattedMinutes =
+      minutes !== undefined ? minutes.toString().padStart(2, "0") : "00";
+
+    // Return the formatted time string
+    return `${formattedHours}:${formattedMinutes}${ampm}`;
+  };
 
   return (
     <div
@@ -169,16 +195,27 @@ export const ScheduledMedModal = ({
                     MEDICATION
                   </label>
                   <div className="mt-2.5">
-                    <select name="medicationLogsName" 
+                    <select
+                      name="medicationLogsName"
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                      onChange={(event) =>handleMedicationChange(event.target.value)}>
-                      <option>Prescription Med Name</option>
-                      {prescriptionList.map((prescription) => (
+                      onChange={handleMedicationChange}
+                      required
+                    >
+                      <option value="">
+                        {prescriptionList.length === 0
+                          ? "No Prescription"
+                          : "Select Medication"}
+                      </option>
+                      {prescriptionList.map((prescription, index) => (
                         <option
-                          key={prescription.prescriptions_uuid}
+                          key={index}
                           value={prescription.prescriptions_name}
+                          data-uuid={prescription.medicationlogs_uuid}
                         >
-                          {prescription.prescriptions_name}
+                          {prescription.prescriptions_name} @{" "}
+                          {formatTime(
+                            prescription.medicationlogs_medicationLogsTime
+                          )}
                         </option>
                       ))}
                     </select>

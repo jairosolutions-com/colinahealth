@@ -437,6 +437,7 @@ const Prorenata = () => {
         <PRNMedModal
           isModalOpen={isModalOpen}
           isOpen={isOpen}
+          uuid={""}
           isEdit={isEdit}
           PRNData={PRNData}
           label="sample label"

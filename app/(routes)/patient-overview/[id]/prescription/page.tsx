@@ -87,7 +87,7 @@ export default function prescription() {
       setSortBy("frequency");
     } else if (option === "Interval") {
       setSortBy("interval");
-    }else {
+    } else {
       setSortBy("dosage");
     }
     console.log("option", option);
@@ -176,13 +176,10 @@ export default function prescription() {
     fetchData();
   }, [currentPage, sortOrder, sortBy, term, isSuccessOpen]);
 
-
-
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
     isModalOpen(false);
-
   };
   const onFailed = () => {
     setIsErrorOpen(true);
@@ -262,84 +259,86 @@ export default function prescription() {
 
         {/* START OF TABLE */}
         <div>
-        {patientPrescriptions.length == 0 ? (
+          {patientPrescriptions.length == 0 ? (
             <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
               <p className="text-xl font-semibold text-gray-700">
                 No Prescription/s
               </p>
             </div>
           ) : (
-          <table className="w-full text-left rtl:text-right">
-            <thead className="">
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-0 py-3 w-[300px]">
-                  PRESCRIPTION ID
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                  MEDICINE NAME
-                </th>
-                <th scope="col" className="px-0 py-3 w-[300px]">
-                  FREQUENCY
-                </th>
-                <th scope="col" className="px-3 py-3 w-[300px]">
-                  INTERVAL
-                </th>
-                <th scope="col" className="px-20  py-3 w-[300px]">
-                  DOSAGE
-                </th>
-                <th scope="col" className="pl-10 pr-6 py-3 w-[200px] ">
-                  STATUS
-                </th>
-                <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                  ACTION
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-             
-              {patientPrescriptions.length > 0 && (
-                <>
-                  {patientPrescriptions.map((prescription, index) => (
-                    <tr key={index} className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4]">
-                      <td className="truncate max-w-[286px] px-0 py-4">
-                        {prescription.prescriptions_uuid}
-                      </td>
-                      <th
-                        scope="row"
-                        className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+            <table className="w-full text-left rtl:text-right">
+              <thead className="">
+                <tr className=" text-[#64748B] border-y  ">
+                  <th scope="col" className="px-0 py-3 w-[300px]">
+                    PRESCRIPTION ID
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                    MEDICINE NAME
+                  </th>
+                  <th scope="col" className="px-0 py-3 w-[300px]">
+                    FREQUENCY
+                  </th>
+                  <th scope="col" className="px-3 py-3 w-[300px]">
+                    INTERVAL (hr/s)
+                  </th>
+                  <th scope="col" className="px-20  py-3 w-[300px]">
+                    DOSAGE
+                  </th>
+                  <th scope="col" className="pl-10 pr-6 py-3 w-[200px] ">
+                    STATUS
+                  </th>
+                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                    ACTION
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {patientPrescriptions.length > 0 && (
+                  <>
+                    {patientPrescriptions.map((prescription, index) => (
+                      <tr
+                        key={index}
+                        className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4]"
                       >
-                        {prescription.prescriptions_name}
-                      </th>
-                      <td className="truncate max-w-[286px] px-0 py-4">
-                        {prescription.prescriptions_frequency}
-                      </td>
-                      <td className="truncate max-w-[286px] px-3 py-4 tb-med">
-                        {prescription.prescriptions_interval}
-                      </td>
-                      <td className="truncate max-w-[286px] px-20 py-4">
-                        {prescription.prescriptions_dosage}
-                      </td>
-                      <td className="px-12 py-4">
-                        {" "}
-                        {prescription.prescriptions_status}
-                      </td>
-                      <td className="px-[70px] py-4">
-                        <p
-                          onClick={() => {
-                            isModalOpen(true);
-                            setIsEdit(true);
-                            setPrescriptionData(prescription);
-                          }}
+                        <td className="truncate max-w-[286px] px-0 py-4">
+                          {prescription.prescriptions_uuid}
+                        </td>
+                        <th
+                          scope="row"
+                          className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                         >
-                          <Edit></Edit>
-                        </p>
-                      </td>
-                    </tr>
-                  ))}
-                </>
-              )}
-            </tbody>
-          </table>
+                          {prescription.prescriptions_name}
+                        </th>
+                        <td className="truncate max-w-[286px] px-0 py-4">
+                          {prescription.prescriptions_frequency}
+                        </td>
+                        <td className="truncate max-w-[286px] px-3 py-4 tb-med">
+                          {prescription.prescriptions_interval} hours
+                        </td>
+                        <td className="truncate max-w-[286px] px-20 py-4">
+                          {prescription.prescriptions_dosage}
+                        </td>
+                        <td className="px-12 py-4">
+                          {" "}
+                          {prescription.prescriptions_status}
+                        </td>
+                        <td className="px-[70px] py-4">
+                          <p
+                            onClick={() => {
+                              isModalOpen(true);
+                              setIsEdit(true);
+                              setPrescriptionData(prescription);
+                            }}
+                          >
+                            <Edit></Edit>
+                          </p>
+                        </td>
+                      </tr>
+                    ))}
+                  </>
+                )}
+              </tbody>
+            </table>
           )}
         </div>
         {/* END OF TABLE */}
@@ -419,18 +418,18 @@ export default function prescription() {
           onSuccess={onSuccess}
           onFailed={onFailed}
           setErrorMessage={setError}
-          />
-        )}
-  
-        {isSuccessOpen && (
-          <SuccessModal
-            label="Success"
-            isAlertOpen={isSuccessOpen}
-            toggleModal={setIsSuccessOpen}
-            isEdit={isEdit}
-          />
-        )}
-        {isErrorOpen && (
+        />
+      )}
+
+      {isSuccessOpen && (
+        <SuccessModal
+          label="Success"
+          isAlertOpen={isSuccessOpen}
+          toggleModal={setIsSuccessOpen}
+          isEdit={isEdit}
+        />
+      )}
+      {isErrorOpen && (
         <ErrorModal
           label="prescriptionFailed"
           isAlertOpen={isErrorOpen}
