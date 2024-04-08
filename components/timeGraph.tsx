@@ -132,7 +132,7 @@ const TimeGraph = ({
   }, [linePosition]);
 
   return (
-    <div className="w-[350vh] h-full overflow-hidden">
+    <div className="w-[320vh] h-full overflow-hidden">
       <div className=" relative z-10">
         <div
           ref={lineRef}
@@ -149,10 +149,10 @@ const TimeGraph = ({
                 {colData.map((col, index) => (
                   <th
                     key={col.time}
-                    className={`text-lg text-center border-b  h-12 max-h-[20px] ${
+                    className={`text-lg text-center border-b  text-gray-500 h-12 max-h-[20px] ${
                       index !== colData.length - 1
-                        ? "text-center border-solid font-light text-gray-500 max-h-[20px] border-x border-[#191D23] border-opacity-60 border-b text-nowrap text-ellipsis overflow-hidden"
-                        : ""
+                        ? "text-center border-solid font-light  max-h-[20px] border-x border-[#191D23] border-opacity-60 border-b text-nowrap text-ellipsis overflow-hidden"
+                        : "text-gray-500"
                     }`}
                     style={{
                       overflow: "hidden",
@@ -182,9 +182,9 @@ const TimeGraph = ({
               {colData.map((col, index) => (
                 <th
                   key={col.time}
-                  className={`text-lg text-center border-b  h-12 max-h-[20px] ${
+                  className={`text-lg text-center border-b font-light text-gray-500  border-x border-[#191D23]  border-opacity-60   h-12 max-h-[20px] ${
                     index !== colData.length - 1
-                      ? "text-center border-solid font-light text-gray-500 max-h-[20px] border-x border-[#191D23] border-opacity-60 border-b text-nowrap text-ellipsis overflow-hidden"
+                      ? "text-center border-solid  max-h-[20px]  text-nowrap text-ellipsis overflow-hidden"
                       : ""
                   }`}
                   style={{
