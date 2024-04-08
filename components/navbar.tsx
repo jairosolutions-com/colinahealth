@@ -20,6 +20,10 @@ export const Navbar = () => {
       label: "Appointments",
       url: "/appointments",
     },
+    {
+      label: "Chart",
+      url: "/chart",
+    },
   ];
 
   const menuRef = useRef<HTMLDivElement>(null);
