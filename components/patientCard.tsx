@@ -55,7 +55,7 @@ const PatientCard = ({
   return (
     <div className="w-full h-full pt-8 pb-4">
       <div className="flex w-full h-full flex-col bg-[#F4F4F4] items-center  border-dashed border-r border-r-black   right-0 justify-end">
-        <p className="absolute top-2 right-4 text-lg text-gray-500 font-light ">
+        <p className="absolute top-2 right-7 text-lg text-gray-500 font-light ">
           Prior
         </p>
         {patientWithMedicationLogsToday.map((patient: any, index: number) => (
@@ -67,7 +67,7 @@ const PatientCard = ({
               className="w-4/6 h-full cursor-pointer"
               onClick={() => handlePatientClick(patient.uuid)}
             >
-              <div className="flex p-2 flex-row w-full">
+              <div className="flex p-2 pl-5 flex-row w-full">
                 <div className="rounded-full max-h-[60px] max-w-[60px] p-2 bg-[#007C854D]">
                   <img
                     className="rounded-full"
@@ -85,7 +85,7 @@ const PatientCard = ({
                   </p>
                 </div>
               </div>
-              <div className="w-full h-full flex flex-col justify-start items-start ml-2 pr-5">
+              <div className="w-full h-full flex flex-col justify-start items-start ml-5 pr-5 pb-5">
                 <p>
                   Attending - <span className="text-gray-400">Nurse Name</span>
                 </p>
@@ -110,8 +110,8 @@ const PatientCard = ({
               </div>
             </div>
 
-            <div className="h-full w-1/6 border-l-2 border-solid flex justify-between items-center flex-col">
-              <div className="h-full w-full flex flex-col border-b-2 text-xs items-center justify-center  cursor-pointer">
+            <div className="h-full w-1/6 border-[#F4F4F4] border-l-4 border-solid flex justify-between items-center flex-col">
+              <div className="h-full w-full flex flex-col border-[#F4F4F4] border-b-4 text-xs items-center justify-center  cursor-pointer">
                 <img src="/icons/chart-order.svg" alt="order" width={20} />
                 Orders
                 <span
@@ -124,7 +124,7 @@ const PatientCard = ({
               </div>
 
               <div
-                className="h-full w-full flex flex-col border-b-2 text-xs items-center justify-center  cursor-pointer"
+                className="h-full w-full flex flex-col border-[#F4F4F4] border-b-4 text-xs items-center justify-center  cursor-pointer"
                 onClick={() => {
                   setPatientUuid(patient.uuid);
                   isModalOpen(true);
@@ -145,7 +145,7 @@ const PatientCard = ({
                   )
                 )}
               </div>
-              <div className="h-full w-full flex flex-row border-b-2 text-xs items-center gap-1 justify-center  cursor-pointer">
+              <div className="h-full w-full flex flex-row border-[#F4F4F4] text-xs items-center gap-1 justify-center  cursor-pointer">
                 <div>
                   <img src="/icons/chart-status.svg" alt="status" width={15} />A
                 </div>
@@ -158,7 +158,7 @@ const PatientCard = ({
               </div>
             </div>
 
-            <div className="h-full w-1/6 border-l-2 border-solid flex justify-between items-center flex-col bg-[#007C851A]"></div>
+            <div className="h-full w-1/6 border-[#F4F4F4] border-l-2 border-solid flex justify-between items-center flex-col bg-[#007C851A]"></div>
           </div>
         ))}
       </div>

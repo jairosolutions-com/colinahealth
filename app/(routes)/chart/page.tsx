@@ -178,9 +178,9 @@ export default function ChartPage() {
           </div>
           {/* Ensuring TimeGraph's height adjusts based on PatientCard's height */}
           <div className="w-4/6 h-full  overflow-y-hidden ">
-            <TimeGraph
+           <div className="w-full h-full"> <TimeGraph
               patientWithMedicationLogsToday={patientWithMedicationLogsToday}
-            />
+            /></div>
           </div>
         </div>
 
