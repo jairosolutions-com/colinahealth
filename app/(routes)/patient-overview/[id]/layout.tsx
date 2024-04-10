@@ -69,6 +69,11 @@ export default function PatientOverviewLayout({
       label: "Notes",
       url: `/patient-overview/${params.id}/notes`,
     },
+    {
+      label: "Forms",
+      url: `/patient-overview/${params.id}/forms`,
+    },
+    
   ];
 
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
@@ -172,15 +177,8 @@ export default function PatientOverviewLayout({
   return (
     <div className="flex flex-col w-full  px-4 lg:px-28 mt-[100px]">
       <div className="flex flex-col gap-[3px]">
-        <div className="text-2xl font-bold">
+        <div className="text-2xl font-bold pb-2">
           <h1>Patient Overview</h1>
-          <p className="text-[14px] font-medium text-[#64748B] mt-[-5px]">
-            {detailsClicked
-              ? "View - Details"
-              : activeTab !== -1
-              ? tabs[activeTab]?.label
-              : ""}
-          </p>
         </div>
         <div className="form ring-1 w-full h-[220px] shadow-md ring-gray-300 px-5 pt-5 rounded-md">
           <div className="flex">
@@ -194,14 +192,14 @@ export default function PatientOverviewLayout({
             </div>
             <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
               <div>
-                <div className=" w-full justify-between text-2xl font-semibold flex">
+                <div className="w-full justify-between text-2xl font-bold flex ml-2">
                   <h1>
                     {" "}
                     {patientData[0]?.firstName} {patientData[0]?.middleName} {patientData[0]?.lastName}
                   </h1>
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
-                      className="underline text-sm font-semibold text-[#07143799] text-right"
+                      className="underline text-sm font-semibold text-[#191D23] text-right mr-10"
                       onClick={() =>
                         handleSeeMoreDetails(
                           `/patient-overview/${params.id}/patient-details`,
@@ -214,9 +212,9 @@ export default function PatientOverviewLayout({
                   </div>
                 </div>
                 <div>
-                  <div className="flex flex-row w-full mt-2">
+                  <div className="flex flex-row w-full mt-2 font-medium">
                     <img
-                      src="/imgs/profile-circle.svg"
+                      src="/imgs/profile-circle-new.svg"
                       className="px-1"
                       alt="profile"
                       width="26"
@@ -243,15 +241,15 @@ export default function PatientOverviewLayout({
                         <img
                           src="/imgs/id.svg"
                           alt="copy"
-                          className="cursor-pointer"
+                          className="cursor-pointer ml-2"
                           onClick={handleCopyClick}
                         />
                       </div>
                     </div>
                   </div>
                   <div className="mb-5"></div>
-                  <div className="flex flex-row w-full ">
-                    <div className="w-1/6 flex">
+                  <div className="flex flex-row w-full font-medium ">
+                
                       <img
                         src="/imgs/codestatus.svg"
                         className="px-1"
@@ -260,7 +258,7 @@ export default function PatientOverviewLayout({
                         height="26"
                       />
                       <div className="">
-                        <h1 className={`flex items-center mr-11`}>
+                        <h1 className={`flex items-center mr-11 gap-1`}>
                           Code Status:
                           <p
                             className={` 
@@ -274,10 +272,10 @@ export default function PatientOverviewLayout({
                           </p>
                         </h1>
                       </div>
-                    </div>
-                    <div className="flex w-5/6">
+                    
+                    <div className="">
                       <div>
-                        <p className="flex items-center mr-11">
+                        <p className="flex items-center ml-4">
                           Allergy:{" "}
                           {patientData[0]?.allergies
                             ? patientData[0]?.allergies
