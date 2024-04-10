@@ -307,7 +307,7 @@ const Scheduled = () => {
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="text-xl font-semibold text-gray-700">
-                      No Scheduled Medication Log/s
+                      No Scheduled Medication Log/s <br/>•ω•
                     </p>
                   </td>
                 </tr>

@@ -261,7 +261,7 @@ const Notes = () => {
         <div>
           {patientNotes.length === 0 ? (
             <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700">No Notes</p>
+              <p className="text-xl font-semibold text-gray-700">No Notes <br/>•ω•</p>
             </h1>
           ) : (
             <table className="w-full text-left rtl:text-right">

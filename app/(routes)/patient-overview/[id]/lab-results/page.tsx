@@ -300,7 +300,7 @@ export default function Laboratoryresults() {
               </table>
               <div className="py-5 flex justify-center items-center">
                 <p className="text-xl font-semibold text-gray-700">
-                  No Lab Result/s
+                  No Lab Result/s <br/>•ω•
                 </p>
               </div>
             </div>

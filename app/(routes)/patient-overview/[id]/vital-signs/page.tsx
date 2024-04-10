@@ -312,7 +312,7 @@ export default function vitalsigns() {
                 </table>
                 <div className="py-5 flex justify-center items-center">
                   <p className="text-xl font-semibold text-gray-700">
-                    No Vital Sign/s
+                    No Vital Sign/s <br/>•ω•
                   </p>
                 </div>
               </div>

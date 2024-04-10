@@ -262,7 +262,7 @@ export default function prescription() {
           {patientPrescriptions.length == 0 ? (
             <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
               <p className="text-xl font-semibold text-gray-700">
-                No Prescription/s
+                No Prescription/s <br/>•ω•
               </p>
             </div>
           ) : (

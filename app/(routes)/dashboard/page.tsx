@@ -1,11 +1,16 @@
 "use client";
 
+import { onNavigate } from "@/actions/navigation";
+import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { Edit, View } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 const Dashboard = () => {
   const router = useRouter();
+  if(!getAccessToken()){
+    onNavigate(router, "/dashboard");
+  }
 
   return (
     <div className="mt-20 w-full justify-center items-center  mx-28">

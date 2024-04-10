@@ -163,7 +163,11 @@ export default function ChartPage() {
 
   return (
     <div className="App w-full h-full pt-24 overflow-y-hidden px-28 ">
-      <div className="w-full flex items-end -mt-8 py-5 bg-[#F4F4F4] ">
+      {patientWithMedicationLogsToday.length == 0 ? (
+        <div className="flex items-center justify-center font-semibold text-3xl w-full h-full -mt-10">No Patient Prescription/s <br/>•ω•</div>
+      ):(
+       <div>
+         <div className="w-full flex items-end -mt-8 py-5 bg-[#F4F4F4] ">
         <h1 className="text-start p-title ml-5 -mb-14 absolute flex items-end z-10">Patient Time Chart</h1>
       </div>
       <div className="w-full h-full flex flex-col ">
@@ -263,6 +267,8 @@ export default function ChartPage() {
           />
         )}
       </div>
+       </div>
+      )}
     </div>
   );
 }

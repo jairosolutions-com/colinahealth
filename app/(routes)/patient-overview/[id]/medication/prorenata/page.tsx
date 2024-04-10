@@ -304,7 +304,7 @@ const Prorenata = () => {
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="text-xl font-semibold text-gray-700">
-                      No PRN Medication Log/s
+                      No PRN Medication Log/s <br/>•ω•
                     </p>
                   </td>
                 </tr>
