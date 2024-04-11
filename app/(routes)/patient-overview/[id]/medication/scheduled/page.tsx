@@ -34,7 +34,7 @@ const Scheduled = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
-
+  const [isUpdated, setIsUpdated] = useState(false);
   interface Modalprops {
     label: string;
     isOpen: boolean;
@@ -47,6 +47,7 @@ const Scheduled = () => {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
+      setIsEdit(false)
       setScheduledMedData([]);
     }
   };
@@ -306,7 +307,7 @@ const Scheduled = () => {
               {patientScheduledMed.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-xl font-semibold text-gray-700">
+                    <p className="text-xl font-semibold text-gray-700 flex text-center">
                       No Scheduled Medication Log/s <br/>•ω•
                     </p>
                   </td>
@@ -450,6 +451,7 @@ const Scheduled = () => {
           isOpen={isOpen}
           isEdit={isEdit}
           scheduledMedData={scheduledMedData}
+          setIsUpdated={setIsUpdated}
           label="sample label"
           onSuccess={onSuccess}
           onFailed={onFailed}
@@ -461,7 +463,8 @@ const Scheduled = () => {
           label="Success"
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          isEdit={isEdit}
+          isUpdated={isUpdated}
+          setIsUpdated={setIsUpdated}
         />
       )}
       {isErrorOpen && (

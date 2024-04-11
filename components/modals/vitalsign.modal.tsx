@@ -11,6 +11,7 @@ import { SuccessModal } from "../shared/success";
 interface Modalprops {
   isEdit: boolean;
   vitalSignData: any;
+  setIsUpdated: any;
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
@@ -21,6 +22,7 @@ export const VitalSignModal = ({
   isEdit,
   vitalSignData,
   label,
+  setIsUpdated,
   isOpen,
   isModalOpen,
   onSuccess,
@@ -60,6 +62,7 @@ export const VitalSignModal = ({
           formData,
           router
         );
+        setIsUpdated(true);
         onSuccess();
         isModalOpen(false);
         return;

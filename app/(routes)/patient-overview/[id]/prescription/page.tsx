@@ -33,6 +33,7 @@ export default function prescription() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
   interface Modalprops {
     label: string;
     isOpen: boolean;
@@ -261,7 +262,7 @@ export default function prescription() {
         <div>
           {patientPrescriptions.length == 0 ? (
             <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700">
+              <p className="text-xl font-semibold text-gray-700 text-center">
                 No Prescription/s <br/>•ω•
               </p>
             </div>
@@ -418,6 +419,7 @@ export default function prescription() {
           onSuccess={onSuccess}
           onFailed={onFailed}
           setErrorMessage={setError}
+          setIsUpdated={setIsUpdated}
         />
       )}
 
@@ -426,7 +428,8 @@ export default function prescription() {
           label="Success"
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          isEdit={isEdit}
+          isUpdated={isUpdated}
+          setIsUpdated={setIsUpdated}
         />
       )}
       {isErrorOpen && (

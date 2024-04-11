@@ -276,7 +276,7 @@ export default function PatientPage({ patient }: { patient: any }) {
         <div className="w-full h-full">
           {patientList.length === 0 ? (
             <div>
-              <div className="w-full flex justify-center text-xl py-5">
+              <div className="w-full flex justify-center text-xl py-5 text-center">
                 No Patient Found! <br/>•ω•
               </div>
             </div>

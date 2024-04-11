@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 interface Modalprops {
   isEdit: boolean;
   allergy: any;
+  setIsUpdated: any;
   label: string;
   isOpen: boolean;
   setErrorMessage: any
@@ -21,6 +22,7 @@ export const AllergyModal = ({
   isEdit,
   allergy,
   label,
+  setIsUpdated,
   isOpen,
   setErrorMessage,
   isModalOpen,
@@ -69,6 +71,7 @@ export const AllergyModal = ({
     try {
       if (isEdit) {
         await updateAllergyOfPatient(allergy.allergies_uuid, formData, router);
+        setIsUpdated(true);
         onSuccess()
         isModalOpen(false);
         return;

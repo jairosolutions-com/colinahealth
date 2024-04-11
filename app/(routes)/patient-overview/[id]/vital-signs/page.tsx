@@ -30,6 +30,7 @@ export default function vitalsigns() {
   const [isEdit, setIsEdit] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
   interface Modalprops {
     label: string;
     isOpen: boolean;
@@ -311,7 +312,7 @@ export default function vitalsigns() {
                   </thead>
                 </table>
                 <div className="py-5 flex justify-center items-center">
-                  <p className="text-xl font-semibold text-gray-700">
+                  <p className="text-xl font-semibold text-gray-700 text-center">
                     No Vital Sign/s <br/>•ω•
                   </p>
                 </div>
@@ -472,6 +473,7 @@ export default function vitalsigns() {
           label="sample label"
           vitalSignData={vitalSignData}
           onSuccess={onSuccess}
+          setIsUpdated={setIsUpdated}
         />
       )}
 
@@ -480,7 +482,8 @@ export default function vitalsigns() {
           label="Success"
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          isEdit={isEdit}
+          isUpdated={isUpdated}
+          setIsUpdated={setIsUpdated}
         />
       )}
     </div>

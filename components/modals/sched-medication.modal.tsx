@@ -11,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 interface ModalProps {
   isEdit: boolean;
   scheduledMedData: any;
+  setIsUpdated: any;
   label: string;
   isOpen: boolean;
   setErrorMessage: any;
@@ -22,6 +23,7 @@ interface ModalProps {
 export const ScheduledMedModal = ({
   isEdit,
   scheduledMedData,
+  setIsUpdated,
   label,
   isOpen,
   setErrorMessage,
@@ -86,6 +88,7 @@ export const ScheduledMedModal = ({
           formData,
           router
         );
+        setIsUpdated(true);
         onSuccess();
         isModalOpen(false);
         return;
@@ -169,7 +172,8 @@ export const ScheduledMedModal = ({
     // Return the formatted time string
     return `${formattedHours}:${formattedMinutes}${ampm}`;
   };
-
+  console.log(scheduledMedData, "scheduledMedData");
+  console.log(scheduledMedData.length, "scheduledMedData length");
   return (
     <div
       className={`absolute inset-[-100px] bg-[#76898A99] flex items-center justify-center pb-[150px]`}
@@ -201,11 +205,21 @@ export const ScheduledMedModal = ({
                       onChange={handleMedicationChange}
                       required
                     >
-                      <option value="">
-                        {prescriptionList.length === 0
-                          ? "No Prescription"
-                          : "Select Medication"}
-                      </option>
+                      {prescriptionList.length === 0 &&
+                      scheduledMedData.length === 0 ? (
+                        <option value="">No Prescription</option>
+                      ) : (
+                        isEdit && (
+                          <option
+                            value={
+                              scheduledMedData.medicationlogs_medicationLogsName
+                            }
+                          >
+                            {scheduledMedData.medicationlogs_medicationLogsName} @ {scheduledMedData.medicationlogs_medicationLogsDate}
+                          </option>
+                        )
+                      )}
+
                       {prescriptionList.map((prescription, index) => (
                         <option
                           key={index}

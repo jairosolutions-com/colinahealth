@@ -31,9 +31,11 @@ const Prorenata = () => {
   const [gotoError, setGotoError] = useState(false);
   const [term, setTerm] = useState("");
   const [isEdit, setIsEdit] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
+
 
   interface Modalprops {
     label: string;
@@ -47,6 +49,7 @@ const Prorenata = () => {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
+      setIsEdit(false)
       setPRNData([]);
     }
   };
@@ -303,7 +306,7 @@ const Prorenata = () => {
               {patientPRNMed.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-xl font-semibold text-gray-700">
+                    <p className="text-xl font-semibold text-gray-700 text-center">
                       No PRN Medication Log/s <br/>•ω•
                     </p>
                   </td>
@@ -438,7 +441,9 @@ const Prorenata = () => {
           isModalOpen={isModalOpen}
           isOpen={isOpen}
           uuid={""}
+          name=""
           isEdit={isEdit}
+          setIsUpdated={setIsUpdated}
           PRNData={PRNData}
           label="sample label"
           onSuccess={onSuccess}
@@ -451,7 +456,8 @@ const Prorenata = () => {
           label="Success"
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          isEdit={isEdit}
+          isUpdated={isUpdated}
+          setIsUpdated={setIsUpdated}
         />
       )}
       {isErrorOpen && (

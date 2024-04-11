@@ -17,6 +17,7 @@ const Appointment = () => {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isEdit, setIsView] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
   const formatDate = (createdAt: string | number | Date) => {
     // Create a new Date object from the provided createdAt date string
     const date = new Date(createdAt);
@@ -303,7 +304,7 @@ const Appointment = () => {
               {patientAppointments.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-xl font-semibold text-gray-700">
+                    <p className="text-xl font-semibold text-gray-700 text-center">
                       No Appointment/s <br/>•ω•
                     </p>
                   </td>

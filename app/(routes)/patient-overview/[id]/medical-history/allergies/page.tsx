@@ -33,6 +33,7 @@ const Allergies = () => {
   const [allergyToEdit, setAllergyToEdit] = useState<any[]>([]);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const params = useParams<{
     id: any;
@@ -172,7 +173,6 @@ const Allergies = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
     isModalOpen(false);
-
   };
   const onFailed = () => {
     setIsErrorOpen(true);
@@ -189,12 +189,13 @@ const Allergies = () => {
             <h1 className="p-title text-[#007C85] cursor-pointer">Allergies</h1>
             <h1 className="p-title mx-2">{">"} </h1>
             <h1
-              onClick={() =>
-                {onNavigate(
+              onClick={() => {
+                onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/medical-history/surgeries`
-                ); setIsLoading(true)}
-              }
+                );
+                setIsLoading(true);
+              }}
               className="p-title cursor-pointer text-gray-600"
             >
               Surgeries
@@ -266,8 +267,9 @@ const Allergies = () => {
         <div>
           {patientAllergies.length === 0 ? (
             <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700">
-                No Allergies Found <br/>•ω•
+              <p className="text-xl font-semibold text-gray-700 text-center">
+                No Allergies Found <br />
+                •ω•
               </p>
             </h1>
           ) : (
@@ -304,7 +306,10 @@ const Allergies = () => {
 
               <tbody>
                 {patientAllergies.map((allergy, index) => (
-                  <tr key={index} className=" group even:bg-gray-50 hover:bg-[#f4f4f4]  border-b ">
+                  <tr
+                    key={index}
+                    className=" group even:bg-gray-50 hover:bg-[#f4f4f4]  border-b "
+                  >
                     <th
                       scope="row"
                       className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
@@ -420,6 +425,7 @@ const Allergies = () => {
           isOpen={isOpen}
           isEdit={isEdit}
           allergy={allergyToEdit}
+          setIsUpdated={setIsUpdated}
           label="sample label"
           onSuccess={onSuccess}
           onFailed={onFailed}
@@ -431,7 +437,8 @@ const Allergies = () => {
           label="Success"
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          isEdit={isEdit}
+          isUpdated={isUpdated}
+          setIsUpdated={setIsUpdated}
         />
       )}
       {isErrorOpen && (

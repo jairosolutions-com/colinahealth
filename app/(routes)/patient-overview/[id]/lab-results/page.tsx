@@ -34,6 +34,7 @@ export default function Laboratoryresults() {
   const [sortOrder, setSortOrder] = useState<string>("ASC");
   const [sortBy, setSortBy] = useState("date");
   const [isEdit, setIsEdit] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
@@ -299,7 +300,7 @@ export default function Laboratoryresults() {
                 </thead>
               </table>
               <div className="py-5 flex justify-center items-center">
-                <p className="text-xl font-semibold text-gray-700">
+                <p className="text-xl font-semibold text-gray-700 text-center">
                   No Lab Result/s <br/>•ω•
                 </p>
               </div>
@@ -475,6 +476,7 @@ export default function Laboratoryresults() {
           isOpen={isOpen}
           label="sample label"
           onSuccess={onSuccess}
+          setIsUpdated={setIsUpdated}
         />
       )}
 
@@ -483,7 +485,8 @@ export default function Laboratoryresults() {
           label="Success"
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          isEdit={isEdit}
+          isUpdated={isUpdated}
+          setIsUpdated={setIsUpdated}
         />
       )}
     </div>

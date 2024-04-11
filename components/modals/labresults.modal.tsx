@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 interface Modalprops {
   isEdit: any;
   labResultData: any;
+  setIsUpdated: any;
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
@@ -19,6 +20,7 @@ interface Modalprops {
 export const LabResultModal = ({
   isEdit,
   labResultData,
+  setIsUpdated,
   label,
   isOpen,
   isModalOpen,
@@ -62,7 +64,8 @@ export const LabResultModal = ({
           labResultData.labResults_uuid,
           formData,
           router
-        );
+        );  
+        setIsUpdated(true)
         onSuccess()
         isModalOpen(false);
         return;

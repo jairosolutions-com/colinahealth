@@ -11,6 +11,7 @@ export const Navbar = () => {
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+
   const routes = [
     {
       label: "Patients List",

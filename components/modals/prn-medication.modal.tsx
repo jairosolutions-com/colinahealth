@@ -9,10 +9,12 @@ import "react-datepicker/dist/react-datepicker.css";
 
 interface ModalProps {
   isEdit: boolean;
+  setIsUpdated: any;
   PRNData: any;
   label: string;
   isOpen: boolean;
   uuid: string;
+  name:any;
   setErrorMessage: any;
   isModalOpen: (isOpen: boolean) => void;
   onSuccess: () => void;
@@ -21,10 +23,12 @@ interface ModalProps {
 
 export const PRNMedModal = ({
   isEdit,
+  setIsUpdated,
   PRNData,
   label,
   isOpen,
   uuid,
+  name,
   setErrorMessage,
   isModalOpen,
   onSuccess,
@@ -83,6 +87,7 @@ export const PRNMedModal = ({
           formData,
           router
         );
+        setIsUpdated(true);
         onSuccess();
         isModalOpen(false);
         return;
@@ -118,14 +123,14 @@ export const PRNMedModal = ({
   console.log(formData, "formData");
   return (
     <div
-      className={`absolute inset-[-100px] overflow-y-hidden overflow-x-hidden bg-[#76898A99] flex items-center justify-center pb-[150px] z-50`}
+      className={`fixed inset-[-100px] overflow-y-hidden overflow-x-hidden bg-[#76898A99] flex items-center justify-center pb-[150px] z-50`}
     >
       <div className="w-[676px] h-[660px] bg-[#FFFFFF] rounded-md">
-        <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
+        <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start text-start rounded-md">
           <h2 className="p-title text-left text-[#071437] pl-9 mt-7">
-            {isEdit ? "Update" : "Add"} PRN Medication Log
+            {isEdit ? "Update" : "Add"} PRN Medication Log {name? 'for' : ""} <span className="text-[#007C85]">{name? name: ""}</span>
           </h2>
-          <p className="text-sm pl-9 text-gray-600 pb-10 pt-2">
+          <p className="!text-sm pl-9 text-gray-600 pb-10 pt-2">
             Submit your log details.
           </p>
         </div>
@@ -133,7 +138,7 @@ export const PRNMedModal = ({
           <div className="w-full max-h-[300px] md:px-10 mt-5">
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-                <div className="sm:col-span-2">
+                <div className="sm:col-span-2 text-start">
                   <label
                     htmlFor="company"
                     className="block text-sm font-semibold leading-6 text-gray-900 required-field"
@@ -152,7 +157,7 @@ export const PRNMedModal = ({
                     />
                   </div>
                 </div>
-                <div className="sm:col-span-2">
+                <div className="sm:col-span-2 text-start">
                   <label
                     htmlFor="message"
                     className="block text-sm font-semibold leading-6 text-gray-900 required-field"
@@ -172,7 +177,7 @@ export const PRNMedModal = ({
                     />
                   </div>
                 </div>
-                <div className="flex-grow md:mr-8 mb-4 md:mb-0">
+                <div className="flex-grow md:mr-8 mb-4 md:mb-0 text-start">
                   <label
                     htmlFor="date"
                     className="block text-sm font-semibold leading-6 text-gray-900 required-field"
@@ -191,7 +196,7 @@ export const PRNMedModal = ({
                     />
                   </div>
                 </div>
-                <div className="flex-grow md:mr-8 mb-4 md:mb-0">
+                <div className="flex-grow md:mr-8 mb-4 md:mb-0 text-start">
                   <label
                     htmlFor="date"
                     className="block text-sm font-semibold leading-6 text-gray-900 required-field"
@@ -210,7 +215,7 @@ export const PRNMedModal = ({
                     />
                   </div>
                 </div>
-                <div>
+                <div className="text-start">
                   <label
                     htmlFor="status"
                     className="block text-sm font-semibold leading-6 text-gray-900 required-field"

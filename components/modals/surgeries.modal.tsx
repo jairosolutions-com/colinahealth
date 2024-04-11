@@ -14,6 +14,7 @@ interface Modalprops {
   surgeryData: any;
   label: string;
   isOpen: boolean;
+  setIsUpdated: any;
   setErrorMessage: any;
   isModalOpen: (isOpen: boolean) => void;
   onSuccess: () => void;
@@ -25,6 +26,7 @@ export const SurgeriesModal = ({
   surgeryData,
   label,
   isOpen,
+  setIsUpdated,
   setErrorMessage,
   isModalOpen,
   onSuccess,
@@ -72,6 +74,7 @@ export const SurgeriesModal = ({
           formData,
           router
         );
+        setIsUpdated(true);
         onSuccess();
         isModalOpen(false);
         return;

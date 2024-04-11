@@ -184,7 +184,7 @@ const TimeGraph = ({
                       );
                     }
                   );
-
+                  const isLastColumn = dataIndex === patientWithMedicationLogsToday.length - 1;
                   return (
                     <td
                       key={`${dataIndex}_${col.time}`}
@@ -195,7 +195,11 @@ const TimeGraph = ({
                       }`}
                       style={{ maxHeight: "20px" }} // Set fixed height for table cells
                     >
-                      <div className=" h-full border-b-[10px]  border-solid border-[#F4F4F4] flex flex-col justify-center items-center">
+                      <div
+                        className={` h-full ${
+                          isLastColumn ? "border-b-[9px]" : "border-b-[10px]"
+                        }  border-solid border-[#F4F4F4] flex flex-col justify-center items-center`}
+                      >
                         {logsInColumn.length >= 1 ? (
                           <div className="max-h-[15px] flex-col gap-2 text-ellipsis flex  justify-center items-center ">
                             <HoverCard>
@@ -210,6 +214,7 @@ const TimeGraph = ({
                                         src="/icons/chart-done.svg"
                                         alt="chart-done"
                                         width={30}
+                                        className="pointer-events-none select-none"
                                       />
                                     )}{" "}
                                     {/* Calculate the count of logs where status is not pending */}
@@ -218,7 +223,7 @@ const TimeGraph = ({
                                       (log: { medicationLogStatus: string }) =>
                                         log.medicationLogStatus !== "pending"
                                     ).length !== 0 && (
-                                      <span className="absolute h-4 w-4 -mt-10 -right-2 top-11 text-xs font-light rounded-full bg-red-600 text-white">
+                                      <span className="absolute h-4 w-4 -mt-10 pointer-events-none select-none -right-2 top-11 text-xs font-light rounded-full bg-red-600 text-white">
                                         {
                                           logsInColumn.filter(
                                             (log: {
@@ -304,6 +309,7 @@ const TimeGraph = ({
                                         src="/icons/chart-list.svg"
                                         alt="list"
                                         width={30}
+                                        className="pointer-events-none select-none"
                                       />
                                       {/* Calculate the count of logs where status is not pending */}
                                       {/* Render the count */}
@@ -313,7 +319,7 @@ const TimeGraph = ({
                                         }) =>
                                           log.medicationLogStatus === "pending"
                                       ).length !== 0 && (
-                                        <span className="absolute h-4 w-4 -mt-10 -right-2 top-11 text-xs font-light rounded-full bg-red-600 text-white">
+                                        <span className="absolute h-4 w-4 -mt-10 pointer-events-none select-none -right-2 top-11 text-xs font-light rounded-full bg-red-600 text-white">
                                           {
                                             logsInColumn.filter(
                                               (log: {
@@ -441,6 +447,7 @@ const TimeGraph = ({
                                           src="/icons/chart-done.svg"
                                           alt="done"
                                           width={50}
+                                          className="pointer-events-none select-none"
                                           //
                                         />
                                       </span>

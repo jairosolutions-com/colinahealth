@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 interface Modalprops {
   isEdit: boolean;
   prescriptionData: any;
+  setIsUpdated: any;
   label: string;
   isOpen: boolean;
   setErrorMessage: any
@@ -22,6 +23,7 @@ export const PrescriptionModal = ({
   isEdit,
   prescriptionData,
   label,
+  setIsUpdated,
   isOpen,
   setErrorMessage,
   isModalOpen,
@@ -71,6 +73,7 @@ console.log(label,'label')
           formData,
           router
         );
+        setIsUpdated(true);
         onSuccess()
         isModalOpen(false);
         return;

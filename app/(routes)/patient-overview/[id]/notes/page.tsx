@@ -32,6 +32,7 @@ const Notes = () => {
   const [notesToEdit, setNotesToEdit] = useState<any[]>([]);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const params = useParams<{
     id: any;
@@ -171,8 +172,8 @@ const Notes = () => {
     setIsEdit(false);
   };
 
-  if(isLoading){
-    return <Loading></Loading>
+  if (isLoading) {
+    return <Loading></Loading>;
   }
 
   return (
@@ -261,7 +262,10 @@ const Notes = () => {
         <div>
           {patientNotes.length === 0 ? (
             <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700">No Notes <br/>•ω•</p>
+              <p className="text-xl font-semibold text-gray-700 text-center">
+                No Notes <br />
+                •ω•
+              </p>
             </h1>
           ) : (
             <table className="w-full text-left rtl:text-right">
@@ -403,7 +407,8 @@ const Notes = () => {
           label={isEdit ? "Edit Note" : "Add Note"}
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          isEdit={isEdit}
+          isUpdated={isUpdated}
+          setIsUpdated={setIsUpdated}
         />
       )}
     </div>

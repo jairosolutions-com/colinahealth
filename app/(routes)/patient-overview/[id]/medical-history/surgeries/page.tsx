@@ -33,6 +33,7 @@ export default function Surgeries() {
   const [isEdit, setIsEdit] = useState(false);
   const [surgeryData, setSurgeryData] = useState<any[]>([]);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
   const params = useParams<{
     id: any;
     tag: string;
@@ -286,7 +287,7 @@ export default function Surgeries() {
         <div>
           {patientSurgeries.length == 0 ? (
             <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700">
+              <p className="text-xl font-semibold text-gray-700 text-center" >
                 No Surgeries Found <br/>•ω•
               </p>
             </div>
@@ -428,6 +429,7 @@ export default function Surgeries() {
           onSuccess={onSuccess}
           onFailed={onFailed}
           setErrorMessage={setError}
+          setIsUpdated={setIsUpdated}
         />
       )}
 
@@ -436,7 +438,8 @@ export default function Surgeries() {
           label="Success"
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          isEdit={isEdit}
+          isUpdated={isUpdated}
+          setIsUpdated={setIsUpdated}
         />
       )}
       {isErrorOpen && (

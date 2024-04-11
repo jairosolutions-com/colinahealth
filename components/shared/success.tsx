@@ -4,11 +4,13 @@ interface AlertProps {
   label: string;
   isAlertOpen: boolean;
   toggleModal: (isOpen: boolean) => void;
-  isEdit: boolean;
+  isUpdated: any;
+  setIsUpdated: any;
 }
 
-export const SuccessModal = ({ label, isAlertOpen, toggleModal, isEdit }: AlertProps) => {
+export const SuccessModal = ({ label, isAlertOpen, toggleModal, isUpdated ,setIsUpdated}: AlertProps) => {
   console.log(label, "label")
+  console.log(isUpdated,"success is edit")
   return (
     <div>
       {isAlertOpen && (
@@ -27,14 +29,14 @@ export const SuccessModal = ({ label, isAlertOpen, toggleModal, isEdit }: AlertP
               <div className="mx-auto mb-5 text-gray-400 w-[110px] h-[110px]">
                 <img src="/icons/success.svg" alt="" />
               </div>
-              <h1 className="text-[34px] font-bold text-lg text-gray-500 mb-4">
-                {isEdit? "Updated" : "Submitted"} Successfully!
+              <h1 className="text-[q34px] font-bold text-lg text-gray-500 mb-4">
+                {isUpdated? "Updated" : "Submitted"} Successfully!
               </h1>
               <p className="text-[24px] text-sm text-gray-400 mb-10">
-                Your data has been successfully {isEdit? "updated" : "added"}.
+                Your data has been successfully {isUpdated? "updated" : "added"}.
               </p>
               <button
-                onClick={() => toggleModal(false)} // Close modal
+              onClick={() => {toggleModal(false); setIsUpdated(false)}} // Close modal
                 className="text-white bg-[#1B84FF] hover:bg-blue-800 font-medium rounded-lg text-[26px] w-[330px] px-[31px] py-[18px] me-2 mx-2 dark:bg-blue-600 dark:hover:bg-blue-700"
               >
                 Okay, Thanks!
