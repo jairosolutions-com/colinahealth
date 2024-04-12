@@ -174,6 +174,7 @@ export const ScheduledMedModal = ({
   };
   console.log(scheduledMedData, "scheduledMedData");
   console.log(scheduledMedData.length, "scheduledMedData length");
+  console.log(formData, "formData");
   return (
     <div
       className={`absolute inset-[-100px] bg-[#76898A99] flex items-center justify-center pb-[150px]`}
@@ -205,6 +206,10 @@ export const ScheduledMedModal = ({
                       onChange={handleMedicationChange}
                       required
                     >
+                      {scheduledMedData.length !== 0 ||prescriptionList.length !==0 &&  (
+                        <option value="">Select Prescription</option>
+                      )}
+
                       {prescriptionList.length === 0 &&
                       scheduledMedData.length === 0 ? (
                         <option value="">No Prescription</option>
@@ -214,8 +219,11 @@ export const ScheduledMedModal = ({
                             value={
                               scheduledMedData.medicationlogs_medicationLogsName
                             }
+                            data-uuid={scheduledMedData.medicationlogs_uuid}
                           >
-                            {scheduledMedData.medicationlogs_medicationLogsName} @ {scheduledMedData.medicationlogs_medicationLogsDate}
+                            {scheduledMedData.medicationlogs_medicationLogsName}{" "}
+                            @{" "}
+                            {scheduledMedData.medicationlogs_medicationLogsDate}
                           </option>
                         )
                       )}

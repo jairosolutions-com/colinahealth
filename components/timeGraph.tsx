@@ -132,7 +132,7 @@ const TimeGraph = ({
   }, [linePosition]);
 
   return (
-    <div className="w-[320vh] h-full overflow-hidden">
+    <div className="w-[320vh] h-full overflow-hidden ">
       <div className=" relative z-10">
         <div
           ref={lineRef}
@@ -190,7 +190,7 @@ const TimeGraph = ({
                       key={`${dataIndex}_${col.time}`}
                       className={`text-center border-x border-dashed max-h-[15px] border-black overflow text-nowrap text-ellipsis overflow-hidden  ${
                         parseInt(col.time) <= parseInt(currentTime) - 100
-                          ? "bg-[#89898926]"
+                          ? "bg-[#E4E4E4] "
                           : "bg-white"
                       }`}
                       style={{ maxHeight: "20px" }} // Set fixed height for table cells

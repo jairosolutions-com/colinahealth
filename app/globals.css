@@ -189,12 +189,12 @@ body,
 ::-webkit-scrollbar-track {
   background: #f3f0f0;
   opacity: 30;
-  border-radius: 10px;
+
   max-height: 400px;
 }
 ::-webkit-scrollbar-thumb {
   background: #d9d9d9;
-  border-radius: 10px;
+
   opacity: 100;
   width: 10px;
 }

@@ -412,7 +412,8 @@ export default function PatientPage({ patient }: { patient: any }) {
           label="Success"
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          isEdit={isEdit}
+          setIsUpdated=''
+          isUpdated=''
         />
       )}
       {isErrorOpen && (
