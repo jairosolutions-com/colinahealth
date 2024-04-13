@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 
 export const Login = () => {
   const router = useRouter();
-  if(getAccessToken()){
+  if (getAccessToken()) {
     onNavigate(router, "/dashboard");
   }
 
@@ -19,9 +19,6 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  
-
-
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,7 +47,6 @@ export const Login = () => {
   };
 
   console.log("email", email);
-
 
   return (
     <div>
@@ -90,7 +86,11 @@ export const Login = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                     />
-                    <div className={`${isInvalid? "block":"hidden"} absolute right-3 flex items-center justify-center h-full `}>
+                    <div
+                      className={`${
+                        isInvalid ? "block" : "hidden"
+                      } absolute right-3 flex items-center justify-center h-full `}
+                    >
                       <img
                         className=""
                         src="/icons/invalidIcon.svg"
@@ -113,7 +113,11 @@ export const Login = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                     />
-                    <div className={`${isInvalid? "block":"hidden"} absolute right-3 flex items-center justify-center h-full `}>
+                    <div
+                      className={`${
+                        isInvalid ? "block" : "hidden"
+                      } absolute right-3 flex items-center justify-center h-full `}
+                    >
                       <img
                         className=""
                         src="/icons/invalidIcon.svg"
@@ -125,24 +129,24 @@ export const Login = () => {
 
                   {/* COMMENT MUNA KAY DILI PA WORKING */}
 
-                  <label className="mb-3 flex items-center justify-start pb-4 pl-5 font-medium md:mb-3">
-                    <input
-                      type="checkbox"
-                      name="checkbox"
-                      className="float-left -ml-[20px] mt-1"
-                      checked={rememberMe} // Bind checked attribute to rememberMe state
-                      onChange={handleCheckboxChange} // Handle checkbox change
-                    />
-                    <span className="ml-2 inline-block cursor-pointer checkbox mt-1">
-                      {" "}
-                      <a href="#" className="font-medium text-[15px]">
+                  <div className="flex">
+                    <label className="mb-3 flex items-center justify-start pb-4 pl-5 font-medium md:mb-3">
+                      <input
+                        type="checkbox"
+                        name="checkbox"
+                        className="float-left -ml-[20px] mt-1"
+                        checked={rememberMe} // Bind checked attribute to rememberMe state
+                        onChange={handleCheckboxChange} // Handle checkbox change
+                      />
+                      <span className="ml-2 inline-block font-medium text-[15px] cursor-pointer checkbox mt-1 select-none">
+                        {" "}
                         Remember me
-                      </a>
-                    </span>
-                    <span className="font-medium text-[15px] ml-auto inline-block cursor-pointer checkbox mt-1 ">
+                      </span>
+                    </label>
+                    <p className="font-medium text-[15px] ml-auto inline-block cursor-pointer mt-1 ">
                       Forgot Password?
-                    </span>
-                  </label>
+                    </p>
+                  </div>
                   <div>
                     <button
                       className="inline-block w-full cursor-pointer text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out"
