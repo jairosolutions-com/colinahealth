@@ -8,7 +8,7 @@ export async function validateUser(
   try {
     const expiresIn = rememberMe ? "30d" : "1d"; 
     const requestData = {
-      username: email,
+      username: email.toLocaleLowerCase(),
       password: password,
       tokenExpiresIn: expiresIn,
     };

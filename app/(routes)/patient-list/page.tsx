@@ -14,7 +14,7 @@ import { getAccessToken } from "@/app/api/login-api/accessToken";
 export default function PatientPage({ patient }: { patient: any }) {
   const router = useRouter();
   if(!getAccessToken()){
-    onNavigate(router, "/dashboard");
+    onNavigate(router, "/login");
   }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);

@@ -132,7 +132,7 @@ const TimeGraph = ({
   }, [linePosition]);
 
   return (
-    <div className="w-[320vh] h-full overflow-hidden ">
+    <div className="w-[320vh] h-full overflow-hidden md:">
       <div className=" relative z-10">
         <div
           ref={lineRef}
