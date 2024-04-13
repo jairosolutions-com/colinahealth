@@ -84,7 +84,7 @@ export const Navbar = () => {
           ))}
         </div>
         <div className="flex gap-3 items-center mr-2">
-          <Image src={"/imgs/admin 1.png"} alt={""} width={30} height={30} />
+          <Image src={"/imgs/admin.svg"} alt={""} width={30} height={30} />
           <Image
             className={`cursor-pointer select-none ${
               dropdownOpen ? "rotate-180" : ""
