@@ -58,7 +58,7 @@ export const Login = () => {
         <div className="grid gap-0 md:h-screen md:grid-cols-2">
           <div className="flex items-center max-h-screen justify-center overflow-hidden">
             <img
-              src="/imgs/Bimage.png"
+              src="/imgs/login-image.png"
               alt="Your Image"
               className="w-full h-full object-cover"
             />
@@ -66,7 +66,7 @@ export const Login = () => {
 
           <div className="flex mt-40 justify-center md:px-5 md:py-10 lg:py-32 ">
             <div className="w-[542.27px] text-left">
-              <h2 className="mb-4 text-1xl font-medium md:mb-10 md:text-2xl lg:mb-10">
+              <h2 className="mb-4 text-[20px] font-semibold md:mb-10 md:text-2xl lg:mb-10">
                 Sign in to your Account
               </h2>
 
@@ -82,7 +82,7 @@ export const Login = () => {
                       type="email"
                       className={`${
                         isInvalid ? "ring-1 ring-red-400" : ""
-                      }  h-9 w-full bg-opacity-60 bg-[#D9D9D9] px-3 py-6 pl-5 text-sm text-[#333333]`}
+                      }  h-9 w-full bg-opacity-10 bg-[#D9D9D9] px-3 py-6 pl-5 text-[15px] text-[#333333]`}
                       placeholder={`${
                         isInvalid ? "Invalid Email!" : "Email Address"
                       }`}
@@ -105,7 +105,7 @@ export const Login = () => {
                       type="password"
                       className={`${
                         isInvalid ? "ring-1 ring-red-400" : ""
-                      }  h-9 w-full bg-opacity-60 bg-[#D9D9D9] px-3 py-6 pl-5 text-sm text-[#333333]`}
+                      }  h-9 w-full bg-opacity-10 bg-[#D9D9D9] px-3 py-6 pl-5 text-[15px] text-[#333333]`}
                       placeholder={`${
                         isInvalid ? "Invalid Password!" : "Password"
                       }`}
@@ -133,19 +133,19 @@ export const Login = () => {
                       checked={rememberMe} // Bind checked attribute to rememberMe state
                       onChange={handleCheckboxChange} // Handle checkbox change
                     />
-                    <span className="ml-2 inline-block cursor-pointer text-sm checkbox mt-1">
+                    <span className="ml-2 inline-block cursor-pointer checkbox mt-1">
                       {" "}
-                      <a href="#" className="font-normal text-[#0b0b1f]">
+                      <a href="#" className="font-medium text-[15px]">
                         Remember me
                       </a>
                     </span>
-                    {/* <span className="ml-auto inline-block cursor-pointer text-sm checkbox mt-1 ">
+                    <span className="font-medium text-[15px] ml-auto inline-block cursor-pointer checkbox mt-1 ">
                       Forgot Password?
-                    </span> */}
+                    </span>
                   </label>
                   <div>
                     <button
-                      className="inline-block w-full cursor-pointer items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out"
+                      className="inline-block w-full cursor-pointer text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out"
                       type="submit"
                     >
                       Sign In

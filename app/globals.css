@@ -158,9 +158,17 @@ body,
 
 .p-title {
   height: 32px;
-  line-height: 32px;
-  font-weight: 700;
+  font-weight: bold;
+  font-size: 20px;
+  /* w-[1157px] h-[32px] leading-[42px] font-bold */
+}
+
+.slash {
+  height: 32px;
+  font-weight: 500;
   font-size: 24px;
+  color: #191d23;
+  opacity: 60%;
   /* w-[1157px] h-[32px] leading-[42px] font-bold */
 }
 
