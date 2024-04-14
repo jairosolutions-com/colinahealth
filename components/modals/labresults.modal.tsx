@@ -22,6 +22,12 @@ interface Modalprops {
   isModalOpen: (isOpen: boolean) => void;
   onSuccess: () => void;
 }
+interface LabFile {
+  file: any; // Assuming file property exists for the key
+  filename: string;
+  data: Uint8Array;
+  file_uuid: string;
+}
 
 export const LabResultModal = ({
   isEdit,
@@ -48,16 +54,34 @@ export const LabResultModal = ({
   const [fileData, setFileData] = useState(new Uint8Array());
   const [fileView, setFileView] = useState();
   const [fileIndex, setFileIndex] = useState(0);
-  const [currentFile, setCurrentFile] = useState(labFiles[fileIndex] || null);
+  const [currentFile, setCurrentFile] = useState({} as LabFile);
   // Convert the buffer data to base64 string
-  const base64String = Buffer.from(fileData).toString("base64");
-  const fileType = fileName.split(".").pop();
+
+  const [base64String, setBase64String] = useState("");
+  const [fileType, setFileType] = useState("");
+
+  // Define the effect to update base64String and fileType when fileData changes
+  useEffect(() => {
+    if (labFiles.length > 0) {
+      const file = labFiles[fileIndex];
+      setCurrentFile(file);
+      setFileName(fileName);
+      setFileData(fileData);
+
+      // Convert the data to base64 and set the file type
+      const newBase64String = Buffer.from(currentFile.data).toString("base64");
+      setBase64String(newBase64String);
+      console.log("FILE STRING", base64String);
+      const newFileType = currentFile.filename.split(".").pop() as string;
+      setFileType(newFileType);
+      console.log("FILE newFileType", newFileType);
+    }
+  }, [fileIndex, labFiles]);
   // Update the current file when fileIndex changes
   useEffect(() => {
-    setCurrentFile(labFiles[fileIndex] || null);
-  }, [fileIndex, labFiles]);
+    setCurrentFile(labFiles[fileIndex]);
+  }, [fileIndex, labFiles, currentFile]);
 
-  
   // Define functions to navigate through files
   const prevFile = () => {
     if (fileIndex > 0) {
@@ -73,22 +97,6 @@ export const LabResultModal = ({
     }
   };
 
-
-  // Function to go to the first file
-  const firstFile = () => {
-    setFileIndex(0);
-  };
-
-  // Function to go to the last file
-  const lastFile = () => {
-    setFileIndex(labFiles.length - 1);
-  };
-
-  // Function to set the file index to a specific value
-  const setFileIndexTo = (index: number) => {
-    setFileIndex(Math.min(Math.max(index, 0), labFiles.length - 1));
-  };
-  let responseData = useState<any[]>([]);
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -161,19 +169,6 @@ export const LabResultModal = ({
       setError("Failed to add Lab Result");
     }
   };
-  const viewFile = async () => {
-    try {
-      const response = await fetchLabFile(
-        labResultData.labResults_uuid,
-        fileId,
-        router
-      );
-      console.log(response, "filez");
-      setFileView(response);
-    } catch (error: any) {
-      setError(error.message);
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -187,7 +182,7 @@ export const LabResultModal = ({
           setCurrentFile(response.data[0]);
           setFileIndex(0);
         }
-        console.log(currentFile)  
+        console.log(currentFile);
       } catch (error: any) {
         setError(error.message);
       }
@@ -212,26 +207,6 @@ export const LabResultModal = ({
     fetchFile();
   }, [labResultData.labResults_uuid, fileId]);
 
-  // const handleButtonClick = async () => {
-
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetchLabResultFiles(
-  //         labResultData.labResults_uuid,
-  //         router
-  //       );
-  //       setLabFiles(response.data);
-
-  //     } catch (error: any) {
-  //       setError(error.message);
-  //     }
-  //   };
-
-  //   fetchData();
-
-  //    console.log(labFiles, "labfilesse");
-
-  // };
 
   return (
     <div
@@ -383,15 +358,16 @@ export const LabResultModal = ({
         ) : (
           <div className="h-[600px] max-h-[500px] md:px-10 mt-5">
             <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-              {labFiles.map((file, index) => (
-                <div key={file.file_uuid} className="even:bg-gray-50 border-b">
+              {labFiles.map((file: LabFile, index) => (
+                <div key={index} className="even:bg-gray-50 border-b">
                   <div
                     onClick={() => {
                       // Set file index and current file for display
                       setFileIndex(index);
-                      setFileName(file.filename)
-                      setFileData(file.data)
                       setCurrentFile(file);
+
+                      setFileName(file.filename);
+                      setFileData(file.data);
                     }}
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
@@ -403,8 +379,7 @@ export const LabResultModal = ({
               {currentFile && (
                 <div
                   key={currentFile.file_uuid}
-                  className="even:bg-gray-50 border-b"
-                >
+                  className="even:bg-gray-50 border-b">
                   <div className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                     {currentFile.filename}
                   </div>
@@ -412,22 +387,25 @@ export const LabResultModal = ({
                     {fileType === "pdf" ? (
                       <iframe
                         src={`data:application/pdf;base64,${base64String}`}
-                        width="100%"
-                        height="100%"
+                        width="500px"
+                        height="500px"
                       ></iframe>
                     ) : (
                       <img
                         src={`data:image/${fileType};base64,${base64String}`}
                         alt={currentFile.filename}
-                        width={400}
-                        height={400}
+                        width="500px"
+                        height="500px"
                       />
                     )}
                   </div>
                   <div className="flex items-center justify-center space-x-2">
                     {fileIndex > 0 && (
                       <button
-                        onClick={prevFile}
+                        onClick={() => {
+                          // Set file index and current file for display
+                          prevFile();
+                        }}
                         className="text-gray-500 hover:text-gray-700"
                       >
                         Previous
@@ -435,7 +413,10 @@ export const LabResultModal = ({
                     )}
                     {fileIndex < labFiles.length - 1 && (
                       <button
-                        onClick={nextFile}
+                        onClick={() => {
+                          // Set file index and current file for display
+                          nextFile();
+                        }}
                         className="text-gray-500 hover:text-gray-700"
                       >
                         Next
