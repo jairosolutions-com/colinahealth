@@ -6,6 +6,11 @@ import {
 } from "@/app/api/lab-results-api/lab-results.api";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import {
+  fetchLabResultFiles,
+  fetchLabFile,
+} from "@/app/api/lab-results-api/lab-results.api";
+import Image from "next/image";
 
 interface Modalprops {
   isEdit: any;
@@ -13,18 +18,20 @@ interface Modalprops {
   setIsUpdated: any;
   label: string;
   isOpen: boolean;
+  isView: boolean;
   isModalOpen: (isOpen: boolean) => void;
   onSuccess: () => void;
 }
 
 export const LabResultModal = ({
   isEdit,
+  isView,
   labResultData,
   setIsUpdated,
   label,
   isOpen,
   isModalOpen,
-  onSuccess
+  onSuccess,
 }: Modalprops) => {
   const params = useParams<{
     id: any;
@@ -32,7 +39,56 @@ export const LabResultModal = ({
     item: string;
   }>();
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   const patientId = params.id.toUpperCase();
+  const [labFiles, setLabFiles] = useState([]); // Initialize as an empty array
+  const [fileId, setFileId] = useState("");
+  const [fileName, setFileName] = useState("");
+  const [fileData, setFileData] = useState(new Uint8Array());
+  const [fileView, setFileView] = useState();
+  const [fileIndex, setFileIndex] = useState(0);
+  const [currentFile, setCurrentFile] = useState(labFiles[fileIndex] || null);
+  // Convert the buffer data to base64 string
+  const base64String = Buffer.from(fileData).toString("base64");
+  const fileType = fileName.split(".").pop();
+  // Update the current file when fileIndex changes
+  useEffect(() => {
+    setCurrentFile(labFiles[fileIndex] || null);
+  }, [fileIndex, labFiles]);
+
+  
+  // Define functions to navigate through files
+  const prevFile = () => {
+    if (fileIndex > 0) {
+      setFileIndex(fileIndex - 1);
+      setCurrentFile(labFiles[fileIndex - 1]);
+    }
+  };
+
+  const nextFile = () => {
+    if (fileIndex < labFiles.length - 1) {
+      setFileIndex(fileIndex + 1);
+      setCurrentFile(labFiles[fileIndex + 1]);
+    }
+  };
+
+
+  // Function to go to the first file
+  const firstFile = () => {
+    setFileIndex(0);
+  };
+
+  // Function to go to the last file
+  const lastFile = () => {
+    setFileIndex(labFiles.length - 1);
+  };
+
+  // Function to set the file index to a specific value
+  const setFileIndexTo = (index: number) => {
+    setFileIndex(Math.min(Math.max(index, 0), labFiles.length - 1));
+  };
+  let responseData = useState<any[]>([]);
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -44,7 +100,15 @@ export const LabResultModal = ({
     hdlCholesterol: labResultData.labResults_hdlCholesterol || "",
     triglycerides: labResultData.labResults_triglycerides || "",
   });
+  let headingText = "";
 
+  if (isEdit) {
+    headingText = "Update Laboratory Result";
+  } else if (isView) {
+    headingText = "View Laboratory Result";
+  } else {
+    headingText = "Add Laboratory Result";
+  }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -52,8 +116,11 @@ export const LabResultModal = ({
       [name]: value,
     }));
   };
-  console.log(isEdit, "EDIT STATUS");
-  console.log(labResultData.labResults_uuid, "labResultData.labResults_uuid");
+  if (isEdit) {
+    console.log(labResultData, "labResultData");
+    console.log(formData, "formData");
+  }
+
   const handleSubmit = async (e: any) => {
     console.log(isEdit, "edit stat");
 
@@ -64,9 +131,9 @@ export const LabResultModal = ({
           labResultData.labResults_uuid,
           formData,
           router
-        );  
-        setIsUpdated(true)
-        onSuccess()
+        );
+        setIsUpdated(true);
+        onSuccess();
         isModalOpen(false);
         return;
       } else {
@@ -87,15 +154,85 @@ export const LabResultModal = ({
           hdlCholesterol: "",
           triglycerides: "",
         });
-        onSuccess()
+        onSuccess();
       }
     } catch (error) {
       console.error("Error adding Lab Result:", error);
       setError("Failed to add Lab Result");
     }
   };
-  console.log(labResultData, "labResultData");
-  console.log(formData, "formData");
+  const viewFile = async () => {
+    try {
+      const response = await fetchLabFile(
+        labResultData.labResults_uuid,
+        fileId,
+        router
+      );
+      console.log(response, "filez");
+      setFileView(response);
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchLabResultFiles(
+          labResultData.labResults_uuid,
+          router
+        );
+        setLabFiles(response.data);
+        if (response.data.length > 0) {
+          setCurrentFile(response.data[0]);
+          setFileIndex(0);
+        }
+        console.log(currentFile)  
+      } catch (error: any) {
+        setError(error.message);
+      }
+    };
+
+    const fetchFile = async () => {
+      try {
+        const response = await fetchLabFile(
+          labResultData.labResults_uuid,
+          fileId,
+          router
+        );
+        console.log(response, "filez");
+        setFileView(response);
+      } catch (error: any) {
+        setError(error.message);
+      }
+    };
+
+    // Call fetchData and fetchFile when `labResultData.labResults_uuid` changes
+    fetchData();
+    fetchFile();
+  }, [labResultData.labResults_uuid, fileId]);
+
+  // const handleButtonClick = async () => {
+
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetchLabResultFiles(
+  //         labResultData.labResults_uuid,
+  //         router
+  //       );
+  //       setLabFiles(response.data);
+
+  //     } catch (error: any) {
+  //       setError(error.message);
+  //     }
+  //   };
+
+  //   fetchData();
+
+  //    console.log(labFiles, "labfilesse");
+
+  // };
+
   return (
     <div
       className={`absolute inset-[-100px] bg-[#76898A99] flex items-center justify-center pb-60`}
@@ -103,145 +240,232 @@ export const LabResultModal = ({
       <div className="max-w-[550px] bg-[#FFFFFF] rounded-md">
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <h2 className="p-title text-left text-[#071437] pl-9 mt-7">
-            {isEdit ? "Update" : "Add"} Laboratory Result
+            {headingText}
           </h2>
           <p className="text-sm pl-9 text-gray-600 pb-10 pt-2">
-            Submit your log details.
+            {isView ? "View" : "Submit"} your log details.
           </p>
         </div>
-        <div className=" mb-9 pt-4">
-          <div className="h-[600px] max-h-[320px] md:px-10 mt-5">
-            <form className="" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="first-name"
-                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
-                  >
-                    HEMOGLOBIN A1c
-                  </label>
-                  <div className="mt-2.5">
-                    <input
-                      value={formData.hemoglobinA1c}
-                      type="text"
-                      onChange={handleChange}
-                      required
-                      name="hemoglobinA1c"
-                      className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                    />
+        {!isView ? (
+          <div className=" mb-9 pt-4">
+            <div className="h-[600px] max-h-[320px] md:px-10 mt-5">
+              <form className="" onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="first-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      HEMOGLOBIN A1c
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        value={formData.hemoglobinA1c}
+                        type="text"
+                        onChange={handleChange}
+                        required
+                        name="hemoglobinA1c"
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="last-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      FASTING BLOOD GLUCOSE
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        type="text"
+                        onChange={handleChange}
+                        value={formData.fastingBloodGlucose}
+                        required
+                        name="fastingBloodGlucose"
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="first-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      TOTAL CHOLESTEROL
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        value={formData.totalCholesterol}
+                        type="text"
+                        required
+                        name="totalCholesterol"
+                        onChange={handleChange}
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="last-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      LDL CHOLESTEROL
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        type="text"
+                        value={formData.ldlCholesterol}
+                        required
+                        name="ldlCholesterol"
+                        onChange={handleChange}
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="first-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      HDL CHOLESTEROL
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        value={formData.hdlCholesterol}
+                        type="text"
+                        onChange={handleChange}
+                        required
+                        name="hdlCholesterol"
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="last-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      TRIGLYCERIDES
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        value={formData.triglycerides}
+                        type="text"
+                        name="triglycerides"
+                        onChange={handleChange}
+                        required
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-5 pb-3 ">
+                    <button
+                      onClick={() => isModalOpen(false)}
+                      type="button"
+                      className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                  <div className="mt-5 pb-3  ">
+                    <button
+                      type="submit"
+                      className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
+                    >
+                      {isEdit ? "Update" : "Submit"}
+                    </button>
                   </div>
                 </div>
-                <div>
-                  <label
-                    htmlFor="last-name"
-                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
-                  >
-                    FASTING BLOOD GLUCOSE
-                  </label>
-                  <div className="mt-2.5">
-                    <input
-                      type="text"
-                      onChange={handleChange}
-                      value={formData.fastingBloodGlucose}
-                      required
-                      name="fastingBloodGlucose"
-                      className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="first-name"
-                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
-                  >
-                    TOTAL CHOLESTEROL
-                  </label>
-                  <div className="mt-2.5">
-                    <input
-                      value={formData.totalCholesterol}
-                      type="text"
-                      required
-                      name="totalCholesterol"
-                      onChange={handleChange}
-                      className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="last-name"
-                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
-                  >
-                    LDL CHOLESTEROL
-                  </label>
-                  <div className="mt-2.5">
-                    <input
-                      type="text"
-                      value={formData.ldlCholesterol}
-                      required
-                      name="ldlCholesterol"
-                      onChange={handleChange}
-                      className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="first-name"
-                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
-                  >
-                    HDL CHOLESTEROL
-                  </label>
-                  <div className="mt-2.5">
-                    <input
-                      value={formData.hdlCholesterol}
-                      type="text"
-                      onChange={handleChange}
-                      required
-                      name="hdlCholesterol"
-                      className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="last-name"
-                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
-                  >
-                    TRIGLYCERIDES
-                  </label>
-                  <div className="mt-2.5">
-                    <input
-                      value={formData.triglycerides}
-                      type="text"
-                      name="triglycerides"
-                      onChange={handleChange}
-                      required
-                      className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-                <div className="mt-5 pb-3 ">
-                  <button
-                    onClick={() => isModalOpen(false)}
-                    type="button"
-                    className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
-                  >
-                    Cancel
-                  </button>
-                </div>
-                <div className="mt-5 pb-3  ">
-                  <button
-                    type="submit"
-                    className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
-                  >
-                    {isEdit ? "Update" : "Submit"}
-                  </button>
-                </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="h-[600px] max-h-[500px] md:px-10 mt-5">
+            <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+              {labFiles.map((file, index) => (
+                <div key={file.file_uuid} className="even:bg-gray-50 border-b">
+                  <div
+                    onClick={() => {
+                      // Set file index and current file for display
+                      setFileIndex(index);
+                      setFileName(file.filename)
+                      setFileData(file.data)
+                      setCurrentFile(file);
+                    }}
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    {file.filename}
+                  </div>
+                </div>
+              ))}
+
+              {currentFile && (
+                <div
+                  key={currentFile.file_uuid}
+                  className="even:bg-gray-50 border-b"
+                >
+                  <div className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    {currentFile.filename}
+                  </div>
+                  <div className="flex items-center justify-center">
+                    {fileType === "pdf" ? (
+                      <iframe
+                        src={`data:application/pdf;base64,${base64String}`}
+                        width="100%"
+                        height="100%"
+                      ></iframe>
+                    ) : (
+                      <img
+                        src={`data:image/${fileType};base64,${base64String}`}
+                        alt={currentFile.filename}
+                        width={400}
+                        height={400}
+                      />
+                    )}
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    {fileIndex > 0 && (
+                      <button
+                        onClick={prevFile}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        Previous
+                      </button>
+                    )}
+                    {fileIndex < labFiles.length - 1 && (
+                      <button
+                        onClick={nextFile}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        Next
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-5 pb-3">
+              <button
+                onClick={() => isModalOpen(false)}
+                type="button"
+                className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
+              >
+                Cancel
+              </button>
+            </div>
+
+            <div className="mt-5 pb-3">
+              <button
+                onClick={() => isModalOpen(false)}
+                className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

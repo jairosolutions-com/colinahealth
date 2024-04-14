@@ -37,9 +37,9 @@ export async function fetchLabResultsByPatient(
     );
 
     console.log(response.data);
-    const { patientId, id, ...patientPrescriptionsNoId } = response.data;
-    console.log(patientPrescriptionsNoId, "patient prescription after search");
-    return patientPrescriptionsNoId;
+    const { patientId, id, ...patientLabResult } = response.data;
+    console.log(patientLabResult, "patient patientLabResult after search");
+    return patientLabResult;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401) {
       setAccessToken("");
@@ -114,4 +114,88 @@ export async function updateLabResultOfPatient(
   }
 }
 
+export async function fetchLabResultFiles(
+  labResultUuid: string,
+  router: any // Pass router instance as a parameter
+): Promise<any> {
+  const requestData = {
+    labResultUuid: labResultUuid.toUpperCase(),
+  };
+  console.log(labResultUuid);
+  try {
+    console.log("searchPatient", requestData);
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("Access token not found in local storage");
+    }
 
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    const response = await axios.get(
+      `${apiUrl}/lab-results/${labResultUuid}/files`,
+      { headers }
+    );
+
+    console.log(response.data, 'api fetch lab result files');
+    return response;
+
+  } catch (error) {
+    if ((error as AxiosError).response?.status === 401) {
+      setAccessToken("");
+      onNavigate(router, "/login");
+      return Promise.reject(new Error("Unauthorized access"));
+    }
+    console.error(
+      "Error searching lab result files:",
+      (error as AxiosError).message
+    );
+  }
+}
+export async function fetchLabFile(
+  labResultUuid: string,
+  labFileId: string,
+  router: any // Pass router instance as a parameter
+): Promise<any> {
+  const requestData = {
+    labResultUuid: labResultUuid.toUpperCase(),
+    labFileId: labFileId.toUpperCase(),
+  };
+
+  console.log("Request data:", requestData);
+  
+  try {
+    const accessToken = getAccessToken();
+    console.log("Access token:", accessToken);
+    
+    if (!accessToken) {
+      throw new Error("Access token not found in local storage");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    console.log("Headers:", headers);
+
+    const response = await axios.get(
+      `${apiUrl}/lab-results/${labResultUuid}/files/${labFileId}`,
+      { headers }
+    );
+
+    console.log("API response data:", response.data);
+    return response;
+
+  } catch (error) {
+    console.error("Error fetching lab file:", error);
+    
+    if ((error as AxiosError).response?.status === 401) {
+      setAccessToken("");
+      onNavigate(router, "/login");
+      return Promise.reject(new Error("Unauthorized access"));
+    }
+
+    return Promise.reject(error);
+  }
+}
