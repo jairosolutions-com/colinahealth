@@ -67,12 +67,19 @@ export async function createPrescriptionOfPatient(patientId: string, formData: a
 
     // Make the API request to create the allergy
     const response = await axios.post(`${apiUrl}/prescriptions/${patientId}`, formData, { headers });
-    const createdAllergy = response.data;
+    const createdPrescription = response.data;
 
-    return createdAllergy;
+    return createdPrescription;
   } catch (error) {
-    console.error("Error creating prescription:", error);
-    throw error; // Rethrow the error to handle it in the component
+    if ((error as AxiosError).response?.status === 401) {
+      setAccessToken("");
+      onNavigate(router, "/login");
+      return Promise.reject(new Error("Unauthorized access"));
+    }
+    console.error(
+      "Error searching patient prescription:",
+      (error as AxiosError).message
+    );
   }
 }
 
@@ -98,9 +105,9 @@ export async function updatePrescriptionOfPatient(
       `${apiUrl}/prescriptions/update/${prescriptionUuid}`, 
     formData, 
     { headers });
-    const updatedSurgery= response.data;
+    const updatedPrescription= response.data;
 
-    return updatedSurgery;
+    return updatedPrescription;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401) {
       setAccessToken("");
