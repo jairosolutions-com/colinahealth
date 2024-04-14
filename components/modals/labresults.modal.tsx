@@ -48,7 +48,7 @@ export const LabResultModal = ({
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const patientId = params.id.toUpperCase();
-  const [labFiles, setLabFiles] = useState([]); // Initialize as an empty array
+  const [labFiles, setLabFiles] = useState<any[]>([]); // Initialize as an empty array
   const [fileId, setFileId] = useState("");
   const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState(new Uint8Array());
@@ -207,17 +207,20 @@ export const LabResultModal = ({
     fetchFile();
   }, [labResultData.labResults_uuid, fileId]);
 
-
   return (
     <div
       className={`absolute inset-[-100px] bg-[#76898A99] flex items-center justify-center pb-60`}
     >
-      <div className="max-w-[550px] bg-[#FFFFFF] rounded-md">
-        <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
+      <div
+        className={`bg-[#FFFFFF] rounded-md ${
+          isView ? "max-w-[1200px] w-[1200px] h-[1200px]" : "max-w-[1500px] h-[500px] w-[550px]"
+        }`}
+      >
+        <div className="bg-[#ffffff] flex flex-col justify-start rounded-md">
           <h2 className="p-title text-left text-[#071437] pl-9 mt-7">
             {headingText}
           </h2>
-          <p className="text-sm pl-9 text-gray-600 pb-10 pt-2">
+          <p className="text-sm pl-9 text-gray-600 pt-2">
             {isView ? "View" : "Submit"} your log details.
           </p>
         </div>
@@ -356,96 +359,96 @@ export const LabResultModal = ({
             </div>
           </div>
         ) : (
-          <div className="h-[600px] max-h-[500px] md:px-10 mt-5">
-            <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-              {labFiles.map((file: LabFile, index) => (
-                <div key={index} className="even:bg-gray-50 border-b">
-                  <div
-                    onClick={() => {
-                      // Set file index and current file for display
-                      setFileIndex(index);
-                      setCurrentFile(file);
+          <>
+            {labFiles.length > 0 && (
+              <>
+                <div className=" grid grid-cols-1 md:grid-cols-10 gap-4">
+                  <div className="md:px-10 mt-5 md:col-span-3 ">
+                    <div className="grid grid-cols-1 gap-x-4 gap-y-4">
+                      {labFiles.map((file: LabFile, index) => (
+                        <div
+                          key={index}
+                          className="even:bg-gray-50 border-b cursor-pointer"
+                          onClick={() => {
+                            // Set file index and current file for display
+                            setFileIndex(index);
+                            setCurrentFile(file);
+                          }}
+                        >
+                          <div className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            {file.filename}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
 
-                      setFileName(file.filename);
-                      setFileData(file.data);
-                    }}
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    {file.filename}
-                  </div>
-                </div>
-              ))}
-
-              {currentFile && (
-                <div
-                  key={currentFile.file_uuid}
-                  className="even:bg-gray-50 border-b">
-                  <div className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                    {currentFile.filename}
-                  </div>
-                  <div className="flex items-center justify-center">
-                    {fileType === "pdf" ? (
-                      <iframe
-                        src={`data:application/pdf;base64,${base64String}`}
-                        width="500px"
-                        height="500px"
-                      ></iframe>
-                    ) : (
-                      <img
-                        src={`data:image/${fileType};base64,${base64String}`}
-                        alt={currentFile.filename}
-                        width="500px"
-                        height="500px"
-                      />
-                    )}
-                  </div>
-                  <div className="flex items-center justify-center space-x-2">
-                    {fileIndex > 0 && (
+                    <div className="mt-5 pb-3">
                       <button
-                        onClick={() => {
-                          // Set file index and current file for display
-                          prevFile();
-                        }}
-                        className="text-gray-500 hover:text-gray-700"
+                        onClick={() => isModalOpen(false)}
+                        type="button"
+                        className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
                       >
-                        Previous
+                        Cancel
                       </button>
-                    )}
-                    {fileIndex < labFiles.length - 1 && (
+                    </div>
+
+                    <div className="mt-5 pb-3">
                       <button
-                        onClick={() => {
-                          // Set file index and current file for display
-                          nextFile();
-                        }}
-                        className="text-gray-500 hover:text-gray-700"
+                        onClick={() => isModalOpen(false)}
+                        className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
                       >
-                        Next
+                        OK
                       </button>
-                    )}
+                    </div>
                   </div>
+
+                  {currentFile && (
+                    <div className=" md:col-span-7  items-center justify-center">
+                      <div className=" w-full mb-4"></div>
+
+                      <div className="w-full max-w-xl">
+                        {fileType === "pdf" ? (
+                          <iframe
+                            src={`data:application/pdf;base64,${base64String}`}
+                            width="800px"
+                            height="1000px"
+                            className="shadow-md rounded-lg"
+                          ></iframe>
+                        ) : (
+                          <iframe  width="800px"
+                          height="1000px"
+                          src={`data:image/${fileType};base64,${base64String}`}>
+
+                        
+                            </iframe>
+                        )}
+                      </div>
+
+                      <div className="flex justify-center space-x-4 mt-4">
+                        {fileIndex > 0 && (
+                          <button
+                            onClick={prevFile}
+                            className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-md"
+                          >
+                            Previous
+                          </button>
+                        )}
+
+                        {fileIndex < labFiles.length - 1 && (
+                          <button
+                            onClick={nextFile}
+                            className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-md"
+                          >
+                            Next
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-
-            <div className="mt-5 pb-3">
-              <button
-                onClick={() => isModalOpen(false)}
-                type="button"
-                className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
-              >
-                Cancel
-              </button>
-            </div>
-
-            <div className="mt-5 pb-3">
-              <button
-                onClick={() => isModalOpen(false)}
-                className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
-              >
-                OK
-              </button>
-            </div>
-          </div>
+              </>
+            )}
+          </>
         )}
       </div>
     </div>
