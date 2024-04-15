@@ -11,7 +11,7 @@ import { useParams, useRouter } from "next/navigation";
 import { NotesModal } from "@/components/modals/notes.modal";
 import { fetchNotesByPatient } from "@/app/api/notes-api/notes-api";
 import { SuccessModal } from "@/components/shared/success";
-import Loading from "./loading";
+import Loading from "../loading";
 
 const Notes = () => {
   const router = useRouter();
@@ -182,7 +182,22 @@ const Notes = () => {
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
             <h1 className="p-title">Notes</h1>
-          </div>
+            <h1 className="slash mx-2">{"/"} </h1>
+            <h1 className="font-medium text-[20px] text-[#007C85] cursor-pointer">Nurse's Notes</h1>
+            <h1 className="slash mx-2">{"/"} </h1>
+          <h1
+              onClick={() => {
+                onNavigate(
+                  router,
+                  `/patient-overview/${patientId.toLowerCase()}/notes/incident-report`
+                );
+                setIsLoading(true);
+              }}
+              className="font-medium text-[20px] cursor-pointer text-gray-600"
+            >
+              Incident Report
+            </h1>
+            </div>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
             Total of {totalNotes} Notes
@@ -280,7 +295,7 @@ const Notes = () => {
                   <th scope="col" className="px-6 py-3 w-[250px]">
                     SUBJECT
                   </th>
-                  <th scope="col" className="px-6 py-3 w-[600px]">
+                  <th scope="col" className="px-6 py-3 w-[400px]">
                     NOTES
                   </th>
                   <th scope="col" className=" px-[90px] py-3 w-10">
@@ -299,7 +314,7 @@ const Notes = () => {
                     </td>
                     <th
                       scope="row"
-                      className="  font-medium text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
+                      className="font-medium text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
                     >
                       {new Date(note.notes_createdAt).toLocaleDateString()}
                     </th>

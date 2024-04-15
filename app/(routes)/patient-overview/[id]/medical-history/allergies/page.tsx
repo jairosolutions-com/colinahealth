@@ -180,14 +180,14 @@ const Allergies = () => {
   };
   console.log(error, "error");
   return (
-    <div className="   w-full">
+    <div className="w-full">
       <div className="flex justify-between ">
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
             <h1 className="p-title">Medical History</h1>
-            <h1 className="p-title mx-2">{">"} </h1>
-            <h1 className="p-title text-[#007C85] cursor-pointer">Allergies</h1>
-            <h1 className="p-title mx-2">{">"} </h1>
+            <h1 className="slash mx-2">{"/"} </h1>
+            <h1 className="font-medium text-[20px] text-[#007C85] cursor-pointer">Allergies</h1>
+            <h1 className="slash mx-2">{"/"} </h1>
             <h1
               onClick={() => {
                 onNavigate(
@@ -196,13 +196,13 @@ const Allergies = () => {
                 );
                 setIsLoading(true);
               }}
-              className="p-title cursor-pointer text-gray-600"
+              className="font-medium text-[20px] cursor-pointer text-gray-600"
             >
               Surgeries
             </h1>
           </div>
           {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
             Total of {totalAllergies} Allergies
           </p>
         </div>
@@ -219,7 +219,7 @@ const Allergies = () => {
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
+                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE] text-[15px]"
                 type="text"
                 onChange={(event) => {
                   setTerm(event.target.value);
@@ -230,7 +230,7 @@ const Allergies = () => {
             </div>
           </form>
           <div className="flex w-full justify-end items-center gap-[12px]">
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
             <DropdownMenu
@@ -245,7 +245,7 @@ const Allergies = () => {
               label={"Ascending"}
             />
 
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
             <DropdownMenu
@@ -267,7 +267,7 @@ const Allergies = () => {
         <div>
           {patientAllergies.length === 0 ? (
             <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700 text-center">
+              <p className="text-xl font-semibold text-gray-700 text-center text-[15px]">
                 No Allergies Found <br />
                 •ω•
               </p>
@@ -275,31 +275,31 @@ const Allergies = () => {
           ) : (
             <table className="w-full text-left rtl:text-right">
               <thead className="">
-                <tr className="uppercase text-[#64748B] border-y  ">
+                <tr className="uppercase text-[#64748B] border-y text-[15px]">
                   <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
                     Allergy ID
                   </th>
-                  <th scope="col" className="px-6 py-3 w-[400px]">
+                  <th scope="col" className="px-2 py-3 w-[300px]">
                     Date
                   </th>
-                  <th scope="col" className="px-6 py-3 w-[400px]">
+                  <th scope="col" className="px-6 py-3 w-[300px]">
                     Type
                   </th>
-                  <th scope="col" className="px-6 py-3 w-[400px]">
+                  <th scope="col" className="px-6 py-3 w-[300px]">
                     Allergen
                   </th>
                   <th scope="col" className="px-6 py-3 w-[300px]">
                     Severity
                   </th>
 
-                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                  <th scope="col" className="px-6 py-3 w-[300px] ">
                     Reaction
                   </th>
-                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                  <th scope="col" className="px-2 py-3 w-[350px] ">
                     Notes
                   </th>
-                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                    ACtions
+                  <th scope="col" className="px-[70px] py-3">
+                    Actions
                   </th>
                 </tr>
               </thead>
@@ -308,7 +308,7 @@ const Allergies = () => {
                 {patientAllergies.map((allergy, index) => (
                   <tr
                     key={index}
-                    className=" group even:bg-gray-50 hover:bg-[#f4f4f4]  border-b "
+                    className=" group even:bg-gray-50 hover:bg-[#f4f4f4]  border-b text-[15px] "
                   >
                     <th
                       scope="row"

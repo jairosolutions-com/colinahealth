@@ -14,30 +14,23 @@ export const SuccessModal = ({ label, isAlertOpen, toggleModal, isUpdated ,setIs
   return (
     <div>
       {isAlertOpen && (
-        <div className="fixed inset-[-100vh] z-50 flex overflow-hidden items-center justify-center ">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          <div className="fixed z-50 bg-white rounded-[10px] shadow-xl w-[650px] mx-auto p-[55px] mb-[320px]">
-            <div className="flex justify-end">
-              <button
-                type="button"
-                className="text-gray-400 hover:text-gray-800 focus:outline-none"
-                onClick={() => toggleModal(false)} // Close modal
-              >             
-              </button>
-            </div>
-            <div className="text-center">
+          <div className="fixed z-50 bg-white rounded-[10px] shadow-xl w-[670px] h-[326px] mx-auto top-[80px]">
+            <div className="text-center pt-[30px]">
               <div className="mx-auto mb-5 text-gray-400 w-[110px] h-[110px]">
-                <img src="/icons/success.svg" alt="" />
+              <img src="/svgs/successful.svg" alt="" />
               </div>
-              <h1 className="text-[q34px] font-bold text-lg text-gray-500 mb-4">
+              <h1 className="text-[20px] font-bold text-md text-[#101828] mb-2">
                 {isUpdated? "Updated" : "Submitted"} Successfully!
               </h1>
-              <p className="text-[24px] text-sm text-gray-400 mb-10">
+              <p className="text-[15px] text-sm text-[#667085] mb-[40px]">
                 Your data has been successfully {isUpdated? "updated" : "added"}.
               </p>
               <button
               onClick={() => {toggleModal(false); setIsUpdated(false)}} // Close modal
-                className="text-white bg-[#1B84FF] hover:bg-blue-800 font-medium rounded-lg text-[26px] w-[330px] px-[31px] py-[18px] me-2 mx-2 dark:bg-blue-600 dark:hover:bg-blue-700"
+                className="text-white bg-[#1B84FF] hover:bg-blue-800 font-medium 
+                rounded-b-[10px] text-[15px] w-[670px] py-[20px] mt-5 dark:bg-blue-600 dark:hover:bg-blue-700"
               >
                 Okay, Thanks!
               </button>

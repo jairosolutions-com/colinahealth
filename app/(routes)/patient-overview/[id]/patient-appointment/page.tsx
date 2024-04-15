@@ -190,14 +190,14 @@ const Appointment = () => {
   }, [currentPage, sortOrder, sortBy, term, isOpen]);
 
   return (
-    <div className="  w-full">
+    <div className="w-full">
       <div className="flex justify-between ">
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
             <h1 className="p-title">Appointment</h1>
           </div>
           {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
             Total of {totalAppointments} Appointments
           </p>
         </div>
@@ -231,7 +231,7 @@ const Appointment = () => {
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
+                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE] text-[15px]"
                 type="text"
                 placeholder="Search by reference no. or name..."
                 onChange={(event) => {
@@ -242,7 +242,7 @@ const Appointment = () => {
             </div>
           </form>
           <div className="flex w-full justify-end items-center gap-[12px]">
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
             <DropdownMenu
@@ -257,7 +257,7 @@ const Appointment = () => {
               label={"Ascending"}
             />
 
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
             <DropdownMenu
@@ -279,8 +279,8 @@ const Appointment = () => {
         <div>
           <table className="w-full text-left rtl:text-right">
             <thead>
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-7 py-3 w-[400px] h-[60px]">
+              <tr className="uppercase text-[#64748B] border-y text-[15px]">
+                <th scope="col" className="px-7 py-3 w-[300px] h-[70px]">
                   STATUS
                 </th>
                 <th scope="col" className="px-6 py-3 w-[400px]">
@@ -304,7 +304,7 @@ const Appointment = () => {
               {patientAppointments.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-xl font-semibold text-gray-700 text-center">
+                    <p className="font-semibold text-gray-700 text-center text-[15px]">
                       No Appointment/s <br/>•ω•
                     </p>
                   </td>
@@ -318,7 +318,7 @@ const Appointment = () => {
                       className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                     >
                       <th
-                        className={`font-large text-16px me-1 px-6 py-5 rounded-full flex justify-start ${
+                        className={`text-15px me-1 px-6 py-5 rounded-full flex justify-start ${
                           appointments.appointments_appointmentStatus ===
                           "Scheduled"
                             ? "text-[#2A7D15]" // Green color for Scheduled

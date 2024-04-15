@@ -67,7 +67,7 @@ export default function PatientOverviewLayout({
     },
     {
       label: "Notes",
-      url: `/patient-overview/${params.id}/notes`,
+      url: `/patient-overview/${params.id}/notes/nurses-notes`,
     },
     {
       label: "Forms",
@@ -175,9 +175,9 @@ export default function PatientOverviewLayout({
   };
 
   return (
-    <div className="flex flex-col w-full  px-4 lg:px-28 mt-[100px]">
+    <div className="flex flex-col w-full px-[150px] py-[90px]">
       <div className="flex flex-col gap-[3px]">
-        <div className="text-2xl font-bold pb-2">
+        <div className="p-title pb-2">
           <h1>Patient Overview</h1>
         </div>
         <div className="form ring-1 w-full h-[220px] shadow-md ring-gray-300 px-5 pt-5 rounded-md">
@@ -192,14 +192,14 @@ export default function PatientOverviewLayout({
             </div>
             <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
               <div>
-                <div className="w-full justify-between text-2xl font-bold flex ml-2">
+                <div className="w-full justify-between p-title flex ml-2">
                   <h1>
                     {" "}
                     {patientData[0]?.firstName} {patientData[0]?.middleName} {patientData[0]?.lastName}
                   </h1>
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
-                      className="underline text-sm font-semibold text-[#191D23] text-right mr-10"
+                      className="underline text-[15px] font-semibold text-[#191D23] text-right mr-10"
                       onClick={() =>
                         handleSeeMoreDetails(
                           `/patient-overview/${params.id}/patient-details`,
@@ -212,7 +212,7 @@ export default function PatientOverviewLayout({
                   </div>
                 </div>
                 <div>
-                  <div className="flex flex-row w-full mt-2 font-medium">
+                  <div className="flex flex-row w-full mt-2 font-medium text-[15px]">
                     <img
                       src="/imgs/profile-circle-new.svg"
                       className="px-1"
@@ -248,7 +248,7 @@ export default function PatientOverviewLayout({
                     </div>
                   </div>
                   <div className="mb-5"></div>
-                  <div className="flex flex-row w-full font-medium ">
+                  <div className="flex flex-row w-full font-medium text-[15px]">
                 
                       <img
                         src="/imgs/codestatus.svg"
@@ -275,7 +275,7 @@ export default function PatientOverviewLayout({
                     
                     <div className="">
                       <div>
-                        <p className="flex items-center ml-4">
+                        <p className="flex items-center ml-7">
                           Allergy:{" "}
                           {patientData[0]?.allergies
                             ? patientData[0]?.allergies
@@ -289,13 +289,13 @@ export default function PatientOverviewLayout({
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
                   <p
-                    className={`cursor-pointer font-semibold ${
+                    className={`cursor-pointer font-bold ${
                       pathname === tab.url ||
                       (tabUrl === "surgeries" &&
                         tab.label === "Medical History") ||
                       (tabUrl === "prorenata" && tab.label === "Medication Log")
-                        ? "text-[#007C85] border-b-[3px] border-[#007C85]"
-                        : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85]"
+                        ? "text-[#007C85] border-b-[3px] border-[#007C85] text-[15px]"
+                        : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85] text-[15px]"
                     }`}
                     key={index}
                     onClick={() => {

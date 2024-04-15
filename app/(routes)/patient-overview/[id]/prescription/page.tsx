@@ -192,7 +192,7 @@ export default function prescription() {
         <div className="flex flex-col">
           <h1 className="p-title">Prescription </h1>
           {/* number of patients */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
             Total of {totalPrescription} Prescriptions
           </p>
         </div>
@@ -213,7 +213,7 @@ export default function prescription() {
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
+                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE] text-[15px]"
                 type="text"
                 placeholder="Search by reference no. or name..."
                 onChange={(event) => {
@@ -224,7 +224,7 @@ export default function prescription() {
             </div>
           </form>
           <div className="flex w-full justify-end items-center gap-[12px]">
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
             <DropdownMenu
@@ -240,7 +240,7 @@ export default function prescription() {
               label={"Ascending"}
             />
 
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
             <DropdownMenu
@@ -262,15 +262,15 @@ export default function prescription() {
         <div>
           {patientPrescriptions.length == 0 ? (
             <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700 text-center">
+              <p className="text-xl font-semibold text-gray-700 text-center text-[15px]">
                 No Prescription/s <br/>•ω•
               </p>
             </div>
           ) : (
             <table className="w-full text-left rtl:text-right">
               <thead className="">
-                <tr className=" text-[#64748B] border-y  ">
-                  <th scope="col" className="px-0 py-3 w-[300px]">
+                <tr className=" text-[#64748B] border-y text-[15px]  ">
+                  <th scope="col" className="px-6 py-3 w-[300px]">
                     PRESCRIPTION ID
                   </th>
                   <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
@@ -299,9 +299,9 @@ export default function prescription() {
                     {patientPrescriptions.map((prescription, index) => (
                       <tr
                         key={index}
-                        className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4]"
+                        className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4] text-[15px]"
                       >
-                        <td className="truncate max-w-[286px] px-0 py-4">
+                        <td className="truncate max-w-[286px] px-6 py-4">
                           {prescription.prescriptions_uuid}
                         </td>
                         <th
