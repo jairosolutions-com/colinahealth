@@ -6,10 +6,7 @@ import {
 } from "@/app/api/lab-results-api/lab-results.api";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import {
-  fetchLabResultFiles,
-  fetchLabFile,
-} from "@/app/api/lab-results-api/lab-results.api";
+import { fetchLabResultFiles } from "@/app/api/lab-results-api/lab-results.api";
 import Image from "next/image";
 
 interface Modalprops {
@@ -48,8 +45,9 @@ export const LabResultModal = ({
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const patientId = params.id.toUpperCase();
-  const [labFiles, setLabFiles] = useState<any[]>([]); // Initialize as an empty array
-  const [fileId, setFileId] = useState("");
+  const [labFiles, setLabFiles] = useState<any[]>([]); //
+  const defaultLabFiles = Array.isArray(labFiles) ? labFiles : [];
+
   const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState(new Uint8Array());
   const [fileView, setFileView] = useState();
@@ -59,32 +57,6 @@ export const LabResultModal = ({
 
   const [base64String, setBase64String] = useState("");
   const [fileType, setFileType] = useState<string>("");
-
-  // Define the effect to update base64String and fileType when fileData changes
-  useEffect(() => {
-    if (labFiles.length > 0) {
-      const file = labFiles[fileIndex];
-      setCurrentFile(file);
-      setFileName(file.filename); // Set the filename using the file object
-      setFileData(file.data); // Set the file data using the file object
-  
-      // Only proceed with the conversion if currentFile.data and currentFile.filename are defined
-      if (currentFile.data !==null && currentFile.filename !==null ) {
-        // Convert the data to base64 and set the file type
-        const newBase64String = Buffer.from(currentFile.data).toString('base64');
-        setBase64String(newBase64String);
-        console.log('FILE STRING', base64String);
-  
-        const newFileType = currentFile.filename.split('.').pop() as string;
-        setFileType(newFileType);
-        console.log('FILE newFileType', newFileType);
-      }
-    }
-  }, [fileIndex, labFiles, fileData, fileName, currentFile]);
-  // Update the current file when fileIndex changes
-  useEffect(() => {
-    setCurrentFile(labFiles[fileIndex]);
-  }, [fileIndex, labFiles, currentFile]);
 
   // Define functions to navigate through files
   const prevFile = () => {
@@ -173,6 +145,36 @@ export const LabResultModal = ({
       setError("Failed to add Lab Result");
     }
   };
+  // Define the effect to update base64String and fileType when fileData changes
+  useEffect(() => {
+    // Only proceed if labFiles is not null and contains files
+    if (labFiles && labFiles.length > 0) {
+      const file = labFiles[fileIndex];
+      setCurrentFile(file);
+      setFileName(file.filename); // Set the filename using the file object
+      setFileData(file.data); // Set the file data using the file object
+
+      // Only proceed with the conversion if file.data is defined
+      if (file.data) {
+        // Convert the data to base64 and set the file type
+        const newBase64String = Buffer.from(file.data).toString("base64");
+        setBase64String(newBase64String);
+        console.log("FILE STRING", base64String);
+
+        const newFileType = file.filename.split(".").pop() as string;
+        setFileType(newFileType);
+        console.log("FILE newFileType", newFileType);
+      }
+    }
+  }, [fileIndex, labFiles, fileData, fileName]);
+
+  // Update the current file when fileIndex changes
+  useEffect(() => {
+    // Only proceed if labFiles is not null and contains files
+    if (labFiles && labFiles.length > 0) {
+      setCurrentFile(labFiles[fileIndex]);
+    }
+  }, [fileIndex, labFiles]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -181,35 +183,26 @@ export const LabResultModal = ({
           labResultData.labResults_uuid,
           router
         );
-        setLabFiles(response.data);
-        if (response.data.length > 0) {
+
+        // Only proceed if response.data is not null or empty
+        if (response.data && response.data.length > 0) {
+          setLabFiles(response.data);
+
           setCurrentFile(response.data[0]);
           setFileIndex(0);
         }
+
         console.log(currentFile);
       } catch (error: any) {
         setError(error.message);
       }
     };
 
-    const fetchFile = async () => {
-      try {
-        const response = await fetchLabFile(
-          labResultData.labResults_uuid,
-          fileId,
-          router
-        );
-        console.log(response, "filez");
-        setFileView(response);
-      } catch (error: any) {
-        setError(error.message);
-      }
-    };
-
-    // Call fetchData and fetchFile when `labResultData.labResults_uuid` changes
-    fetchData();
-    fetchFile();
-  }, [labResultData.labResults_uuid, fileId]);
+    // Call fetchData and fetchFile only if `labResultData.labResults_uuid` changes and is not null
+    if (labResultData.labResults_uuid) {
+      fetchData();
+    }
+  }, [labResultData.labResults_uuid]);
 
   return (
     <div
@@ -218,12 +211,14 @@ export const LabResultModal = ({
       <div
         className={`bg-[#FFFFFF] rounded-md ${
           isView
-            ? " md:w-[1200px] max-h-[800px] max-w-[1000px] md:h-[1200px]"
-            : " h-[500px] w-[550px]"
+            ? defaultLabFiles?.length > 0
+              ? "w-[1000px] h-[900px]" // If isView is true and defaultLabFiles is not empty
+              : "w-[550px] h-[500px]" // If isView is true and defaultLabFiles is empty
+            : "w-[550px] h-[500px]" // If isView is false
         }`}
       >
-        <div className="bg-[#ffffff] flex flex-col justify-start rounded-md">
-          <h2 className="p-title text-left text-[#071437] pl-9 mt-7">
+        <div className="bg-[#ffffff] flex flex-col justify-start  mt-7 rounded-md">
+          <h2 className="p-title text-left text-[#071437] pl-9">
             {headingText}
           </h2>
           <p className="text-sm pl-9 text-gray-600 pt-2">
@@ -366,17 +361,44 @@ export const LabResultModal = ({
           </div>
         ) : (
           <>
-            {labFiles.length > 0 && (
+            {defaultLabFiles?.length === 0 ? (
+              <div className="">
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-10 gap-4">
+                    <div className="md:px-10 mt-5 md:col-span-3">
+                      <div className="">No Files Attached</div>
+                      <div className="mt-5 pb-3">
+                        <button
+                          onClick={() => isModalOpen(false)}
+                          type="button"
+                          className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+
+                      <div className="mt-5 pb-3">
+                        <button
+                          onClick={() => isModalOpen(false)}
+                          className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
+                        >
+                          OK
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              </div>
+            ) : (
               <>
-                <div className=" grid grid-cols-1 md:grid-cols-10 gap-4">
-                  <div className="md:px-10 mt-5 md:col-span-3 ">
-                    <div className="grid grid-cols-1 gap-x-4 gap-y-4">
-                      {labFiles.map((file: LabFile, index) => (
+                <div className="h-full grid grid-cols-1 md:grid-cols-10 gap-4">
+                  <div className="md:px-10 mt-5 md:col-span-3 grid grid-rows-12">
+                    <div className="grid grid-cols-1 row-span-3 gap-x-4 ">
+                      {defaultLabFiles.map((file: LabFile, index) => (
                         <div
                           key={index}
                           className="even:bg-gray-50 border-b cursor-pointer"
                           onClick={() => {
-                            // Set file index and current file for display
                             setFileIndex(index);
                             setCurrentFile(file);
                           }}
@@ -387,30 +409,31 @@ export const LabResultModal = ({
                         </div>
                       ))}
                     </div>
+                    <div className="flex flex-col  row-span-7 items-center justify-end mt-5">
+                      <div className="mt-5">
+                        <button
+                          onClick={() => isModalOpen(false)}
+                          type="button"
+                          className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
+                        >
+                          Cancel
+                        </button>
+                      </div>
 
-                    <div className="mt-5 pb-3">
-                      <button
-                        onClick={() => isModalOpen(false)}
-                        type="button"
-                        className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-
-                    <div className="mt-5 pb-3">
-                      <button
-                        onClick={() => isModalOpen(false)}
-                        className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
-                      >
-                        OK
-                      </button>
+                      <div className="mt-2">
+                        <button
+                          onClick={() => isModalOpen(false)}
+                          className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
+                        >
+                          OK
+                        </button>
+                      </div>
                     </div>
                   </div>
 
                   {currentFile && (
-                    <div className=" md:col-span-7  items-center justify-center">
-                      <div className=" w-full mb-4"></div>
+                    <div className="md:col-span-7 items-center justify-center">
+                      <div className="w-full mb-4"></div>
 
                       <div className="w-full max-w-xl">
                         {fileType === "pdf" ? (
@@ -452,35 +475,6 @@ export const LabResultModal = ({
                   )}
                 </div>
               </>
-            )}
-            {labFiles.length < 1 && (
-              <div className=" grid grid-cols-1 md:grid-cols-10 gap-4">
-                <div className="md:px-10 mt-5 md:col-span-3 ">
-                  <div className="grid grid-cols-1 gap-x-4 gap-y-4">
-                  
-                       No Files Attached
-                  </div>
-
-                  <div className="mt-5 pb-3">
-                    <button
-                      onClick={() => isModalOpen(false)}
-                      type="button"
-                      className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-
-                  <div className="mt-5 pb-3">
-                    <button
-                      onClick={() => isModalOpen(false)}
-                      className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
-                    >
-                      OK
-                    </button>
-                  </div>
-                </div>
-              </div>
             )}
           </>
         )}
