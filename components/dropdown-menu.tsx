@@ -33,14 +33,14 @@ const DropdownMenu = ({ open, width, label, options }: DropdownMenuProps) => {
     <div className={`w-full max-w-[165px] w-${width} `} ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-[#FFFFFF] relative w-full h-[47px] rounded-[5px] px-[20px] items-center flex justify-between font-semibold opacity-[60%]"
+        className="bg-[#FFFFFF] relative w-full h-[47px] rounded-[5px] px-[20px] items-center flex justify-between font-semibold opacity-[60%] text-[15px]"
       >
         {optionLabel}
         <img src="/imgs/dropdown.svg" alt="" />
       </button>
 
       {isOpen && (
-        <div className=" bg-white w-[165px] flex flex-col absolute mt-2 rounded-md p-4 shadow-xl cursor-pointer">
+        <div className=" bg-white w-[165px] flex flex-col absolute mt-2 rounded-md p-4 shadow-xl cursor-pointer text-[15px]">
           {options.map((option, index) => (
             <div className="flex flex-row gap-2 "
             onClick={() => {

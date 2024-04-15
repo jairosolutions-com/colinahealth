@@ -10,6 +10,8 @@ import { DemographicModal } from "@/components/modals/demographic.modal";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
+import Add from "@/components/shared/buttons/add";
+import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 
 export default function PatientPage({ patient }: { patient: any }) {
   const router = useRouter();
@@ -181,43 +183,28 @@ export default function PatientPage({ patient }: { patient: any }) {
   };
 
   return (
-    <div className="relative w-full mx-24 mt-24 z-1">
+    <div className="w-full px-[150px] py-[90px]">
       <div className="flex justify-end">
         <p
           onClick={() => onNavigate(router, "/dashboard")}
-          className="text-[#64748B] underline cursor-pointer"
+          className="text-[#64748B] underline cursor-pointer text-[15px]"
         >
           Back to Dashboard
         </p>
       </div>
       <div className="flex justify-between items-center">
-        <div className="flex flex-col mb-5 px-5 ">
-          <p className="p-title ">Patients List Records</p>
+        <div className="flex flex-col mb-3">
+          <p className="p-title">Patients List Records</p>
           {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[21px] mt-2 ">
+          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
             Total of {totalPatient} Patients
           </p>
         </div>
         <div className="flex flex-row justify-end">
-          <button
-            className=" mr-2 btn-add h-12 cursor-pointer"
-            onClick={() => isModalOpen(true)}
-          >
-            <img
-              src="/imgs/add.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Add
-          </button>
-          <button className="btn-pdfs relative h-12">
-            <img
-              src="/imgs/downloadpdf.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2 "
-            />
-            Download PDF
-          </button>
+          
+          <Add  onClick={() => isModalOpen(true)}></Add>
+          <DownloadPDF></DownloadPDF>
+  
         </div>
       </div>
 
@@ -228,7 +215,7 @@ export default function PatientPage({ patient }: { patient: any }) {
             <label className=""></label>
             <div className="flex">
               <input
-                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE] text-[15px]"
                 type="text"
                 placeholder="Search by reference no. or name..."
                 value={term}
@@ -240,7 +227,7 @@ export default function PatientPage({ patient }: { patient: any }) {
             </div>
           </form>
           <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-            <p className="text-[#191D23] opacity-[60% font-semibold]">
+            <p className="text-[#191D23] opacity-[60% font-semibold] text-[15px]">
               Order by
             </p>
             <DropdownMenu
@@ -254,7 +241,7 @@ export default function PatientPage({ patient }: { patient: any }) {
               width={"165px"}
               label={"Select"}
             />
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
             <DropdownMenu
@@ -276,18 +263,18 @@ export default function PatientPage({ patient }: { patient: any }) {
         <div className="w-full h-full">
           {patientList.length === 0 ? (
             <div>
-              <div className="w-full flex justify-center text-xl py-5 text-center">
+              <div className="w-full flex justify-center py-5 text-center text-[15px]">
                 No Patient Found! <br/>•ω•
               </div>
             </div>
           ) : (
-            <table className="w-full h-full justify-center items-start ">
+            <table className="w-full h-full justify-center items-start text-[15px]">
               <thead className=" text-left rtl:text-right">
                 <tr className="uppercase text-[#64748B] border border-[#E7EAEE]">
                   <th scope="col" className="px-6 py-3 w-[286px] h-[70px]">
                     Patient ID
                   </th>
-                  <th scope="col" className="px-6 py-3 w-[552px]">
+                  <th scope="col" className="px-6 py-3 w-[352px]">
                     Name
                   </th>
                   <th scope="col" className="px-6 py-3 w-[277px]">
@@ -297,7 +284,7 @@ export default function PatientPage({ patient }: { patient: any }) {
                     Gender
                   </th>
 
-                  <th scope="col" className="px-[70px] py-3 w-[210px] ">
+                  <th scope="col" className="px-[65px] py-3 w-[10px] ">
                     Action
                   </th>
                 </tr>

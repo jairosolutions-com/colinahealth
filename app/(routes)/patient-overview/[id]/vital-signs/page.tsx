@@ -203,7 +203,7 @@ export default function vitalsigns() {
   };
 
   return (
-    <div className="  w-full">
+    <div className="w-full">
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="p-title">Vital Signs</h1>
@@ -276,17 +276,17 @@ export default function vitalsigns() {
         <div>
           {patientVitalSign.length == 0 ? (
             <div>
-              <div className="border-1 min-w-[180vh] py-5  flex-col justify-center items-center">
+              <div className="w-full flex-col justify-center items-center">
                 <table className="w-full block text-left rtl:text-right">
                   <thead className="">
-                    <tr className=" text-[#64748B] border-y  ">
+                    <tr className=" text-[#64748B] border-b text-[15px]">
                       <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
                         VITAL SIGN ID
                       </th>
-                      <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
+                      <th scope="col" className="px-6 py-3 w-[400px]">
                         DATE
                       </th>
-                      <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                      <th scope="col" className="px-6 py-3 w-[300px]">
                         TIME
                       </th>
                       <th
@@ -306,7 +306,7 @@ export default function vitalsigns() {
                       </th>
 
                       <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                        Action
+                        ACTION
                       </th>
                     </tr>
                   </thead>
@@ -321,7 +321,7 @@ export default function vitalsigns() {
           ) : (
             <table className="w-full text-left rtl:text-right">
               <thead className="">
-                <tr className=" text-[#64748B] border-y  ">
+                <tr className=" text-[#64748B] border-y text-[15px]">
                   <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
                     VITAL SIGN ID
                   </th>
@@ -345,7 +345,7 @@ export default function vitalsigns() {
                   </th>
 
                   <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                    Action
+                    ACTION
                   </th>
                 </tr>
               </thead>
@@ -354,7 +354,7 @@ export default function vitalsigns() {
                 {patientVitalSign.map((vitalSign, index) => (
                   <tr
                     key={index}
-                    className="odd:bg-white border-b hover:bg-[#f4f4f4] group"
+                    className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
                   >
                     <th
                       scope="row"
@@ -377,7 +377,7 @@ export default function vitalsigns() {
                     <td className="px-6 py-4">
                       {vitalSign.vitalsign_temperature}°F
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-1 py-4">
                       {vitalSign.vitalsign_respiratoryRate}breaths/min
                     </td>
 
