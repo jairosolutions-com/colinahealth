@@ -185,7 +185,7 @@ export default function ChartPage() {
              {/* <input type="text" placeholder="search patient..." className="text-md font-thin"/> */}
             </div>
           </div>
-          <div className="w-full h-full flex flex-col ">
+          <div className="w-full h-full flex flex-col z-0">
             <div className="flex md:flex-row flex-col bg-[#F4F4F4]">
               <div className="md:w-2/6 h-full sticky top-0 pt-4">
                 <PatientCard

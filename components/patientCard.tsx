@@ -86,7 +86,7 @@ const PatientCard = ({
   return (
     <div className="w-full h-full pt-8 pb-4">
       <div className="flex w-full h-full flex-col  bg-[#F4F4F4] items-center  md:border-dashed md:border-r md:border-r-black   right-0 justify-end">
-        <p className="absolute top-2 right-7 text-lg text-gray-500 font-light ">
+        <p className="absolute top-2 right-10 text-lg text-gray-500 font-light ">
           Prior
         </p>
         {patientWithMedicationLogsToday.map((patient: any, index: number) => (
@@ -155,13 +155,13 @@ const PatientCard = ({
                     className="pointer-events-none select-none"
                   />
                   Orders
-                  <span
-                    className={`absolute h-4 w-4 text-white bg-red-500 text-xs pointer-events-none select-none -mt-7 -mr-7 rounded-full ${
+                  <p
+                    className={`absolute h-4 w-4 text-white bg-red-500 text-xs pointer-events-none select-none -mt-7 -mr-7 rounded-full -z-[0] ${
                       patient.medicationlogs.length === 0 ? "hidden" : ""
                     }`}
                   >
                     {patient.medicationlogs.length}
-                  </span>
+                  </p>
                 </div>
 
                 <div
@@ -223,7 +223,7 @@ const PatientCard = ({
                 </div>
               </div>
 
-              <div className="h-full w-[127px] border-[#F4F4F4] border-l-2 border-solid flex justify-center items-center flex-col bg-[#007C851A]">
+              <div className="h-full w-[127px] border-[#F4F4F4] border-l-2 border-solid flex justify-center overflow overflow-hidden items-center flex-col bg-[#007C851A] ">
                 {patient.medicationlogs.length !== 0 &&
                   patient.medicationlogs.some(
                     (log: any) =>
@@ -231,7 +231,8 @@ const PatientCard = ({
                       moment(log.medicationLogsTime, "HH:mm").format("HHmm") <=
                         currentTime
                   ) && (
-                    <HoverCard>
+                    <div className="flex flex-col items-center justify-center">
+                      <HoverCard>
                       <HoverCardTrigger>
                         <div
                           className={`bg-[#FACC15] rounded-full p-1.5 cursor-pointer`}
@@ -259,7 +260,7 @@ const PatientCard = ({
                         </div>
                       </HoverCardTrigger>
                       <HoverCardContent>
-                        <div className="bg-white p-5 z-[5000]">
+                        <div className="bg-white p-5 z-[6000]">
                           {patient.medicationlogs
                             .filter(
                               (log: {
@@ -316,6 +317,7 @@ const PatientCard = ({
                         </div>
                       </HoverCardContent>
                     </HoverCard>
+                      </div>
                   )}
               </div>
             </div>
