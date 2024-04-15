@@ -3,6 +3,7 @@
 import {
   updateLabResultOfPatient,
   createLabResultOfPatient,
+  addLabFile,
 } from "@/app/api/lab-results-api/lab-results.api";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -43,11 +44,11 @@ export const LabResultModal = ({
   }>();
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
+  const [labResultUuid, setLabResultUuid] = useState("");
+  const [labFile, setLabFile] = useState<any>(null);
   const patientId = params.id.toUpperCase();
   const [labFiles, setLabFiles] = useState<any[]>([]); //
   const defaultLabFiles = Array.isArray(labFiles) ? labFiles : [];
-
   const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState(new Uint8Array());
   const [fileView, setFileView] = useState();
@@ -100,15 +101,37 @@ export const LabResultModal = ({
       [name]: value,
     }));
   };
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+        setLabFile(file);
+        setFileName(file.name);
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            const base64String = reader.result?.toString() || "";
+            setBase64String(base64String);
+
+            const fileType = file.type.split("/")[1];
+            setFileType(fileType);
+        };
+
+        reader.onerror = () => {
+            console.error("Error reading file");
+            setError("Error reading file");
+        };
+
+        reader.readAsDataURL(file);
+    }
+};
   if (isEdit) {
     console.log(labResultData, "labResultData");
     console.log(formData, "formData");
   }
 
-  const handleSubmit = async (e: any) => {
-    console.log(isEdit, "edit stat");
-
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
       if (isEdit) {
         await updateLabResultOfPatient(
@@ -119,16 +142,34 @@ export const LabResultModal = ({
         setIsUpdated(true);
         onSuccess();
         isModalOpen(false);
-        return;
       } else {
+        // Create the lab result
         const labResult = await createLabResultOfPatient(
           patientId,
           formData,
           router
         );
         console.log("Lab Result added successfully:", labResult);
+        const getUuid = labResult.uuid;
+        console.log("Lab UUID:", getUuid);
 
-        // Reset the form data after successful submission
+        // Prepare FormData for file upload
+        const labFileFormData = new FormData();
+        if (labFile) {
+          labFileFormData.append("labfile", labFile, fileName);
+        }
+
+        // Add lab file
+        const addLabFiles = await addLabFile(
+          getUuid,
+          labFileFormData,
+          router
+        );
+
+        console.log("Lab Result added successfully:", labResult);
+        console.log("Lab FILE added successfully:", addLabFiles);
+
+        // Reset form data
         setFormData({
           date: "",
           hemoglobinA1c: "",
@@ -213,8 +254,8 @@ export const LabResultModal = ({
           isView
             ? defaultLabFiles?.length > 0
               ? "w-[1000px] h-[900px]" // If isView is true and defaultLabFiles is not empty
-              : "w-[550px] h-[500px]" // If isView is true and defaultLabFiles is empty
-            : "w-[550px] h-[500px]" // If isView is false
+              : "w-[550px] h-[550px]" // If isView is true and defaultLabFiles is empty
+            : "w-[550px] h-[550px]" // If isView is false
         }`}
       >
         <div className="bg-[#ffffff] flex flex-col justify-start  mt-7 rounded-md">
@@ -334,6 +375,16 @@ export const LabResultModal = ({
                         name="triglycerides"
                         onChange={handleChange}
                         required
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                    <div className="mt-2.5">
+                      <input
+                        type="file"
+                        name="file"
+                        onChange={(e) => {
+                          handleFile(e);
+                        }}
                         className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
                       />
                     </div>

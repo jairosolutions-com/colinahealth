@@ -77,6 +77,32 @@ export async function createLabResultOfPatient(patientId: string, formData: any,
   }
 }
 
+export async function addLabFile(  labResultUuid: string,
+  formData:any, router: any): Promise<any> {
+  try {
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("Access token not found in local storage");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    // Make the API request to create the allergy
+    const response = await axios.post(`${apiUrl}/lab-results/${labResultUuid}/upload`, formData, { headers });
+    
+    const labFileInserted = response.data;
+    console.log(labFileInserted, "labFileInserted");
+
+    return labFileInserted;
+    
+  } catch (error) {
+    console.error("Error creating LabResult:", error);
+    throw error; // Rethrow the error to handle it in the component
+  }
+}
+
 
 export async function updateLabResultOfPatient(
   labResultUuid: string,

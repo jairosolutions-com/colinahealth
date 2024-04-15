@@ -33,7 +33,7 @@ export default function Laboratoryresults() {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState<string>("ASC");
-  const [sortBy, setSortBy] = useState("date");
+  const [sortBy, setSortBy] = useState("uuid");
   const [isEdit, setIsEdit] = useState(false);
   const [isView, setIsView] = useState(false);
 
