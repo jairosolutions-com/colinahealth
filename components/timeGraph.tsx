@@ -11,8 +11,16 @@ import {
 
 const TimeGraph = ({
   patientWithMedicationLogsToday,
+  setMedicationLogUuid,
+  isAschModalOpen,
+  setPatientName,
+  setAschData
 }: {
   patientWithMedicationLogsToday: any;
+  setMedicationLogUuid: any;
+  isAschModalOpen: any;
+  setPatientName: any;
+  setAschData: any;
 }) => {
   const [currentTime, setCurrentTime] = useState(moment().format("HHmm"));
   const [tableHeight, setTableHeight] = useState<number>(0);
@@ -284,7 +292,8 @@ const TimeGraph = ({
                                         },
                                         logIndex: React.Key | null | undefined
                                       ) => (
-                                        <div key={logIndex}>
+                                        <div key={logIndex} 
+                                        className="text-start">
                                           {log.medicationLogsName} -{" "}
                                           {log.medicationType} -{" "}
                                           {log.medicationLogStatus}
@@ -375,7 +384,15 @@ const TimeGraph = ({
                                         },
                                         logIndex: React.Key | null | undefined
                                       ) => (
-                                        <div key={logIndex}>
+                                        <div key={logIndex}
+                                        data-uuid={log.uuid}
+                                        onClick={()=>{
+                                          setMedicationLogUuid(log.uuid)
+                                          isAschModalOpen(true)
+                                          setPatientName(`${data.firstName} ${data.lastName}`)
+                                          setAschData(log)
+                                        }}
+                                         className="cursor-pointer hover:text-[#83C5CA] text-start" >
                                           {log.medicationLogsName} -{" "}
                                           {log.medicationType} -{" "}
                                           {log.medicationLogStatus}
