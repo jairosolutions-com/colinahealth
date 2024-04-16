@@ -3,7 +3,10 @@ import { onNavigate } from "@/actions/navigation";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { fetchPatientPrescriptions } from "@/app/api/patients-api/patientTimeGraph";
 import { PRNMedModal } from "@/components/modals/prn-medication.modal";
+import { ScheduledMedModal } from "@/components/modals/sched-medication.modal";
 import PatientCard from "@/components/patientCard";
+import { ErrorModal } from "@/components/shared/error";
+import { SuccessModal } from "@/components/shared/success";
 import TimeGraph from "@/components/timeGraph";
 import { formUrlQuery } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -27,9 +30,13 @@ export default function ChartPage() {
   const [term, setTerm] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isAschOpen, setIsAschOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [patientName, setPatientName] = useState("");
+  const [medicationLogUuid, setMedicationLogUuid] = useState("");
+  const [aschData, setAschData] = useState<any[]>([]);
+  const [isUpdated, setIsUpdated] = useState(false);
   console.log(patientName, "patientName");
 
   const goToPreviousPage = () => {
@@ -111,10 +118,20 @@ export default function ChartPage() {
     }
   };
 
+  const isAschModalOpen = (isAschOpen: boolean) => {
+    setIsAschOpen(isAschOpen);
+    if (isAschOpen) {
+      document.body.style.overflow = "hidden";
+    } else if (!isAschOpen) {
+      document.body.style.overflow = "scroll";
+    }
+  };
+  console.log(term);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const patientListWithPrescription = await fetchPatientPrescriptions(
+          term,
           currentPage,
           router
         );
@@ -128,7 +145,8 @@ export default function ChartPage() {
     };
 
     fetchData();
-  }, [currentPage, isOpen]);
+  }, [currentPage, isOpen, term,isAschOpen]);
+  console.log(totalPages, "totalPages")
 
   const [id, setId] = useState("");
   const searchParams = useSearchParams();
@@ -151,6 +169,7 @@ export default function ChartPage() {
     setIsSuccessOpen(true);
     setIsEdit(false);
     isModalOpen(false);
+    isAschModalOpen(false);
   };
   const onFailed = () => {
     setIsErrorOpen(true);
@@ -161,6 +180,7 @@ export default function ChartPage() {
     isOpen: boolean;
     isModalOpen: (isOpen: boolean) => void;
   }
+  
 
   if (isLoading) {
     return (
@@ -171,23 +191,37 @@ export default function ChartPage() {
   }
 
   return (
-    <div className="App w-full h-full pt-20  md:overflow-hidden md:px-28 px-5">
-      {patientWithMedicationLogsToday.length == 0 ? (
-        <div className="flex items-center justify-center font-semibold text-3xl w-full h-full -mt-10">
-          No Patient Prescription/s <br />
-          •ω•
-        </div>
-      ) : (
-        <div className="w-full h-full">
-          <div className="w-full flex items-end -mt-8 py-5 bg-[#F4F4F4] ">
-            <div className="text-start p-title md:ml-5 -mb-14 just md:gap-[34px]  flex items-end z-10">
-             <h1> Time Chart</h1>
-             {/* <input type="text" placeholder="search patient..." className="text-md font-thin"/> */}
-            </div>
+    <div className="App w-full h-full pt-24  md:overflow-hidden md:px-28 px-5">
+      <div className={`w-full h-full ${patientWithMedicationLogsToday.length == 0?"bg-[#F4F4F4]" :"" }`}>
+        <div className="w-full flex items-end -mt-8 py-5 bg-[#F4F4F4] ">
+          <div className="text-start p-title md:ml-5 pt-2 -mb-8 justify-start  flex flex-col items-start gap-1 z-10">
+            <img
+              src="/icons/search-icon.svg"
+              alt="search-icon"
+              className="absolute ml-1 mt-4"
+            />
+            <input
+              type="text"
+              className="w-[419px] -ml-3 pl-10 h-[45px]  outline-none  pt-[14px]  ring-[1px] ring-[#E7EAEE] py-3 text-sm font-thin rounded-md"
+              placeholder="Search by reference no. or name..."
+              value={term}
+              onChange={(e) => {
+                setTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            <h1 className="-ml-3 w-full "> Time Chart</h1>
           </div>
-          <div className="w-full h-full flex flex-col z-0">
+        </div>
+        {patientWithMedicationLogsToday.length == 0 ? (
+          <div className="flex items-center justify-center font-semibold text-3xl w-full h-full -mt-10">
+            No Patient Prescription/s <br />
+            •ω•
+          </div>
+        ) : (
+          <div className="w-full h-full flex flex-col ">
             <div className="flex md:flex-row flex-col bg-[#F4F4F4]">
-              <div className="md:w-2/6 h-full sticky top-0 pt-4">
+              <div className="md:w-2/6 h-full sticky top-0 pt-10">
                 <PatientCard
                   patientWithMedicationLogsToday={
                     patientWithMedicationLogsToday
@@ -198,13 +232,17 @@ export default function ChartPage() {
                 />
               </div>
               {/* Ensuring TimeGraph's height adjusts based on PatientCard's height */}
-              <div className="md:w-4/6 h-full md:block hidden  overflow-y-hidden border-r-4 border-[#1B84FF]">
-                <div className="w-full h-full">
+              <div className="md:w-4/6 h-full md:block hidden   overflow-y-hidden border-r-4 border-[#d9d9d9]">
+                <div className="w-full h-full pt-[25px]">
                   {" "}
                   <TimeGraph
                     patientWithMedicationLogsToday={
                       patientWithMedicationLogsToday
                     }
+                    setMedicationLogUuid={setMedicationLogUuid}
+                    isAschModalOpen={isAschModalOpen}
+                    setPatientName={setPatientName}
+                    setAschData={setAschData}
                   />
                 </div>
               </div>
@@ -276,23 +314,57 @@ export default function ChartPage() {
               </div>
             )}
           </div>
-        </div>
-      )}
-      {isOpen && (
-        <PRNMedModal
-          isModalOpen={isModalOpen}
-          uuid={patientUuid}
+        )}
+        {isOpen && (
+          <PRNMedModal
+            isModalOpen={isModalOpen}
+            uuid={patientUuid}
+            name={patientName}
+            setIsUpdated={""}
+            isOpen={isOpen}
+            isEdit={isEdit}
+            PRNData={PRNData}
+            label="sample label"
+            onSuccess={onSuccess}
+            onFailed={onFailed}
+            setErrorMessage={setError}
+          />
+        )}
+        {isAschOpen && (
+        <ScheduledMedModal
+          aschData={aschData}
+          isModalOpen={isAschModalOpen}
+          uuid={medicationLogUuid}
           name={patientName}
-          setIsUpdated={""}
-          isOpen={isOpen}
+          isOpen={isAschOpen}
           isEdit={isEdit}
-          PRNData={PRNData}
+          scheduledMedData={""}
+          setIsUpdated={""}
           label="sample label"
           onSuccess={onSuccess}
           onFailed={onFailed}
           setErrorMessage={setError}
         />
       )}
+       {isSuccessOpen && (
+        <SuccessModal
+          label="Success"
+          isAlertOpen={isSuccessOpen}
+          toggleModal={setIsSuccessOpen}
+          isUpdated=''
+          setIsUpdated={setIsUpdated}
+        />
+      )}
+      {isErrorOpen && (
+        <ErrorModal
+          label="Scheduled Log already exist"
+          isAlertOpen={isErrorOpen}
+          toggleModal={setIsErrorOpen}
+          isEdit={isEdit}
+          errorMessage={error}
+        />
+      )}
+      </div>
     </div>
   );
 }

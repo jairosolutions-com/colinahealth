@@ -231,7 +231,7 @@ const Dashboard = () => {
                 {dueMedicationList.map((dueMedication, index) => (
                   <div
                     key={index}
-                    className="w-full flex flex-row h-[75px] mb-1 hover:bg-slate-100"
+                    className="w-full flex flex-row h-[75px] mb-1 hover:bg-slate-100 cursor-pointer"
                   >
                     <div className="flex w-1/6 items-center ">
                       <img src="/imgs/tao1.svg" alt="" width={58} height={58} />

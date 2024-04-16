@@ -448,6 +448,9 @@ const Scheduled = () => {
       {isOpen && (
         <ScheduledMedModal
           isModalOpen={isModalOpen}
+          uuid=""
+          name=""
+          aschData={""}
           isOpen={isOpen}
           isEdit={isEdit}
           scheduledMedData={scheduledMedData}
