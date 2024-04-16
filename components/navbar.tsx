@@ -66,7 +66,7 @@ export const Navbar = () => {
               onClick={() => handleTabClick(route.url, !isActive)}
               key={index}
             >
-              <p className="">{route.label}</p>
+              <p className="hover:text-gray-200">{route.label}</p>
               {pathname === route.url && (
                 <p
                   className={`${"border-b-[3px] border-[#ffffff] w-full absolute bottom-[-20px]"}`}

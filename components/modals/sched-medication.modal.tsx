@@ -9,7 +9,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 interface ModalProps {
+  uuid: string;
+  name: string;
   isEdit: boolean;
+  aschData: any;
   scheduledMedData: any;
   setIsUpdated: any;
   label: string;
@@ -21,7 +24,10 @@ interface ModalProps {
 }
 
 export const ScheduledMedModal = ({
+  uuid,
+  name,
   isEdit,
+  aschData,
   scheduledMedData,
   setIsUpdated,
   label,
@@ -36,8 +42,9 @@ export const ScheduledMedModal = ({
     tag: string;
     item: string;
   }>();
-  const patientId = params.id.toUpperCase();
+  const patientId = params.id ? params.id.toUpperCase() : uuid.toUpperCase();
   console.log(patientId, "patientId");
+  console.log(aschData, "aschData")
   const router = useRouter();
   const [prescriptionList, setPrescriptionList] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -177,14 +184,14 @@ export const ScheduledMedModal = ({
   console.log(formData, "formData");
   return (
     <div
-      className={`absolute inset-[-100px] bg-[#76898A99] flex items-center justify-center pb-[150px]`}
+      className={`fixed inset-[-100px]  z-[9999] bg-[#76898A99] flex items-center justify-center pb-[150px]`}
     >
       <div className="w-[676px] h-[660px] bg-[#FFFFFF] rounded-md">
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <h2 className="p-title text-left text-[#071437] pl-9 mt-7">
-            {isEdit ? "Update" : "Add"} Scheduled Medication Log
+            {isEdit ? "Update" : "Add"} Scheduled Medication Log {name? 'for' : ""} <span className="text-[#007C85]">{name? name: ""}</span>
           </h2>
-          <p className="text-sm pl-9 text-gray-600 pb-10 pt-2">
+          <p className="text-sm text-start pl-9 text-gray-600 pb-10 pt-2">
             Submit your log details.
           </p>
         </div>
@@ -195,7 +202,7 @@ export const ScheduledMedModal = ({
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="company"
-                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    className="block text-start text-sm font-semibold leading-6 text-gray-900 required-field"
                   >
                     MEDICATION
                   </label>
@@ -210,8 +217,15 @@ export const ScheduledMedModal = ({
                         <option value="">Select Prescription</option>
                       )}
 
+                      {aschData.length !== 0 && (
+                        <><option value="">Select Prescription</option><option value={aschData.medicationLogsName} data-uuid={aschData.uuid}>
+                          {aschData.medicationLogsName} @{" "} {aschData.medicationLogsTime}
+                        </option></>
+                      )}
+
                       {prescriptionList.length === 0 &&
-                      scheduledMedData.length === 0 ? (
+                      scheduledMedData.length === 0 &&
+                      aschData.length === 0 ? (
                         <option value="">No Prescription</option>
                       ) : (
                         isEdit && (
@@ -246,7 +260,7 @@ export const ScheduledMedModal = ({
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="message"
-                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    className="block text-sm text-start font-semibold leading-6 text-gray-900 required-field"
                   >
                     NOTES
                   </label>
@@ -266,7 +280,7 @@ export const ScheduledMedModal = ({
                 <div className="flex-grow md:mr-8 mb-4 md:mb-0">
                   <label
                     htmlFor="date"
-                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    className="block text-sm text-start font-semibold leading-6 text-gray-900 required-field"
                   >
                     DATE
                   </label>
@@ -285,7 +299,7 @@ export const ScheduledMedModal = ({
                 <div className="flex-grow md:mr-8 mb-4 md:mb-0">
                   <label
                     htmlFor="date"
-                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    className="block text-sm text-start font-semibold leading-6 text-gray-900 required-field"
                   >
                     TIME
                   </label>
@@ -304,7 +318,7 @@ export const ScheduledMedModal = ({
                 <div>
                   <label
                     htmlFor="status"
-                    className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    className="block text-sm text-start font-semibold leading-6 text-gray-900 required-field"
                   >
                     STATUS
                   </label>

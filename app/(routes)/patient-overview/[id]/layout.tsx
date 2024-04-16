@@ -73,7 +73,6 @@ export default function PatientOverviewLayout({
       label: "Forms",
       url: `/patient-overview/${params.id}/forms`,
     },
-    
   ];
 
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
@@ -81,7 +80,6 @@ export default function PatientOverviewLayout({
     onNavigate(router, url);
     setActiveTab(-1);
     setDetailsClicked(true);
-    
   };
 
   // const handleTabClick = (index: number, url: string) => {
@@ -94,8 +92,7 @@ export default function PatientOverviewLayout({
     onNavigate(router, url);
     setActiveTab(tabIndex);
     setDetailsClicked(false);
-    console.log(url, "url")
-    
+    console.log(url, "url");
   };
   console.log(pathname, "pathname");
   useEffect(() => {
@@ -137,21 +134,53 @@ export default function PatientOverviewLayout({
   if (isLoading) {
     switch (true) {
       case !isAllergy:
-        return <Loading></Loading>;
+        return (
+          <div className="w-full h-full flex justify-center items-center ">
+            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+          </div>
+        );
       case !isSurgery:
-        return <Loading></Loading>;
+        return (
+          <div className="w-full h-full flex justify-center items-center ">
+            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+          </div>
+        );
       case !isMedicationLog:
-        return <Loading></Loading>;
+        return (
+          <div className="w-full h-full flex justify-center items-center ">
+            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+          </div>
+        );
       case !isPrescription:
-        return <Loading></Loading>;
+        return (
+          <div className="w-full h-full flex justify-center items-center ">
+            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+          </div>
+        );
       case !isVitalSign:
-        return <Loading></Loading>;
+        return (
+          <div className="w-full h-full flex justify-center items-center ">
+            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+          </div>
+        );
       case !isLabRes:
-        return <Loading></Loading>;
+        return (
+          <div className="w-full h-full flex justify-center items-center ">
+            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+          </div>
+        );
       case !isAppointment:
-        return <Loading></Loading>;
+        return (
+          <div className="w-full h-full flex justify-center items-center ">
+            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+          </div>
+        );
       case !isNotes:
-        return <Loading></Loading>;
+        return (
+          <div className="w-full h-full flex justify-center items-center ">
+            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+          </div>
+        );
       default:
         break;
     }
@@ -163,7 +192,7 @@ export default function PatientOverviewLayout({
 
   const handleCopyClick = () => {
     if (inputRef.current) {
-      toast.success("Patient ID copied to clipboard")
+      toast.success("Patient ID copied to clipboard");
       const range = document.createRange();
       range.selectNodeContents(inputRef.current);
       const selection = window.getSelection();
@@ -195,7 +224,8 @@ export default function PatientOverviewLayout({
                 <div className="w-full justify-between p-title flex ml-2">
                   <h1>
                     {" "}
-                    {patientData[0]?.firstName} {patientData[0]?.middleName} {patientData[0]?.lastName}
+                    {patientData[0]?.firstName} {patientData[0]?.middleName}{" "}
+                    {patientData[0]?.lastName}
                   </h1>
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
@@ -249,30 +279,29 @@ export default function PatientOverviewLayout({
                   </div>
                   <div className="mb-5"></div>
                   <div className="flex flex-row w-full font-medium text-[15px]">
-                
-                      <img
-                        src="/imgs/codestatus.svg"
-                        className="px-1"
-                        alt="codestatus"
-                        width="26"
-                        height="26"
-                      />
-                      <div className="">
-                        <h1 className={`flex items-center mr-11 gap-1`}>
-                          Code Status:
-                          <p
-                            className={` 
+                    <img
+                      src="/imgs/codestatus.svg"
+                      className="px-1"
+                      alt="codestatus"
+                      width="26"
+                      height="26"
+                    />
+                    <div className="">
+                      <h1 className={`flex items-center mr-11 gap-1`}>
+                        Code Status:
+                        <p
+                          className={` 
                           ${
                             patientData[0]?.codeStatus === "DNR"
                               ? "text-red-500"
                               : "text-blue-500"
                           } ml-1`}
-                          >
-                            {patientData[0]?.codeStatus}
-                          </p>
-                        </h1>
-                      </div>
-                    
+                        >
+                          {patientData[0]?.codeStatus}
+                        </p>
+                      </h1>
+                    </div>
+
                     <div className="">
                       <div>
                         <p className="flex items-center ml-7">
