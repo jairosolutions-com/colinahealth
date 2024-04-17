@@ -12,10 +12,11 @@ import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-
-export default function PatientPage({ patient }: { patient: any }) {
+import Modal from "@/components/reusable/modal";
+import { DemographicModalContent } from "@/components/modal-content/demographic-modal-content";
+export default function PatientPage({}: { patient: any }) {
   const router = useRouter();
-  if(!getAccessToken()){
+  if (!getAccessToken()) {
     onNavigate(router, "/login");
   }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -201,10 +202,8 @@ export default function PatientPage({ patient }: { patient: any }) {
           </p>
         </div>
         <div className="flex flex-row justify-end">
-          
-          <Add  onClick={() => isModalOpen(true)}></Add>
+          <Add onClick={() => isModalOpen(true)}></Add>
           <DownloadPDF></DownloadPDF>
-  
         </div>
       </div>
 
@@ -264,7 +263,8 @@ export default function PatientPage({ patient }: { patient: any }) {
           {patientList.length === 0 ? (
             <div>
               <div className="w-full flex justify-center py-5 text-center text-[15px]">
-                No Patient Found! <br/>•ω•
+                No Patient Found! <br />
+                •ω•
               </div>
             </div>
           ) : (
@@ -385,7 +385,8 @@ export default function PatientPage({ patient }: { patient: any }) {
         </div>
       )}
       {isOpen && (
-        <DemographicModal
+        <Modal
+          content={<DemographicModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
           isOpen={isOpen}
           label="sample label"
@@ -399,8 +400,8 @@ export default function PatientPage({ patient }: { patient: any }) {
           label="Success"
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          setIsUpdated=''
-          isUpdated=''
+          setIsUpdated=""
+          isUpdated=""
         />
       )}
       {isErrorOpen && (

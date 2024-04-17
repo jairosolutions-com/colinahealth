@@ -13,7 +13,8 @@ import { fetchScheduledMedByPatient } from "@/app/api/medication-logs-api/schedu
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
 import Loading from "../loading";
-
+import Modal from "@/components/reusable/modal";
+import { ScheduledModalContent } from "@/components/modal-content/scheduled-modal-content";
 const Scheduled = () => {
   const router = useRouter();
   // start of orderby & sortby function
@@ -47,7 +48,7 @@ const Scheduled = () => {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
-      setIsEdit(false)
+      setIsEdit(false);
       setScheduledMedData([]);
     }
   };
@@ -188,7 +189,7 @@ const Scheduled = () => {
   }
 
   console.log("patientScheduledMed", patientScheduledMed);
-  console.log(patientScheduledMed)
+  console.log(patientScheduledMed);
   return (
     <div className="  w-full">
       <div className="flex justify-between ">
@@ -308,7 +309,8 @@ const Scheduled = () => {
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="text-xl font-semibold text-gray-700 flex text-center">
-                      No Scheduled Medication Log/s <br/>•ω•
+                      No Scheduled Medication Log/s <br />
+                      •ω•
                     </p>
                   </td>
                 </tr>
@@ -446,7 +448,8 @@ const Scheduled = () => {
         </div>
       )}
       {isOpen && (
-        <ScheduledMedModal
+        <Modal
+          content={<ScheduledModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
           uuid=""
           name=""

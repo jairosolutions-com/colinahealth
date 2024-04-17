@@ -12,6 +12,8 @@ import { NotesModal } from "@/components/modals/notes.modal";
 import { fetchNotesByPatient } from "@/app/api/notes-api/notes-api";
 import { SuccessModal } from "@/components/shared/success";
 import Loading from "../loading";
+import { NursenotesModalContent } from "@/components/modal-content/nursenotes-modal-content";
+import Modal from "@/components/reusable/modal";
 
 const Notes = () => {
   const router = useRouter();
@@ -183,9 +185,11 @@ const Notes = () => {
           <div className="flex flex-row items-center">
             <h1 className="p-title">Notes</h1>
             <h1 className="slash mx-2">{"/"} </h1>
-            <h1 className="font-medium text-[20px] text-[#007C85] cursor-pointer">Nurse's Notes</h1>
+            <h1 className="font-medium text-[20px] text-[#007C85] cursor-pointer">
+              Nurse's Notes
+            </h1>
             <h1 className="slash mx-2">{"/"} </h1>
-          <h1
+            <h1
               onClick={() => {
                 onNavigate(
                   router,
@@ -197,7 +201,7 @@ const Notes = () => {
             >
               Incident Report
             </h1>
-            </div>
+          </div>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
             Total of {totalNotes} Notes
@@ -407,7 +411,9 @@ const Notes = () => {
         </div>
       )}
       {isOpen && (
-        <NotesModal
+        <Modal
+          content={<NursenotesModalContent isModalOpen={isModalOpen} />}
+          isModalOpen={isModalOpen}
           isEdit={isEdit}
           isModalOpen={isModalOpen}
           isOpen={isOpen}

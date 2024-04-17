@@ -10,9 +10,9 @@ import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchLabResultsByPatient } from "@/app/api/lab-results-api/lab-results.api";
 import { LabResultModal } from "@/components/modals/labresults.modal";
-
+import Modal from "@/components/reusable/modal";
 import { SuccessModal } from "@/components/shared/success";
-
+import { LabresultsModalContent } from "@/components/modal-content/labresults-modal-content";
 export default function Laboratoryresults() {
   const router = useRouter();
   // start of orderby & sortby function
@@ -355,7 +355,10 @@ export default function Laboratoryresults() {
                 {patientLabResults.length > 0 && (
                   <>
                     {patientLabResults.map((labResult, index) => (
-                      <tr key={index} className="  even:bg-gray-50  border-b text-[15px]">
+                      <tr
+                        key={index}
+                        className="  even:bg-gray-50  border-b text-[15px]"
+                      >
                         <th
                           scope="row"
                           className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
@@ -484,11 +487,11 @@ export default function Laboratoryresults() {
         </div>
       )}
       {isOpen && (
-        <LabResultModal
+        <Modal
+          content={<LabresultsModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
           isEdit={isEdit}
           isView={isView}
-
           labResultData={labResultData}
           isOpen={isOpen}
           label="sample label"

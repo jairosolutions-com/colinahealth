@@ -10,7 +10,8 @@ import { useParams, useRouter } from "next/navigation";
 import { VitalSignModal } from "@/components/modals/vitalsign.modal";
 import { fetchVitalSignsByPatient } from "@/app/api/vital-sign-api/vital-sign-api";
 import { SuccessModal } from "@/components/shared/success";
-
+import Modal from "@/components/reusable/modal";
+import { VitalModalContent } from "@/components/modal-content/vital-modal-content";
 export default function vitalsigns() {
   const router = useRouter();
   // start of orderby & sortby function
@@ -313,7 +314,8 @@ export default function vitalsigns() {
                 </table>
                 <div className="py-5 flex justify-center items-center">
                   <p className="text-xl font-semibold text-gray-700 text-center">
-                    No Vital Sign/s <br/>•ω•
+                    No Vital Sign/s <br />
+                    •ω•
                   </p>
                 </div>
               </div>
@@ -466,9 +468,10 @@ export default function vitalsigns() {
         </div>
       )}
       {isOpen && (
-        <VitalSignModal
-          isEdit={isEdit}
+        <Modal
+          content={<VitalModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
+          isEdit={isEdit}
           isOpen={isOpen}
           label="sample label"
           vitalSignData={vitalSignData}

@@ -13,7 +13,8 @@ import Loading from "./loading";
 import { AllergyModal } from "@/components/modals/allergies.modal";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
-
+import Modal from "@/components/reusable/modal";
+import { AllergiesModalContent } from "@/components/modal-content/allergies-modal-content";
 const Allergies = () => {
   const router = useRouter();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -186,7 +187,9 @@ const Allergies = () => {
           <div className="flex flex-row items-center">
             <h1 className="p-title">Medical History</h1>
             <h1 className="slash mx-2">{"/"} </h1>
-            <h1 className="font-medium text-[20px] text-[#007C85] cursor-pointer">Allergies</h1>
+            <h1 className="font-medium text-[20px] text-[#007C85] cursor-pointer">
+              Allergies
+            </h1>
             <h1 className="slash mx-2">{"/"} </h1>
             <h1
               onClick={() => {
@@ -420,7 +423,8 @@ const Allergies = () => {
         </div>
       )}
       {isOpen && (
-        <AllergyModal
+        <Modal
+          content={<AllergiesModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
           isOpen={isOpen}
           isEdit={isEdit}
