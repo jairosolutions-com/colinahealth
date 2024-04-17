@@ -9,7 +9,6 @@ import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { PRNMedModal } from "@/components/modals/prn-medication.modal";
-import Loading from "../loading";
 import { fetchPRNMedByPatient } from "@/app/api/medication-logs-api/prn-med-api";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
@@ -36,7 +35,6 @@ const Prorenata = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
 
-
   interface Modalprops {
     label: string;
     isOpen: boolean;
@@ -49,7 +47,7 @@ const Prorenata = () => {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "scroll";
-      setIsEdit(false)
+      setIsEdit(false);
       setPRNData([]);
     }
   };
@@ -186,7 +184,11 @@ const Prorenata = () => {
   };
 
   if (isLoading) {
-    return <Loading></Loading>;
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
   }
 
   console.log(patientPRNMed, "prn med");
@@ -200,11 +202,11 @@ const Prorenata = () => {
             <h1 className="p-title mx-2">{">"} </h1>
             <h1
               onClick={() => {
+                setIsLoading(true);
                 onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/medication/scheduled`
                 );
-                setIsLoading(true);
               }}
               className="p-title cursor-pointer text-gray-600"
             >
@@ -235,7 +237,9 @@ const Prorenata = () => {
                 type="text"
                 placeholder="Search by reference no. or name..."
                 value={term}
-                onChange={(e) => {setTerm(e.target.value)}}
+                onChange={(e) => {
+                  setTerm(e.target.value);
+                }}
               />
             </div>
           </form>
@@ -307,7 +311,8 @@ const Prorenata = () => {
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="text-xl font-semibold text-gray-700 text-center">
-                      No PRN Medication Log/s <br/>•ω•
+                      No PRN Medication Log/s <br />
+                      •ω•
                     </p>
                   </td>
                 </tr>

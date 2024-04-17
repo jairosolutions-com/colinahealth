@@ -40,16 +40,22 @@ export async function fetchLabResultsByPatient(
     const { patientId, id, ...patientPrescriptionsNoId } = response.data;
     console.log(patientPrescriptionsNoId, "patient prescription after search");
     return patientPrescriptionsNoId;
-  } catch (error) {
-    if ((error as AxiosError).response?.status === 401) {
-      setAccessToken("");
-      onNavigate(router, "/login");
-      return Promise.reject(new Error("Unauthorized access"));
+  } catch (error:any) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.message === "Network Error") {
+        // Handle network error
+        console.error("Connection refused or network error occurred.");
+        return Promise.reject(new Error("Connection refused or network error occurred."));
+      }
+      if (axiosError.response?.status === 401) {
+        setAccessToken("");
+        onNavigate(router, "/login");
+        return Promise.reject(new Error("Unauthorized access"));
+      }
     }
-    console.error(
-      "Error searching patient prescription:",
-      (error as AxiosError).message
-    );
+    console.error("Error searching patient list:", error.message);
+    return Promise.reject(error);
   }
 }
 

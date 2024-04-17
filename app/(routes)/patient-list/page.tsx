@@ -12,12 +12,15 @@ import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function PatientPage({ patient }: { patient: any }) {
   const router = useRouter();
-  if(!getAccessToken()){
+  if (!getAccessToken()) {
     onNavigate(router, "/login");
   }
+  const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortBy, setSortBy] = useState("firstName");
@@ -150,7 +153,15 @@ export default function PatientPage({ patient }: { patient: any }) {
         setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
-        setIsLoading(false);
+        console.log("error", error.message);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: <ToastAction altText="Try again" onClick={() => {
+            window.location.reload();
+          }}>Try again</ToastAction>,
+        });
       }
     };
 
@@ -201,10 +212,8 @@ export default function PatientPage({ patient }: { patient: any }) {
           </p>
         </div>
         <div className="flex flex-row justify-end">
-          
-          <Add  onClick={() => isModalOpen(true)}></Add>
+          <Add onClick={() => isModalOpen(true)}></Add>
           <DownloadPDF></DownloadPDF>
-  
         </div>
       </div>
 
@@ -264,7 +273,8 @@ export default function PatientPage({ patient }: { patient: any }) {
           {patientList.length === 0 ? (
             <div>
               <div className="w-full flex justify-center py-5 text-center text-[15px]">
-                No Patient Found! <br/>•ω•
+                No Patient Found! <br />
+                •ω•
               </div>
             </div>
           ) : (
@@ -399,8 +409,8 @@ export default function PatientPage({ patient }: { patient: any }) {
           label="Success"
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          setIsUpdated=''
-          isUpdated=''
+          setIsUpdated=""
+          isUpdated=""
         />
       )}
       {isErrorOpen && (

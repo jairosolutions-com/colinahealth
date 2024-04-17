@@ -8,6 +8,8 @@ import PatientCard from "@/components/patientCard";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
 import TimeGraph from "@/components/timeGraph";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 import { formUrlQuery } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,6 +19,7 @@ export default function ChartPage() {
   if (!getAccessToken()) {
     onNavigate(router, "/login");
   }
+  const { toast } = useToast();
   const [patientList, setPatientList] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [gotoError, setGotoError] = useState(false);
@@ -139,14 +142,23 @@ export default function ChartPage() {
         setTotalPages(patientListWithPrescription.totalPages);
         setTotalPrescriptions(patientListWithPrescription.totalCount);
         setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching patientListWithPrescription list:");
+      } catch (error:any) {
+        setError(error.message);
+        console.log("error");
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: <ToastAction altText="Try again" onClick={() => {
+            window.location.reload();
+          }}>Try again</ToastAction>,
+        });
       }
     };
 
     fetchData();
-  }, [currentPage, isOpen, term,isAschOpen]);
-  console.log(totalPages, "totalPages")
+  }, [currentPage, isOpen, term, isAschOpen]);
+  console.log(totalPages, "totalPages");
 
   const [id, setId] = useState("");
   const searchParams = useSearchParams();
@@ -180,7 +192,6 @@ export default function ChartPage() {
     isOpen: boolean;
     isModalOpen: (isOpen: boolean) => void;
   }
-  
 
   if (isLoading) {
     return (
@@ -192,7 +203,11 @@ export default function ChartPage() {
 
   return (
     <div className="App w-full h-full pt-24  md:overflow-hidden md:px-28 px-5">
-      <div className={`w-full h-full ${patientWithMedicationLogsToday.length == 0?"bg-[#F4F4F4]" :"" }`}>
+      <div
+        className={`w-full h-full ${
+          patientWithMedicationLogsToday.length == 0 ? "bg-[#F4F4F4]" : ""
+        }`}
+      >
         <div className="w-full flex items-end -mt-8 py-5 bg-[#F4F4F4] ">
           <div className="text-start p-title md:ml-5 pt-2 -mb-8 justify-start  flex flex-col items-start gap-1 z-10">
             <img
@@ -331,39 +346,39 @@ export default function ChartPage() {
           />
         )}
         {isAschOpen && (
-        <ScheduledMedModal
-          aschData={aschData}
-          isModalOpen={isAschModalOpen}
-          uuid={medicationLogUuid}
-          name={patientName}
-          isOpen={isAschOpen}
-          isEdit={isEdit}
-          scheduledMedData={""}
-          setIsUpdated={""}
-          label="sample label"
-          onSuccess={onSuccess}
-          onFailed={onFailed}
-          setErrorMessage={setError}
-        />
-      )}
-       {isSuccessOpen && (
-        <SuccessModal
-          label="Success"
-          isAlertOpen={isSuccessOpen}
-          toggleModal={setIsSuccessOpen}
-          isUpdated=''
-          setIsUpdated={setIsUpdated}
-        />
-      )}
-      {isErrorOpen && (
-        <ErrorModal
-          label="Scheduled Log already exist"
-          isAlertOpen={isErrorOpen}
-          toggleModal={setIsErrorOpen}
-          isEdit={isEdit}
-          errorMessage={error}
-        />
-      )}
+          <ScheduledMedModal
+            aschData={aschData}
+            isModalOpen={isAschModalOpen}
+            uuid={medicationLogUuid}
+            name={patientName}
+            isOpen={isAschOpen}
+            isEdit={isEdit}
+            scheduledMedData={""}
+            setIsUpdated={""}
+            label="sample label"
+            onSuccess={onSuccess}
+            onFailed={onFailed}
+            setErrorMessage={setError}
+          />
+        )}
+        {isSuccessOpen && (
+          <SuccessModal
+            label="Success"
+            isAlertOpen={isSuccessOpen}
+            toggleModal={setIsSuccessOpen}
+            isUpdated=""
+            setIsUpdated={setIsUpdated}
+          />
+        )}
+        {isErrorOpen && (
+          <ErrorModal
+            label="Scheduled Log already exist"
+            isAlertOpen={isErrorOpen}
+            toggleModal={setIsErrorOpen}
+            isEdit={isEdit}
+            errorMessage={error}
+          />
+        )}
       </div>
     </div>
   );

@@ -10,7 +10,6 @@ import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchNotesByPatient } from "@/app/api/notes-api/notes-api";
 import { SuccessModal } from "@/components/shared/success";
-import Loading from "../loading";
 import { IncidentReportModal } from "@/components/modals/incident-report.modal";
 
 const Notes = () => {
@@ -173,7 +172,11 @@ const Notes = () => {
   };
 
   if (isLoading) {
-    return <Loading></Loading>;
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
   }
 
   return (
@@ -183,22 +186,23 @@ const Notes = () => {
           <div className="flex flex-row items-center">
             <h1 className="p-title">Notes</h1>
             <h1 className="slash mx-2">{"/"} </h1>
-            <h1 className="font-medium text-[20px] text-gray-600 cursor-pointer"
-            onClick={() => {
+            <h1
+              className="font-medium text-[20px] text-gray-600 cursor-pointer"
+              onClick={() => {
+                setIsLoading(true);
                 onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/notes/nurses-notes`
                 );
-                setIsLoading(true);
               }}
-              >Nurses Notes</h1>
-            <h1 className="slash mx-2">{"/"} </h1>
-          <h1
-              className="font-medium text-[20px] cursor-pointer text-[#007C85]"
             >
+              Nurses Notes
+            </h1>
+            <h1 className="slash mx-2">{"/"} </h1>
+            <h1 className="font-medium text-[20px] cursor-pointer text-[#007C85]">
               Incident Report
             </h1>
-            </div>
+          </div>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
             Total of {totalNotes} Notes
@@ -276,33 +280,33 @@ const Notes = () => {
 
         {/* START OF TABLE */}
         <div>
-            <table className="w-full text-left rtl:text-right">
-              <thead>
-                <tr className="uppercase text-[#64748B] border-y  ">
-                  <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                    NOTES ID
-                  </th>
-                  <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                    DATE
-                  </th>
-                  <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                    TIME
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[250px]">
-                    SUBJECT
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[200px]">
-                   Details of Incident
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[200px]">
-                   Reported By
-                  </th>
-                  <th scope="col" className=" px-[90px] py-3 w-10">
-                    ACTION
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
+          <table className="w-full text-left rtl:text-right">
+            <thead>
+              <tr className="uppercase text-[#64748B] border-y  ">
+                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
+                  NOTES ID
+                </th>
+                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
+                  DATE
+                </th>
+                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
+                  TIME
+                </th>
+                <th scope="col" className="px-6 py-3 w-[250px]">
+                  SUBJECT
+                </th>
+                <th scope="col" className="px-6 py-3 w-[200px]">
+                  Details of Incident
+                </th>
+                <th scope="col" className="px-6 py-3 w-[200px]">
+                  Reported By
+                </th>
+                <th scope="col" className=" px-[90px] py-3 w-10">
+                  ACTION
+                </th>
+              </tr>
+            </thead>
+            <tbody>
               <tr className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group">
                 <th
                   scope="row"
@@ -310,27 +314,19 @@ const Notes = () => {
                 >
                   March 22, 2024
                 </th>
+                <td className="truncate max-w-[552px] px-6 py-3">10:00 AM</td>
                 <td className="truncate max-w-[552px] px-6 py-3">
-                  10:00 AM
+                  Health Problem
                 </td>
-                <td className="truncate max-w-[552px] px-6 py-3">
-                 Health Problem
-                </td>
-                <td className="px-6 py-3">
-                Advised to monitor and follow up.
-                </td>
-                <td className="px-6 py-3">
-                Ansel, David A, MD
-                </td>
-                <td className="px-6 py-3">
-                Advised to monitor and follow up.
-                </td>
+                <td className="px-6 py-3">Advised to monitor and follow up.</td>
+                <td className="px-6 py-3">Ansel, David A, MD</td>
+                <td className="px-6 py-3">Advised to monitor and follow up.</td>
                 <td className="px-[90px] py-3">
                   <Edit></Edit>
                 </td>
               </tr>
-              </tbody>
-            </table>
+            </tbody>
+          </table>
         </div>
         {/* END OF TABLE */}
       </div>
