@@ -5,9 +5,11 @@ import { Navbar } from "@/components/navbar";
 import { useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
-import Loading from "./loading";
+
 import { getAccessToken } from "@/app/api/login-api/accessToken";
-import { toast } from "sonner";
+import { toast as sonner } from "sonner";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
@@ -22,6 +24,7 @@ export default function PatientOverviewLayout({
   if (!getAccessToken()) {
     onNavigate(router, "/login");
   }
+  const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -37,6 +40,7 @@ export default function PatientOverviewLayout({
   const [isLabRes, setIsLabRes] = useState(false);
   const [isAppointment, setIsAppointment] = useState(false);
   const [isNotes, setIsNotes] = useState(false);
+  const [isForms, setIsForms] = useState(false);
   const inputRef = useRef<HTMLSpanElement>(null);
 
   console.log(getAccessToken, "getAccessToken");
@@ -89,10 +93,11 @@ export default function PatientOverviewLayout({
   // };
   const handleTabClick = (url: string, tabIndex: number) => {
     setIsLoading(true);
-    onNavigate(router, url);
+
     setActiveTab(tabIndex);
     setDetailsClicked(false);
     console.log(url, "url");
+    onNavigate(router, url);
   };
   console.log(pathname, "pathname");
   useEffect(() => {
@@ -115,6 +120,8 @@ export default function PatientOverviewLayout({
       setIsAppointment(true);
     } else if (tabUrl === "notes") {
       setIsNotes(true);
+    } else if (tabUrl === "forms") {
+      setIsForms(true);
     }
     const fetchData = async () => {
       try {
@@ -124,7 +131,15 @@ export default function PatientOverviewLayout({
         setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
-        setIsLoading(false);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: <ToastAction altText="Try again" onClick={() => {
+            window.location.reload();
+          }}>Try again</ToastAction>,
+        });
+        
       }
     };
 
@@ -181,6 +196,12 @@ export default function PatientOverviewLayout({
             <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
           </div>
         );
+        case !isForms:
+        return (
+          <div className="w-full h-full flex justify-center items-center ">
+            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+          </div>
+        );
       default:
         break;
     }
@@ -192,7 +213,7 @@ export default function PatientOverviewLayout({
 
   const handleCopyClick = () => {
     if (inputRef.current) {
-      toast.success("Patient ID copied to clipboard");
+      sonner.success("Patient ID copied to clipboard");
       const range = document.createRange();
       range.selectNodeContents(inputRef.current);
       const selection = window.getSelection();
@@ -322,7 +343,9 @@ export default function PatientOverviewLayout({
                       pathname === tab.url ||
                       (tabUrl === "surgeries" &&
                         tab.label === "Medical History") ||
-                      (tabUrl === "prorenata" && tab.label === "Medication Log")
+                      (tabUrl === "prorenata" &&
+                        tab.label === "Medication Log") ||
+                      (tabUrl === "incident-report" && tab.label === "Notes")
                         ? "text-[#007C85] border-b-[3px] border-[#007C85] text-[15px]"
                         : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85] text-[15px]"
                     }`}

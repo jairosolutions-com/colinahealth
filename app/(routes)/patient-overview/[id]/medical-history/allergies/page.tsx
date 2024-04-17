@@ -9,7 +9,6 @@ import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchAllergiesByPatient } from "@/app/api/medical-history-api/allergies.api";
-import Loading from "./loading";
 import { AllergyModal } from "@/components/modals/allergies.modal";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
@@ -166,7 +165,11 @@ const Allergies = () => {
 
   console.log(allergyToEdit, "allergy uuid");
   if (isLoading) {
-    <Loading></Loading>;
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
   }
 
   const onSuccess = () => {
@@ -186,15 +189,17 @@ const Allergies = () => {
           <div className="flex flex-row items-center">
             <h1 className="p-title">Medical History</h1>
             <h1 className="slash mx-2">{"/"} </h1>
-            <h1 className="font-medium text-[20px] text-[#007C85] cursor-pointer">Allergies</h1>
+            <h1 className="font-medium text-[20px] text-[#007C85] cursor-pointer">
+              Allergies
+            </h1>
             <h1 className="slash mx-2">{"/"} </h1>
             <h1
               onClick={() => {
+                setIsLoading(true);
                 onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/medical-history/surgeries`
                 );
-                setIsLoading(true);
               }}
               className="font-medium text-[20px] cursor-pointer text-gray-600"
             >

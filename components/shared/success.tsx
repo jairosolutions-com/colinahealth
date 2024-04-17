@@ -28,7 +28,12 @@ export const SuccessModal = ({ label, isAlertOpen, toggleModal, isUpdated ,setIs
                 Your data has been successfully {isUpdated? "updated" : "added"}.
               </p>
               <button
-              onClick={() => {toggleModal(false); setIsUpdated(false)}} // Close modal
+              onClick={() => {
+                toggleModal(false); 
+                if (setIsUpdated !== "") {
+                  setIsUpdated(false); 
+                }
+              }}
                 className="text-white bg-[#1B84FF] hover:bg-blue-800 font-medium 
                 rounded-b-[10px] text-[15px] w-[670px] py-[20px] mt-5 dark:bg-blue-600 dark:hover:bg-blue-700"
               >

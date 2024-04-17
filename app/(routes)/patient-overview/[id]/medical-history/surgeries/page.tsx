@@ -10,7 +10,6 @@ import { SurgeriesModal } from "@/components/modals/surgeries.modal";
 import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries.api";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
-import Loading from "./loading";
 
 export default function Surgeries() {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -183,7 +182,9 @@ export default function Surgeries() {
 
   if (isLoading) {
     return (
-      <Loading></Loading>
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
     );
   }
 
@@ -206,18 +207,21 @@ export default function Surgeries() {
             <h1 className="p-title">Medical History</h1>
             <h1 className="slash mx-2">{"/"} </h1>
             <h1
-              onClick={() =>
-              {onNavigate(
+              onClick={() => {
+                setIsLoading(true);
+                onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/medical-history/allergies`
-                ); setIsLoading(true)}
-              }
+                );
+              }}
               className=" font-medium text-[20px] cursor-pointer text-gray-600"
             >
               Allergies
             </h1>
             <h1 className="slash mx-2">{"/"}</h1>
-            <h1 className="font-medium text-[20px] cursor-pointer text-[#007C85]">Surgeries</h1>
+            <h1 className="font-medium text-[20px] cursor-pointer text-[#007C85]">
+              Surgeries
+            </h1>
           </div>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
@@ -287,8 +291,9 @@ export default function Surgeries() {
         <div>
           {patientSurgeries.length == 0 ? (
             <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700 text-center" >
-                No Surgeries Found <br/>•ω•
+              <p className="text-xl font-semibold text-gray-700 text-center">
+                No Surgeries Found <br />
+                •ω•
               </p>
             </div>
           ) : (
@@ -318,7 +323,10 @@ export default function Surgeries() {
               </thead>
               <tbody>
                 {patientSurgeries.map((surgery, index) => (
-                  <tr key={index} className="group hover:bg-[#f4f4f4]  even:bg-gray-50  border-b text-[15px]">
+                  <tr
+                    key={index}
+                    className="group hover:bg-[#f4f4f4]  even:bg-gray-50  border-b text-[15px]"
+                  >
                     <th
                       scope="row"
                       className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
