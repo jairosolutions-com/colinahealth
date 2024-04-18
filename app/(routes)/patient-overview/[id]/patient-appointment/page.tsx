@@ -161,6 +161,7 @@ const Appointment = () => {
       setAppointmentData([]);
     }
   };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
