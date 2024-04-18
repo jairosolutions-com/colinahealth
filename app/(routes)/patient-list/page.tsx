@@ -18,7 +18,6 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function PatientPage({ patient }: { patient: any }) {
-
   const router = useRouter();
   if (!getAccessToken()) {
     onNavigate(router, "/login");
@@ -73,6 +72,11 @@ export default function PatientPage({ patient }: { patient: any }) {
 
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else if (!isOpen) {
+      document.body.style.overflow = "block";
+    }
   };
 
   const goToPreviousPage = () => {
@@ -161,9 +165,16 @@ export default function PatientPage({ patient }: { patient: any }) {
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
           description: error.message,
-          action: <ToastAction altText="Try again" onClick={() => {
-            window.location.reload();
-          }}>Try again</ToastAction>,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
         });
       }
     };
@@ -399,13 +410,17 @@ export default function PatientPage({ patient }: { patient: any }) {
       )}
       {isOpen && (
         <Modal
-          content={<DemographicModalContent isModalOpen={isModalOpen} />}
+          content={
+            <DemographicModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              label="sample label"
+              onSuccess={onSuccess}
+              onFailed={onFailed}
+              setErrorMessage={setError}
+            />
+          }
           isModalOpen={isModalOpen}
-          // // isOpen={isOpen}
-          // label="sample label"
-          // onSuccess={onSuccess}
-          // onFailed={onFailed}
-          // setErrorMessage={setError}
         />
       )}
       {isSuccessOpen && (

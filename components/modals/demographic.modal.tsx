@@ -78,7 +78,7 @@ export const DemographicModal = ({
         email: "",
       });
       onSuccess();
-      isModalOpen(false)
+      isModalOpen(false);
     } catch (error: any) {
       if (error.message === "Patient already exist") {
         setErrorMessage("Patient already exist");
@@ -292,7 +292,7 @@ export const DemographicModal = ({
                       </label>
                       <select
                         required
-                        className="w-full"
+                        className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                         name="country"
                         onChange={(event) =>
                           handleCountryChange(event.target.value)

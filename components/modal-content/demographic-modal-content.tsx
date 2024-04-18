@@ -1,15 +1,137 @@
 "use client";
+import { fetchCountryList } from "@/app/api/country-api/countryList.api";
+import { addPatient } from "@/app/api/patients-api/patientList.api";
 import { X } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 interface Modalprops {
+  label: string;
+  isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
+  setErrorMessage: any;
+  onSuccess: () => void;
+  onFailed: () => void;
 }
 
-export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
+export const DemographicModalContent = ({
+  label,
+  isOpen,
+  isModalOpen,
+  setErrorMessage,
+  onSuccess,
+  onFailed,
+}: Modalprops) => {
   const [selectedCodeStatus, setSelectedCodeStatus] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
+  const [countryList, setCountryList] = useState<any[]>([]);
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    middleName: "",
+    gender: "",
+    age: "",
+    dateOfBirth: "",
+    phoneNo: "",
+    address1: "",
+    city: "",
+    address2: "",
+    state: "",
+    country: "",
+    zip: "",
+    admissionDate: "",
+    codeStatus: "",
+    email: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === 'age' && (!/^\d*$/.test(value))) {
+      return; // Don't update state
+    }
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    // Call the addPatient API function here
+    e.preventDefault();
+    try {
+      const patientList = await addPatient(formData, router);
+      console.log("Patient added successfully:", patientList);
+      // Optionally, you can reset the form data after successful submission
+      setFormData({
+        firstName: "",
+        lastName: "",
+        middleName: "",
+        gender: "",
+        age: "",
+        dateOfBirth: "",
+        phoneNo: "",
+        address1: "",
+        city: "",
+        address2: "",
+        state: "",
+        country: "",
+        zip: "",
+        admissionDate: "",
+        codeStatus: "",
+        email: "",
+      });
+      onSuccess();
+      isModalOpen(false);
+    } catch (error: any) {
+      if (error.message === "Patient already exist") {
+        setErrorMessage("Patient already exist");
+        onFailed();
+        isModalOpen(false);
+        console.log("conflict error");
+      }
+      console.log(error.message);
+      setError("Failed to add Patient");
+    }
+  };
+
+  const handleCountryChange = (countryId: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      country: countryId,
+    }));
+  };
+
+  const handleGenderChange = (gender: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      gender: gender,
+    }));
+  };
+
+  const handleCodeStatusChange = (codeStatus: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      codeStatus: codeStatus,
+    }));
+  };
+  console.log(error, "error");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const countries = await fetchCountryList(router);
+        setCountryList(countries);
+      } catch (error) {
+        console.error("Error fetching country list:");
+      }
+    };
+
+    fetchData();
+  }, []);
+  console.log(formData, "formData");
   function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>): void {
     throw new Error("Function not implemented.");
   }
@@ -17,24 +139,24 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
   return (
     <>
       <div className="w-[1200px] h-[645px]">
-        <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
-          <div className="items-center flex justify-between px-8">
-            <h2 className="p-title text-left text-[#071437] mt-5 w-full pl-2">
-              Patient Demographic
-            </h2>
-            <X
-              onClick={() => isModalOpen(false)}
-              className="w-7 h-7 text-black flex items-center mt-2"
-            />
+        <form className="" onSubmit={handleSubmit}>
+          <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
+            <div className="items-center flex justify-between px-8">
+              <h2 className="p-title text-left text-[#071437] mt-5 w-full pl-2">
+                Patient Demographic
+              </h2>
+              <X
+                onClick={() => isModalOpen(false)}
+                className="w-7 h-7 text-black flex items-center mt-2 cursor-pointer"
+              />
+            </div>
+            <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
+              Add patient demographic and make sure to submit.
+            </p>
+            <div className="flex place-items-end mr-4"></div>
           </div>
-          <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
-            Add patient demographic and make sure to submit.
-          </p>
-          <div className="flex place-items-end mr-4"></div>
-        </div>
-        <div className=" mb-9 pt-4">
-          <div className="h-[600px] max-h-[470px] md:px-10 mt-5">
-            <form className="">
+          <div className=" mb-9 pt-4">
+            <div className="h-[600px] max-h-[470px] md:px-10 mt-5">
               <div className="grid grid-cols-3 gap-x-4 gap-y-4">
                 <div>
                   <label
@@ -48,7 +170,10 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                       type="text"
                       required
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                      placeholder="input firstname"
+                      placeholder="input first name"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -64,7 +189,10 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                       type="text"
                       required
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                      placeholder="input middlename"
+                      placeholder="input middle name"
+                      name="middleName"
+                      value={formData.middleName}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -80,7 +208,10 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                       type="text"
                       required
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                      placeholder="input lastname"
+                      placeholder="input last name"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -96,8 +227,11 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                       <input
                         type="text"
                         required
-                        className="block w-[174px] h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
+                        className="block w-[174px] h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6 appearance-none"
                         placeholder="input age"
+                        name="age"
+                        value={formData.age}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -113,13 +247,13 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                         <select
                           id="status"
                           className="block w-[173px] h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
-                          value={selectedGender}
-                          onChange={(e) => setSelectedGender(e.target.value)}
+                          onChange={(e) => handleGenderChange(e.target.value)}
                           style={{ cursor: "pointer" }}
+                          name="lastName"
                         >
                           <option value="">select gender</option>
-                          <option value="active">Male</option>
-                          <option value="inactive">Female</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
                         </select>
                         <Image
                           className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
@@ -145,6 +279,9 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                       required
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                       placeholder="input date"
+                      name="dateOfBirth"
+                      value={formData.dateOfBirth}
+                      onChange={handleChange}
                     />
                     <Image
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
@@ -168,22 +305,27 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                       required
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                       placeholder="input address 1"
+                      name="address1"
+                      value={formData.address1}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
                 <div>
                   <label
                     htmlFor="first-name"
-                    className="block text-lg font-bold leading-6 text-gray-900 required-field"
+                    className="block text-lg font-bold leading-6 text-gray-900"
                   >
                     Address 2
                   </label>
                   <div className="mt-1">
                     <input
                       type="text"
-                      required
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                       placeholder="input address 2 (optional)"
+                      name="address2"
+                      value={formData.address2}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -201,6 +343,9 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                         required
                         className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
                         placeholder="input city"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -218,6 +363,9 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                           required
                           className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
                           placeholder="input state"
+                          name="state"
+                          value={formData.state}
+                          onChange={handleChange}
                         />
                       </div>
                     </div>
@@ -230,12 +378,28 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                   >
                     Country
                   </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
+                  <div className="mt-1 relative">
+                    <select
                       required
-                      className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                      placeholder="input country"
+                      className="block cursor-pointer w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      name="country"
+                      onChange={(event) =>
+                        handleCountryChange(event.target.value)
+                      }
+                    >
+                      <option>Select a country</option>
+                      {countryList.map((country) => (
+                        <option key={country.countryId} value={country.id}>
+                          {country.name}
+                        </option>
+                      ))}
+                    </select>
+                    <Image
+                      className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
+                      width={20}
+                      height={20}
+                      src={"/svgs/chevron-up.svg"}
+                      alt={""}
                     />
                   </div>
                 </div>
@@ -252,22 +416,9 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                       required
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
                       placeholder="input zip"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="last-name"
-                    className="block text-lg font-bold leading-6 text-gray-900 required-field"
-                  >
-                    Allergies
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      required
-                      className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
-                      placeholder="input Allergies"
+                      name="zip"
+                      value={formData.zip}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -282,14 +433,14 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                   <div className="mt-1 relative">
                     <select
                       id="status"
-                      className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
-                      value={selectedCodeStatus}
-                      onChange={(e) => setSelectedCodeStatus(e.target.value)}
+                      className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6 cursor-pointer"
+                      name="codeStatus"
+                      onChange={(e) => handleCodeStatusChange(e.target.value)}
                       style={{ cursor: "pointer" }}
                     >
                       <option value="">select status</option>
-                      <option value="active">DNR</option>
-                      <option value="inactive">FULL CODE</option>
+                      <option value="DNR">DNR</option>
+                      <option value="FULL CODE">FULL CODE</option>
                     </select>
                     <Image
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
@@ -313,6 +464,9 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                       required
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
                       placeholder="input addmission date"
+                      name="admissionDate"
+                      value={formData.admissionDate}
+                      onChange={handleChange}
                     />
                     <Image
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
@@ -336,11 +490,33 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                       required
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                       placeholder="input email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label
+                    htmlFor="first-name"
+                    className="block text-lg font-bold leading-6 text-gray-900 required-field"
+                  >
+                    Phone Number
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      type="text"
+                      required
+                      className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      placeholder="input phone number"
+                      name="phoneNo"
+                      value={formData.phoneNo}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
 
-                <div className="">
+                <div className="w-full">
                   <label
                     htmlFor="imageUpload"
                     className="relative h-[70px] w-full bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-1.5"
@@ -371,24 +547,24 @@ export const DemographicModalContent = ({ isModalOpen }: Modalprops) => {
                   />
                 </div>
               </div>
-            </form>
+            </div>
+            <div className="justify-center flex border-t-4 ">
+              <button
+                onClick={() => isModalOpen(false)}
+                type="button"
+                className="w-[600px] h-[50px]  bg-[#ffffff] hover:text-red-500 text-black font-medium mt-4 mr-[3px] rounded-bl-md border-2  "
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="w-[600px] bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff]  font-medium mt-4 rounded-br-md"
+              >
+                Submit
+              </button>
+            </div>
           </div>
-          <div className="justify-center flex border-t-4 ">
-            <button
-              onClick={() => isModalOpen(false)}
-              type="button"
-              className="w-[600px] h-[50px]  bg-[#ffffff] hover:text-red-500 text-black font-medium mt-4 mr-[3px] rounded-bl-md border-2  "
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              className="w-[600px] bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff]  font-medium mt-4 rounded-br-md"
-            >
-              Submit
-            </button>
-          </div>
-        </div>
+        </form>
       </div>
     </>
   );
