@@ -164,7 +164,7 @@ export const Login = () => {
                     >
                       <img
                         className=""
-                        src="/icons/show-pass.svg"
+                        src={`${showPass ? "/icons/show-pass.svg" : "/icons/hide-pass.svg"}`}
                         alt="show-pass"
                         width={25}
                       />
