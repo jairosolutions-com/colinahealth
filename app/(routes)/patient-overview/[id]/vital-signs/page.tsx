@@ -471,12 +471,12 @@ export default function vitalsigns() {
         <Modal
           content={<VitalModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
-          isEdit={isEdit}
-          isOpen={isOpen}
-          label="sample label"
-          vitalSignData={vitalSignData}
-          onSuccess={onSuccess}
-          setIsUpdated={setIsUpdated}
+          // isEdit={isEdit}
+          // isOpen={isOpen}
+          // label="sample label"
+          // vitalSignData={vitalSignData}
+          // onSuccess={onSuccess}
+          // setIsUpdated={setIsUpdated}
         />
       )}
 

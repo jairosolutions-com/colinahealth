@@ -401,11 +401,11 @@ const Notes = () => {
         <Modal
           content={<IncidentreportModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
-          isEdit={isEdit}
-          isOpen={isOpen}
-          label={isEdit ? "Edit Note" : "Add Note"}
-          notesToEdit={notesToEdit}
-          onSuccess={onSuccess}
+          // isEdit={isEdit}
+          // isOpen={isOpen}
+          // label={isEdit ? "Edit Note" : "Add Note"}
+          // notesToEdit={notesToEdit}
+          // onSuccess={onSuccess}
         />
       )}
 

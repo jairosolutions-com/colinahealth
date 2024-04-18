@@ -39,14 +39,6 @@ export async function fetchLabResultsByPatient(
     const { patientId, id, ...patientLabResult } = response.data;
     console.log(patientLabResult, "patient patientLabResult after search");
     return patientLabResult;
-  } catch (error) {
-    if ((error as AxiosError).response?.status === 401) {
-      setAccessToken("");
-      onNavigate(router, "/login");
-      return Promise.reject(new Error("Unauthorized access"));
-    const { patientId, id, ...patientPrescriptionsNoId } = response.data;
-    console.log(patientPrescriptionsNoId, "patient prescription after search");
-    return patientPrescriptionsNoId;
   } catch (error:any) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;

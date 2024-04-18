@@ -10,7 +10,6 @@ import { SurgeriesModal } from "@/components/modals/surgeries.modal";
 import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries.api";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
-import Loading from "./loading";
 import { SurgeriesModalContent } from "@/components/modal-content/surgeries-modal-content";
 import Modal from "@/components/reusable/modal";
 
@@ -185,7 +184,6 @@ export default function Surgeries() {
 
   if (isLoading) {
 
-    return <Loading></Loading>;
     return (
       <div className="w-full h-full flex justify-center items-center ">
         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
@@ -438,14 +436,14 @@ export default function Surgeries() {
         <Modal
           content={<SurgeriesModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          isEdit={isEdit}
-          surgeryData={surgeryData}
-          label="sample label"
-          onSuccess={onSuccess}
-          onFailed={onFailed}
-          setErrorMessage={setError}
-          setIsUpdated={setIsUpdated}
+          // isOpen={isOpen}
+          // isEdit={isEdit}
+          // surgeryData={surgeryData}
+          // label="sample label"
+          // onSuccess={onSuccess}
+          // onFailed={onFailed}
+          // setErrorMessage={setError}
+          // setIsUpdated={setIsUpdated}
         />
       )}
 

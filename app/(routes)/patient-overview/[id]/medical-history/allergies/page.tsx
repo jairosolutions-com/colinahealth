@@ -429,14 +429,14 @@ const Allergies = () => {
         <Modal
           content={<AllergiesModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          isEdit={isEdit}
-          allergy={allergyToEdit}
-          setIsUpdated={setIsUpdated}
-          label="sample label"
-          onSuccess={onSuccess}
-          onFailed={onFailed}
-          setErrorMessage={setError}
+          // isOpen={isOpen}
+          // isEdit={isEdit}
+          // allergy={allergyToEdit}
+          // setIsUpdated={setIsUpdated}
+          // label="sample label"
+          // onSuccess={onSuccess}
+          // onFailed={onFailed}
+          // setErrorMessage={setError}
         />
       )}
       {isSuccessOpen && (

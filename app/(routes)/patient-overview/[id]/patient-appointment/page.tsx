@@ -446,10 +446,10 @@ const Appointment = () => {
         <Modal
           content={<AppointmentModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          isView={isEdit}
-          appointmentData={appointmentData}
-          label="sample label"
+          // isOpen={isOpen}
+          // isView={isEdit}
+          // appointmentData={appointmentData}
+          // label="sample label"
         />
       )}
     </div>

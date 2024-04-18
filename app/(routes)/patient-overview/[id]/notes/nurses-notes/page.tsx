@@ -11,7 +11,6 @@ import { useParams, useRouter } from "next/navigation";
 import { NotesModal } from "@/components/modals/notes.modal";
 import { fetchNotesByPatient } from "@/app/api/notes-api/notes-api";
 import { SuccessModal } from "@/components/shared/success";
-import Loading from "../loading";
 import { NursenotesModalContent } from "@/components/modal-content/nursenotes-modal-content";
 import Modal from "@/components/reusable/modal";
 
@@ -419,12 +418,12 @@ const Notes = () => {
         <Modal
           content={<NursenotesModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
-          isEdit={isEdit}
-          isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          label={isEdit ? "Edit Note" : "Add Note"}
-          notesToEdit={notesToEdit}
-          onSuccess={onSuccess}
+          // isEdit={isEdit}
+          // isModalOpen={isModalOpen}
+          // isOpen={isOpen}
+          // label={isEdit ? "Edit Note" : "Add Note"}
+          // notesToEdit={notesToEdit}
+          // onSuccess={onSuccess}
         />
       )}
 
