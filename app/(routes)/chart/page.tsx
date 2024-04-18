@@ -40,6 +40,7 @@ export default function ChartPage() {
   const [medicationLogUuid, setMedicationLogUuid] = useState("");
   const [aschData, setAschData] = useState<any[]>([]);
   const [isUpdated, setIsUpdated] = useState(false);
+  const [endLineHeight, setEndLineHeight] = useState(0);
   console.log(patientName, "patientName");
 
   const goToPreviousPage = () => {
@@ -142,16 +143,23 @@ export default function ChartPage() {
         setTotalPages(patientListWithPrescription.totalPages);
         setTotalPrescriptions(patientListWithPrescription.totalCount);
         setIsLoading(false);
-      } catch (error:any) {
+      } catch (error: any) {
         setError(error.message);
         console.log("error");
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
           description: error.message,
-          action: <ToastAction altText="Try again" onClick={() => {
-            window.location.reload();
-          }}>Try again</ToastAction>,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
         });
       }
     };
@@ -202,7 +210,7 @@ export default function ChartPage() {
   }
 
   return (
-    <div className="App w-full h-full pt-24  md:overflow-hidden md:px-28 px-5">
+    <div className="App w-full h-full pt-24  md:overflow-hidden md:px-[145px] px-5">
       <div
         className={`w-full h-full ${
           patientWithMedicationLogsToday.length == 0 ? "bg-[#F4F4F4]" : ""
@@ -247,8 +255,8 @@ export default function ChartPage() {
                 />
               </div>
               {/* Ensuring TimeGraph's height adjusts based on PatientCard's height */}
-              <div className="md:w-4/6 h-full md:block hidden   overflow-y-hidden border-r-4 border-[#d9d9d9]">
-                <div className="w-full h-full pt-[25px]">
+              <div className="md:w-4/6 h-full md:block hidden   overflow-y-hidden ">
+                <div className="w-full h-full pt-[25px] ">
                   {" "}
                   <TimeGraph
                     patientWithMedicationLogsToday={
@@ -258,8 +266,15 @@ export default function ChartPage() {
                     isAschModalOpen={isAschModalOpen}
                     setPatientName={setPatientName}
                     setAschData={setAschData}
+                    setEndLineHeight={setEndLineHeight}
                   />
                 </div>
+              </div>
+              <div className=" relative  z-50 r-0">
+                <div
+                  className="absolute w-1 bg-[#d9d9d9] endLine mt-[25px]"
+                  style={{ height: endLineHeight + "px", right: 0 }}
+                ></div>
               </div>
             </div>
 

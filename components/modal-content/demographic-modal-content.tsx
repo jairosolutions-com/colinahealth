@@ -46,7 +46,7 @@ export const DemographicModalContent = ({
     codeStatus: "",
     email: "",
   });
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === 'age' && (!/^\d*$/.test(value))) {
