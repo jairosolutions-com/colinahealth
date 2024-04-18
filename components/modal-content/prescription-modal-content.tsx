@@ -53,6 +53,10 @@ export const PrescriptionModalContent = ({
   }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    if (name === 'interval' && (!/^\d*$/.test(value) || parseInt(value) > 12)) {
+      return; // Don't update state
+    }
+    
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
