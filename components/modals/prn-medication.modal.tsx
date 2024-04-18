@@ -53,6 +53,7 @@ export const PRNMedModal = ({
     medicationType: "PRN",
     medicationLogStatus: PRNData.medicationlogs_medicationLogStatus || "",
   });
+  console.log(isEdit, "isEdit")
   console.log(label, "label");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
