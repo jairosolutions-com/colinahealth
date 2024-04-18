@@ -76,7 +76,7 @@ const Allergies = () => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "block";
       setIsEdit(false);
       setAllergyToEdit([]);
     }
@@ -427,16 +427,20 @@ const Allergies = () => {
       )}
       {isOpen && (
         <Modal
-          content={<AllergiesModalContent isModalOpen={isModalOpen} />}
+          content={
+            <AllergiesModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              isEdit={isEdit}
+              allergy={allergyToEdit}
+              setIsUpdated={setIsUpdated}
+              label="sample label"
+              onSuccess={onSuccess}
+              onFailed={onFailed}
+              setErrorMessage={setError}
+            />
+          }
           isModalOpen={isModalOpen}
-          // isOpen={isOpen}
-          // isEdit={isEdit}
-          // allergy={allergyToEdit}
-          // setIsUpdated={setIsUpdated}
-          // label="sample label"
-          // onSuccess={onSuccess}
-          // onFailed={onFailed}
-          // setErrorMessage={setError}
         />
       )}
       {isSuccessOpen && (

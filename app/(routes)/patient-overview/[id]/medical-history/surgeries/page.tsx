@@ -183,13 +183,11 @@ export default function Surgeries() {
   }, [currentPage, sortOrder, sortBy, term, isOpen]);
 
   if (isLoading) {
-
     return (
       <div className="w-full h-full flex justify-center items-center ">
         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
       </div>
     );
-
   }
 
   const onSuccess = () => {
@@ -434,16 +432,20 @@ export default function Surgeries() {
       )}
       {isOpen && (
         <Modal
-          content={<SurgeriesModalContent isModalOpen={isModalOpen} />}
+          content={
+            <SurgeriesModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              isEdit={isEdit}
+              surgeryData={surgeryData}
+              label="sample label"
+              onSuccess={onSuccess}
+              onFailed={onFailed}
+              setErrorMessage={setError}
+              setIsUpdated={setIsUpdated}
+            />
+          }
           isModalOpen={isModalOpen}
-          // isOpen={isOpen}
-          // isEdit={isEdit}
-          // surgeryData={surgeryData}
-          // label="sample label"
-          // onSuccess={onSuccess}
-          // onFailed={onFailed}
-          // setErrorMessage={setError}
-          // setIsUpdated={setIsUpdated}
         />
       )}
 
