@@ -413,16 +413,20 @@ export default function prescription() {
       )}
       {isOpen && (
         <Modal
-          content={<PrescriptionModalContent isModalOpen={isModalOpen} />}
+          content={
+            <PrescriptionModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              label="sample label"
+              isEdit={isEdit}
+              prescriptionData={prescriptionData}
+              onSuccess={onSuccess}
+              onFailed={onFailed}
+              setErrorMessage={setError}
+              setIsUpdated={setIsUpdated}
+            />
+          }
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          label="sample label"
-          isEdit={isEdit}
-          prescriptionData={prescriptionData}
-          onSuccess={onSuccess}
-          onFailed={onFailed}
-          setErrorMessage={setError}
-          setIsUpdated={setIsUpdated}
         />
       )}
 

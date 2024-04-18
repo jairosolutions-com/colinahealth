@@ -74,7 +74,7 @@ export async function createSurgeriesOfPatient(
       Authorization: `Bearer ${accessToken}`,
     };
 
-    // Make the API request to create the allergy
+    // Make the API request to create the surgeries
     const response = await axios.post(
       `${apiUrl}/surgeries/${patientId}`,
       formData,
