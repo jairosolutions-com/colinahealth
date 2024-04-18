@@ -37,9 +37,9 @@ export async function fetchPrescriptionByPatient(
     );
 
     console.log(response.data);
-    const { patientId, id, ...patientPrescriptionsNoId } = response.data;
-    console.log(patientPrescriptionsNoId, "patient prescription after search");
-    return patientPrescriptionsNoId;
+    const createdPrescription = response.data;
+    console.log(createdPrescription, "patient prescription after search");
+    return createdPrescription;
   } catch (error:any) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
@@ -81,11 +81,10 @@ export async function createPrescriptionOfPatient(patientId: string, formData: a
       setAccessToken("");
       onNavigate(router, "/login");
       return Promise.reject(new Error("Unauthorized access"));
+    } else {
+      console.error((error as AxiosError).message);
+      throw error;
     }
-    console.error(
-      "Error searching patient prescription:",
-      (error as AxiosError).message
-    );
   }
 }
 

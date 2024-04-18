@@ -79,12 +79,12 @@ export const SurgeriesModalContent = ({
         isModalOpen(false);
         return;
       } else {
-        const prescription = await createSurgeriesOfPatient(
+        const surgeries = await createSurgeriesOfPatient(
           patientId,
           formData,
           router
         );
-        console.log("Prescription added successfully:", prescription);
+        console.log("surgeries added successfully:", surgeries);
 
         // Reset the form data after successful submission
         setFormData({

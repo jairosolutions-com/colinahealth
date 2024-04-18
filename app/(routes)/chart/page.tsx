@@ -116,7 +116,7 @@ export default function ChartPage() {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setPRNData([]);
     }
   };
@@ -126,7 +126,7 @@ export default function ChartPage() {
     if (isAschOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isAschOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
     }
   };
   console.log(term);
