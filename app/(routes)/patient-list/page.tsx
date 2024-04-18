@@ -14,9 +14,9 @@ import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Modal from "@/components/reusable/modal";
 import { DemographicModalContent } from "@/components/modal-content/demographic-modal-content";
-export default function PatientPage({}: { patient: any }) {
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+
 
 export default function PatientPage({ patient }: { patient: any }) {
 
@@ -402,7 +402,7 @@ export default function PatientPage({ patient }: { patient: any }) {
         <Modal
           content={<DemographicModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
+          // isOpen={isOpen}
           label="sample label"
           onSuccess={onSuccess}
           onFailed={onFailed}

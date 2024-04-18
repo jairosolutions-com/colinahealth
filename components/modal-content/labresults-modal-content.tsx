@@ -1,37 +1,276 @@
 "use client";
 
 import { X } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import {
+  updateLabResultOfPatient,
+  createLabResultOfPatient,
+  addLabFile,
+} from "@/app/api/lab-results-api/lab-results.api";
+import { useParams, useRouter } from "next/navigation";
+import { fetchLabResultFiles } from "@/app/api/lab-results-api/lab-results.api";
 
 interface Modalprops {
+  isEdit: any;
+  labResultData: any;
+  setIsUpdated: any;
   isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
+}
+interface LabFile {
+  file: any; // Assuming file property exists for the key
+  filename: string;
+  data: Uint8Array;
+  file_uuid: string;
 }
 
-export const LabresultsModalContent = ({ isModalOpen }: Modalprops) => {
-  function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>): void {
-    throw new Error("Function not implemented.");
+export const LabresultsModalContent = ({
+  isEdit,
+  labResultData,
+  setIsUpdated,
+  // isOpen,
+  isModalOpen,
+  onSuccess,
+}: Modalprops) => {
+  const params = useParams<{
+    id: any;
+    tag: string;
+    item: string;
+  }>();
+  const formatDate = (createdAt: string | number | Date) => {
+    // Create a new Date object from the provided createdAt date string
+    const date = new Date(createdAt);
+
+    // Get the month, day, and year
+    const month = date.toLocaleString("default", { month: "short" });
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    const formattedDate = `${month} ${day}, ${year}`;
+
+    return formattedDate;
+  };
+  const [labFile, setLabFile] = useState<any>(null);
+  const patientId = params.id.toUpperCase();
+  const [labFiles, setLabFiles] = useState<any[]>([]); //
+  const defaultLabFiles = Array.isArray(labFiles) ? labFiles : [];
+  const [fileName, setFileName] = useState("");
+  const [fileData, setFileData] = useState(new Uint8Array());
+  const [fileIndex, setFileIndex] = useState(0);
+  const [currentFile, setCurrentFile] = useState({} as LabFile);
+  // Convert the buffer data to base64 string
+  const formRef = useRef(null);
+
+  const [base64String, setBase64String] = useState("");
+  const [fileType, setFileType] = useState<string>("");
+
+  // Define functions to navigate through files
+  const prevFile = () => {
+    if (fileIndex > 0) {
+      setFileIndex(fileIndex - 1);
+      setCurrentFile(labFiles[fileIndex - 1]);
+    }
+  };
+
+  const nextFile = () => {
+    if (fileIndex < labFiles.length - 1) {
+      setFileIndex(fileIndex + 1);
+      setCurrentFile(labFiles[fileIndex + 1]);
+    }
+  };
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    date: labResultData.labResults_date || "",
+    hemoglobinA1c: labResultData.labResults_hemoglobinA1c || "",
+    fastingBloodGlucose: labResultData.labResults_fastingBloodGlucose || "",
+    totalCholesterol: labResultData.labResults_totalCholesterol || "",
+    ldlCholesterol: labResultData.labResults_ldlCholesterol || "",
+    hdlCholesterol: labResultData.labResults_hdlCholesterol || "",
+    triglycerides: labResultData.labResults_triglycerides || "",
+  });
+  let headingText = "";
+
+  if (isEdit) {
+    headingText = "Update Laboratory Result";
+  } else {
+    headingText = "Add Laboratory Result";
   }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === "appointmentDate") {
+      setDate(value);
+      labResultData.date = value;
+      console.log(value, "lab date");
+    }
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setLabFile(file);
+      setFileName(file.name);
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const base64String = reader.result?.toString() || "";
+        setBase64String(base64String);
+
+        const fileType = file.type.split("/")[1];
+        setFileType(fileType);
+      };
+
+      reader.onerror = () => {
+        console.error("Error reading file");
+        setError("Error reading file");
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+  if (isEdit) {
+    console.log(labResultData, "labResultData");
+    console.log(formData, "formData");
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("submit clicked");
+    try {
+      if (isEdit) {
+        await updateLabResultOfPatient(
+          labResultData.labResults_uuid,
+          formData,
+          router
+        );
+        setIsUpdated(true);
+        onSuccess();
+        isModalOpen(false);
+      } else {
+        // Create the lab result
+        const labResult = await createLabResultOfPatient(
+          patientId,
+          formData,
+          router
+        );
+        console.log("Lab Result added successfully:", labResult);
+        const getUuid = labResult.uuid;
+        console.log("Lab UUID:", getUuid);
+
+        // Prepare FormData for file upload
+        const labFileFormData = new FormData();
+        if (labFile) {
+          labFileFormData.append("labfile", labFile, fileName);
+        }
+
+        // Add lab file
+        const addLabFiles = await addLabFile(getUuid, labFileFormData, router);
+
+        console.log("Lab Result added successfully:", labResult);
+        console.log("Lab FILE added successfully:", addLabFiles);
+
+        // Reset form data
+        setFormData({
+          date: "",
+          hemoglobinA1c: "",
+          fastingBloodGlucose: "",
+          totalCholesterol: "",
+          ldlCholesterol: "",
+          hdlCholesterol: "",
+          triglycerides: "",
+        });
+        onSuccess();
+      }
+    } catch (error) {
+      console.error("Error adding Lab Result:", error);
+      setError("Failed to add Lab Result");
+    }
+  };
+
+  useEffect(() => {
+    // Only proceed if labFiles is not null and contains files
+    if (labFiles && labFiles.length > 0) {
+      const file = labFiles[fileIndex];
+      setCurrentFile(file);
+      setFileName(file.filename); // Set the filename using the file object
+      setFileData(file.data); // Set the file data using the file object
+
+      // Only proceed with the conversion if file.data is defined
+      if (file.data) {
+        // Convert the data to base64 and set the file type
+        const newBase64String = Buffer.from(file.data).toString("base64");
+        setBase64String(newBase64String);
+        console.log("FILE STRING", base64String);
+
+        const newFileType = file.filename.split(".").pop() as string;
+        setFileType(newFileType);
+        console.log("FILE newFileType", newFileType);
+      }
+    }
+  }, [fileIndex, labFiles, fileData, fileName]);
+
+  // Update the current file when fileIndex changes
+  useEffect(() => {
+    // Only proceed if labFiles is not null and contains files
+    if (labFiles && labFiles.length > 0) {
+      setCurrentFile(labFiles[fileIndex]);
+    }
+  }, [fileIndex, labFiles]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchLabResultFiles(
+          labResultData.labResults_uuid,
+          router
+        );
+
+        // Only proceed if response.data is not null or empty
+        if (response.data && response.data.length > 0) {
+          setLabFiles(response.data);
+
+          setCurrentFile(response.data[0]);
+          setFileIndex(0);
+        }
+
+        console.log(currentFile);
+      } catch (error: any) {
+        setError(error.message);
+      }
+    };
+
+    // Call fetchData and fetchFile only if `labResultData.labResults_uuid` changes and is not null
+    if (labResultData.labResults_uuid) {
+      fetchData();
+    }
+  }, [labResultData.labResults_uuid]);
 
   return (
     <div className="w-[676px] h-[575px]">
-      <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
-        <div className="items-center flex justify-between">
-          <h2 className="p-title text-left text-[#071437] pl-10 mt-7">
-            Add Laboratory Result
-          </h2>
-          <X
-            onClick={() => isModalOpen(false)}
-            className="w-7 h-7 text-black flex items-center mt-2 mr-4"
-          />
+      <form className="" onSubmit={handleSubmit}>
+        <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
+          <div className="items-center flex justify-between">
+            <h2 className="p-title text-left text-[#071437] pl-10 mt-7">
+              {headingText}
+            </h2>
+            <X
+              onClick={() => isModalOpen(false)}
+              className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+            />
+          </div>
+          <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
+            {isEdit ? "Update" : "Submit"} your log details.
+          </p>
         </div>
-        <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
-          Submit your log details.
-        </p>
-      </div>
-      <div className=" mb-9 pt-4">
-        <div className="h-[600px] max-h-[400px] md:px-10 mt-5">
-          <form className="">
+        <div className=" mb-9 pt-4">
+          <div className="h-[600px] max-h-[400px] md:px-10 mt-5">
             <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
               <div>
                 <label
@@ -42,8 +281,11 @@ export const LabresultsModalContent = ({ isModalOpen }: Modalprops) => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    value={formData.hemoglobinA1c}
                     type="text"
+                    onChange={handleChange}
                     required
+                    name="hemoglobinA1c"
                     className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     placeholder="input hemoglobin a1c"
                   />
@@ -59,7 +301,10 @@ export const LabresultsModalContent = ({ isModalOpen }: Modalprops) => {
                 <div className="mt-2.5">
                   <input
                     type="text"
+                    onChange={handleChange}
+                    value={formData.fastingBloodGlucose}
                     required
+                    name="fastingBloodGlucose"
                     className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     placeholder="input fasting blood glucose"
                   />
@@ -74,8 +319,11 @@ export const LabresultsModalContent = ({ isModalOpen }: Modalprops) => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    value={formData.totalCholesterol}
                     type="text"
                     required
+                    name="totalCholesterol"
+                    onChange={handleChange}
                     className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     placeholder="input total cholesterol"
                   />
@@ -91,7 +339,10 @@ export const LabresultsModalContent = ({ isModalOpen }: Modalprops) => {
                 <div className="mt-2.5">
                   <input
                     type="text"
+                    value={formData.ldlCholesterol}
                     required
+                    name="ldlCholesterol"
+                    onChange={handleChange}
                     className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
                     placeholder="input ldl cholesterol"
                   />
@@ -106,8 +357,12 @@ export const LabresultsModalContent = ({ isModalOpen }: Modalprops) => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    value={formData.hdlCholesterol}
                     type="text"
+                    onChange={handleChange}
                     required
+                    name="hdlCholesterol"
+
                     className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     placeholder="input hdl cholesterol"
                   />
@@ -122,7 +377,10 @@ export const LabresultsModalContent = ({ isModalOpen }: Modalprops) => {
                 </label>
                 <div className="mt-2.5">
                   <input
+                    value={formData.triglycerides}
                     type="text"
+                    name="triglycerides"
+                    onChange={handleChange}
                     required
                     className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
                     placeholder="input triglycerides"
@@ -136,10 +394,14 @@ export const LabresultsModalContent = ({ isModalOpen }: Modalprops) => {
                 >
                   DATE
                 </label>
+                
                 <div className="mt-2.5 relative">
                   <input
-                    type="date"
                     required
+                    type="date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleChange}
                     className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
                     placeholder="input triglycerides"
                   />
@@ -177,32 +439,36 @@ export const LabresultsModalContent = ({ isModalOpen }: Modalprops) => {
                 <input
                   type="file"
                   id="imageUpload"
-                  accept="image/*"
+                  multiple={true}
+                  accept="image/*,pdf"
                   className="hidden"
-                  onChange={(e) => handleImageUpload(e)}
+                  name="file"
+                  onChange={(e) => {
+                    handleFile(e);
+                  }}
                 />
               </div>
             </div>
-          </form>
-        </div>
-        <div className="pt-26">
-          <div className="justify-center flex border-t-4 pt-26">
-            <button
-              onClick={() => isModalOpen(false)}
-              type="button"
-              className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md"
-            >
-              Submit
-            </button>
+          </div>
+          <div className="pt-26">
+            <div className="justify-center flex border-t-4 pt-26">
+              <button
+                onClick={() => isModalOpen(false)}
+                type="button"
+                className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md"
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

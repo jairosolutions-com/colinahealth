@@ -13,6 +13,7 @@ import { LabResultModal } from "@/components/modals/labresults.modal";
 import Modal from "@/components/reusable/modal";
 import { SuccessModal } from "@/components/shared/success";
 import { LabresultsModalContent } from "@/components/modal-content/labresults-modal-content";
+import { LabResultsViewModalContent } from "@/components/modal-content/labresultsview-modal-content";
 export default function Laboratoryresults() {
   const router = useRouter();
   // start of orderby & sortby function
@@ -369,9 +370,7 @@ export default function Laboratoryresults() {
                           scope="row"
                           className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                         >
-                          {new Date(
-                            labResult.labResults_createdAt
-                          ).toLocaleDateString()}
+                          {labResult.labResults_date}
                         </th>
                         <td className="px-0 py-4">
                           {labResult.labResults_hemoglobinA1c}%
@@ -405,6 +404,7 @@ export default function Laboratoryresults() {
                             onClick={() => {
                               isModalOpen(true);
                               setIsView(true);
+                              
                               setLabResultData(labResult);
                             }}
                           >
@@ -488,15 +488,22 @@ export default function Laboratoryresults() {
       )}
       {isOpen && (
         <Modal
-          content={<LabresultsModalContent isModalOpen={isModalOpen} />}
-          isModalOpen={isModalOpen}
+          content={<LabresultsModalContent   
+            isModalOpen={isModalOpen}
           isEdit={isEdit}
-          isView={isView}
           labResultData={labResultData}
-          isOpen={isOpen}
-          label="sample label"
           onSuccess={onSuccess}
-          setIsUpdated={setIsUpdated}
+          setIsUpdated={setIsUpdated} />}
+          isModalOpen={isModalOpen} />
+      )}
+      {isView && (
+        <Modal 
+          content={<LabResultsViewModalContent  
+            isModalOpen={isModalOpen}
+          isView={isView}
+          labResultsData={labResultData}
+       />}
+          isModalOpen={isModalOpen}
         />
       )}
 

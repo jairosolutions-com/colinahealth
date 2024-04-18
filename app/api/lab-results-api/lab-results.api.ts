@@ -35,19 +35,12 @@ export async function fetchLabResultsByPatient(
       requestData,
       { headers }
     );
+
     console.log(response.data);
-    const { patientId, id, ...patientLabResult } = response.data;
-    console.log(patientLabResult, "patient patientLabResult after search");
-    return patientLabResult;
-  } catch (error) {
-    if ((error as AxiosError).response?.status === 401) {
-      setAccessToken("");
-      onNavigate(router, "/login");
-      return Promise.reject(new Error("Unauthorized access"));
     const { patientId, id, ...patientPrescriptionsNoId } = response.data;
     console.log(patientPrescriptionsNoId, "patient prescription after search");
     return patientPrescriptionsNoId;
-  } catch (error:any) {
+  } catch (error: any) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
       if (axiosError.message === "Network Error") {
@@ -90,8 +83,8 @@ export async function createLabResultOfPatient(patientId: string, formData: any,
   }
 }
 
-export async function addLabFile(  labResultUuid: string,
-  formData:any, router: any): Promise<any> {
+export async function addLabFile(labResultUuid: string,
+  formData: any, router: any): Promise<any> {
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
@@ -104,12 +97,12 @@ export async function addLabFile(  labResultUuid: string,
 
     // Make the API request to create the allergy
     const response = await axios.post(`${apiUrl}/lab-results/${labResultUuid}/upload`, formData, { headers });
-    
+
     const labFileInserted = response.data;
     console.log(labFileInserted, "labFileInserted");
 
     return labFileInserted;
-    
+
   } catch (error) {
     console.error("Error creating LabResult:", error);
     throw error; // Rethrow the error to handle it in the component
@@ -140,7 +133,7 @@ export async function updateLabResultOfPatient(
       { headers });
     const updatedLabResult = response.data;
 
-    return updatedLabResult ;
+    return updatedLabResult;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401) {
       setAccessToken("");
@@ -192,4 +185,3 @@ export async function fetchLabResultFiles(
     );
   }
 }
-
