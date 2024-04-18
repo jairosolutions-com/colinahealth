@@ -10,7 +10,6 @@ import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchNotesByPatient } from "@/app/api/notes-api/notes-api";
 import { SuccessModal } from "@/components/shared/success";
-import Loading from "../loading";
 import { IncidentReportModal } from "@/components/modals/incident-report.modal";
 import { IncidentreportModalContent } from "@/components/modal-content/incidentreport-modal-content";
 import Modal from "@/components/reusable/modal";
@@ -175,7 +174,11 @@ const Notes = () => {
   };
 
   if (isLoading) {
-    return <Loading></Loading>;
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
   }
 
   return (
@@ -188,11 +191,11 @@ const Notes = () => {
             <h1
               className="font-medium text-[20px] text-gray-600 cursor-pointer"
               onClick={() => {
+                setIsLoading(true);
                 onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/notes/nurses-notes`
                 );
-                setIsLoading(true);
               }}
             >
               Nurses Notes

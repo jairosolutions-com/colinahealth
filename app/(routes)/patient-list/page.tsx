@@ -15,10 +15,16 @@ import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Modal from "@/components/reusable/modal";
 import { DemographicModalContent } from "@/components/modal-content/demographic-modal-content";
 export default function PatientPage({}: { patient: any }) {
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+
+export default function PatientPage({ patient }: { patient: any }) {
+
   const router = useRouter();
   if (!getAccessToken()) {
     onNavigate(router, "/login");
   }
+  const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortBy, setSortBy] = useState("firstName");
@@ -151,7 +157,15 @@ export default function PatientPage({}: { patient: any }) {
         setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
-        setIsLoading(false);
+        console.log("error", error.message);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: <ToastAction altText="Try again" onClick={() => {
+            window.location.reload();
+          }}>Try again</ToastAction>,
+        });
       }
     };
 

@@ -13,6 +13,7 @@ import { ErrorModal } from "@/components/shared/error";
 import Loading from "./loading";
 import { SurgeriesModalContent } from "@/components/modal-content/surgeries-modal-content";
 import Modal from "@/components/reusable/modal";
+
 export default function Surgeries() {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
@@ -183,7 +184,14 @@ export default function Surgeries() {
   }, [currentPage, sortOrder, sortBy, term, isOpen]);
 
   if (isLoading) {
+
     return <Loading></Loading>;
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
+
   }
 
   const onSuccess = () => {
@@ -206,6 +214,7 @@ export default function Surgeries() {
             <h1 className="slash mx-2">{"/"} </h1>
             <h1
               onClick={() => {
+                setIsLoading(true);
                 onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/medical-history/allergies`

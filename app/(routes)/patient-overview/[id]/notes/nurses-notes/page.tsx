@@ -15,6 +15,7 @@ import Loading from "../loading";
 import { NursenotesModalContent } from "@/components/modal-content/nursenotes-modal-content";
 import Modal from "@/components/reusable/modal";
 
+
 const Notes = () => {
   const router = useRouter();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -175,7 +176,11 @@ const Notes = () => {
   };
 
   if (isLoading) {
-    return <Loading></Loading>;
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
   }
 
   return (
@@ -191,11 +196,11 @@ const Notes = () => {
             <h1 className="slash mx-2">{"/"} </h1>
             <h1
               onClick={() => {
+                setIsLoading(true);
                 onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/notes/incident-report`
                 );
-                setIsLoading(true);
               }}
               className="font-medium text-[20px] cursor-pointer text-gray-600"
             >

@@ -9,7 +9,6 @@ import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { PRNMedModal } from "@/components/modals/prn-medication.modal";
-import Loading from "../loading";
 import { fetchPRNMedByPatient } from "@/app/api/medication-logs-api/prn-med-api";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
@@ -186,7 +185,11 @@ const Prorenata = () => {
   };
 
   if (isLoading) {
-    return <Loading></Loading>;
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
   }
 
   console.log(patientPRNMed, "prn med");
@@ -200,11 +203,11 @@ const Prorenata = () => {
             <h1 className="p-title mx-2">{">"} </h1>
             <h1
               onClick={() => {
+                setIsLoading(true);
                 onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/medication/scheduled`
                 );
-                setIsLoading(true);
               }}
               className="p-title cursor-pointer text-gray-600"
             >

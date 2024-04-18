@@ -15,6 +15,7 @@ import { SuccessModal } from "@/components/shared/success";
 import Loading from "../loading";
 import Modal from "@/components/reusable/modal";
 import { ScheduledModalContent } from "@/components/modal-content/scheduled-modal-content";
+
 const Scheduled = () => {
   const router = useRouter();
   // start of orderby & sortby function
@@ -185,7 +186,11 @@ const Scheduled = () => {
   };
 
   if (isLoading) {
-    return <Loading></Loading>;
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
   }
 
   console.log("patientScheduledMed", patientScheduledMed);
@@ -201,11 +206,11 @@ const Scheduled = () => {
             <h1 className="p-title mx-2">{">"} </h1>
             <h1
               onClick={() => {
+                setIsLoading(true);
                 onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/medication/prorenata`
                 );
-                setIsLoading(true);
               }}
               className="p-title cursor-pointer text-gray-600"
             >
