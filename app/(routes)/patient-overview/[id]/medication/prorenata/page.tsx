@@ -8,7 +8,6 @@ import Edit from "@/components/shared/buttons/edit";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { PRNMedModal } from "@/components/modals/prn-medication.modal";
 import { fetchPRNMedByPatient } from "@/app/api/medication-logs-api/prn-med-api";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
@@ -443,18 +442,23 @@ const Prorenata = () => {
         </div>
       )}
       {isOpen && (
-        <PRNMedModal
+        <Modal
+          content={
+            <PrnModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              uuid={""}
+              name=""
+              isEdit={isEdit}
+              setIsUpdated={setIsUpdated}
+              PRNData={PRNData}
+              label="sample label"
+              onSuccess={onSuccess}
+              onFailed={onFailed}
+              setErrorMessage={setError}
+            />
+          }
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          uuid={""}
-          name=""
-          isEdit={isEdit}
-          setIsUpdated={setIsUpdated}
-          PRNData={PRNData}
-          label="sample label"
-          onSuccess={onSuccess}
-          onFailed={onFailed}
-          setErrorMessage={setError}
         />
       )}
       {isSuccessOpen && (
