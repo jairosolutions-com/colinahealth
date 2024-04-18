@@ -10,7 +10,9 @@ import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { AppointmentsModal } from "@/components/modals/appointments.modal";
 import { fetchAppointmentsByPatient as fetchAppointmentsByPatient } from "@/app/api/appointments-api/appointments.api";
-
+import { AppointmentviewModalContent } from "@/components/modal-content/appointmentview-modal-content";
+import Modal from "@/components/reusable/modal";
+import { AppointmentModalContent } from "@/components/modal-content/appointment-modal-content";
 const Appointment = () => {
   const router = useRouter();
   // start of orderby & sortby function
@@ -305,7 +307,8 @@ const Appointment = () => {
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="font-semibold text-gray-700 text-center text-[15px]">
-                      No Appointment/s <br/>•ω•
+                      No Appointment/s <br />
+                      •ω•
                     </p>
                   </td>
                 </tr>
@@ -439,7 +442,8 @@ const Appointment = () => {
         </div>
       )}
       {isOpen && (
-        <AppointmentsModal
+        <Modal
+          content={<AppointmentModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
           isOpen={isOpen}
           isView={isEdit}

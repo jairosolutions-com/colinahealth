@@ -12,7 +12,8 @@ import { PRNMedModal } from "@/components/modals/prn-medication.modal";
 import { fetchPRNMedByPatient } from "@/app/api/medication-logs-api/prn-med-api";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
-
+import Modal from "@/components/reusable/modal";
+import { PrnModalContent } from "@/components/modal-content/prn-modal-content";
 const Prorenata = () => {
   const router = useRouter();
   // start of orderby & sortby function

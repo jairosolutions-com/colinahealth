@@ -11,7 +11,8 @@ import { fetchPrescriptionByPatient as fetchPrescriptionsByPatient } from "@/app
 import { PrescriptionModal } from "@/components/modals/prescription.modal";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
-// import { Modal } from "@/components/shared/modalss";
+import Modal from "@/components/reusable/modal";
+import { PrescriptionModalContent } from "@/components/modal-content/prescription-modal-content";
 
 export default function prescription() {
   const router = useRouter();
@@ -263,7 +264,8 @@ export default function prescription() {
           {patientPrescriptions.length == 0 ? (
             <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
               <p className="text-xl font-semibold text-gray-700 text-center text-[15px]">
-                No Prescription/s <br/>•ω•
+                No Prescription/s <br />
+                •ω•
               </p>
             </div>
           ) : (
@@ -410,7 +412,8 @@ export default function prescription() {
         </div>
       )}
       {isOpen && (
-        <PrescriptionModal
+        <Modal
+          content={<PrescriptionModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
           isOpen={isOpen}
           label="sample label"

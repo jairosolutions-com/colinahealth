@@ -12,6 +12,9 @@ import { ScheduledMedModal } from "@/components/modals/sched-medication.modal";
 import { fetchScheduledMedByPatient } from "@/app/api/medication-logs-api/scheduled-med-api";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
+import Loading from "../loading";
+import Modal from "@/components/reusable/modal";
+import { ScheduledModalContent } from "@/components/modal-content/scheduled-modal-content";
 
 const Scheduled = () => {
   const router = useRouter();
@@ -450,7 +453,8 @@ const Scheduled = () => {
         </div>
       )}
       {isOpen && (
-        <ScheduledMedModal
+        <Modal
+          content={<ScheduledModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
           uuid=""
           name=""

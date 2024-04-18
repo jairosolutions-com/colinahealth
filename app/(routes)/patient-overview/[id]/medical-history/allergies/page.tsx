@@ -12,7 +12,8 @@ import { fetchAllergiesByPatient } from "@/app/api/medical-history-api/allergies
 import { AllergyModal } from "@/components/modals/allergies.modal";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
-
+import Modal from "@/components/reusable/modal";
+import { AllergiesModalContent } from "@/components/modal-content/allergies-modal-content";
 const Allergies = () => {
   const router = useRouter();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -425,7 +426,8 @@ const Allergies = () => {
         </div>
       )}
       {isOpen && (
-        <AllergyModal
+        <Modal
+          content={<AllergiesModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
           isOpen={isOpen}
           isEdit={isEdit}

@@ -8,7 +8,8 @@ import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useRouter } from "next/navigation";
 import { FormsModalContent } from "@/components/modals/forms.modal";
-
+import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
+import Modal from "@/components/reusable/modal";
 export default function FormsTab() {
   const router = useRouter();
   // start of orderby & sortby function
@@ -198,7 +199,12 @@ export default function FormsTab() {
             </nav>
           </div>
         </div>
-        {isOpen && <FormsModalContent isModalOpen={isModalOpen} />}
+        {isOpen && (
+          <Modal
+            content={<FormsviewModalContent isModalOpen={isModalOpen} />}
+            isModalOpen={isModalOpen}
+          />
+        )}
       </div>
     </div>
   );

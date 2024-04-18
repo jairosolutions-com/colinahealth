@@ -11,6 +11,8 @@ import { useParams, useRouter } from "next/navigation";
 import { fetchNotesByPatient } from "@/app/api/notes-api/notes-api";
 import { SuccessModal } from "@/components/shared/success";
 import { IncidentReportModal } from "@/components/modals/incident-report.modal";
+import { IncidentreportModalContent } from "@/components/modal-content/incidentreport-modal-content";
+import Modal from "@/components/reusable/modal";
 
 const Notes = () => {
   const router = useRouter();
@@ -396,9 +398,10 @@ const Notes = () => {
         </div>
       )}
       {isOpen && (
-        <IncidentReportModal
-          isEdit={isEdit}
+        <Modal
+          content={<IncidentreportModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
+          isEdit={isEdit}
           isOpen={isOpen}
           label={isEdit ? "Edit Note" : "Add Note"}
           notesToEdit={notesToEdit}

@@ -12,10 +12,14 @@ import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
+import Modal from "@/components/reusable/modal";
+import { DemographicModalContent } from "@/components/modal-content/demographic-modal-content";
+export default function PatientPage({}: { patient: any }) {
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function PatientPage({ patient }: { patient: any }) {
+
   const router = useRouter();
   if (!getAccessToken()) {
     onNavigate(router, "/login");
@@ -395,7 +399,8 @@ export default function PatientPage({ patient }: { patient: any }) {
         </div>
       )}
       {isOpen && (
-        <DemographicModal
+        <Modal
+          content={<DemographicModalContent isModalOpen={isModalOpen} />}
           isModalOpen={isModalOpen}
           isOpen={isOpen}
           label="sample label"
