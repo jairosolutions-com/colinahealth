@@ -20,7 +20,7 @@ const Scheduled = () => {
   const router = useRouter();
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
-  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortOrder, setSortOrder] = useState("DESC");
   const [sortBy, setSortBy] = useState("createdAt");
   const [pageNumber, setPageNumber] = useState("");
   const [patientScheduledMed, setPatientScheduledMed] = useState<any[]>([]);
@@ -48,7 +48,7 @@ const Scheduled = () => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setIsEdit(false);
       setScheduledMedData([]);
     }
@@ -454,19 +454,23 @@ const Scheduled = () => {
       )}
       {isOpen && (
         <Modal
-          content={<ScheduledModalContent isModalOpen={isModalOpen} />}
+          content={
+            <ScheduledModalContent
+              isModalOpen={isModalOpen}
+              uuid=""
+              name=""
+              aschData={""}
+              isOpen={isOpen}
+              isEdit={isEdit}
+              scheduledMedData={scheduledMedData}
+              setIsUpdated={setIsUpdated}
+              label="sample label"
+              onSuccess={onSuccess}
+              onFailed={onFailed}
+              setErrorMessage={setError}
+            />
+          }
           isModalOpen={isModalOpen}
-          // uuid=""
-          // name=""
-          // aschData={""}
-          // isOpen={isOpen}
-          // isEdit={isEdit}
-          // scheduledMedData={scheduledMedData}
-          // setIsUpdated={setIsUpdated}
-          // label="sample label"
-          // onSuccess={onSuccess}
-          // onFailed={onFailed}
-          // setErrorMessage={setError}
         />
       )}
       {isSuccessOpen && (

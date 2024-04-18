@@ -18,7 +18,7 @@ const Allergies = () => {
   const router = useRouter();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-  const [sortOrder, setSortOrder] = useState<string>("ASC");
+  const [sortOrder, setSortOrder] = useState<string>("DESC");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [patientAllergies, setPatientAllergies] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -76,7 +76,7 @@ const Allergies = () => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "block";
+      document.body.style.overflow = "visible";
       setIsEdit(false);
       setAllergyToEdit([]);
     }
