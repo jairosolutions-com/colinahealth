@@ -163,7 +163,7 @@ export const Login = () => {
                       onClick={() => setShowPass(!showPass)}
                     >
                       <img
-                        className=""
+                        className={`${password? "block":"hidden"}`}
                         src={`${showPass ? "/icons/show-pass.svg" : "/icons/hide-pass.svg"}`}
                         alt="show-pass"
                         width={25}

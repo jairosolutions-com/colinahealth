@@ -18,7 +18,7 @@ const Prorenata = () => {
   const router = useRouter();
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
-  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortOrder, setSortOrder] = useState("DESC");
   const [sortBy, setSortBy] = useState("createdAt");
   const [pageNumber, setPageNumber] = useState("");
   const [patientPRNMed, setPatientPRNMed] = useState<any[]>([]);

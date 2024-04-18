@@ -75,7 +75,7 @@ export default function PatientPage({ patient }: { patient: any }) {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "block";
+      document.body.style.overflow = "visible";
     }
   };
 

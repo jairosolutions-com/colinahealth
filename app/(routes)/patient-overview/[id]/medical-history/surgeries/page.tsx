@@ -25,7 +25,7 @@ export default function Surgeries() {
   const [pageNumber, setPageNumber] = useState("");
   const [gotoError, setGotoError] = useState(false);
   const [term, setTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortOrder, setSortOrder] = useState("DESC");
   const [surgeryUuid, setSurgeryUuid] = useState("");
   const router = useRouter();
   const [sortBy, setSortBy] = useState("typeOfSurgery");
@@ -78,7 +78,7 @@ export default function Surgeries() {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setIsEdit(false);
       setSurgeryData([]);
     }

@@ -44,7 +44,7 @@ export const ScheduledMedModal = ({
   }>();
   const patientId = params.id ? params.id.toUpperCase() : uuid.toUpperCase();
   console.log(patientId, "patientId");
-  console.log(aschData, "aschData")
+  console.log(aschData, "aschData");
   const router = useRouter();
   const [prescriptionList, setPrescriptionList] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -179,6 +179,7 @@ export const ScheduledMedModal = ({
     // Return the formatted time string
     return `${formattedHours}:${formattedMinutes}${ampm}`;
   };
+  console.log(isEdit, "isEdit")
   console.log(scheduledMedData, "scheduledMedData");
   console.log(scheduledMedData.length, "scheduledMedData length");
   console.log(formData, "formData");
@@ -189,7 +190,9 @@ export const ScheduledMedModal = ({
       <div className="w-[676px] h-[660px] bg-[#FFFFFF] rounded-md">
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <h2 className="p-title text-left text-[#071437] pl-9 mt-7">
-            {isEdit ? "Update" : "Add"} Scheduled Medication Log {name? 'for' : ""} <span className="text-[#007C85]">{name? name: ""}</span>
+            {isEdit ? "Update" : "Add"} Scheduled Medication Log{" "}
+            {name ? "for" : ""}{" "}
+            <span className="text-[#007C85]">{name ? name : ""}</span>
           </h2>
           <p className="text-sm text-start pl-9 text-gray-600 pb-10 pt-2">
             Submit your log details.
@@ -213,14 +216,22 @@ export const ScheduledMedModal = ({
                       onChange={handleMedicationChange}
                       required
                     >
-                      {scheduledMedData.length !== 0 ||prescriptionList.length !==0 &&  (
-                        <option value="">Select Prescription</option>
-                      )}
+                      {scheduledMedData.length !== 0 ||
+                        (prescriptionList.length !== 0 && (
+                          <option value="">Select Prescription</option>
+                        ))}
 
                       {aschData.length !== 0 && (
-                        <><option value="">Select Prescription</option><option value={aschData.medicationLogsName} data-uuid={aschData.uuid}>
-                          {aschData.medicationLogsName} @{" "} {aschData.medicationLogsTime}
-                        </option></>
+                        <>
+                          <option value="">Select Prescription</option>
+                          <option
+                            value={aschData.medicationLogsName}
+                            data-uuid={aschData.uuid}
+                          >
+                            {aschData.medicationLogsName} @{" "}
+                            {aschData.medicationLogsTime}
+                          </option>
+                        </>
                       )}
 
                       {prescriptionList.length === 0 &&
@@ -293,6 +304,7 @@ export const ScheduledMedModal = ({
                       value={formData.medicationLogsDate}
                       onChange={handleChange}
                       required
+                      disabled={isEdit}
                     />
                   </div>
                 </div>
