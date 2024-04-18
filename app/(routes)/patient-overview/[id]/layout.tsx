@@ -80,10 +80,10 @@ export default function PatientOverviewLayout({
   ];
 
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
-    setIsLoading(true);
-    onNavigate(router, url);
     setActiveTab(-1);
     setDetailsClicked(true);
+    setIsLoading(true);
+    onNavigate(router, url);
   };
 
   // const handleTabClick = (index: number, url: string) => {
@@ -92,11 +92,9 @@ export default function PatientOverviewLayout({
   //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
   // };
   const handleTabClick = (url: string, tabIndex: number) => {
-    setIsLoading(true);
-
     setActiveTab(tabIndex);
     setDetailsClicked(false);
-    console.log(url, "url");
+    setIsLoading(true);
     onNavigate(router, url);
   };
   console.log(pathname, "pathname");
@@ -135,11 +133,17 @@ export default function PatientOverviewLayout({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
           description: error.message,
-          action: <ToastAction altText="Try again" onClick={() => {
-            window.location.reload();
-          }}>Try again</ToastAction>,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
         });
-        
       }
     };
 
@@ -196,7 +200,7 @@ export default function PatientOverviewLayout({
             <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
           </div>
         );
-        case !isForms:
+      case !isForms:
         return (
           <div className="w-full h-full flex justify-center items-center ">
             <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
