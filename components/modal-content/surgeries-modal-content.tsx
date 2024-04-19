@@ -33,6 +33,7 @@ export const SurgeriesModalContent = ({
   onFailed,
 }: Modalprops) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [charactersFull, setCharactersFull] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     dateOfSurgery: surgeryData.surgeries_dateOfSurgery,
@@ -59,10 +60,20 @@ export const SurgeriesModalContent = ({
   };
   const handleNoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === "notes" && value.length > 200) {
+      const truncatedValue = value.slice(0, 200);
+      setCharactersFull(true);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: truncatedValue,
+      }));
+    } else {
+      setCharactersFull(false);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e: any) => {
@@ -183,6 +194,13 @@ export const SurgeriesModalContent = ({
                     placeholder="input notes"
                     style={{ resize: "none" }}
                   />
+                  <p
+                    className={`absolute text-red-500 ${
+                      charactersFull ? "visible" : "hidden"
+                    }`}
+                  >
+                    *Maximum of 200 characters only!
+                  </p>
                 </div>
               </div>
               <div className="">

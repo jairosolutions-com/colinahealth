@@ -36,16 +36,27 @@ export const AppointmentModalContent = ({
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [error, setError] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [charactersFull, setCharactersFull] = useState<boolean>(false);
 
   const handleEditToggle = () => {
     setIsEditable(!isEditable);
   };
   const handleDetailsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === "details" && value.length > 200) {
+      const truncatedValue = value.slice(0, 200);
+      setCharactersFull(true);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: truncatedValue,
+      }));
+    } else {
+      setCharactersFull(false);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedStatus(e.target.value);
@@ -185,7 +196,7 @@ export const AppointmentModalContent = ({
                       <p> {formData.appointmentStatus} Appointment</p>
                     </div>
                   )}
-                  {formData.appointmentStatus === "Patient-IN"  && (
+                  {formData.appointmentStatus === "Patient-IN" && (
                     <div className="flex">
                       <div className="w-1 h-1 my-2 mx-1 mt-2 bg-[#E0BD03] rounded-full"></div>
                       <p> On-going Appointment </p>
@@ -341,6 +352,13 @@ export const AppointmentModalContent = ({
                     value={formData.details}
                     disabled={!isEditable && isView}
                   />
+                  <p
+                    className={`absolute text-red-500 ${
+                      charactersFull ? "visible" : "hidden"
+                    }`}
+                  >
+                    *Maximum of 200 characters only!
+                  </p>
                 </div>
               </div>
               <div className={`${isView ? "visible" : "hidden"}`}>

@@ -43,6 +43,7 @@ export const AllergiesModalContent = ({
   const patientId = params.id.toUpperCase();
   // const patientId = params.id;
   const router = useRouter();
+  const [charactersFull, setCharactersFull] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     patientUuid: patientId,
@@ -62,10 +63,21 @@ export const AllergiesModalContent = ({
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === "notes" && value.length > 200) {
+      const truncatedValue = value.slice(0, 200);
+      setCharactersFull(true);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: truncatedValue,
+      }));
+    
+    } else {
+      setCharactersFull(false);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e: any) => {
@@ -222,6 +234,7 @@ export const AllergiesModalContent = ({
                     value={formData.notes}
                     onChange={handleTextChange}
                   />
+                  <p className={`absolute text-red-500 ${charactersFull?"visible":"hidden"}`}>*Maximum of 200 characters only!</p>
                 </div>
               </div>
             </div>

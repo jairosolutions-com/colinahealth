@@ -40,11 +40,11 @@ export const PrnModalContent = ({
     tag: string;
     item: string;
   }>();
-console.log(isEdit, "isEdit")
+  console.log(isEdit, "isEdit");
   const patientId = params.id ? params.id.toUpperCase() : uuid.toUpperCase();
   console.log(patientId, "patientId");
-
   const [error, setError] = useState<string | null>(null);
+  const [charactersFull, setCharactersFull] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     medicationLogsName: PRNData.medicationlogs_medicationLogsName || "",
     medicationLogsDate: PRNData.medicationlogs_medicationLogsDate || "",
@@ -72,10 +72,20 @@ console.log(isEdit, "isEdit")
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === "notes" && value.length > 200) {
+      const truncatedValue = value.slice(0, 200);
+      setCharactersFull(true);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: truncatedValue,
+      }));
+    } else {
+      setCharactersFull(false);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e: any) => {
@@ -177,6 +187,13 @@ console.log(isEdit, "isEdit")
                     value={formData.notes}
                     onChange={handleTextChange}
                   />
+                  <p
+                    className={`absolute text-red-500 ${
+                      charactersFull ? "visible" : "hidden"
+                    }`}
+                  >
+                    *Maximum of 200 characters only!
+                  </p>
                 </div>
               </div>
               <div className="">
@@ -282,7 +299,7 @@ console.log(isEdit, "isEdit")
               type="submit"
               className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md"
             >
-                 {isEdit ? "Update" : "Submit"}
+              {isEdit ? "Update" : "Submit"}
             </button>
           </div>
         </div>
