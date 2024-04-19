@@ -82,7 +82,6 @@ export default function PatientOverviewLayout({
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
     setActiveTab(-1);
     setDetailsClicked(true);
-    setIsLoading(true);
     onNavigate(router, url);
   };
 
@@ -94,7 +93,7 @@ export default function PatientOverviewLayout({
   const handleTabClick = (url: string, tabIndex: number) => {
     setActiveTab(tabIndex);
     setDetailsClicked(false);
-    setIsLoading(true);
+
     onNavigate(router, url);
   };
   console.log(pathname, "pathname");
@@ -255,12 +254,13 @@ export default function PatientOverviewLayout({
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
                       className="underline text-[15px] font-semibold text-[#191D23] text-right mr-10"
-                      onClick={() =>
+                      onClick={() => {
+                        setIsLoading(true);
                         handleSeeMoreDetails(
                           `/patient-overview/${params.id}/patient-details`,
                           -1
-                        )
-                      }
+                        );
+                      }}
                     >
                       See more details
                     </p>
@@ -355,6 +355,7 @@ export default function PatientOverviewLayout({
                     }`}
                     key={index}
                     onClick={() => {
+                      setIsLoading(true);
                       handleTabClick(tab.url, index);
                     }}
                   >

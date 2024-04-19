@@ -211,7 +211,10 @@ export default function PatientPage({ patient }: { patient: any }) {
     <div className="w-full px-[150px] py-[90px]">
       <div className="flex justify-end">
         <p
-          onClick={() => onNavigate(router, "/dashboard")}
+          onClick={() => {
+            setIsLoading(true);
+            onNavigate(router, "/dashboard");
+          }}
           className="text-[#64748B] underline cursor-pointer text-[15px]"
         >
           Back to Dashboard
@@ -222,7 +225,7 @@ export default function PatientPage({ patient }: { patient: any }) {
           <p className="p-title">Patients List Records</p>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
-            Total of {totalPatient} Patients
+            Total of {patientList.length==0?"0":totalPatient} Patients
           </p>
         </div>
         <div className="flex flex-row justify-end">
