@@ -439,8 +439,8 @@ export const DemographicModalContent = ({
                       style={{ cursor: "pointer" }}
                     >
                       <option value="">select status</option>
-                      <option value="DNR">DNR</option>
-                      <option value="FULL CODE">FULL CODE</option>
+                      <option value="DNR" className="text-red-500">DNR</option>
+                      <option value="FULL CODE" className="text-blue-500">FULL CODE</option>
                     </select>
                     <Image
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
