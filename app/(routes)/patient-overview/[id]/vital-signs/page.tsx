@@ -42,7 +42,7 @@ export default function vitalsigns() {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setIsEdit(false);
       setVitalSignData([]);
     }
@@ -469,14 +469,18 @@ export default function vitalsigns() {
       )}
       {isOpen && (
         <Modal
-          content={<VitalModalContent isModalOpen={isModalOpen} />}
+          content={
+            <VitalModalContent
+              isModalOpen={isModalOpen}
+              isEdit={isEdit}
+              isOpen={isOpen}
+              label="sample label"
+              vitalSignData={vitalSignData}
+              onSuccess={onSuccess}
+              setIsUpdated={setIsUpdated}
+            />
+          }
           isModalOpen={isModalOpen}
-          // isEdit={isEdit}
-          // isOpen={isOpen}
-          // label="sample label"
-          // vitalSignData={vitalSignData}
-          // onSuccess={onSuccess}
-          // setIsUpdated={setIsUpdated}
         />
       )}
 
