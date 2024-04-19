@@ -75,8 +75,8 @@ const Appointment = () => {
 
   const [patientAppointments, setPatientAppointments] = useState<any[]>([]);
   const [term, setTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("DESC");
-  const [sortBy, setSortBy] = useState("appointmentTime");
+  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortBy, setSortBy] = useState("appointmentDate");
   const [pageNumber, setPageNumber] = useState("");
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalAppointments, setTotalAppointments] = useState<number>(0);
@@ -158,12 +158,12 @@ const Appointment = () => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setIsView(false);
       setAppointmentData([]);
     }
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -444,12 +444,16 @@ const Appointment = () => {
       )}
       {isOpen && (
         <Modal
-          content={<AppointmentModalContent isModalOpen={isModalOpen} />}
+          content={
+            <AppointmentModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              isView={isEdit}
+              appointmentData={appointmentData}
+              label="sample label"
+            />
+          }
           isModalOpen={isModalOpen}
-          // isOpen={isOpen}
-          // isView={isEdit}
-          // appointmentData={appointmentData}
-          // label="sample label"
         />
       )}
     </div>
