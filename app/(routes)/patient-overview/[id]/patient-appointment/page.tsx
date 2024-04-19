@@ -158,7 +158,7 @@ const Appointment = () => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setIsView(false);
       setAppointmentData([]);
     }
