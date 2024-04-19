@@ -167,7 +167,7 @@ export const LabResultsViewModalContent = ({
           }}
         />
       ) : (
-        <div className="w-[676px] h-[607px]">
+        <div className="w-[676px] h-[594px]">
           {isLoading ? (
             // Loading state
             <>
