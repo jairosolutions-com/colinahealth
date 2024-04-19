@@ -112,34 +112,82 @@ export const LabresultsModalContent = ({
     }));
   };
 
+  // Define a state to track the selected filenames
+  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
+
+  // Update the handleFile function to track selected filenames and change the label
+  // const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     const files = e.target.files;
+
+  //     if (files && files.length > 0) {
+  //         // Map the filenames from the input
+  //         const fileNames = Array.from(files).map(file => file.name);
+
+  //         // Update the selected filenames state
+  //         setSelectedFileNames(fileNames);
+
+  //         // Process the first file for existing functionality
+  //         const file = files[0];
+  //         setLabFile(file);
+  //         setFileName(file.name);
+
+  //         const reader = new FileReader();
+
+  //         reader.onloadend = () => {
+  //             const base64String = reader.result?.toString() || "";
+  //             setBase64String(base64String);
+
+  //             const fileType = file.type.split("/")[1];
+  //             setFileType(fileType);
+  //         };
+
+  //         reader.onerror = () => {
+  //             console.error("Error reading file");
+  //             setError("Error reading file");
+  //         };
+
+  //         reader.readAsDataURL(file);
+  //     } else {
+  //         // No files selected
+  //         console.warn("No files selected");
+  //         setSelectedFileNames([]); // Clear selected filenames state
+  //     }
+  // };
+  const [selectedFiles, setSelectedLabFiles] = useState<File[]>([]);
+  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [fileTypes, setFileTypes] = useState<string[]>([]);
+
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setLabFile(file);
-      setFileName(file.name);
-      const reader = new FileReader();
+    const files = e.target.files;
 
-      reader.onloadend = () => {
-        const base64String = reader.result?.toString() || "";
-        setBase64String(base64String);
+    if (files && files.length > 0) {
+      const newFiles: File[] = [];
+      const newFileNames: string[] = [];
+      const newFileTypes: string[] = [];
 
-        const fileType = file.type.split("/")[1];
-        setFileType(fileType);
-      };
+      Array.from(files).forEach((file) => {
+        if (file) {
+          // Add file, name, and type to arrays
+          newFiles.push(file);
+          newFileNames.push(file.name);
+          newFileTypes.push(file.type.split("/")[1]);
 
-      reader.onerror = () => {
-        console.error("Error reading file");
-        setError("Error reading file");
-      };
+          // You can handle base64 conversion here if needed
+        }
+      });
 
-      reader.readAsDataURL(file);
+      // Update state variables with arrays
+      setSelectedLabFiles(newFiles);
+      setFileNames(newFileNames);
+      setFileTypes(newFileTypes);
+    } else {
+      console.warn("No files selected");
     }
   };
   if (isEdit) {
     console.log(labResultData, "labResultData");
     console.log(formData, "formData");
   }
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("submit clicked");
@@ -150,6 +198,31 @@ export const LabresultsModalContent = ({
           formData,
           router
         );
+        const getUuid = labResultData.labResults_uuid;
+        console.log("Lab UUID:", getUuid);
+
+        // Iterate through each selected file
+        if (selectedFiles && selectedFiles.length > 0) {
+          // Iterate through each selected file
+          for (let i = 0; i < selectedFiles.length; i++) {
+            const labFileFormData = new FormData();
+            labFileFormData.append("labfile", selectedFiles[i], fileNames[i]);
+
+            // Add lab file
+            const addLabFiles = await addLabFile(
+              getUuid,
+              labFileFormData,
+              router
+            );
+
+            console.log(
+              `Lab FILE ${fileNames[i]} added successfully:`,
+              addLabFiles
+            );
+          }
+        } else {
+          console.warn("No files selected to upload");
+        }
         setIsUpdated(true);
         onSuccess();
         isModalOpen(false);
@@ -164,18 +237,28 @@ export const LabresultsModalContent = ({
         const getUuid = labResult.uuid;
         console.log("Lab UUID:", getUuid);
 
-        // Prepare FormData for file upload
-        const labFileFormData = new FormData();
-        if (labFile) {
-          labFileFormData.append("labfile", labFile, fileName);
+        // Iterate through each selected file
+        if (selectedFiles && selectedFiles.length > 0) {
+          // Iterate through each selected file
+          for (let i = 0; i < selectedFiles.length; i++) {
+            const labFileFormData = new FormData();
+            labFileFormData.append("labfile", selectedFiles[i], fileNames[i]);
+
+            // Add lab file
+            const addLabFiles = await addLabFile(
+              getUuid,
+              labFileFormData,
+              router
+            );
+
+            console.log(
+              `Lab FILE ${fileNames[i]} added successfully:`,
+              addLabFiles
+            );
+          }
+        } else {
+          console.warn("No files selected to upload");
         }
-
-        // Add lab file
-        const addLabFiles = await addLabFile(getUuid, labFileFormData, router);
-
-        console.log("Lab Result added successfully:", labResult);
-        console.log("Lab FILE added successfully:", addLabFiles);
-
         // Reset form data
         setFormData({
           date: "",
@@ -194,6 +277,68 @@ export const LabresultsModalContent = ({
     }
   };
 
+  //   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //     e.preventDefault();
+  //     console.log("Submit clicked");
+
+  //     try {
+  //         if (isEdit) {
+  //             // Update existing lab result
+  //             await updateLabResultOfPatient(labResultData.labResults_uuid, formData, router);
+  //             setIsUpdated(true);
+  //             onSuccess();
+  //             isModalOpen(false);
+  //         } else {
+  //             // Create new lab result
+  //             const labResult = await createLabResultOfPatient(patientId, formData, router);
+  //             console.log("Lab Result added successfully:", labResult);
+
+  //             const getUuid = labResult.uuid;
+  //             console.log("Lab UUID:", getUuid);
+
+  //             // Prepare FormData for file uploads
+  //             const labFileFormData = new FormData();
+
+  //             // Check that labFiles is defined and has files
+  //             if (labFiles && labFiles.length > 0) {
+  //                 // Append each file to FormData
+  //                 labFiles.forEach((file) => {
+  //                     labFileFormData.append("labfile", file);
+  //                 });
+
+  //                   console.log(getUuid);
+  //                 // Submit all files in a single API call
+  //                 const addLabFiles = await addLabFile(getUuid, labFileFormData, router);
+  //                 console.log("Lab FILES added successfully:", addLabFiles);
+  //             } else {
+  //                 console.warn("No files to upload");
+  //             }
+
+  //             // Reset form data
+  //             setFormData({
+  //                 date: "",
+  //                 hemoglobinA1c: "",
+  //                 fastingBloodGlucose: "",
+  //                 totalCholesterol: "",
+  //                 ldlCholesterol: "",
+  //                 hdlCholesterol: "",
+  //                 triglycerides: "",
+  //             });
+  //             onSuccess();
+  //         }
+  //     } catch (error :any) {
+  //         console.error("Error adding Lab Result:", error);
+
+  //         // Log the error details for troubleshooting
+  //         if (error.response) {
+  //             console.error("Response data:", error.response.data);
+  //             console.error("Response status:", error.response.status);
+  //             console.error("Response headers:", error.response.headers);
+  //         }
+  //         setError("Failed to add Lab Result");
+  //     }
+  // };
+
   useEffect(() => {
     // Only proceed if labFiles is not null and contains files
     if (labFiles && labFiles.length > 0) {
@@ -207,7 +352,6 @@ export const LabresultsModalContent = ({
         // Convert the data to base64 and set the file type
         const newBase64String = Buffer.from(file.data).toString("base64");
         setBase64String(newBase64String);
-        console.log("FILE STRING", base64String);
 
         const newFileType = file.filename.split(".").pop() as string;
         setFileType(newFileType);
@@ -215,6 +359,17 @@ export const LabresultsModalContent = ({
       }
     }
   }, [fileIndex, labFiles, fileData, fileName]);
+  useEffect(() => {
+    // Initialize selected file names array
+    let selectedFileNames: string[] = [];
+
+    // Push file names to selectedFileNames array
+    for (let file of labFiles) {
+      selectedFileNames.push(file.filename);
+    }
+    console.log(selectedFileNames, "selected file names");
+    setSelectedFileNames(selectedFileNames);
+  }, [labFiles]);
 
   // Update the current file when fileIndex changes
   useEffect(() => {
@@ -362,7 +517,6 @@ export const LabresultsModalContent = ({
                     onChange={handleChange}
                     required
                     name="hdlCholesterol"
-
                     className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     placeholder="input hdl cholesterol"
                   />
@@ -394,7 +548,7 @@ export const LabresultsModalContent = ({
                 >
                   DATE
                 </label>
-                
+
                 <div className="mt-2.5 relative">
                   <input
                     required
@@ -417,35 +571,47 @@ export const LabresultsModalContent = ({
               <div className="">
                 <label
                   htmlFor="imageUpload"
-                  className="relative h-12 w-full bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px]"
+                  className={`relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] ${
+                    selectedFileNames.length > 0
+                      ? "bg-[#e3f2fd] border-[#2196f3]"
+                      : "bg-[#daf3f5] border-[#007C85] border-dashed border-2"
+                  }`}
                 >
-                  <Image
-                    className="w-10 h-10 mr-1"
-                    width={50}
-                    height={50}
-                    src={"/svgs/folder-add.svg"}
-                    alt={""}
-                  />
-                  <div className="flex pb-5 text-nowrap text-[12px] ">
-                    <p className="mt-2">Upload or Attach Files or</p>
-                    <p className="underline decoration-solid text-blue-500 ml-1 mt-2">
-                      Browse
-                    </p>
-                  </div>
-                  <span className="text-[10px] font-normal absolute bottom-2 text-[#667085] ml-10 ">
-                    Minimum file size
-                  </span>
+                  {selectedFileNames.length > 0 ? (
+                    // Display selected filenames
+                    <div className="text-[12px] w-full truncate mx-2">
+                      {selectedFileNames.join(", ")}
+                    </div>
+                  ) : (
+                    // Default label content
+                    <>
+                      <Image
+                        className="w-10 h-10 mr-1"
+                        width={50}
+                        height={50}
+                        src={"/svgs/folder-add.svg"}
+                        alt={""}
+                      />
+                      <div className="flex pb-5 text-nowrap text-[12px]">
+                        <p className="mt-2">Upload or Attach Files or</p>
+                        <p className="underline decoration-solid text-blue-500 ml-1 mt-2">
+                          Browse
+                        </p>
+                      </div>
+                      <span className="text-[10px] font-normal absolute bottom-2 text-[#667085] ml-10">
+                        Minimum file size
+                      </span>
+                    </>
+                  )}
                 </label>
                 <input
                   type="file"
                   id="imageUpload"
                   multiple={true}
                   accept="image/*,pdf"
-                  className="hidden"
+                  className=""
                   name="file"
-                  onChange={(e) => {
-                    handleFile(e);
-                  }}
+                  onChange={(e) => handleFile(e)}
                 />
               </div>
             </div>

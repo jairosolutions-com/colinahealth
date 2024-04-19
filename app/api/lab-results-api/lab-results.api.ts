@@ -83,29 +83,71 @@ export async function createLabResultOfPatient(patientId: string, formData: any,
   }
 }
 
-export async function addLabFile(labResultUuid: string,
-  formData: any, router: any): Promise<any> {
+export async function addLabFile(labResultUuid: string, formData: any, router: any): Promise<any> {
   try {
-    const accessToken = getAccessToken();
-    if (!accessToken) {
-      throw new Error("Access token not found in local storage");
-    }
+      const accessToken = getAccessToken();
+      if (!accessToken) {
+          throw new Error("Access token not found in local storage");
+      }
 
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-    };
+      // Set headers
+      const headers = {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data',  // Axios should set this automatically, but specify it just in case
+      };
 
-    // Make the API request to create the allergy
-    const response = await axios.post(`${apiUrl}/lab-results/${labResultUuid}/upload`, formData, { headers });
+      // Log the FormData content for debugging
+      for (let [key, value] of formData.entries()) {
+          console.log(`FormData key: ${key}, value: ${value}`);
+      }
 
-    const labFileInserted = response.data;
-    console.log(labFileInserted, "labFileInserted");
+      // Make the API request to upload files
+      const response = await axios.post(`${apiUrl}/lab-results/${labResultUuid}/uploadfiles`, formData, { headers });
 
-    return labFileInserted;
+      const labFileInserted = response.data;
+      console.log("Lab files uploaded successfully:", labFileInserted);
+
+      return labFileInserted;
+  } catch (error:any) {
+      console.error("Error uploading lab files:", error);
+      
+      // Log error details for troubleshooting
+      if (error.response) {
+          console.error("Response data:", error.response.data);
+          console.error("Response status:", error.response.status);
+          console.error("Response headers:", error.response.headers);
+      }
+      throw error; // Rethrow the error to handle it in the calling function
+  }
+}
+// Function to delete files associated with a lab result
+export async function deleteLabFiles(labResultUuid: string, fileUUID: string): Promise<any> {
+  try {
+      // Retrieve the access token from local storage
+      const accessToken = getAccessToken();
+      if (!accessToken) {
+          throw new Error("Access token not found in local storage");
+      }
+
+      // Define the headers for the request, including the Authorization header
+      const headers = {
+          Authorization: `Bearer ${accessToken}`,
+      };
+
+      // Define the request data with the array of fileUUIDs
+  
+      // Make the API DELETE request to delete the specified files
+      const response = await axios.patch(`${apiUrl}/lab-results/files/delete/${fileUUID}`, {
+          headers,
+      });
+      console.log(response, "labFileInserted");
+
+      // Return the response data if the deletion is successful
+      return response.data;
 
   } catch (error) {
-    console.error("Error creating LabResult:", error);
-    throw error; // Rethrow the error to handle it in the component
+      console.error("Error deleting files:", error);
+      throw error; // Rethrow the error to handle it in the calling component
   }
 }
 

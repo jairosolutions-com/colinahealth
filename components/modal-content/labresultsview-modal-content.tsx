@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { fetchLabResultFiles } from "@/app/api/lab-results-api/lab-results.api";
+import { fetchLabResultFiles , deleteLabFiles} from "@/app/api/lab-results-api/lab-results.api";
 import Image from "next/image";
 
 interface ModalProps {
@@ -52,46 +52,7 @@ export const LabResultsViewModalContent = ({
   const [fileType, setFileType] = useState<string>("");
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
-    date: labResultsData.labResults_date || "",
-    hemoglobinA1c: labResultsData.labResults_hemoglobinA1c || "",
-    fastingBloodGlucose: labResultsData.labResults_fastingBloodGlucose || "",
-    totalCholesterol: labResultsData.labResults_totalCholesterol || "",
-    ldlCholesterol: labResultsData.labResults_ldlCholesterol || "",
-    hdlCholesterol: labResultsData.labResults_hdlCholesterol || "",
-    triglycerides: labResultsData.labResults_triglycerides || "",
-  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setLabFile(file);
-      setFileName(file.name);
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        const base64String = reader.result?.toString() || "";
-        setBase64String(base64String);
-        const fileType = file.type.split("/")[1];
-        setFileType(fileType);
-      };
-
-      reader.onerror = () => {
-        console.error("Error reading file");
-        setError("Error reading file");
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
 
   useEffect(() => {
     if (labFiles && labFiles.length > 0) {
@@ -120,6 +81,8 @@ export const LabResultsViewModalContent = ({
 
         if (response.data && response.data.length > 0) {
           setLabFiles(response.data);
+          console.log(response.data,'labFilesdATA');
+
           setCurrentFile(response.data[0]);
           setFileIndex(0);
         }
@@ -159,7 +122,44 @@ export const LabResultsViewModalContent = ({
   const toggleCheckboxes = () => {
     setShowCheckboxes(!showCheckboxes);
   };
+  const [selectedFileUUID, setSelectedFileUUIDs] = useState<string[]>([]);
 
+  const handleDeleteClick = async () => {
+    console.log("Delete button clicked");
+    try {
+        // Check if there are any selected file UUIDs to delete
+        if (selectedFileUUID.length > 0) {
+           for (const fileUuid of selectedFileUUID) {
+            await deleteLabFiles(labResultUuid, fileUuid); 
+        }
+           
+            console.log("Files deleted successfully");
+
+            // Reset the list of selected file UUIDs
+            setSelectedFileUUIDs([]);
+
+            // Perform any additional actions on success
+            // onSuccess(); // This can refresh the list of lab files, show a success message, etc.
+        } else {
+            console.warn("No files selected for deletion");
+        }
+    } catch (error) {
+        // Handle any errors that occurred during the API call
+        console.error("Error deleting files:", error);
+        // Optionally, set error state to display an error message to the user
+        setError("Failed to delete files");
+    }
+};
+
+  const handleCheckboxChange = (fileUuid: string, isChecked: boolean) => {
+    if (isChecked) {
+        // Add the fileUuid to the array if it is not already present
+        setSelectedFileUUIDs((prevUUIDs) => [...prevUUIDs, fileUuid]);
+    } else {
+        // Remove the fileUuid from the array
+        setSelectedFileUUIDs((prevUUIDs) => prevUUIDs.filter(uuid => uuid !== fileUuid));
+    }
+};
   const selectAll = () => {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach((checkbox) => {
@@ -210,13 +210,18 @@ export const LabResultsViewModalContent = ({
                         width="600px"
                         height="550px"
                         className="shadow-md rounded-lg"
+                        onClick={toggleModal}
+
                       ></iframe>
                     ) : (
-                      <iframe
-                        width="600px"
-                        height="550px"
+                      <Image
+                      alt="fileimage"
+                      width="600"
+                      height="550"
+                      onClick={toggleModal}
+
                         src={`data:image/${fileType};base64,${base64String}`}
-                      ></iframe>
+                      ></Image>
                     )}
                   </div>
                   <div
@@ -247,16 +252,19 @@ export const LabResultsViewModalContent = ({
                           setFileIndex(index);
                           setCurrentFile(file);
                         }}
-                        className="h-[40px] flex justify-between bg-white shadow-md mt-2"
+                        className="h-[40px]  text-overflow
+                        truncate flex justify-between bg-white shadow-md mt-2"
                       >
                         {editMode && (
                           <input
                             type="checkbox"
+                            onChange={(e) => handleCheckboxChange(file.fileUuid, e.target.checked)}
+
                             className="h-[15px] mt-3 bg-white w-full flex justify-between"
                           />
                         )}
                         <p className="bg-white shadow-sm">
-                          <span className="ml-4 mr-10 mt-2 flex items-center text-[15px]">
+                          <span className="   ml-4 mr-10 mt-2 flex items-center text-[15px]">
                             {file.filename}
                           </span>
                         </p>
@@ -294,7 +302,7 @@ export const LabResultsViewModalContent = ({
                     />
                     Print
                   </button>
-                  <button
+                  <button   
                     type="button"
                     className="absolute top-0 left-0 m-4 ml-36 text-white hover:underline flex text-[20px]"
                   >
@@ -314,12 +322,11 @@ export const LabResultsViewModalContent = ({
                     Close
                   </button>
                   <Image
-                    src="/imgs/docs.png"
-                    alt="Document"
-                    width={700}
-                    height={500}
-                    className=""
-                  />
+                    alt="Document Full Preview"
+                    width={1500}
+                    height={1200}
+                    src={`data:image/${fileType};base64,${base64String}`}
+                    />
                 </div>
               </div>
             )}
@@ -341,6 +348,7 @@ export const LabResultsViewModalContent = ({
                     </button>
                     <button
                       type="button"
+                      onClick={handleDeleteClick}
                       className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md"
                     >
                       Yes
