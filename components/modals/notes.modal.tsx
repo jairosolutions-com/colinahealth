@@ -58,12 +58,12 @@ export const NotesModal = ({ isEdit,
           isModalOpen(false);
           return;
         } else {
-          const vitalSign = await createNotesOfPatient(
+          const notes = await createNotesOfPatient(
             patientId,
             formData,
             router
           );
-          console.log("vital sign added successfully:", vitalSign);
+          console.log("notesadded successfully:", notes);
   
           // Reset the form data after successful submission
           setFormData({
