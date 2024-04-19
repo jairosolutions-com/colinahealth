@@ -135,11 +135,9 @@ export async function deleteLabFiles(labResultUuid: string, fileUUID: string): P
       };
 
       // Define the request data with the array of fileUUIDs
-  
-      // Make the API DELETE request to delete the specified files
-      const response = await axios.patch(`${apiUrl}/lab-results/files/delete/${fileUUID}`, {
-          headers,
-      });
+      const response = await axios.patch(`${apiUrl}/lab-results/files/delete/${fileUUID}`, {}, {
+        headers,
+    });
       console.log(response, "labFileInserted");
 
       // Return the response data if the deletion is successful

@@ -363,13 +363,28 @@ export const LabresultsModalContent = ({
     // Initialize selected file names array
     let selectedFileNames: string[] = [];
 
-    // Push file names to selectedFileNames array
-    for (let file of labFiles) {
-      selectedFileNames.push(file.filename);
+    // Only proceed if labFiles is not null and contains files
+    if (labFiles && labFiles.length > 0) {
+        // Push file names to selectedFileNames array
+        for (let file of labFiles) {
+            // Only push the filename if it's defined
+            if (file && file.filename) {
+                selectedFileNames.push(file.filename);
+            }
+        }
+
+        console.log(selectedFileNames, "selected file names");
+        console.log(labFiles, "labFiles labFiles labFiles");
+
+        // Set selected file names
+        setSelectedFileNames(selectedFileNames);
+    } else {
+        // Log a message when there are no files in labFiles
+        console.log("No files in labFiles");
+        // Optionally, you can clear the selectedFileNames state here
+        setSelectedFileNames([]);
     }
-    console.log(selectedFileNames, "selected file names");
-    setSelectedFileNames(selectedFileNames);
-  }, [labFiles]);
+}, [labFiles]);
 
   // Update the current file when fileIndex changes
   useEffect(() => {
