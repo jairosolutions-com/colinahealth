@@ -79,12 +79,42 @@ export default function PatientOverviewLayout({
     },
   ];
 
+  const [currentRoute, setCurrentRoute] = useState<string>("");
+
+  const [seeMoreClicked, setSeeMoreClicked] = useState(
+    localStorage.getItem("seeMoreClicked") === "true" ? true : false
+  );
+  const [seeMoreHovered, setSeeMoreHovered] = useState(
+    localStorage.getItem("seeMoreHovered") === "true" ? true : false
+  );
+
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
     setActiveTab(-1);
     setDetailsClicked(true);
+    localStorage.setItem("seeMoreClicked", "true"); // Set local storage
     onNavigate(router, url);
   };
 
+  const handleSeeMoreHover = () => {
+    setSeeMoreHovered(true);
+    localStorage.setItem("seeMoreHovered", "true"); // Set local storage
+  };
+
+  const handleSeeMoreLeave = () => {
+    setSeeMoreHovered(false);
+    localStorage.setItem("seeMoreHovered", "false"); // Set local storage
+  };
+
+  useEffect(() => {
+    const pathParts = pathname.split("/");
+    setCurrentRoute(pathParts[pathParts.length - 1]);
+
+    // Check local storage for previous state
+    const clicked = localStorage.getItem("seeMoreClicked") === "true";
+    const hovered = localStorage.getItem("seeMoreHovered") === "true";
+    setSeeMoreClicked(clicked);
+    setSeeMoreHovered(hovered);
+  }, [pathname]);
   // const handleTabClick = (index: number, url: string) => {
   //   setActiveTab(index);
   //   onNavigate(router, url);
@@ -233,7 +263,7 @@ export default function PatientOverviewLayout({
         <div className="p-title pb-2">
           <h1>Patient Overview</h1>
         </div>
-        <div className="form ring-1 w-full h-[220px] shadow-md ring-gray-300 px-5 pt-5 rounded-md">
+        <div className="form ring-1 w-full h-[220px] ring-[#D0D5DD] px-5 pt-5 rounded-md">
           <div className="flex">
             <div className="flex flex-col">
               <img
@@ -253,7 +283,14 @@ export default function PatientOverviewLayout({
                   </h1>
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
-                      className="underline text-[15px] font-semibold text-[#191D23] text-right mr-10"
+                      className={`underline text-[15px] font-semibold text-right mr-10 ${
+                        (seeMoreHovered || seeMoreClicked) &&
+                        currentRoute === "patient-details"
+                          ? "text-[#007C85]"
+                          : ""
+                      }`}
+                      onMouseEnter={handleSeeMoreHover}
+                      onMouseLeave={handleSeeMoreLeave}
                       onClick={() => {
                         setIsLoading(true);
                         handleSeeMoreDetails(
@@ -329,7 +366,7 @@ export default function PatientOverviewLayout({
 
                     <div className="">
                       <div>
-                        <p className="flex items-center ml-7">
+                        <p className="flex items-center ml-4">
                           Allergy:{" "}
                           {patientData[0]?.allergies
                             ? patientData[0]?.allergies
@@ -350,8 +387,8 @@ export default function PatientOverviewLayout({
                       (tabUrl === "prorenata" &&
                         tab.label === "Medication Log") ||
                       (tabUrl === "incident-report" && tab.label === "Notes")
-                        ? "text-[#007C85] border-b-[3px] border-[#007C85] text-[15px]"
-                        : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85] text-[15px]"
+                        ? "text-[#007C85] border-b-2 border-[#007C85] text-[15px] pb-1"
+                        : "hover:text-[#007C85] hover:border-b-2 pb-1 h-[31px] border-[#007C85] text-[15px]"
                     }`}
                     key={index}
                     onClick={() => {
