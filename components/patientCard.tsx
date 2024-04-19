@@ -18,11 +18,13 @@ const PatientCard = ({
   setPatientUuid,
   setPatientName,
   isModalOpen,
+  setIsLoading,
 }: {
   patientWithMedicationLogsToday: any;
   setPatientUuid: any;
   setPatientName: any;
   isModalOpen: any;
+  setIsLoading: any;
 }) => {
   const router = useRouter();
   const [currentTime, setCurrentTime] = useState(moment().format("HHmm"));
@@ -94,7 +96,10 @@ const PatientCard = ({
             <div className="flex flex-row  bg-white border-2 border-b-8 border-l-8  h-[203px] w-full rounded-lg border-[#F4F4F4] right-0">
               <div
                 className="w-4/6 h-full cursor-pointer"
-                onClick={() => handlePatientClick(patient.uuid)}
+                onClick={() => {
+                  setIsLoading(true);
+                  handlePatientClick(patient.uuid);
+                }}
               >
                 <div className="flex p-3 pl-5 flex-row w-full mt-2">
                   <div className="rounded-full max-h-[60px] max-w-[60px] p-1 bg-[#007C854D]">

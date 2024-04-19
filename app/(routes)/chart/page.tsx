@@ -258,6 +258,7 @@ export default function ChartPage() {
                     patientWithMedicationLogsToday={
                       patientWithMedicationLogsToday
                     }
+                    setIsLoading={setIsLoading}
                     setPatientUuid={setPatientUuid}
                     isModalOpen={isModalOpen}
                     setPatientName={setPatientName}
