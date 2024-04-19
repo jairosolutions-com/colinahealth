@@ -132,7 +132,7 @@ export const PrnModalContent = ({
   };
   console.log(formData, "formData");
   return (
-    <div className="w-[676px] h-[631px]">
+    <div className={`w-[676px] ${charactersFull? "h-[650px]":"h-[632px]"} `}>
       <form onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
@@ -149,7 +149,7 @@ export const PrnModalContent = ({
             Submit your log details.
           </p>
         </div>
-        <div className=" mb-9 pt-4">
+        <div className={` ${charactersFull?"mb-[175px]" :"mb-[156px]"} pt-4`}>
           <div className="w-full max-h-[300px] md:px-10 mt-5">
             <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
@@ -188,7 +188,7 @@ export const PrnModalContent = ({
                     onChange={handleTextChange}
                   />
                   <p
-                    className={`absolute text-red-500 ${
+                    className={` text-red-500 ${
                       charactersFull ? "visible" : "hidden"
                     }`}
                   >
@@ -286,7 +286,7 @@ export const PrnModalContent = ({
             </div>
           </div>
         </div>
-        <div className="pt-[120px]">
+        <div className="">
           <div className="justify-center flex border-t-4 pt-26">
             <button
               onClick={() => isModalOpen(false)}

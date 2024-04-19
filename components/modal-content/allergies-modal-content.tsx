@@ -234,7 +234,7 @@ export const AllergiesModalContent = ({
                     value={formData.notes}
                     onChange={handleTextChange}
                   />
-                  <p className={`absolute text-red-500 ${charactersFull?"visible":"hidden"}`}>*Maximum of 200 characters only!</p>
+                  <p className={`absolute text-end text-red-500 ${charactersFull?"visible":"hidden"}`}>*Maximum of 200 characters only!</p>
                 </div>
               </div>
             </div>

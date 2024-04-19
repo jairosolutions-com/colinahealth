@@ -120,8 +120,8 @@ export const SurgeriesModalContent = ({
   console.log(surgeryData, "surgeryData");
   console.log(formData, "formData");
   return (
-    <div className="w-[676px] h-[554px]">
-      <form className="" onSubmit={handleSubmit}>
+    <div className={`w-[676px] ${charactersFull? "h-[578px]":"h-[554px]"}`}>
+      <form className="h-full" onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
             <h2 className="p-title text-left text-[#071437] pl-10 mt-7">
@@ -195,7 +195,7 @@ export const SurgeriesModalContent = ({
                     style={{ resize: "none" }}
                   />
                   <p
-                    className={`absolute text-red-500 ${
+                    className={` text-red-500 ${
                       charactersFull ? "visible" : "hidden"
                     }`}
                   >
@@ -232,7 +232,7 @@ export const SurgeriesModalContent = ({
             </div>
           </div>
         </div>
-        <div className="justify-center flex border-t-4">
+        <div className="relative justify-center flex border-t-4">
           <button
             onClick={() => isModalOpen(false)}
             type="button"
