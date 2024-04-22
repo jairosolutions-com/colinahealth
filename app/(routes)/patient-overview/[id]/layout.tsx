@@ -180,64 +180,11 @@ export default function PatientOverviewLayout({
   }, [patientId, router, params]);
 
   if (isLoading) {
-    switch (true) {
-      case !isAllergy:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isSurgery:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isMedicationLog:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isPrescription:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isVitalSign:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isLabRes:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isAppointment:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isNotes:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isForms:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      default:
-        break;
-    }
+     return (
+       <div className="w-full h-full flex justify-center items-center ">
+         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+       </div>
+     );
   }
   console.log(patientData, "patientData");
 

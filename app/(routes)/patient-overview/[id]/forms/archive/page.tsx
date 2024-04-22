@@ -170,6 +170,13 @@ export default function ArchiveTab() {
     setIsEdit(false);
   };
 
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
+  }
   console.log(patientForms, "patientForms");
   return (
     <div className="  w-full">
@@ -178,6 +185,7 @@ export default function ArchiveTab() {
           <div className="flex gap-2">
             <p
               onClick={() => {
+                setIsLoading(true)
                 onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/forms`
