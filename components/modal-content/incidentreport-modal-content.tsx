@@ -2,10 +2,22 @@ import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 interface Modalprops {
+  isEdit: boolean;
   isModalOpen: (isOpen: boolean) => void;
+  notesToEdit: any;
+  label: string;
+  isOpen: boolean;
+  onSuccess: () => void;
 }
 
-export const IncidentreportModalContent = ({ isModalOpen }: Modalprops) => {
+export const IncidentreportModalContent = ({
+  isEdit,
+  notesToEdit,
+  label,
+  isOpen,
+  isModalOpen,
+  onSuccess,
+}: Modalprops) => {
   const [selectedStatus, setSelectedStatus] = useState(""); // State to hold the selected status
 
   return (

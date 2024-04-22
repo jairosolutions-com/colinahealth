@@ -6,6 +6,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function fetchNotesByPatient(
   patientUuid: string,
+  type:string,
   term: string,
   currentPage: number,
   sortBy: string,
@@ -14,6 +15,7 @@ export async function fetchNotesByPatient(
 ): Promise<any> {
   const requestData = {
     patientUuid: patientUuid.toUpperCase(),
+    type: type,
     term: term,
     page: currentPage,
     sortBy: sortBy,

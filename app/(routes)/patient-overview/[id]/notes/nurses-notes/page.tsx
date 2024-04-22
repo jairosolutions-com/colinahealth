@@ -14,7 +14,6 @@ import { SuccessModal } from "@/components/shared/success";
 import { NursenotesModalContent } from "@/components/modal-content/nursenotes-modal-content";
 import Modal from "@/components/reusable/modal";
 
-
 const Notes = () => {
   const router = useRouter();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -35,6 +34,7 @@ const Notes = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+  const type = "nn"
 
   const params = useParams<{
     id: any;
@@ -148,6 +148,7 @@ const Notes = () => {
       try {
         const response = await fetchNotesByPatient(
           patientId,
+          type,
           term,
           currentPage,
           sortBy,
@@ -416,14 +417,15 @@ const Notes = () => {
       )}
       {isOpen && (
         <Modal
-          content={<NursenotesModalContent isModalOpen={isModalOpen} />}
+          content={
+            <NursenotesModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              label="sample label"
+              onSuccess={onSuccess}
+            />
+          }
           isModalOpen={isModalOpen}
-          // isEdit={isEdit}
-          // isModalOpen={isModalOpen}
-          // isOpen={isOpen}
-          // label={isEdit ? "Edit Note" : "Add Note"}
-          // notesToEdit={notesToEdit}
-          // onSuccess={onSuccess}
         />
       )}
 
