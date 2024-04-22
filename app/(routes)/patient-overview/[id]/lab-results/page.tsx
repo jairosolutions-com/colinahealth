@@ -197,7 +197,7 @@ export default function Laboratoryresults() {
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="p-title">Laboratory Results </h1>
-          {/* number of patiens */}
+          {/* number of patients */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
             Total of {totalLabResults} Lab Results
           </p>

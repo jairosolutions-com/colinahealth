@@ -7,6 +7,7 @@ import {
 } from "@/app/api/lab-results-api/lab-results.api";
 import Image from "next/image";
 import { NofileviewModalContent } from "./nofileview-modal-content";
+import { SuccessModal } from "../shared/success";
 
 interface ModalProps {
   labResultsData: any;
@@ -26,15 +27,24 @@ export const LabResultsViewModalContent = ({
   labResultsData,
   isModalOpen,
 }: ModalProps) => {
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+    
+
+    isModalOpen(false);
+  };
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+
   const params = useParams<{ id: any; tag: string; item: string }>();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [labResultUuid, setLabResultUuid] = useState("");
-  const [labFile, setLabFile] = useState<any>(null);
+  const [isUpdated, setIsUpdated] = useState(false);
+
   const patientId = params.id.toUpperCase();
   const [labFiles, setLabFiles] = useState<LabFile[]>([]);
   const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState<Uint8Array>(new Uint8Array());
-
+  const [labResultData, setLabResultData] = useState<any>({});
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [showCheckboxes, setShowCheckboxes] = useState(false);
@@ -105,6 +115,7 @@ export const LabResultsViewModalContent = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setLabResultUuid(labResultsData.labResults_uuid);
       try {
         const response = await fetchLabResultFiles(
           labResultsData.labResults_uuid,
@@ -113,11 +124,11 @@ export const LabResultsViewModalContent = ({
 
         if (response.data && response.data.length > 0) {
           setLabFiles(response.data);
-          console.log(response.data, "labFilesdATA");
-          setIsLoading(false);
-
+          console.log(response.data, "LabFiles Data");
           setCurrentFile(response.data[0]);
           setFileIndex(0);
+          setIsLoading(false);
+
         }
       } catch (error: any) {
         setError(error.message);
@@ -162,7 +173,9 @@ export const LabResultsViewModalContent = ({
     <div>
       {defaultLabFiles?.length === 0 && isLoading === false ? (
         <NofileviewModalContent
-          isModalOpen={(isOpen: boolean): void => {
+        labResultUuid={labResultUuid}
+        onSuccess={onSuccess}
+        isModalOpen={(isOpen: boolean): void => {
             isModalOpen(isOpen);
           }}
         />
@@ -231,7 +244,7 @@ export const LabResultsViewModalContent = ({
                             ></iframe>
                           ) : (
                             <Image
-                              alt="fileimage"
+                              alt="file image"
                               width="600"
                               height="550"
                               onClick={toggleModal}
@@ -307,7 +320,7 @@ export const LabResultsViewModalContent = ({
                         >
                           <Image
                             className="mr-2"
-                            src="/svgs/downlod.svg"
+                            src="/svgs/download.svg"
                             alt="Icon"
                             width={30}
                             height={30}
@@ -398,7 +411,17 @@ export const LabResultsViewModalContent = ({
               {toast}
             </>
           )}
+        
         </div>
+      )}
+            {isSuccessOpen && (
+        <SuccessModal
+          label="Success"
+          isAlertOpen={isSuccessOpen}
+          toggleModal={setIsSuccessOpen}
+          isUpdated={isUpdated}
+          setIsUpdated={setIsUpdated}
+        />
       )}
     </div>
   );

@@ -115,44 +115,6 @@ export const LabresultsModalContent = ({
   // Define a state to track the selected filenames
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
 
-  // Update the handleFile function to track selected filenames and change the label
-  // const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     const files = e.target.files;
-
-  //     if (files && files.length > 0) {
-  //         // Map the filenames from the input
-  //         const fileNames = Array.from(files).map(file => file.name);
-
-  //         // Update the selected filenames state
-  //         setSelectedFileNames(fileNames);
-
-  //         // Process the first file for existing functionality
-  //         const file = files[0];
-  //         setLabFile(file);
-  //         setFileName(file.name);
-
-  //         const reader = new FileReader();
-
-  //         reader.onloadend = () => {
-  //             const base64String = reader.result?.toString() || "";
-  //             setBase64String(base64String);
-
-  //             const fileType = file.type.split("/")[1];
-  //             setFileType(fileType);
-  //         };
-
-  //         reader.onerror = () => {
-  //             console.error("Error reading file");
-  //             setError("Error reading file");
-  //         };
-
-  //         reader.readAsDataURL(file);
-  //     } else {
-  //         // No files selected
-  //         console.warn("No files selected");
-  //         setSelectedFileNames([]); // Clear selected filenames state
-  //     }
-  // };
   const [selectedFiles, setSelectedLabFiles] = useState<File[]>([]);
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [fileTypes, setFileTypes] = useState<string[]>([]);
@@ -171,7 +133,18 @@ export const LabresultsModalContent = ({
           newFiles.push(file);
           newFileNames.push(file.name);
           newFileTypes.push(file.type.split("/")[1]);
+          if (files && files.length > 0) {
+            // Push file names to selectedFileNames array
+            if (file && file.name) {
+              selectedFileNames.push(file.name);
+            }
 
+            console.log(selectedFileNames, "selected file names");
+            console.log(labFiles, "labFiles labFiles labFiles");
+
+            // Set selected file names
+            setSelectedFileNames(selectedFileNames);
+          }
           // You can handle base64 conversion here if needed
         }
       });
@@ -279,68 +252,6 @@ export const LabresultsModalContent = ({
     }
   };
 
-  //   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     console.log("Submit clicked");
-
-  //     try {
-  //         if (isEdit) {
-  //             // Update existing lab result
-  //             await updateLabResultOfPatient(labResultData.labResults_uuid, formData, router);
-  //             setIsUpdated(true);
-  //             onSuccess();
-  //             isModalOpen(false);
-  //         } else {
-  //             // Create new lab result
-  //             const labResult = await createLabResultOfPatient(patientId, formData, router);
-  //             console.log("Lab Result added successfully:", labResult);
-
-  //             const getUuid = labResult.uuid;
-  //             console.log("Lab UUID:", getUuid);
-
-  //             // Prepare FormData for file uploads
-  //             const labFileFormData = new FormData();
-
-  //             // Check that labFiles is defined and has files
-  //             if (labFiles && labFiles.length > 0) {
-  //                 // Append each file to FormData
-  //                 labFiles.forEach((file) => {
-  //                     labFileFormData.append("labfile", file);
-  //                 });
-
-  //                   console.log(getUuid);
-  //                 // Submit all files in a single API call
-  //                 const addLabFiles = await addLabFile(getUuid, labFileFormData, router);
-  //                 console.log("Lab FILES added successfully:", addLabFiles);
-  //             } else {
-  //                 console.warn("No files to upload");
-  //             }
-
-  //             // Reset form data
-  //             setFormData({
-  //                 date: "",
-  //                 hemoglobinA1c: "",
-  //                 fastingBloodGlucose: "",
-  //                 totalCholesterol: "",
-  //                 ldlCholesterol: "",
-  //                 hdlCholesterol: "",
-  //                 triglycerides: "",
-  //             });
-  //             onSuccess();
-  //         }
-  //     } catch (error :any) {
-  //         console.error("Error adding Lab Result:", error);
-
-  //         // Log the error details for troubleshooting
-  //         if (error.response) {
-  //             console.error("Response data:", error.response.data);
-  //             console.error("Response status:", error.response.status);
-  //             console.error("Response headers:", error.response.headers);
-  //         }
-  //         setError("Failed to add Lab Result");
-  //     }
-  // };
-
   useEffect(() => {
     // Only proceed if labFiles is not null and contains files
     if (labFiles && labFiles.length > 0) {
@@ -386,7 +297,7 @@ export const LabresultsModalContent = ({
       // Optionally, you can clear the selectedFileNames state here
       setSelectedFileNames([]);
     }
-  }, [labFiles]);
+  }, [labFiles, setSelectedFileNames]);
 
   // Update the current file when fileIndex changes
   useEffect(() => {
@@ -428,7 +339,7 @@ export const LabresultsModalContent = ({
   return (
     <>
       <div className="w-[676px] h-[575px]">
-        {isLoading ? (
+        {isLoading && isEdit ?(
           // Loading state
           <>
             <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">

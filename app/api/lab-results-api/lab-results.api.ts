@@ -156,7 +156,7 @@ export async function updateLabResultOfPatient(
   router: any):
   Promise<any> {
   try {
-    console.log(formData, "formdata")
+    console.log(formData, "Form Data")
     const accessToken = getAccessToken();
     if (!accessToken) {
       throw new Error("Access token not found in local storage");
