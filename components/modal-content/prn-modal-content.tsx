@@ -42,7 +42,7 @@ export const PrnModalContent = ({
     tag: string;
     item: string;
   }>();
-  const {toast} = useToast()
+  const { toast } = useToast();
   console.log(isEdit, "isEdit");
   const patientId = params.id ? params.id.toUpperCase() : uuid.toUpperCase();
   console.log(patientId, "patientId");
@@ -151,7 +151,7 @@ export const PrnModalContent = ({
   };
   console.log(formData, "formData");
   return (
-    <div className={`w-[676px] ${charactersFull ? "h-[650px]" : "h-[632px]"} `}>
+    <div className={`w-[676px] ${charactersFull ? "h-[646px]" : "h-[628px]"} `}>
       <form onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
@@ -308,7 +308,7 @@ export const PrnModalContent = ({
           </div>
         </div>
         <div className="">
-          <div className="justify-center flex border-t-4 pt-26">
+          <div className="justify-center flex pt-26">
             <button
               onClick={() => isModalOpen(false)}
               type="button"

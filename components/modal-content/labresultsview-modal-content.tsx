@@ -63,7 +63,6 @@ export const LabResultsViewModalContent = ({
 
   const toggleDeleteModal = () => {
     setDeleteModalOpen(!deleteModalOpen);
-
   };
 
   const [selectedFileUUID, setSelectedFileUUID] = useState("");
@@ -109,10 +108,8 @@ export const LabResultsViewModalContent = ({
 
   useEffect(() => {
     const fetchData = async () => {
-
       setLabResultUuid(labResultsData.labResults_uuid);
       try {
-
         const response = await fetchLabResultFiles(
           labResultsData.labResults_uuid,
           router
@@ -125,19 +122,17 @@ export const LabResultsViewModalContent = ({
           setFileIndex(0);
           setIsLoading(false);
         }
-       if (defaultLabFiles?.length === 0 ){
+        if (defaultLabFiles?.length === 0) {
           setIsNoFileModalOpen(true);
-
-       }
+        }
       } catch (error: any) {
         setError(error.message);
       }
     };
 
-    if (labResultsData.labResults_uuid ) {
+    if (labResultsData.labResults_uuid) {
       fetchData();
     }
-
   }, [
     labResultsData.labResults_uuid,
     router,
@@ -184,7 +179,7 @@ export const LabResultsViewModalContent = ({
           }}
         />
       ) : (
-        <div className="w-[676px] h-[594px]">
+        <div className="w-[676px] h-[590px]">
           {isLoading ? (
             // Loading state
             <>
@@ -395,7 +390,7 @@ export const LabResultsViewModalContent = ({
                 </div>
               </div>
               <div>
-                <div className="justify-center flex border-t-4">
+                <div className="justify-center flex ">
                   <button
                     onClick={() => isModalOpen(false)}
                     type="button"

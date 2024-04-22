@@ -51,7 +51,7 @@ export const SurgeriesModalContent = ({
   }>();
 
   const patientId = params.id.toUpperCase();
-const {toast} = useToast()
+  const { toast } = useToast();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -137,7 +137,7 @@ const {toast} = useToast()
   console.log(surgeryData, "surgeryData");
   console.log(formData, "formData");
   return (
-    <div className={`w-[676px] ${charactersFull ? "h-[578px]" : "h-[554px]"}`}>
+    <div className={`w-[676px] ${charactersFull ? "h-[577px]" : "h-[550px]"}`}>
       <form className="h-full" onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
@@ -249,7 +249,7 @@ const {toast} = useToast()
             </div>
           </div>
         </div>
-        <div className="relative justify-center flex border-t-4">
+        <div className="relative justify-center flex ">
           <button
             onClick={() => isModalOpen(false)}
             type="button"

@@ -141,7 +141,7 @@ export const PrescriptionModalContent = ({
   console.log(prescriptionData, "prescriptionData");
   console.log(formData, "formData");
   return (
-    <div className="w-[676px] h-[487px]">
+    <div className="w-[676px] h-[484px]">
       <form className="" onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
@@ -315,7 +315,7 @@ export const PrescriptionModalContent = ({
           </div>
         </div>
         <div className="">
-          <div className="justify-center flex border-t-4 pt-26">
+          <div className="justify-center flex pt-26">
             <button
               onClick={() => isModalOpen(false)}
               type="button"
