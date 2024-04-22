@@ -21,7 +21,7 @@ export const ErrorModal = ({
       {isAlertOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          <div className="fixed z-50 bg-white rounded-[10px] shadow-xl w-[670px] h-[326px] mx-auto top-[80px]">
+          <div className="fixed z-50 bg-white rounded-[10px] shadow-xl w-[670px] h-[326px] mx-auto">
             <div className="text-center pt-[30px]">
               <div className="mx-auto mb-5 text-gray-400 w-[110px] h-[110px]">
                 <img src="/svgs/error-icon.svg" alt="" />
@@ -40,7 +40,6 @@ export const ErrorModal = ({
                   : label === "prescriptionFailed"
                   ? "Prescription already exists!"
                   : "There was a problem with your request."}
-                  
               </h1>
               <p className="text-[24px] text-sm text-gray-400 mb-10">
                 {label === "Allergy already exist"

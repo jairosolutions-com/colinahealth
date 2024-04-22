@@ -53,10 +53,10 @@ export const PrescriptionModalContent = ({
   }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === 'interval' && (!/^\d*$/.test(value) || parseInt(value) > 12)) {
+    if (name === "interval" && (!/^\d*$/.test(value) || parseInt(value) > 12)) {
       return; // Don't update state
     }
-    
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -104,7 +104,7 @@ export const PrescriptionModalContent = ({
       }
     } catch (error: any) {
       if (error.message === "Request failed with status code 409") {
-        console.log(error.message,'error message  ')
+        console.log(error.message, "error message  ");
         setErrorMessage("Prescription already exist");
         onFailed();
         isModalOpen(false);
@@ -284,7 +284,7 @@ export const PrescriptionModalContent = ({
             <button
               onClick={() => isModalOpen(false)}
               type="button"
-              className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+              className="w-[600px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mt-4 mr-[3px] rounded-bl-md"
             >
               Cancel
             </button>

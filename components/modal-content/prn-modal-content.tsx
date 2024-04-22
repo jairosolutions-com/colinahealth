@@ -132,7 +132,7 @@ export const PrnModalContent = ({
   };
   console.log(formData, "formData");
   return (
-    <div className={`w-[676px] ${charactersFull? "h-[650px]":"h-[632px]"} `}>
+    <div className={`w-[676px] ${charactersFull ? "h-[650px]" : "h-[632px]"} `}>
       <form onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
@@ -149,7 +149,9 @@ export const PrnModalContent = ({
             Submit your log details.
           </p>
         </div>
-        <div className={` ${charactersFull?"mb-[175px]" :"mb-[156px]"} pt-4`}>
+        <div
+          className={` ${charactersFull ? "mb-[175px]" : "mb-[156px]"} pt-4`}
+        >
           <div className="w-full max-h-[300px] md:px-10 mt-5">
             <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
@@ -291,7 +293,7 @@ export const PrnModalContent = ({
             <button
               onClick={() => isModalOpen(false)}
               type="button"
-              className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+              className="w-[600px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mt-4 mr-[3px] rounded-bl-md"
             >
               Cancel
             </button>
