@@ -34,7 +34,7 @@ const Notes = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
-  const type = "nn"
+  const type = "nn";
 
   const params = useParams<{
     id: any;
@@ -148,8 +148,8 @@ const Notes = () => {
       try {
         const response = await fetchNotesByPatient(
           patientId,
-          type,
           term,
+          type,
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
@@ -307,9 +307,6 @@ const Notes = () => {
                   <th scope="col" className="px-6 py-3 w-[400px]">
                     NOTES
                   </th>
-                  <th scope="col" className=" px-[90px] py-3 w-10">
-                    ACTION
-                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -331,17 +328,6 @@ const Notes = () => {
                       {note.notes_subject}
                     </td>
                     <td className="px-6 py-3">{note.notes_notes}</td>
-                    <td className="px-[90px] py-3">
-                      <p
-                        onClick={() => {
-                          isModalOpen(true);
-                          setIsEdit(true);
-                          setNotesToEdit(note);
-                        }}
-                      >
-                        <Edit></Edit>
-                      </p>
-                    </td>
                   </tr>
                 ))}
               </tbody>

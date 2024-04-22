@@ -34,7 +34,7 @@ const Notes = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
-
+  const type = "ir";
   const params = useParams<{
     id: any;
     tag: string;
@@ -147,6 +147,7 @@ const Notes = () => {
       try {
         const response = await fetchNotesByPatient(
           patientId,
+          type,
           term,
           currentPage,
           sortBy,
@@ -288,45 +289,40 @@ const Notes = () => {
                 <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
                   NOTES ID
                 </th>
-                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
+                {/* <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
                   DATE
                 </th>
                 <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
                   TIME
-                </th>
+                </th> */}
                 <th scope="col" className="px-6 py-3 w-[250px]">
                   SUBJECT
                 </th>
                 <th scope="col" className="px-6 py-3 w-[200px]">
                   Details of Incident
                 </th>
-                <th scope="col" className="px-6 py-3 w-[200px]">
-                  Reported By
-                </th>
-                <th scope="col" className=" px-[90px] py-3 w-10">
-                  ACTION
-                </th>
               </tr>
             </thead>
             <tbody>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group">
-                <th
-                  scope="row"
-                  className="  font-medium text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
+              {patientNotes.map((notes, index) => (
+                <tr
+                  key={index}
+                  className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                 >
-                  March 22, 2024
-                </th>
-                <td className="truncate max-w-[552px] px-6 py-3">10:00 AM</td>
-                <td className="truncate max-w-[552px] px-6 py-3">
-                  Health Problem
-                </td>
-                <td className="px-6 py-3">Advised to monitor and follow up.</td>
-                <td className="px-6 py-3">Ansel, David A, MD</td>
-                <td className="px-6 py-3">Advised to monitor and follow up.</td>
-                <td className="px-[90px] py-3">
-                  <Edit></Edit>
-                </td>
-              </tr>
+                  <th
+                    scope="row"
+                    className="  font-medium text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
+                  >
+                    {notes.notes_uuid}
+                  </th>
+                  <td className="truncate max-w-[552px] px-6 py-3">
+                    {notes.notes_subject}
+                  </td>
+                  <td className="truncate max-w-[552px] px-6 py-3">
+                    {notes.notes_notes}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -399,13 +395,15 @@ const Notes = () => {
       )}
       {isOpen && (
         <Modal
-          content={<IncidentreportModalContent isModalOpen={isModalOpen} />}
+          content={
+            <IncidentreportModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              label={isEdit ? "Edit Note" : "Add Note"}
+              onSuccess={onSuccess}
+            />
+          }
           isModalOpen={isModalOpen}
-          // isEdit={isEdit}
-          // isOpen={isOpen}
-          // label={isEdit ? "Edit Note" : "Add Note"}
-          // notesToEdit={notesToEdit}
-          // onSuccess={onSuccess}
         />
       )}
 
