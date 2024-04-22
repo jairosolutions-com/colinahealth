@@ -147,8 +147,8 @@ const Notes = () => {
       try {
         const response = await fetchNotesByPatient(
           patientId,
-          type,
           term,
+          type,
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
