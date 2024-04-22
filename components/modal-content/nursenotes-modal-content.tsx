@@ -19,7 +19,7 @@ export const NursenotesModalContent = ({
   isModalOpen,
   onSuccess,
 }: Modalprops) => {
-  const [selectedStatus, setSelectedStatus] = useState(""); // State to hold the selected status
+
   const params = useParams<{
     id: any;
     tag: string;
@@ -104,6 +104,7 @@ export const NursenotesModalContent = ({
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
+                    required
                   />
                 </div>
               </div>
@@ -146,6 +147,7 @@ export const NursenotesModalContent = ({
                     name="notes"
                     value={formData.notes}
                     onChange={handleTextChange}
+                    required
                   />
                 </div>
               </div>
