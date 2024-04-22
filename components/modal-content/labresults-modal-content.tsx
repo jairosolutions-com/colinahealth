@@ -38,47 +38,16 @@ export const LabresultsModalContent = ({
     tag: string;
     item: string;
   }>();
-  const formatDate = (createdAt: string | number | Date) => {
-    // Create a new Date object from the provided createdAt date string
-    const date = new Date(createdAt);
-
-    // Get the month, day, and year
-    const month = date.toLocaleString("default", { month: "short" });
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    const formattedDate = `${month} ${day}, ${year}`;
-
-    return formattedDate;
-  };
-  const [labFile, setLabFile] = useState<any>(null);
+  
   const patientId = params.id.toUpperCase();
   const [labFiles, setLabFiles] = useState<any[]>([]); //
-  const defaultLabFiles = Array.isArray(labFiles) ? labFiles : [];
   const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState(new Uint8Array());
-  const [fileIndex, setFileIndex] = useState(0);
-  const [currentFile, setCurrentFile] = useState({} as LabFile);
-  // Convert the buffer data to base64 string
-  const formRef = useRef(null);
 
   const [base64String, setBase64String] = useState("");
   const [fileType, setFileType] = useState<string>("");
 
-  // Define functions to navigate through files
-  const prevFile = () => {
-    if (fileIndex > 0) {
-      setFileIndex(fileIndex - 1);
-      setCurrentFile(labFiles[fileIndex - 1]);
-    }
-  };
 
-  const nextFile = () => {
-    if (fileIndex < labFiles.length - 1) {
-      setFileIndex(fileIndex + 1);
-      setCurrentFile(labFiles[fileIndex + 1]);
-    }
-  };
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
 
   const router = useRouter();
@@ -251,27 +220,6 @@ export const LabresultsModalContent = ({
       setError("Failed to add Lab Result");
     }
   };
-
-  useEffect(() => {
-    // Only proceed if labFiles is not null and contains files
-    if (labFiles && labFiles.length > 0) {
-      const file = labFiles[fileIndex];
-      setCurrentFile(file);
-      setFileName(file.filename); // Set the filename using the file object
-      setFileData(file.data); // Set the file data using the file object
-
-      // Only proceed with the conversion if file.data is defined
-      if (file.data) {
-        // Convert the data to base64 and set the file type
-        const newBase64String = Buffer.from(file.data).toString("base64");
-        setBase64String(newBase64String);
-
-        const newFileType = file.filename.split(".").pop() as string;
-        setFileType(newFileType);
-        console.log("FILE newFileType", newFileType);
-      }
-    }
-  }, [fileIndex, labFiles, fileData, fileName]);
   useEffect(() => {
     // Initialize selected file names array
     let selectedFileNames: string[] = [];
@@ -299,14 +247,6 @@ export const LabresultsModalContent = ({
     }
   }, [labFiles, setSelectedFileNames]);
 
-  // Update the current file when fileIndex changes
-  useEffect(() => {
-    // Only proceed if labFiles is not null and contains files
-    if (labFiles && labFiles.length > 0) {
-      setCurrentFile(labFiles[fileIndex]);
-    }
-  }, [fileIndex, labFiles]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -319,12 +259,8 @@ export const LabresultsModalContent = ({
         if (response.data && response.data.length > 0) {
           setLabFiles(response.data);
           setIsLoading(false);
-
-          setCurrentFile(response.data[0]);
-          setFileIndex(0);
         }
 
-        console.log(currentFile);
       } catch (error: any) {
         setError(error.message);
       }

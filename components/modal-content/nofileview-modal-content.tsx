@@ -10,6 +10,7 @@ interface ModalProps {
   labResultUuid: any;
   isModalOpen: (isOpen: boolean) => void;
   onSuccess: () => void;
+  onClose: any;
 }
 interface LabFile {
   file: any; // Assuming file property exists for the key
@@ -19,13 +20,17 @@ interface LabFile {
 }
 
 export const NofileviewModalContent = ({
-  labResultUuid ,
+  labResultUuid,
   isModalOpen,
   onSuccess,
+  onClose, // Receive the callback function
 }: ModalProps) => {
+
   const [modalOpen, setModalOpen] = useState(false);
   const { toast } = useToast();
+
   const [labFiles, setLabFiles] = useState<any[]>([]); //
+  const defaultLabFiles = Array.isArray(labFiles) ? labFiles : [];
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
   const [selectedFiles, setSelectedLabFiles] = useState<File[]>([]);
   const [fileNames, setFileNames] = useState<string[]>([]);
@@ -35,6 +40,10 @@ export const NofileviewModalContent = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("submit clicked");
+    if (selectedFiles.length === 0) {
+      toggleToast();
+      return;
+    }
     try {
       const getUuid = labResultUuid;
       console.log(getUuid, "getUuid");
@@ -57,6 +66,9 @@ export const NofileviewModalContent = ({
             addLabFiles
           );
         }
+
+        onClose(false);
+        // Call the onSuccess callback function 
       } else {
         console.warn("No files selected to upload");
       }
@@ -99,14 +111,12 @@ export const NofileviewModalContent = ({
       setSelectedLabFiles(newFiles);
       setFileNames(newFileNames);
       setFileTypes(newFileTypes);
+
     } else {
       console.warn("No files selected");
     }
   };
-  const toggleToast = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
-    e.preventDefault();
+  const toggleToast = (): void => {
     toast({
       variant: "destructive",
       title: "No File Attached!",
@@ -139,7 +149,7 @@ export const NofileviewModalContent = ({
       // Optionally, you can clear the selectedFileNames state here
       setSelectedFileNames([]);
     }
-  }, [labFiles]);
+  }, [labFiles, defaultLabFiles]);
 
   return (
     <div className="w-[676px] h-[545px]">

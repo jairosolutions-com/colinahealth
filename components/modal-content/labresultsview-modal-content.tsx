@@ -29,7 +29,6 @@ export const LabResultsViewModalContent = ({
 }: ModalProps) => {
   const onSuccess = () => {
     setIsSuccessOpen(true);
-    
 
     isModalOpen(false);
   };
@@ -50,27 +49,23 @@ export const LabResultsViewModalContent = ({
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [toast, setToast] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [isNoFileModalOpen, setIsNoFileModalOpen] = useState(false);
+  // update isNoFileModalOpen state
+  const handleNoFileModalClose = (isModalOpen: boolean) => {
+    setIsNoFileModalOpen(isModalOpen);
+    setIsLoading(true);
+    console.log("isNoFileModalOpen HANDLE", isNoFileModalOpen);
+  };
 
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
 
-  const closeModal = () => {
-    setModalOpen(false);
-  };
-
   const toggleDeleteModal = () => {
     setDeleteModalOpen(!deleteModalOpen);
+
   };
 
-  const toggleEditMode = () => {
-    setEditMode(!editMode);
-    setShowCheckboxes(false);
-  };
-
-  const toggleCheckboxes = () => {
-    setShowCheckboxes(!showCheckboxes);
-  };
   const [selectedFileUUID, setSelectedFileUUID] = useState("");
   const [fileIndex, setFileIndex] = useState(0);
   const [currentFile, setCurrentFile] = useState<LabFile>({} as LabFile);
@@ -82,7 +77,6 @@ export const LabResultsViewModalContent = ({
       setCurrentFile(labFiles[fileIndex - 1]);
     }
   };
-
   const nextFile = () => {
     if (fileIndex < labFiles.length - 1) {
       setFileIndex(fileIndex + 1);
@@ -115,8 +109,10 @@ export const LabResultsViewModalContent = ({
 
   useEffect(() => {
     const fetchData = async () => {
+
       setLabResultUuid(labResultsData.labResults_uuid);
       try {
+
         const response = await fetchLabResultFiles(
           labResultsData.labResults_uuid,
           router
@@ -128,17 +124,27 @@ export const LabResultsViewModalContent = ({
           setCurrentFile(response.data[0]);
           setFileIndex(0);
           setIsLoading(false);
-
         }
+       if (defaultLabFiles?.length === 0 ){
+          setIsNoFileModalOpen(true);
+          setIsLoading(false);
+
+       }
       } catch (error: any) {
         setError(error.message);
       }
     };
 
-    if (labResultsData.labResults_uuid) {
+    if (labResultsData.labResults_uuid ) {
       fetchData();
     }
-  }, [labResultsData.labResults_uuid, router, deleteModalOpen]);
+
+  }, [
+    labResultsData.labResults_uuid,
+    router,
+    deleteModalOpen,
+    isNoFileModalOpen,
+  ]);
 
   const handleDeleteClick = async () => {
     console.log("Delete button clicked");
@@ -168,14 +174,14 @@ export const LabResultsViewModalContent = ({
     }
   };
 
-
   return (
     <div>
       {defaultLabFiles?.length === 0 && isLoading === false ? (
         <NofileviewModalContent
-        labResultUuid={labResultUuid}
-        onSuccess={onSuccess}
-        isModalOpen={(isOpen: boolean): void => {
+          labResultUuid={labResultUuid}
+          onSuccess={onSuccess} // Pass onSuccess prop
+          onClose={handleNoFileModalClose}
+          isModalOpen={(isOpen: boolean): void => {
             isModalOpen(isOpen);
           }}
         />
@@ -411,10 +417,9 @@ export const LabResultsViewModalContent = ({
               {toast}
             </>
           )}
-        
         </div>
       )}
-            {isSuccessOpen && (
+      {isSuccessOpen && (
         <SuccessModal
           label="Success"
           isAlertOpen={isSuccessOpen}
