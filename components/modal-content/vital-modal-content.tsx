@@ -8,6 +8,8 @@ import {
   updateVitalSignsOfPatient,
   createVitalSignsOfPatient,
 } from "@/app/api/vital-sign-api/vital-sign-api";
+import { ToastAction } from "../ui/toast";
+import { useToast } from "../ui/use-toast";
 interface Modalprops {
   isEdit: boolean;
   vitalSignData: any;
@@ -32,7 +34,7 @@ export const VitalModalContent = ({
     tag: string;
     item: string;
   }>();
-
+  const { toast } = useToast();
   const patientId = params.id.toUpperCase();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -86,7 +88,24 @@ export const VitalModalContent = ({
 
         onSuccess();
       }
-    } catch (error) {
+    } catch (error: any) {
+      if (error.message == "Network Error") {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
+        });
+      }
       console.error("Error adding Prescription:", error);
       setError("Failed to add Prescription");
     }

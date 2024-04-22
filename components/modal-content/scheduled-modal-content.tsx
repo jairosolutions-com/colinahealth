@@ -6,6 +6,8 @@ import {
   updateScheduledMedOfPatient,
   fetchPrescriptionsOfPatient,
 } from "@/app/api/medication-logs-api/scheduled-med-api";
+import { ToastAction } from "../ui/toast";
+import { useToast } from "../ui/use-toast";
 
 interface ModalProps {
   uuid: string;
@@ -41,6 +43,7 @@ export const ScheduledModalContent = ({
     tag: string;
     item: string;
   }>();
+  const {toast } =useToast()
   const patientId = params.id ? params.id.toUpperCase() : uuid.toUpperCase();
   console.log(patientId, "patientId");
   console.log(aschData, "aschData");
@@ -148,8 +151,25 @@ export const ScheduledModalContent = ({
           router
         );
         setPrescriptionList(prescriptionList.data);
-      } catch (error) {
+      } catch (error:any) {
         console.error("Error fetching prescription list:");
+        if (error.message == "Network Error") {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
+        });
+      }
       }
     };
 

@@ -8,6 +8,8 @@ import {
   updateSurgeryOfPatient,
   createSurgeriesOfPatient,
 } from "@/app/api/medical-history-api/surgeries.api";
+import { ToastAction } from "../ui/toast";
+import { useToast } from "../ui/use-toast";
 
 interface Modalprops {
   isEdit: boolean;
@@ -42,7 +44,6 @@ export const SurgeriesModalContent = ({
     notes: surgeryData.surgeries_notes,
   });
   const router = useRouter();
-
   const params = useParams<{
     id: any;
     tag: string;
@@ -50,7 +51,7 @@ export const SurgeriesModalContent = ({
   }>();
 
   const patientId = params.id.toUpperCase();
-
+const {toast} = useToast()
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -113,6 +114,22 @@ export const SurgeriesModalContent = ({
         onFailed();
         isModalOpen(false);
         console.log("conflict error");
+      } else if (error.message == "Network Error") {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
+        });
       }
       setError("Failed to add Surgery");
     }

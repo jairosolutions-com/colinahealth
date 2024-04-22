@@ -7,6 +7,8 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { ToastAction } from "../ui/toast";
+import { useToast } from "../ui/use-toast";
 
 interface Modalprops {
   isEdit: boolean;
@@ -36,7 +38,7 @@ export const PrescriptionModalContent = ({
     tag: string;
     item: string;
   }>();
-
+  const { toast } = useToast();
   const patientId = params.id.toUpperCase();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -109,12 +111,29 @@ export const PrescriptionModalContent = ({
         onSuccess();
       }
     } catch (error: any) {
+      console.log(error.message, "error message");
       if (error.message === "Request failed with status code 409") {
         console.log(error.message, "error message  ");
         setErrorMessage("Prescription already exist");
         onFailed();
         isModalOpen(false);
         console.log("conflict error");
+      } else if (error.message == "Network Error") {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
+        });
       }
       setError("Failed to add Prescription");
     }

@@ -8,6 +8,8 @@ import {
   updateAppointmentOfPatient,
   createAppointmentOfPatient,
 } from "@/app/api/appointments-api/appointments.api";
+import { ToastAction } from "../ui/toast";
+import { useToast } from "../ui/use-toast";
 interface Modalprops {
   isView: boolean;
   appointmentData: any;
@@ -30,7 +32,7 @@ export const AppointmentModalContent = ({
     item: string;
   }>();
   const patientId = params.id.toUpperCase();
-
+  const { toast } = useToast();
   const [selectedStatus, setSelectedStatus] = useState("");
   const [isEditable, setIsEditable] = useState(false);
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
@@ -142,7 +144,24 @@ export const AppointmentModalContent = ({
           appointmentStatus: "",
         });
       }
-    } catch (error) {
+    } catch (error: any) {
+      if (error.message == "Network Error") {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
+        });
+      }
       console.error("Error adding Appointment:", error);
       setError("Failed to add Prescription");
     }

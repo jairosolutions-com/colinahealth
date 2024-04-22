@@ -6,6 +6,8 @@ import {
   updateNotesOfPatient,
   createNotesOfPatient,
 } from "@/app/api/notes-api/notes-api";
+import { ToastAction } from "../ui/toast";
+import { useToast } from "../ui/use-toast";
 interface Modalprops {
   isModalOpen: (isOpen: boolean) => void;
   label: string;
@@ -19,13 +21,12 @@ export const NursenotesModalContent = ({
   isModalOpen,
   onSuccess,
 }: Modalprops) => {
-
   const params = useParams<{
     id: any;
     tag: string;
     item: string;
   }>();
-
+  const { toast } = useToast();
   const patientId = params.id.toUpperCase();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +63,24 @@ export const NursenotesModalContent = ({
       });
 
       onSuccess();
-    } catch (error) {
+    } catch (error: any) {
+      if (error.message == "Network Error") {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
+        });
+      }
       console.error("Error adding note:", error);
       setError("Failed to add note");
     }
