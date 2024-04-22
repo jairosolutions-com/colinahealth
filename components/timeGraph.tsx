@@ -140,7 +140,7 @@ const TimeGraph = ({
       });
     }
   }, [linePosition]);
-
+  console.log(patientWithMedicationLogsToday.length, "lenght");
   return (
     <div className="w-full h-full ">
       <div className="w-[320vh] h-full overflow-hidden ">
@@ -209,7 +209,12 @@ const TimeGraph = ({
                       >
                         <div
                           className={` h-full ${
-                            isLastColumn ? "border-b-[9px]" : "border-b-[10px]"
+                            isLastColumn &&
+                            patientWithMedicationLogsToday.length != 1
+                              ? "border-b-[9px]"
+                              : patientWithMedicationLogsToday.length === 1
+                              ? "border-b-0"
+                              : "border-b-[10px]"
                           }  border-solid border-[#F4F4F4] flex flex-col justify-center items-center`}
                         >
                           {logsInColumn.length >= 1 ? (
