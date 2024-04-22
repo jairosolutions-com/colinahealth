@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 interface ModalProps {
   labResultUuid: any;
   isModalOpen: (isOpen: boolean) => void;
-  onSuccess: () => void;
   onClose: any;
 }
 interface LabFile {
@@ -22,7 +21,6 @@ interface LabFile {
 export const NofileviewModalContent = ({
   labResultUuid,
   isModalOpen,
-  onSuccess,
   onClose, // Receive the callback function
 }: ModalProps) => {
 

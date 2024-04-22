@@ -127,7 +127,6 @@ export const LabResultsViewModalContent = ({
         }
        if (defaultLabFiles?.length === 0 ){
           setIsNoFileModalOpen(true);
-          setIsLoading(false);
 
        }
       } catch (error: any) {
@@ -179,7 +178,6 @@ export const LabResultsViewModalContent = ({
       {defaultLabFiles?.length === 0 && isLoading === false ? (
         <NofileviewModalContent
           labResultUuid={labResultUuid}
-          onSuccess={onSuccess} // Pass onSuccess prop
           onClose={handleNoFileModalClose}
           isModalOpen={(isOpen: boolean): void => {
             isModalOpen(isOpen);

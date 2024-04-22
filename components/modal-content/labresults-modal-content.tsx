@@ -38,7 +38,7 @@ export const LabresultsModalContent = ({
     tag: string;
     item: string;
   }>();
-  
+
   const patientId = params.id.toUpperCase();
   const [labFiles, setLabFiles] = useState<any[]>([]); //
   const [fileName, setFileName] = useState("");
@@ -46,7 +46,6 @@ export const LabresultsModalContent = ({
 
   const [base64String, setBase64String] = useState("");
   const [fileType, setFileType] = useState<string>("");
-
 
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
 
@@ -260,7 +259,6 @@ export const LabresultsModalContent = ({
           setLabFiles(response.data);
           setIsLoading(false);
         }
-
       } catch (error: any) {
         setError(error.message);
       }
@@ -275,7 +273,7 @@ export const LabresultsModalContent = ({
   return (
     <>
       <div className="w-[676px] h-[575px]">
-        {isLoading && isEdit ?(
+        {isLoading && isEdit ? (
           // Loading state
           <>
             <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
@@ -464,20 +462,21 @@ export const LabresultsModalContent = ({
                     <div className="">
                       <label
                         htmlFor="imageUpload"
-                        className={`relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] ${
-                          selectedFileNames.length > 0
-                            ? "bg-[#e3f2fd] border-[#2196f3]"
-                            : "bg-[#daf3f5] border-[#007C85] border-dashed border-2"
-                        }`}
+                        className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px]
+                       bg-[#daf3f5] border-[#007C85] border-dashed border-2"
                       >
-                        {selectedFileNames.length > 0 ? (
-                          // Display selected filenames
-                          <div className="text-[12px] w-full truncate mx-2">
-                            {selectedFileNames.join(", ")}
-                          </div>
-                        ) : (
-                          // Default label content
-                          <>
+                        <>
+                          {selectedFileNames.length > 0 ? (
+                            // If files are selected, display filein.svg
+                            <Image
+                              className="w-10 h-10 mr-1"
+                              width={50}
+                              height={50}
+                              src={"/svgs/filein.svg"}
+                              alt=""
+                            />
+                          ) : (
+                            // If no files are selected, display folder-add.svg
                             <Image
                               className="w-10 h-10 mr-1"
                               width={50}
@@ -485,17 +484,29 @@ export const LabresultsModalContent = ({
                               src={"/svgs/folder-add.svg"}
                               alt={""}
                             />
-                            <div className="flex pb-5 text-nowrap text-[12px]">
-                              <p className="mt-2">Upload or Attach Files or</p>
-                              <p className="underline decoration-solid text-blue-500 ml-1 mt-2">
-                                Browse
-                              </p>
-                            </div>
-                            <span className="text-[10px] font-normal absolute bottom-2 text-[#667085] ml-10">
-                              Minimum file size
-                            </span>
-                          </>
-                        )}
+                          )}
+                          <div className="flex pb-5 text-nowrap text-[12px]">
+                            <p className="mt-2">Upload or Attach Files or</p>
+                            <p className="underline decoration-solid text-blue-500 ml-1 mt-2">
+                              Browse
+                            </p>
+                          </div>
+                          <span className="text-[10px] font-normal absolute bottom-2 text-[#667085] ml-10">
+                            {selectedFileNames.length === 0 ? (
+                              // Display "Maximum File Size: 10MB" if no files are attached
+                              <span>Maximum File Size: 10MB</span>
+                            ) : (
+                              // Display the file name if one file is attached, or the number of files if more than one are attached
+                              <span>
+                                {selectedFileNames.length === 1
+                                  ? // Display the file name if one file is attached
+                                    selectedFileNames[0]
+                                  : // Display the number of files if more than one are attached
+                                    `${selectedFileNames.length} files attached`}
+                              </span>
+                            )}
+                          </span>
+                        </>
                       </label>
                       <input
                         type="file"
