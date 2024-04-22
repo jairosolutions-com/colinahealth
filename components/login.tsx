@@ -136,7 +136,7 @@ export const Login = () => {
                   </div>
                   <div className="relative mb-4 flex flex-col">
                     <input
-                      autoFocus
+                      
                       id="password"
                       type={showPass ? "text" : "password"}
                       className={`${isInvalid ? "ring-1 ring-red-400" : ""}  
