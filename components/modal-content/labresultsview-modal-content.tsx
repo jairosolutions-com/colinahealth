@@ -63,7 +63,6 @@ export const LabResultsViewModalContent = ({
 
   const toggleDeleteModal = () => {
     setDeleteModalOpen(!deleteModalOpen);
-
   };
 
   const [selectedFileUUID, setSelectedFileUUID] = useState("");
@@ -109,10 +108,8 @@ export const LabResultsViewModalContent = ({
 
   useEffect(() => {
     const fetchData = async () => {
-
       setLabResultUuid(labResultsData.labResults_uuid);
       try {
-
         const response = await fetchLabResultFiles(
           labResultsData.labResults_uuid,
           router
@@ -125,19 +122,17 @@ export const LabResultsViewModalContent = ({
           setFileIndex(0);
           setIsLoading(false);
         }
-       if (defaultLabFiles?.length === 0 ){
+        if (defaultLabFiles?.length === 0) {
           setIsNoFileModalOpen(true);
-
-       }
+        }
       } catch (error: any) {
         setError(error.message);
       }
     };
 
-    if (labResultsData.labResults_uuid ) {
+    if (labResultsData.labResults_uuid) {
       fetchData();
     }
-
   }, [
     labResultsData.labResults_uuid,
     router,
@@ -258,12 +253,14 @@ export const LabResultsViewModalContent = ({
                         </div>
                         <div className="w-[220px]">
                           <div className="w-full flex justify-between flex-row">
-                            <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-full flex justify-center hover:border-[#686868]  ">
+                            <p className=" border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-full flex justify-center hover:border-[#686868]  ">
                               Choose files to upload
                             </p>
                             <label
-                              htmlFor="imageUpload"
-                              className="text-[13px] bg-[#007C85] px-2 py-1 text-white cursor-pointer rounded-r-md flex justify-center border-2 border-[#007C85]"
+                              htmlFor="fileupload"
+                              className={`text-[13px] bg-[#007C85] px-2 py-1 text-white cursor-pointer rounded-r-md flex justify-center border-2 border-[#007C85] ${
+                                defaultLabFiles.length === 5 ? "disabled" : ""
+                              }`}
                             >
                               Browse
                             </label>

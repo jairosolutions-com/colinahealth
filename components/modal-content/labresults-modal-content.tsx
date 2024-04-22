@@ -9,7 +9,10 @@ import {
   addLabFile,
 } from "@/app/api/lab-results-api/lab-results.api";
 import { useParams, useRouter } from "next/navigation";
-import { fetchLabResultFiles ,getCurrentFileCountFromDatabase} from "@/app/api/lab-results-api/lab-results.api";
+import {
+  fetchLabResultFiles,
+  getCurrentFileCountFromDatabase,
+} from "@/app/api/lab-results-api/lab-results.api";
 import { useToast } from "@/components/ui/use-toast";
 interface Modalprops {
   isEdit: any;
@@ -152,27 +155,24 @@ export const LabresultsModalContent = ({
     e.preventDefault();
     const getUuid = labResultData.labResults_uuid;
     console.log("Lab UUID:", getUuid);
-   
-    
+
     try {
       if (isEdit) {
         const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
         console.log("Current file count:", currentFileCount);
         // Define the maximum allowed files based on the current count
         const maxAllowedFiles = 5 - currentFileCount;
-    
+
         if (selectedFiles.length > maxAllowedFiles) {
           // Show toast indicating that the maximum file limit has been exceeded
           toggleMaxFilesToast();
           return;
-        }
-        else
-        await updateLabResultOfPatient(
-          labResultData.labResults_uuid,
-          formData,
-          router
-        );
-     
+        } else
+          await updateLabResultOfPatient(
+            labResultData.labResults_uuid,
+            formData,
+            router
+          );
 
         // Iterate through each selected file
         if (selectedFiles && selectedFiles.length > 0) {
@@ -490,7 +490,24 @@ export const LabresultsModalContent = ({
                         />
                       </div>
                     </div>
-                    {labFiles.length < 5 ? (
+                    {labFiles.length === 5 && isEdit? (
+                      <div className="">
+                      <label className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2">
+                        <>
+                          <Image
+                            className="w-10 h-10 mr-1"
+                            width={50}
+                            height={50}
+                            src={"/svgs/filein.svg"}
+                            alt=""
+                          />
+                          <div className="flex pb-5 text-nowrap text-[12px]">
+                            <p className="mt-2">MAXIMUM FILES UPLOADED</p>
+                          </div>
+                        </>
+                      </label>
+                    </div>
+                    ) : (
                       <div className="">
                         <label
                           htmlFor="imageUpload"
@@ -544,52 +561,13 @@ export const LabresultsModalContent = ({
                           id="imageUpload"
                           multiple={true}
                           accept="image/*,pdf"
+                          className="hidden"
                           name="file"
                           onChange={(e) => handleFile(e)}
                           max={5}
                         />
                       </div>
-                    ) : (
-                      <div className="">
-                        <label
-                          htmlFor="imageUpload"
-                          className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2"
-                        >
-                          <>
-                            {selectedFileNames.length > 0 ? (
-                              // If files are selected, display filein.svg
-                              <Image
-                                className="w-10 h-10 mr-1"
-                                width={50}
-                                height={50}
-                                src={"/svgs/filein.svg"}
-                                alt=""
-                              />
-                            ) : (
-                              // If no files are selected, display folder-add.svg
-                              <Image
-                                className="w-10 h-10 mr-1"
-                                width={50}
-                                height={50}
-                                src={"/svgs/folder-add.svg"}
-                                alt=""
-                              />
-                            )}
-                            <div className="flex pb-5 text-nowrap text-[12px]">
-                              <p className="mt-2">MAXIMUM FILES UPLOADED</p>
-                            </div>
-                          </>
-                        </label>
-                        <input
-                          type="file"
-                          id="imageUpload"
-                          multiple={true}
-                          accept="image/*,pdf"
-                          name="file"
-                          onChange={(e) => handleFile(e)}
-                          max={5}
-                        />
-                      </div>
+                     
                     )}
                   </div>
                 </div>
