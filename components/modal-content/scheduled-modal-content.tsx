@@ -43,7 +43,7 @@ export const ScheduledModalContent = ({
     tag: string;
     item: string;
   }>();
-  const {toast } =useToast()
+  const { toast } = useToast();
   const patientId = params.id ? params.id.toUpperCase() : uuid.toUpperCase();
   console.log(patientId, "patientId");
   console.log(aschData, "aschData");
@@ -151,25 +151,25 @@ export const ScheduledModalContent = ({
           router
         );
         setPrescriptionList(prescriptionList.data);
-      } catch (error:any) {
+      } catch (error: any) {
         console.error("Error fetching prescription list:");
         if (error.message == "Network Error") {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: error.message,
-          action: (
-            <ToastAction
-              altText="Try again"
-              onClick={() => {
-                window.location.reload();
-              }}
-            >
-              Try again
-            </ToastAction>
-          ),
-        });
-      }
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error.message,
+            action: (
+              <ToastAction
+                altText="Try again"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Try again
+              </ToastAction>
+            ),
+          });
+        }
       }
     };
 
@@ -213,7 +213,7 @@ export const ScheduledModalContent = ({
   console.log(scheduledMedData.length, "scheduledMedData length");
   console.log(formData, "formData");
   return (
-    <div className={`w-[676px] ${charactersFull ? "h-[650px]" : "h-[632px]"} `}>
+    <div className={`w-[676px] ${charactersFull ? "h-[646px]" : "h-[628px]"} `}>
       <form onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
@@ -429,7 +429,7 @@ export const ScheduledModalContent = ({
           </div>
         </div>
         <div className="">
-          <div className="justify-center flex border-t-4 pt-26">
+          <div className="justify-center flex pt-26">
             <button
               onClick={() => isModalOpen(false)}
               type="button"

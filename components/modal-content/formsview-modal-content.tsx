@@ -71,7 +71,7 @@ export const FormsviewModalContent = ({
   };
   console.log(formData, "formData");
   return (
-    <div className="w-[676px] h-[550px] bg-[#FFFFFF] rounded-md">
+    <div className="w-[676px] h-[546px] bg-[#FFFFFF] rounded-md">
       <form className="" onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
@@ -162,7 +162,7 @@ export const FormsviewModalContent = ({
           </div>
         </div>
         <div className="pt-10">
-          <div className="justify-center flex border-t-4 ">
+          <div className="justify-center flex ">
             <button
               onClick={() => isModalOpen(false)}
               type="button"

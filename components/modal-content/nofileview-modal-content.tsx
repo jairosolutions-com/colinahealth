@@ -23,7 +23,6 @@ export const NofileviewModalContent = ({
   isModalOpen,
   onClose, // Receive the callback function
 }: ModalProps) => {
-
   const [modalOpen, setModalOpen] = useState(false);
   const { toast } = useToast();
 
@@ -66,7 +65,7 @@ export const NofileviewModalContent = ({
         }
 
         onClose(false);
-        // Call the onSuccess callback function 
+        // Call the onSuccess callback function
       } else {
         console.warn("No files selected to upload");
       }
@@ -109,7 +108,6 @@ export const NofileviewModalContent = ({
       setSelectedLabFiles(newFiles);
       setFileNames(newFileNames);
       setFileTypes(newFileTypes);
-
     } else {
       console.warn("No files selected");
     }
@@ -150,7 +148,7 @@ export const NofileviewModalContent = ({
   }, [labFiles, defaultLabFiles]);
 
   return (
-    <div className="w-[676px] h-[545px]">
+    <div className="w-[676px] h-[541px]">
       <form className="" onSubmit={handleSubmit}>
         <div className="mb-9 ">
           <div className="h-[400px] md:px-10 mt-10 flex justify-center items-center">
@@ -202,7 +200,7 @@ export const NofileviewModalContent = ({
           </div>
         </div>
         <div className="pt-10">
-          <div className="justify-center flex border-t-4">
+          <div className="justify-center flex">
             <button
               onClick={() => isModalOpen(false)}
               type="button"

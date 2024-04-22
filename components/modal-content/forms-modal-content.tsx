@@ -13,7 +13,7 @@ export const FormsModalContent = ({ isModalOpen }: Modalprops) => {
   }
 
   return (
-    <div className="w-[676px] h-[625px] bg-[#FFFFFF] rounded-md">
+    <div className="w-[676px] h-[621px] bg-[#FFFFFF] rounded-md">
       <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
         <div className="items-center flex justify-between">
           <h2 className="p-title text-left text-[#071437] pl-10 mt-7">
@@ -120,7 +120,7 @@ export const FormsModalContent = ({ isModalOpen }: Modalprops) => {
         </div>
       </div>
       <div className="pt-10">
-        <div className="justify-center flex border-t-4">
+        <div className="justify-center flex ">
           <button
             onClick={() => isModalOpen(false)}
             type="button"

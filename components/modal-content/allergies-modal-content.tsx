@@ -139,7 +139,7 @@ export const AllergiesModalContent = ({
   console.log(formData, "formData");
 
   return (
-    <div className="w-[676px] h-[554px]">
+    <div className="w-[676px] h-[550px]">
       <form className="" onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
@@ -263,7 +263,7 @@ export const AllergiesModalContent = ({
             </div>
           </div>
         </div>
-        <div className="justify-center flex border-t-4">
+        <div className="justify-center flex">
           <button
             onClick={() => isModalOpen(false)}
             type="button"
