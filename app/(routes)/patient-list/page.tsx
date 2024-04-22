@@ -17,6 +17,7 @@ import { DemographicModalContent } from "@/components/modal-content/demographic-
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
+
 export default function PatientPage({ patient }: { patient: any }) {
   const router = useRouter();
   if (!getAccessToken()) {
@@ -432,6 +433,12 @@ export default function PatientPage({ patient }: { patient: any }) {
             />
           }
           isModalOpen={isModalOpen}
+          // isOpen={isOpen}
+          label="sample label"
+          onSuccess={onSuccess}
+          onFailed={onFailed}
+          setErrorMessage={setError}
+
         />
       )}
       {isSuccessOpen && (

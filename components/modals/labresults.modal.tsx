@@ -1,5 +1,4 @@
 "use client";
-import { X } from "lucide-react";
 
 import {
   updateLabResultOfPatient,
@@ -105,26 +104,26 @@ export const LabResultModal = ({
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setLabFile(file);
-      setFileName(file.name);
-      const reader = new FileReader();
+        setLabFile(file);
+        setFileName(file.name);
+        const reader = new FileReader();
 
-      reader.onloadend = () => {
-        const base64String = reader.result?.toString() || "";
-        setBase64String(base64String);
+        reader.onloadend = () => {
+            const base64String = reader.result?.toString() || "";
+            setBase64String(base64String);
 
-        const fileType = file.type.split("/")[1];
-        setFileType(fileType);
-      };
+            const fileType = file.type.split("/")[1];
+            setFileType(fileType);
+        };
 
-      reader.onerror = () => {
-        console.error("Error reading file");
-        setError("Error reading file");
-      };
+        reader.onerror = () => {
+            console.error("Error reading file");
+            setError("Error reading file");
+        };
 
-      reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
     }
-  };
+};
   if (isEdit) {
     console.log(labResultData, "labResultData");
     console.log(formData, "formData");
@@ -161,7 +160,11 @@ export const LabResultModal = ({
         }
 
         // Add lab file
-        const addLabFiles = await addLabFile(getUuid, labFileFormData, router);
+        const addLabFiles = await addLabFile(
+          getUuid,
+          labFileFormData,
+          router
+        );
 
         console.log("Lab Result added successfully:", labResult);
         console.log("Lab FILE added successfully:", addLabFiles);
@@ -255,285 +258,277 @@ export const LabResultModal = ({
             : "w-[550px] h-[550px]" // If isView is false
         }`}
       >
-        <div className="w-[676px] h-[575px]">
-          <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
-            <div className="items-center flex justify-between">
-              <h2 className="p-title text-left text-[#071437] pl-10 mt-7">
-                {headingText}
-              </h2>
-              <X
-                onClick={() => isModalOpen(false)}
-                className="w-7 h-7 text-black flex items-center mt-2 mr-4"
-              />
+        <div className="bg-[#ffffff] flex flex-col justify-start  mt-7 rounded-md">
+          <h2 className="p-title text-left text-[#071437] pl-9">
+            {headingText}
+          </h2>
+          <p className="text-sm pl-9 text-gray-600 pt-2">
+            {isView ? "View" : "Submit"} your log details.
+          </p>
+        </div>
+        {!isView ? (
+          <div className=" mb-9 pt-4">
+            <div className="h-[600px] max-h-[320px] md:px-10 mt-5">
+              <form className="" onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="first-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      HEMOGLOBIN A1c
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        value={formData.hemoglobinA1c}
+                        type="text"
+                        onChange={handleChange}
+                        required
+                        name="hemoglobinA1c"
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="last-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      FASTING BLOOD GLUCOSE
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        type="text"
+                        onChange={handleChange}
+                        value={formData.fastingBloodGlucose}
+                        required
+                        name="fastingBloodGlucose"
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="first-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      TOTAL CHOLESTEROL
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        value={formData.totalCholesterol}
+                        type="text"
+                        required
+                        name="totalCholesterol"
+                        onChange={handleChange}
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="last-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      LDL CHOLESTEROL
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        type="text"
+                        value={formData.ldlCholesterol}
+                        required
+                        name="ldlCholesterol"
+                        onChange={handleChange}
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="first-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      HDL CHOLESTEROL
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        value={formData.hdlCholesterol}
+                        type="text"
+                        onChange={handleChange}
+                        required
+                        name="hdlCholesterol"
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="last-name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 required-field"
+                    >
+                      TRIGLYCERIDES
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        value={formData.triglycerides}
+                        type="text"
+                        name="triglycerides"
+                        onChange={handleChange}
+                        required
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                    <div className="mt-2.5">
+                      <input
+                        type="file"
+                        name="file"
+                        onChange={(e) => {
+                          handleFile(e);
+                        }}
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-5 pb-3 ">
+                    <button
+                      onClick={() => isModalOpen(false)}
+                      type="button"
+                      className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                  <div className="mt-5 pb-3  ">
+                    <button
+                      type="submit"
+                      className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
+                    >
+                      {isEdit ? "Update" : "Submit"}
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-            <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
-              {isView ? "View" : "Submit"} your log details.
-            </p>
           </div>
-          {!isView ? (
-            <div className=" mb-9 pt-4">
-              <div className="h-[600px] max-h-[400px] md:px-10 mt-5">
-                <form className="" onSubmit={handleSubmit}>
-                  <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                    <div>
-                      <label
-                        htmlFor="first-name"
-                        className="block text-md font-bold leading-6 text-gray-900 required-field"
-                      >
-                        HEMOGLOBIN A1c
-                      </label>
-                      <div className="mt-2.5">
-                        <input
-                          value={formData.hemoglobinA1c}
-                          type="text"
-                          onChange={handleChange}
-                          required
-                          name="hemoglobinA1c"
-                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="last-name"
-                        className="block text-md font-bold leading-6 text-gray-900 required-field"
-                      >
-                        FASTING BLOOD GLUCOSE
-                      </label>
-                      <div className="mt-2.5">
-                        <input
-                          type="text"
-                          onChange={handleChange}
-                          value={formData.fastingBloodGlucose}
-                          required
-                          name="fastingBloodGlucose"
-                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="first-name"
-                        className="block text-md font-bold leading-6 text-gray-900 required-field"
-                      >
-                        TOTAL CHOLESTEROL
-                      </label>
-                      <div className="mt-2.5">
-                        <input
-                          value={formData.totalCholesterol}
-                          type="text"
-                          required
-                          name="totalCholesterol"
-                          onChange={handleChange}
-                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="last-name"
-                        className="block text-md font-bold leading-6 text-gray-900 required-field"
-                      >
-                        LDL CHOLESTEROL
-                      </label>
-                      <div className="mt-2.5">
-                        <input
-                          type="text"
-                          value={formData.ldlCholesterol}
-                          required
-                          name="ldlCholesterol"
-                          onChange={handleChange}
-                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="first-name"
-                        className="block text-md font-bold leading-6 text-gray-900 required-field"
-                      >
-                        HDL CHOLESTEROL
-                      </label>
-                      <div className="mt-2.5">
-                        <input
-                          value={formData.hdlCholesterol}
-                          type="text"
-                          onChange={handleChange}
-                          required
-                          name="hdlCholesterol"
-                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="last-name"
-                        className="block text-md font-bold leading-6 text-gray-900 required-field"
-                      >
-                        TRIGLYCERIDES
-                      </label>
-                      <div className="mt-2.5">
-                        <input
-                          value={formData.triglycerides}
-                          type="text"
-                          name="triglycerides"
-                          onChange={handleChange}
-                          required
-                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                      <div className="mt-2.5">
-                        <input
-                          type="file"
-                          name="file"
-                          onChange={(e) => {
-                            handleFile(e);
-                          }}
-                          className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
-                    <div className="pt-26">
-                      <div className="justify-center flex border-t-4 pt-26">
+        ) : (
+          <>
+            {defaultLabFiles?.length === 0 ? (
+              <div className="">
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-10 gap-4">
+                    <div className="md:px-10 mt-5 md:col-span-3">
+                      <div className="">No Files Attached</div>
+                      <div className="mt-5 pb-3">
                         <button
                           onClick={() => isModalOpen(false)}
                           type="button"
-                          className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+                          className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
                         >
                           Cancel
                         </button>
+                      </div>
+
+                      <div className="mt-5 pb-3">
                         <button
-                          type="button"
-                          className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md"
+                          onClick={() => isModalOpen(false)}
+                          className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
                         >
-                          Submit
+                          OK
                         </button>
                       </div>
                     </div>
                   </div>
-                </form>
-              </div>
-            </div>
-          ) : (
-            <>
-              {defaultLabFiles?.length === 0 ? (
-                <div className="">
-                  <>
-                    <div className="grid grid-cols-1 md:grid-cols-10 gap-4">
-                      <div className="md:px-10 mt-5 md:col-span-3">
-                        <div className="">No Files Attached</div>
-                        <div className="mt-5 pb-3">
-                          <button
-                            onClick={() => isModalOpen(false)}
-                            type="button"
-                            className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-
-                        <div className="mt-5 pb-3">
-                          <button
-                            onClick={() => isModalOpen(false)}
-                            className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
-                          >
-                            OK
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                </div>
-              ) : (
-                <>
-                  <div className="h-full grid grid-cols-1 md:grid-cols-10 gap-4">
-                    <div className="md:px-10 mt-5 md:col-span-3 grid grid-rows-12">
-                      <div className="grid grid-cols-1 row-span-3 gap-x-4 ">
-                        {defaultLabFiles.map((file: LabFile, index) => (
-                          <div
-                            key={index}
-                            className="even:bg-gray-50 border-b cursor-pointer"
-                            onClick={() => {
-                              setFileIndex(index);
-                              setCurrentFile(file);
-                            }}
-                          >
-                            <div className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                              {file.filename}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="flex flex-col  row-span-7 items-center justify-end mt-5">
-                        <div className="mt-5">
-                          <button
-                            onClick={() => isModalOpen(false)}
-                            type="button"
-                            className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-
-                        <div className="mt-2">
-                          <button
-                            onClick={() => isModalOpen(false)}
-                            className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
-                          >
-                            OK
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {currentFile && (
-                      <div className="md:col-span-7 items-center justify-center">
-                        <div className="w-full mb-4"></div>
-
-                        <div className="w-full max-w-xl">
-                          {fileType === "pdf" ? (
-                            <iframe
-                              src={`data:application/pdf;base64,${base64String}`}
-                              width="600px"
-                              height="550px"
-                              className="shadow-md rounded-lg"
-                            ></iframe>
-                          ) : (
-                            <iframe
-                              width="600px"
-                              height="550px"
-                              src={`data:image/${fileType};base64,${base64String}`}
-                            ></iframe>
-                          )}
-                        </div>
-
-                        <div className="flex justify-center space-x-4 mt-4">
-                          {fileIndex > 0 && (
-                            <button
-                              onClick={prevFile}
-                              className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-md"
-                            >
-                              Previous
-                            </button>
-                          )}
-
-                          {fileIndex < labFiles.length - 1 && (
-                            <button
-                              onClick={nextFile}
-                              className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-md"
-                            >
-                              Next
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
                 </>
-              )}
-            </>
-          )}
-        </div>
+              </div>
+            ) : (
+              <>
+                <div className="h-full grid grid-cols-1 md:grid-cols-10 gap-4">
+                  <div className="md:px-10 mt-5 md:col-span-3 grid grid-rows-12">
+                    <div className="grid grid-cols-1 row-span-3 gap-x-4 ">
+                      {defaultLabFiles.map((file: LabFile, index) => (
+                        <div
+                          key={index}
+                          className="even:bg-gray-50 border-b cursor-pointer"
+                          onClick={() => {
+                            setFileIndex(index);
+                            setCurrentFile(file);
+                          }}
+                        >
+                          <div className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            {file.filename}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex flex-col  row-span-7 items-center justify-end mt-5">
+                      <div className="mt-5">
+                        <button
+                          onClick={() => isModalOpen(false)}
+                          type="button"
+                          className="w-48 px-3 py-2 hover:bg-[#D9D9D9] font-medium rounded-[7px] text-[#000] ring-1 ring-gray-200"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+
+                      <div className="mt-2">
+                        <button
+                          onClick={() => isModalOpen(false)}
+                          className="w-48 px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] rounded-[7px] text-[#ffff] font-medium"
+                        >
+                          OK
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {currentFile && (
+                    <div className="md:col-span-7 items-center justify-center">
+                      <div className="w-full mb-4"></div>
+
+                      <div className="w-full max-w-xl">
+                        {fileType === "pdf" ? (
+                          <iframe
+                            src={`data:application/pdf;base64,${base64String}`}
+                            width="600px"
+                            height="550px"
+                            className="shadow-md rounded-lg"
+                          ></iframe>
+                        ) : (
+                          <iframe
+                            width="600px"
+                            height="550px"
+                            src={`data:image/${fileType};base64,${base64String}`}
+                          ></iframe>
+                        )}
+                      </div>
+
+                      <div className="flex justify-center space-x-4 mt-4">
+                        {fileIndex > 0 && (
+                          <button
+                            onClick={prevFile}
+                            className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-md"
+                          >
+                            Previous
+                          </button>
+                        )}
+
+                        {fileIndex < labFiles.length - 1 && (
+                          <button
+                            onClick={nextFile}
+                            className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-md"
+                          >
+                            Next
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
