@@ -14,6 +14,7 @@ export const ErrorModalContent = ({ isModalOpen }: Modalprops) => {
         <div className="z-50 bg-white rounded-[10px] shadow-xl w-[670px] h-[326px] mx-auto top-[80px]">
           <div className="text-center pt-[30px]">
             <div className="mx-auto mb-5 text-gray-400 w-[110px] h-[110px] ">
+              ``
               <img src="/svgs/successful.svg" alt="" />
             </div>
             <h1 className="text-[25px] font-bold text-md text-[#101828] mb-2">
