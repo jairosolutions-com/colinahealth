@@ -194,35 +194,27 @@ const Appointment = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between ">
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center">
-            <h1 className="p-title">Appointment</h1>
+      <div className="w-full justify-between flex mb-2">
+        <div className="flex-row">
+          <p className="p-title">Appointment</p>
+
+          <div>
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+              Total of {totalAppointments} Appointments
+            </p>
           </div>
-          {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
-            Total of {totalAppointments} Appointments
-          </p>
         </div>
-        <div className="flex flex-row justify-end mt-[15px]">
+        <div className="flex gap-2">
           <button
             onClick={() => isModalOpen(true)}
-            className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu"
+            className="flex items-center justify-center hover:bg-[#2267B9] bg-[#1B84FF] text-white font-semibold w-[100px] h-[52px] rounded gap-2"
           >
-            <img
-              src="/imgs/add.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Add
+            <img src="/imgs/add.svg" alt="" />
+            <p className="text-[18px]">Add</p>
           </button>
-          <button className="btn-pdfs hover:bg-[#007C85] h-[42px] hover:border-[#007C85] hover:text-white flex items-center justify-center rounded-lg font-manrope text-black text-lg px-8 py-4 border-2 border-gray-300 text-center w-64 relative ">
-            <img
-              src="/imgs/downloadpdf.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Download PDF
+          <button className="btn-pdfs flex items-center justify-center border-[2px] text-black font-semibold w-[228px] rounded h-[52px] gap-2">
+            <img src="/imgs/downloadpdf.svg" alt="" />
+            <p className="text-[18px]">Download PDF</p>
           </button>
         </div>
       </div>
