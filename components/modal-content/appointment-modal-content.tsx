@@ -162,7 +162,7 @@ export const AppointmentModalContent = ({
   return (
     <div
       className={`${
-        isView ? "h-[640px]" : charactersFull?"h-[551px]":"h-[541px]"
+        isView ? "h-[640px]" : charactersFull ? "h-[551px]" : "h-[541px]"
       } w-[676px]  bg-[#FFFFFF] rounded-md`}
     >
       <form className="" onSubmit={handleSubmit}>
@@ -391,12 +391,12 @@ export const AppointmentModalContent = ({
               </div>
             </div>
           </div>
-          <div className={`${charactersFull?"mt-[30px]" :"mt-5"}`}>
+          <div className={`${charactersFull ? "mt-[30px]" : "mt-5"}`}>
             <div className="justify-center flex border-t-4 pt-26">
               <button
                 onClick={() => isModalOpen(false)}
                 type="button"
-                className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+                className="w-[600px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mt-4 mr-[3px] rounded-bl-md"
               >
                 Cancel
               </button>

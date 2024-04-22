@@ -70,7 +70,6 @@ export const AllergiesModalContent = ({
         ...prevData,
         [name]: truncatedValue,
       }));
-    
     } else {
       setCharactersFull(false);
       setFormData((prevData) => ({
@@ -234,7 +233,13 @@ export const AllergiesModalContent = ({
                     value={formData.notes}
                     onChange={handleTextChange}
                   />
-                  <p className={`absolute text-end text-red-500 ${charactersFull?"visible":"hidden"}`}>*Maximum of 200 characters only!</p>
+                  <p
+                    className={`absolute text-end text-red-500 ${
+                      charactersFull ? "visible" : "hidden"
+                    }`}
+                  >
+                    *Maximum of 200 characters only!
+                  </p>
                 </div>
               </div>
             </div>
@@ -244,7 +249,7 @@ export const AllergiesModalContent = ({
           <button
             onClick={() => isModalOpen(false)}
             type="button"
-            className="w-[600px] h-[50px] bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+            className="w-[600px] h-[50px] bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mt-4 mr-[3px] rounded-bl-md"
           >
             Cancel
           </button>

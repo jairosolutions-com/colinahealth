@@ -46,10 +46,10 @@ export const DemographicModalContent = ({
     codeStatus: "",
     email: "",
   });
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === 'age' && (!/^\d*$/.test(value))) {
+    if (name === "age" && !/^\d*$/.test(value)) {
       return; // Don't update state
     }
     setFormData((prevData) => ({
@@ -439,8 +439,12 @@ export const DemographicModalContent = ({
                       style={{ cursor: "pointer" }}
                     >
                       <option value="">select status</option>
-                      <option value="DNR" className="text-red-500">DNR</option>
-                      <option value="FULL CODE" className="text-blue-500">FULL CODE</option>
+                      <option value="DNR" className="text-red-500">
+                        DNR
+                      </option>
+                      <option value="FULL CODE" className="text-blue-500">
+                        FULL CODE
+                      </option>
                     </select>
                     <Image
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
@@ -552,7 +556,7 @@ export const DemographicModalContent = ({
               <button
                 onClick={() => isModalOpen(false)}
                 type="button"
-                className="w-[600px] h-[50px]  bg-[#ffffff] hover:text-red-500 text-black font-medium mt-4 mr-[3px] rounded-bl-md border-2  "
+                className="w-[600px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mt-4 mr-[3px] rounded-bl-md  "
               >
                 Cancel
               </button>
