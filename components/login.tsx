@@ -134,11 +134,12 @@ export const Login = () => {
                     </label>
                     <p className={`${isInvalid?"block":"hidden"} mt-2 text-red-500`}>Enter a valid email</p>
                   </div>
+                  
                   <div className="relative mb-4 flex flex-col">
                     <input
                       
                       id="password"
-                      type={showPass ? "text" : "password"}
+                      type={!showPass ? "password" : "text"}
                       className={`${isInvalid ? "ring-1 ring-red-400" : ""}  
                       h-[60px] w-full bg-opacity-10 bg-[#FFFFFF] px-3 py-6 pl-5 pb-2 text-md text-[#333333]`}
                       value={password}

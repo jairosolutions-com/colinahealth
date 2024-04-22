@@ -208,13 +208,13 @@ export default function ChartPage() {
       </div>
     );
   }
-
+console.log(patientWithMedicationLogsToday, "patientWithMedicationLogsToday");
   return (
     <div className=" w-full px-[150px]">
       <div className="w-full flex-col  flex justify-center items-center">
         {patientWithMedicationLogsToday.length == 0 && !term ? (
-          <div className="w-full h-full flex justify-center items-center -mt-10">
-            No Data Yet
+          <div className="w-full h-screen flex  flex-col justify-center items-center -mt-10">
+           <p> No Data Yet</p> <span> Create a prescription for patient </span>
           </div>
         ) : (
           <div className="bg-[#F4F4F4] h-full w-full">

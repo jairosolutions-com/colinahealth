@@ -27,7 +27,7 @@ const TimeGraph = ({
   const [currentTime, setCurrentTime] = useState(moment().format("HHmm"));
   const [tableHeight, setTableHeight] = useState<number>(0);
   const lineRef = useRef<HTMLDivElement>(null);
-  setEndLineHeight(tableHeight);
+ 
   console.log("Updating currentTime:", currentTime);
   const colData: { name: string; time: string }[] = [];
   for (let i = 0; i < 24; i++) {
@@ -117,7 +117,9 @@ const TimeGraph = ({
         // Here we directly set the height of the line position element
         lineRef.current.style.height = table.clientHeight + "px";
       }
+      
     }
+   
   }, [patientWithMedicationLogsToday]); // Re-calculate height when table content changes
 
   useEffect(() => {
@@ -129,6 +131,7 @@ const TimeGraph = ({
         lineRef.current.style.height = table.clientHeight + "px";
       }
     }
+    
   }, []); // Run once after component is mounted
 
   useEffect(() => {
@@ -139,6 +142,7 @@ const TimeGraph = ({
         inline: "center",
       });
     }
+    setEndLineHeight(tableHeight);
   }, [linePosition]);
   console.log(patientWithMedicationLogsToday.length, "lenght");
   return (
