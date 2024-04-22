@@ -8,6 +8,7 @@ import {
 import Image from "next/image";
 import { NofileviewModalContent } from "./nofileview-modal-content";
 import { SuccessModal } from "../shared/success";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ModalProps {
   labResultsData: any;
@@ -105,7 +106,14 @@ export const LabResultsViewModalContent = ({
       }
     }
   }, [fileIndex, labFiles]);
-
+  const { toast } = useToast();
+  const toggleMaxFilesToast = (): void => {
+    toast({
+      variant: "destructive",
+      title: "Maximum of 5 Files Attached!",
+      description: "Please try again.",
+    });
+  };
   useEffect(() => {
     const fetchData = async () => {
       setLabResultUuid(labResultsData.labResults_uuid);
@@ -140,6 +148,58 @@ export const LabResultsViewModalContent = ({
     isNoFileModalOpen,
   ]);
 
+  // Define a state to track the selected filenames
+  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
+  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [fileTypes, setFileTypes] = useState<string[]>([]);
+  const [selectedFiles, setSelectedLabFiles] = useState<File[]>([]);
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    setSelectedFileNames([""]);
+
+    if (files && files.length > 0) {
+      if (files.length > 5) {
+        // Show toast indicating maximum file limit exceeded
+        toggleMaxFilesToast();
+        e.target.value = "";
+
+        return;
+      }
+      const newFiles: File[] = [];
+      const newFileNames: string[] = [];
+      const newFileTypes: string[] = [];
+
+      Array.from(files).forEach((file) => {
+        if (file) {
+          // Add file, name, and type to arrays
+          newFiles.push(file);
+          newFileNames.push(file.name);
+          newFileTypes.push(file.type.split("/")[1]);
+          if (files && files.length > 0) {
+            // Push file names to selectedFileNames array
+            if (file && file.name) {
+              selectedFileNames.push(file.name);
+            }
+
+            console.log(selectedFileNames, "selected file names");
+            console.log(labFiles, "labFiles labFiles labFiles");
+
+            // Set selected file names
+            setSelectedFileNames(newFileNames);
+          }
+          // You can handle base64 conversion here if needed
+        }
+      });
+
+      // Update state variables with arrays
+      setSelectedLabFiles(newFiles);
+      setFileNames(newFileNames);
+      console.log(selectedFileNames.length, "newFileNames");
+      setFileTypes(newFileTypes);
+    } else {
+      console.warn("No files selected");
+    }
+  };
   const handleDeleteClick = async () => {
     console.log("Delete button clicked");
     console.log("Selected File UUID:", selectedFileUUID);
@@ -254,16 +314,27 @@ export const LabResultsViewModalContent = ({
                         <div className="w-[220px]">
                           <div className="w-full flex justify-between flex-row">
                             <p className=" border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-full flex justify-center hover:border-[#686868]  ">
-                              Choose files to upload
+                              {defaultLabFiles.length < 5
+                                ? "Choose files to upload"
+                                : "Max Files Uploaded"}{" "}
                             </p>
                             <label
                               htmlFor="fileupload"
-                              className={`text-[13px] bg-[#007C85] px-2 py-1 text-white cursor-pointer rounded-r-md flex justify-center border-2 border-[#007C85] ${
-                                defaultLabFiles.length === 5 ? "disabled" : ""
-                              }`}
+                              className="text-[13px] bg-[#007C85] px-2 py-1 text-white cursor-pointer rounded-r-md flex justify-center border-2 border-[#007C85]"
                             >
                               Browse
                             </label>
+                            <input
+                              type="file"
+                              id="fileupload"
+                              multiple={true}
+                              accept="image/*,pdf"
+                              className="hidden"
+                              name="file"
+                              disabled={defaultLabFiles.length === 5}
+                              onChange={(e) => handleFile(e)}
+                              max={5}
+                            />
                           </div>
                           {defaultLabFiles.map((file: LabFile, index) => (
                             <div

@@ -44,11 +44,7 @@ export const LabresultsModalContent = ({
 
   const patientId = params.id.toUpperCase();
   const [labFiles, setLabFiles] = useState<any[]>([]); //
-  const [fileName, setFileName] = useState("");
-  const [fileData, setFileData] = useState(new Uint8Array());
 
-  const [base64String, setBase64String] = useState("");
-  const [fileType, setFileType] = useState<string>("");
 
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
 
