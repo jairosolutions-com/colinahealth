@@ -75,8 +75,8 @@ const Appointment = () => {
 
   const [patientAppointments, setPatientAppointments] = useState<any[]>([]);
   const [term, setTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("DESC");
-  const [sortBy, setSortBy] = useState("appointmentTime");
+  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortBy, setSortBy] = useState("appointmentDate");
   const [pageNumber, setPageNumber] = useState("");
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalAppointments, setTotalAppointments] = useState<number>(0);
@@ -158,11 +158,12 @@ const Appointment = () => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setIsView(false);
       setAppointmentData([]);
     }
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -193,57 +194,58 @@ const Appointment = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between ">
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center">
-            <h1 className="p-title">Appointment</h1>
+      <div className="w-full justify-between flex mb-2">
+        <div className="flex-row">
+          <p className="p-title">Appointment</p>
+
+          <div>
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+              Total of {totalAppointments} Appointments
+            </p>
           </div>
-          {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
-            Total of {totalAppointments} Appointments
-          </p>
         </div>
-        <div className="flex flex-row justify-end mt-[15px]">
+        <div className="flex gap-2">
           <button
             onClick={() => isModalOpen(true)}
-            className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu"
+            className="flex items-center justify-center hover:bg-[#2267B9] bg-[#1B84FF] text-white font-semibold w-[100px] h-[52px] rounded gap-2"
           >
-            <img
-              src="/imgs/add.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Add
+            <img src="/imgs/add.svg" alt="" />
+            <p className="text-[18px]">Add</p>
           </button>
-          <button className="btn-pdfs hover:bg-[#007C85] h-[42px] hover:border-[#007C85] hover:text-white flex items-center justify-center rounded-lg font-manrope text-black text-lg px-8 py-4 border-2 border-gray-300 text-center w-64 relative ">
-            <img
-              src="/imgs/downloadpdf.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Download PDF
+          <button className="btn-pdfs flex items-center justify-center border-[2px] text-black font-semibold w-[228px] rounded h-[52px] gap-2">
+            <img src="/imgs/downloadpdf.svg" alt="" />
+            <p className="text-[18px]">Download PDF</p>
           </button>
         </div>
       </div>
 
       <div className="w-full m:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
-          <form className="">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+          <form className="mr-5 relative">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE] text-[15px]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
                 type="text"
                 placeholder="Search by reference no. or name..."
-                onChange={(event) => {
-                  setTerm(event.target.value);
+                value={term}
+                onChange={(e) => {
+                  setTerm(e.target.value);
                   setCurrentPage(1);
                 }}
               />
+              <img
+                src="/svgs/search.svg"
+                alt="Search"
+                width="20"
+                height="20"
+                className="absolute left-8 top-9 pointer-events-none"
+              />
             </div>
           </form>
-          <div className="flex w-full justify-end items-center gap-[12px]">
+
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
             <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
@@ -256,9 +258,8 @@ const Appointment = () => {
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Ascending"}
+              label={"Select"}
             />
-
             <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
@@ -276,7 +277,6 @@ const Appointment = () => {
             />
           </div>
         </div>
-
         {/* START OF TABLE */}
         <div>
           <table className="w-full text-left rtl:text-right">
@@ -443,12 +443,16 @@ const Appointment = () => {
       )}
       {isOpen && (
         <Modal
-          content={<AppointmentModalContent isModalOpen={isModalOpen} />}
+          content={
+            <AppointmentModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              isView={isEdit}
+              appointmentData={appointmentData}
+              label="sample label"
+            />
+          }
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          isView={isEdit}
-          appointmentData={appointmentData}
-          label="sample label"
         />
       )}
     </div>

@@ -79,24 +79,51 @@ export default function PatientOverviewLayout({
     },
   ];
 
+  const [currentRoute, setCurrentRoute] = useState<string>("");
+
+  const [seeMoreClicked, setSeeMoreClicked] = useState(
+    localStorage.getItem("seeMoreClicked") === "true" ? true : false
+  );
+  const [seeMoreHovered, setSeeMoreHovered] = useState(
+    localStorage.getItem("seeMoreHovered") === "true" ? true : false
+  );
+
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
-    setIsLoading(true);
-    onNavigate(router, url);
     setActiveTab(-1);
     setDetailsClicked(true);
+    localStorage.setItem("seeMoreClicked", "true"); // Set local storage
+    onNavigate(router, url);
   };
 
+  const handleSeeMoreHover = () => {
+    setSeeMoreHovered(true);
+    localStorage.setItem("seeMoreHovered", "true"); // Set local storage
+  };
+
+  const handleSeeMoreLeave = () => {
+    setSeeMoreHovered(false);
+    localStorage.setItem("seeMoreHovered", "false"); // Set local storage
+  };
+
+  useEffect(() => {
+    const pathParts = pathname.split("/");
+    setCurrentRoute(pathParts[pathParts.length - 1]);
+
+    // Check local storage for previous state
+    const clicked = localStorage.getItem("seeMoreClicked") === "true";
+    const hovered = localStorage.getItem("seeMoreHovered") === "true";
+    setSeeMoreClicked(clicked);
+    setSeeMoreHovered(hovered);
+  }, [pathname]);
   // const handleTabClick = (index: number, url: string) => {
   //   setActiveTab(index);
   //   onNavigate(router, url);
   //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
   // };
   const handleTabClick = (url: string, tabIndex: number) => {
-    setIsLoading(true);
-
     setActiveTab(tabIndex);
     setDetailsClicked(false);
-    console.log(url, "url");
+
     onNavigate(router, url);
   };
   console.log(pathname, "pathname");
@@ -135,11 +162,17 @@ export default function PatientOverviewLayout({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
           description: error.message,
-          action: <ToastAction altText="Try again" onClick={() => {
-            window.location.reload();
-          }}>Try again</ToastAction>,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
         });
-        
       }
     };
 
@@ -147,64 +180,11 @@ export default function PatientOverviewLayout({
   }, [patientId, router, params]);
 
   if (isLoading) {
-    switch (true) {
-      case !isAllergy:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isSurgery:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isMedicationLog:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isPrescription:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isVitalSign:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isLabRes:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isAppointment:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      case !isNotes:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-        case !isForms:
-        return (
-          <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-          </div>
-        );
-      default:
-        break;
-    }
+     return (
+       <div className="w-full h-full flex justify-center items-center ">
+         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+       </div>
+     );
   }
   console.log(patientData, "patientData");
 
@@ -230,7 +210,7 @@ export default function PatientOverviewLayout({
         <div className="p-title pb-2">
           <h1>Patient Overview</h1>
         </div>
-        <div className="form ring-1 w-full h-[220px] shadow-md ring-gray-300 px-5 pt-5 rounded-md">
+        <div className="form ring-1 w-full h-[220px] ring-[#D0D5DD] px-5 pt-5 rounded-md">
           <div className="flex">
             <div className="flex flex-col">
               <img
@@ -250,13 +230,21 @@ export default function PatientOverviewLayout({
                   </h1>
                   <div className=" cursor-pointer items-center ml-10 flex ">
                     <p
-                      className="underline text-[15px] font-semibold text-[#191D23] text-right mr-10"
-                      onClick={() =>
+                      className={`underline text-[15px] font-semibold text-right mr-10 ${
+                        (seeMoreHovered || seeMoreClicked) &&
+                        currentRoute === "patient-details"
+                          ? "text-[#007C85]"
+                          : ""
+                      }`}
+                      onMouseEnter={handleSeeMoreHover}
+                      onMouseLeave={handleSeeMoreLeave}
+                      onClick={() => {
+                        setIsLoading(true);
                         handleSeeMoreDetails(
                           `/patient-overview/${params.id}/patient-details`,
                           -1
-                        )
-                      }
+                        );
+                      }}
                     >
                       See more details
                     </p>
@@ -281,7 +269,7 @@ export default function PatientOverviewLayout({
                         </p>
                       </div>
                       <div>
-                        <p className="flex items-center mr-11">
+                        <p className="flex items-center mr-10 ml-1">
                           Gender: {patientData[0]?.gender}
                         </p>
                       </div>
@@ -308,7 +296,7 @@ export default function PatientOverviewLayout({
                       height="26"
                     />
                     <div className="">
-                      <h1 className={`flex items-center mr-11 gap-1`}>
+                      <h1 className={`flex items-center`}>
                         Code Status:
                         <p
                           className={` 
@@ -316,7 +304,7 @@ export default function PatientOverviewLayout({
                             patientData[0]?.codeStatus === "DNR"
                               ? "text-red-500"
                               : "text-blue-500"
-                          } ml-1`}
+                          } ml-1 w-[100px]`}
                         >
                           {patientData[0]?.codeStatus}
                         </p>
@@ -325,7 +313,7 @@ export default function PatientOverviewLayout({
 
                     <div className="">
                       <div>
-                        <p className="flex items-center ml-7">
+                        <p className="flex items-center">
                           Allergy:{" "}
                           {patientData[0]?.allergies
                             ? patientData[0]?.allergies
@@ -346,11 +334,12 @@ export default function PatientOverviewLayout({
                       (tabUrl === "prorenata" &&
                         tab.label === "Medication Log") ||
                       (tabUrl === "incident-report" && tab.label === "Notes")
-                        ? "text-[#007C85] border-b-[3px] border-[#007C85] text-[15px]"
-                        : "hover:text-[#007C85] hover:border-b-[3px] h-[27px] border-[#007C85] text-[15px]"
+                        ? "text-[#007C85] border-b-2 border-[#007C85] text-[15px] pb-1"
+                        : "hover:text-[#007C85] hover:border-b-2 pb-1 h-[31px] border-[#007C85] text-[15px]"
                     }`}
                     key={index}
                     onClick={() => {
+                      setIsLoading(true);
                       handleTabClick(tab.url, index);
                     }}
                   >

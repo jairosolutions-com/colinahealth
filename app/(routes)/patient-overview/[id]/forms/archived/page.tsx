@@ -1,47 +1,79 @@
 "use client";
 
-import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import Edit from "@/components/shared/buttons/edit";
-import { useState } from "react";
+import Edit from "@/components/shared/buttons/view";
+import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { ScheduledMedModal } from "@/components/modals/sched-medication.modal";
-import { fetchScheduledMedByPatient } from "@/app/api/medication-logs-api/scheduled-med-api";
-import { ErrorModal } from "@/components/shared/error";
+import { FormsModalContent } from "@/components/modals/forms.modal";
+import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
+import Modal from "@/components/reusable/modal";
+import { fetchFormsByPatient } from "@/app/api/forms-api/forms.api";
 import { SuccessModal } from "@/components/shared/success";
 
-import Modal from "@/components/reusable/modal";
-import { ScheduledModalContent } from "@/components/modal-content/scheduled-modal-content";
-
-const Scheduled = () => {
+export default function ArchiveTab() {
   const router = useRouter();
-  // start of orderby & sortby function
+  const params = useParams<{
+    id: any;
+    tag: string;
+    item: string;
+  }>();
+  const patientId = params.id.toUpperCase();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
-  const [sortOrder, setSortOrder] = useState("DESC");
-  const [sortBy, setSortBy] = useState("createdAt");
-  const [pageNumber, setPageNumber] = useState("");
-  const [patientScheduledMed, setPatientScheduledMed] = useState<any[]>([]);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [totalScheduledMeds, setTotalScheduledMeds] = useState<number>(0);
+  const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
+  const [sortOrder, setSortOrder] = useState("ASC");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [scheduledMedData, setScheduledMedData] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [patientForms, setPatientForms] = useState<any[]>([]);
+  const [sortBy, setSortBy] = useState("dateIssued");
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalNotes, setTotalNotes] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState("");
   const [gotoError, setGotoError] = useState(false);
-  const [term, setTerm] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState("");
+  const [term, setTerm] = useState<string>("");
   const [isEdit, setIsEdit] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [notesToEdit, setNotesToEdit] = useState<any[]>([]);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
-  interface Modalprops {
-    label: string;
-    isOpen: boolean;
-    isModalOpen: (isOpen: boolean) => void;
-  }
+  const handleOrderOptionClick = (option: string) => {
+    if (option === "Ascending") {
+      setSortOrder("ASC");
+    } else {
+      setSortOrder("DESC");
+    }
+  };
+
+  const handleSortOptionClick = (option: string) => {
+    if (option == "Age") {
+      setSortBy("age");
+    } else if (option == "Name") {
+      setSortBy("firstName");
+    } else if (option == "Gender") {
+      setSortBy("gender");
+    }
+    console.log(sortBy, "option");
+  };
+
+  const optionsOrderedBy = [
+    { label: "Ascending", onClick: handleOrderOptionClick },
+    { label: "Descending", onClick: handleOrderOptionClick },
+  ];
+  const optionsSortBy = [
+    { label: "Vital Sign ID", onClick: handleSortOptionClick },
+    { label: "Date", onClick: handleSortOptionClick },
+    { label: "Time", onClick: handleSortOptionClick },
+    { label: "Blood Pressure", onClick: handleSortOptionClick },
+    { label: "Heart Rate", onClick: handleSortOptionClick },
+    { label: "Temperature", onClick: handleSortOptionClick },
+    { label: "Respiratory", onClick: handleSortOptionClick },
+  ];
+  // end of orderby & sortby function
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
@@ -49,8 +81,6 @@ const Scheduled = () => {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "visible";
-      setIsEdit(false);
-      setScheduledMedData([]);
     }
   };
 
@@ -66,44 +96,6 @@ const Scheduled = () => {
       setCurrentPage(currentPage + 1);
     }
   };
-
-  const params = useParams<{
-    id: any;
-    tag: string;
-    item: string;
-  }>();
-
-  const patientId = params.id.toUpperCase();
-
-  const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-  const handleOrderOptionClick = (option: string) => {
-    setIsOpenOrderedBy(false);
-    if (option === "Ascending") {
-      setSortOrder("ASC");
-    } else {
-      setSortOrder("DESC");
-    }
-  };
-  const handleSortOptionClick = (option: string) => {
-    setIsOpenSortedBy(false);
-    if (option === "Date") {
-      setSortBy("medicationLogsDate");
-    } else if (option === "Time") {
-      setSortBy("medicationLogsTime");
-    } else {
-      setSortBy("medicationLogsName");
-    }
-    console.log("option", option);
-  };
-  const optionsOrderedBy = [
-    { label: "Ascending", onClick: handleOrderOptionClick },
-    { label: "Descending", onClick: handleOrderOptionClick },
-  ];
-  const optionsSortBy = [
-    { label: "Date", onClick: handleSortOptionClick },
-    { label: "Time", onClick: handleSortOptionClick },
-    { label: "Medication", onClick: handleSortOptionClick },
-  ]; // end of orderby & sortby function
 
   const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -152,7 +144,7 @@ const Scheduled = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchScheduledMedByPatient(
+        const response = await fetchFormsByPatient(
           patientId,
           term,
           currentPage,
@@ -160,10 +152,9 @@ const Scheduled = () => {
           sortOrder as "ASC" | "DESC",
           router
         );
-        setPatientScheduledMed(response.data);
+        setPatientForms(response.data);
         setTotalPages(response.totalPages);
-        console.log(response.totalPages, "total");
-        setTotalScheduledMeds(response.totalCount);
+        setTotalNotes(response.totalCount);
         setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
@@ -177,12 +168,6 @@ const Scheduled = () => {
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
-    isModalOpen(false);
-    setScheduledMedData([]);
-  };
-  const onFailed = () => {
-    setIsErrorOpen(true);
-    setIsEdit(false);
   };
 
   if (isLoading) {
@@ -192,45 +177,33 @@ const Scheduled = () => {
       </div>
     );
   }
-
-  console.log("patientScheduledMed", patientScheduledMed);
-  console.log(patientScheduledMed);
+  console.log(patientForms, "patientForms");
   return (
     <div className="  w-full">
       <div className="w-full justify-between flex mb-2">
         <div className="flex-row">
           <div className="flex gap-2">
-            <p className="p-title">Medication Logs</p>
-            <span className="slash">{">"}</span>
-            <span className="active">Scheduled</span>
-            <span className="slash">{">"}</span>
-            <span
+            <p
               onClick={() => {
+                setIsLoading(true);
                 onNavigate(
                   router,
-                  `/patient-overview/${patientId.toLowerCase()}/medication/prorenata`
+                  `/patient-overview/${patientId.toLowerCase()}/forms`
                 );
                 setIsLoading(true);
               }}
-              className="bread"
+              className="p-title hover:underline cursor-pointer"
             >
-              PRN
-            </span>
+              Form
+            </p>
+            <span className="slash">{">"}</span>
+            <span className="active">Archived</span>
           </div>
           <div>
-            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
-              Total of {totalScheduledMeds} Scheduled Medication Logs
-            </p>
+            <p>Total of 6 logs</p>
           </div>
         </div>
         <div className="flex gap-2">
-          <button
-            onClick={() => isModalOpen(true)}
-            className="flex items-center justify-center hover:bg-[#2267B9] bg-[#1B84FF] text-white font-semibold w-[100px] h-[52px] rounded gap-2"
-          >
-            <img src="/imgs/add.svg" alt="" />
-            <p className="text-[18px]">Add</p>
-          </button>
           <button className="btn-pdfs flex items-center justify-center border-[2px] text-black font-semibold w-[228px] rounded h-[52px] gap-2">
             <img src="/imgs/downloadpdf.svg" alt="" />
             <p className="text-[18px]">Download PDF</p>
@@ -238,7 +211,7 @@ const Scheduled = () => {
         </div>
       </div>
 
-      <div className="w-full m:rounded-lg items-center">
+      <div className="w-full sm:rounded-lg items-center pt-2">
         <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
           <form className="mr-5 relative">
             {/* search bar */}
@@ -300,104 +273,28 @@ const Scheduled = () => {
         {/* START OF TABLE */}
         <div>
           <table className="w-full text-left rtl:text-right">
-            <thead className="">
+            <thead>
               <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[300px] h-[60px] ">
-                  Medication ID
+                <th scope="col" className="px-7 py-3 h-[60px] w-[250px]">
+                  NAME OF DOCUMENT
                 </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  Date
+                <th scope="col" className="px-7 py-3 h-[60px] w-[200px]">
+                  DATE ISSUED
                 </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  Time
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  Medication
-                </th>
-                <th scope="col" className="px-5 py-3 w-[400px]">
-                  Notes
-                </th>
-                <th scope="col" className="px-6 py-3 w-[100px]">
-                  Status
-                </th>
-                <th scope="col" className=" px-20 py-4 w-[10px]">
-                  Action
+                <th scope="col" className="px-7 py-3 h-[60px] w-[900px]">
+                  NOTES
                 </th>
               </tr>
             </thead>
             <tbody>
-              {patientScheduledMed.length === 0 && (
-                <tr>
-                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-xl font-semibold text-gray-700 flex text-center">
-                      No Scheduled Medication Log/s <br />
-                      •ω•
-                    </p>
-                  </td>
-                </tr>
-              )}
-              {patientScheduledMed.length > 0 && (
-                <>
-                  {patientScheduledMed.map((schedMed, index) => (
-                    <tr
-                      key={index}
-                      className="odd:bg-white border-b hover:bg-[#f4f4f4] group"
-                    >
-                      <th
-                        scope="row"
-                        className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                      >
-                        {schedMed.medicationlogs_uuid}
-                      </th>
-                      <td className="truncate max-w-[552px] px-6 py-4">
-                        {schedMed.medicationlogs_medicationLogsDate}
-                      </td>
-                      <td className="px-6 py-4">
-                        {new Date(
-                          new Date().getFullYear(), // Use current year as default
-                          new Date().getMonth(), // Use current month as default
-                          new Date().getDate(), // Use current day as default
-                          parseInt(
-                            schedMed.medicationlogs_medicationLogsTime.split(
-                              ":"
-                            )[0]
-                          ), // Extract hours
-                          parseInt(
-                            schedMed.medicationlogs_medicationLogsTime.split(
-                              ":"
-                            )[1]
-                          ) // Extract minutes
-                        ).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        })}
-                      </td>
-                      <td className="truncate max-w-[400px] px-6 py-4">
-                        {schedMed.medicationlogs_medicationLogsName}
-                      </td>
-                      <td className="px-5 py-4">
-                        {schedMed.medicationlogs_notes}
-                      </td>
-                      <td className="px-6 py-4">
-                        {schedMed.medicationlogs_medicationLogStatus}
-                      </td>
-
-                      <td className="px-[70px] py-4">
-                        <p
-                          onClick={() => {
-                            isModalOpen(true);
-                            setIsEdit(true);
-                            setScheduledMedData(schedMed);
-                          }}
-                        >
-                          <Edit></Edit>
-                        </p>
-                      </td>
-                    </tr>
-                  ))}
-                </>
-              )}
+              <tr className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group">
+                <th className="px-7 py-3 h-[60px] ">Patient Details</th>
+                <td className="px-7 py-3 h-[60px]">10/12/2024</td>
+                <td className="px-7 py-3 h-[60px]">
+                  Patient reports occasional headaches. Advised to monitor and
+                  follow up.
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -471,19 +368,9 @@ const Scheduled = () => {
       {isOpen && (
         <Modal
           content={
-            <ScheduledModalContent
+            <FormsviewModalContent
               isModalOpen={isModalOpen}
-              uuid=""
-              name=""
-              aschData={""}
-              isOpen={isOpen}
-              isEdit={isEdit}
-              scheduledMedData={scheduledMedData}
-              setIsUpdated={setIsUpdated}
-              label="sample label"
               onSuccess={onSuccess}
-              onFailed={onFailed}
-              setErrorMessage={setError}
             />
           }
           isModalOpen={isModalOpen}
@@ -491,24 +378,13 @@ const Scheduled = () => {
       )}
       {isSuccessOpen && (
         <SuccessModal
-          label="Success"
+          label={isEdit ? "Edit Note" : "Add Note"}
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
           isUpdated={isUpdated}
           setIsUpdated={setIsUpdated}
         />
       )}
-      {isErrorOpen && (
-        <ErrorModal
-          label="Scheduled Log already exist"
-          isAlertOpen={isErrorOpen}
-          toggleModal={setIsErrorOpen}
-          isEdit={isEdit}
-          errorMessage={error}
-        />
-      )}
     </div>
   );
-};
-
-export default Scheduled;
+}

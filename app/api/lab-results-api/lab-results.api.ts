@@ -41,6 +41,7 @@ export async function fetchLabResultsByPatient(
     console.log(patientPrescriptionsNoId, "patient prescription after search");
     return patientPrescriptionsNoId;
   } catch (error: any) {
+
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
       if (axiosError.message === "Network Error") {

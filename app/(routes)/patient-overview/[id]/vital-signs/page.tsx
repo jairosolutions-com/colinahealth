@@ -42,7 +42,7 @@ export default function vitalsigns() {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setIsEdit(false);
       setVitalSignData([]);
     }
@@ -205,41 +205,59 @@ export default function vitalsigns() {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center">
-        <div className="flex flex-col">
-          <h1 className="p-title">Vital Signs</h1>
-          {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
-            Total of {totalVitalSigns} Vital Sign/s
-          </p>
-        </div>
-        <div className="flex flex-row justify-end">
-          <div className="flex flex-row justify-end">
-            <Add onClick={() => isModalOpen(true)} />
-            <DownloadPDF></DownloadPDF>
+      <div className="w-full justify-between flex mb-2">
+        <div className="flex-row">
+          <p className="p-title">Vital Signs</p>
+
+          <div>
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+              Total of {totalVitalSigns} Vital Signs
+            </p>
           </div>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => isModalOpen(true)}
+            className="flex items-center justify-center hover:bg-[#2267B9] bg-[#1B84FF] text-white font-semibold w-[100px] h-[52px] rounded gap-2"
+          >
+            <img src="/imgs/add.svg" alt="" />
+            <p className="text-[18px]">Add</p>
+          </button>
+          <button className="btn-pdfs flex items-center justify-center border-[2px] text-black font-semibold w-[228px] rounded h-[52px] gap-2">
+            <img src="/imgs/downloadpdf.svg" alt="" />
+            <p className="text-[18px]">Download PDF</p>
+          </button>
         </div>
       </div>
 
       <div className="w-full sm:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
-          <form className="">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+          <form className="mr-5 relative">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
                 type="text"
                 placeholder="Search by reference no. or name..."
-                onChange={(event) => {
-                  setTerm(event.target.value);
+                value={term}
+                onChange={(e) => {
+                  setTerm(e.target.value);
                   setCurrentPage(1);
                 }}
               />
+              <img
+                src="/svgs/search.svg"
+                alt="Search"
+                width="20"
+                height="20"
+                className="absolute left-8 top-9 pointer-events-none"
+              />
             </div>
           </form>
-          <div className="flex w-full justify-end items-center gap-[12px]">
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
             <DropdownMenu
@@ -247,15 +265,13 @@ export default function vitalsigns() {
                 label,
                 onClick: () => {
                   onClick(label);
-                  console.log("label", label);
                 },
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Ascending"}
+              label={"Select"}
             />
-
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
             <DropdownMenu
@@ -272,7 +288,6 @@ export default function vitalsigns() {
             />
           </div>
         </div>
-
         {/* START OF TABLE */}
         <div>
           {patientVitalSign.length == 0 ? (
@@ -469,14 +484,18 @@ export default function vitalsigns() {
       )}
       {isOpen && (
         <Modal
-          content={<VitalModalContent isModalOpen={isModalOpen} />}
+          content={
+            <VitalModalContent
+              isModalOpen={isModalOpen}
+              isEdit={isEdit}
+              isOpen={isOpen}
+              label="sample label"
+              vitalSignData={vitalSignData}
+              onSuccess={onSuccess}
+              setIsUpdated={setIsUpdated}
+            />
+          }
           isModalOpen={isModalOpen}
-          isEdit={isEdit}
-          isOpen={isOpen}
-          label="sample label"
-          vitalSignData={vitalSignData}
-          onSuccess={onSuccess}
-          setIsUpdated={setIsUpdated}
         />
       )}
 

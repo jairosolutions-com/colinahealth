@@ -121,9 +121,16 @@ const Dashboard = () => {
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
           description: error.message,
-          action: <ToastAction altText="Try again" onClick={() => {
-            window.location.reload();
-          }}>Try again</ToastAction>,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
         });
       }
     };
@@ -314,9 +321,9 @@ const Dashboard = () => {
                 <path
                   d="M2.14795 2.15826L8.7739 8.78421L2.14795 15.4102"
                   stroke="currentColor"
-                  stroke-width="2.43402"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2.43402"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </div>

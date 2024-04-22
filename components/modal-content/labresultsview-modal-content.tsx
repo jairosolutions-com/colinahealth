@@ -394,7 +394,6 @@ export const LabResultsViewModalContent = ({
                   </div>
                 </div>
               </div>
-
               <div>
                 <div className="justify-center flex border-t-4">
                   <button

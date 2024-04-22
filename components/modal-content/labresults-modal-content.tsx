@@ -543,5 +543,6 @@ export const LabresultsModalContent = ({
         )}
       </div>
     </>
+
   );
 };

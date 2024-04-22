@@ -6,7 +6,9 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function fetchNotesByPatient(
   patientUuid: string,
+
   term: string,
+  type: string,
   currentPage: number,
   sortBy: string,
   sortOrder: "ASC" | "DESC",
@@ -14,7 +16,9 @@ export async function fetchNotesByPatient(
 ): Promise<any> {
   const requestData = {
     patientUuid: patientUuid.toUpperCase(),
+
     term: term,
+    type: type,
     page: currentPage,
     sortBy: sortBy,
     sortOrder: sortOrder,
@@ -40,13 +44,15 @@ export async function fetchNotesByPatient(
     const patientNotes = response.data;
     console.log(patientNotes, "patient notes after search");
     return patientNotes;
-  } catch (error:any) {
+  } catch (error: any) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
       if (axiosError.message === "Network Error") {
         // Handle network error
         console.error("Connection refused or network error occurred.");
-        return Promise.reject(new Error("Connection refused or network error occurred."));
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
       }
       if (axiosError.response?.status === 401) {
         setAccessToken("");
@@ -59,8 +65,11 @@ export async function fetchNotesByPatient(
   }
 }
 
-
-export async function createNotesOfPatient(patientId: string, formData: any, router: any): Promise<any> {
+export async function createNotesOfPatient(
+  patientId: string,
+  formData: any,
+  router: any
+): Promise<any> {
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
@@ -72,7 +81,11 @@ export async function createNotesOfPatient(patientId: string, formData: any, rou
     };
 
     // Make the API request to create the Notes
-    const response = await axios.post(`${apiUrl}/notes/${patientId}`, formData, { headers });
+    const response = await axios.post(
+      `${apiUrl}/notes/${patientId}`,
+      formData,
+      { headers }
+    );
     const createdNotes = response.data;
 
     return createdNotes;
@@ -82,14 +95,13 @@ export async function createNotesOfPatient(patientId: string, formData: any, rou
   }
 }
 
-
 export async function updateNotesOfPatient(
-  prescriptionUuid: string, 
-  formData: any, 
-  router: any): 
-  Promise<any> {
+  notesUuid: string,
+  formData: any,
+  router: any
+): Promise<any> {
   try {
-    console.log(formData, "formdata")
+    console.log(formData, "formdata");
     const accessToken = getAccessToken();
     if (!accessToken) {
       throw new Error("Access token not found in local storage");
@@ -101,10 +113,11 @@ export async function updateNotesOfPatient(
 
     // Make the API request to create the Notes
     const response = await axios.patch(
-      `${apiUrl}/notes/update/${prescriptionUuid}`, 
-    formData, 
-    { headers });
-    const updatedSurgery= response.data;
+      `${apiUrl}/notes/update/${notesUuid}`,
+      formData,
+      { headers }
+    );
+    const updatedSurgery = response.data;
 
     return updatedSurgery;
   } catch (error) {
@@ -113,9 +126,6 @@ export async function updateNotesOfPatient(
       onNavigate(router, "/login");
       return Promise.reject(new Error("Unauthorized access"));
     }
-    console.error(
-      (error as AxiosError).message
-    );
+    console.error((error as AxiosError).message);
   }
 }
-
