@@ -225,7 +225,7 @@ export default function PatientPage({ patient }: { patient: any }) {
           <p className="p-title">Patients List Records</p>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
-            Total of {patientList.length==0?"0":totalPatient} Patients
+            Total of {patientList.length == 0 ? "0" : totalPatient} Patients
           </p>
         </div>
         <div className="flex flex-row justify-end">
@@ -236,12 +236,12 @@ export default function PatientPage({ patient }: { patient: any }) {
 
       <div className="w-full sm:rounded-lg items-center">
         <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
-          <form className=" mr-5">
+          <form className="mr-5 relative">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE] text-[15px]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
                 type="text"
                 placeholder="Search by reference no. or name..."
                 value={term}
@@ -250,10 +250,18 @@ export default function PatientPage({ patient }: { patient: any }) {
                   setCurrentPage(1);
                 }}
               />
+              <img
+                src="/svgs/search.svg"
+                alt="Search"
+                width="20"
+                height="20"
+                className="absolute left-8 top-9 pointer-events-none"
+              />
             </div>
           </form>
+
           <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-            <p className="text-[#191D23] opacity-[60% font-semibold] text-[15px]">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
             <DropdownMenu
@@ -297,7 +305,7 @@ export default function PatientPage({ patient }: { patient: any }) {
           ) : (
             <table className="w-full h-full justify-center items-start text-[15px]">
               <thead className=" text-left rtl:text-right">
-                <tr className="uppercase text-[#64748B] border border-[#E7EAEE]">
+                <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
                   <th scope="col" className="px-6 py-3 w-[286px] h-[70px]">
                     Patient ID
                   </th>
