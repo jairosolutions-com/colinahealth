@@ -83,7 +83,7 @@ export async function createLabResultOfPatient(patientId: string, formData: any,
     throw error; // Rethrow the error to handle it in the component
   }
 }
-//test
+//testss
 
 export async function addLabFile(labResultUuid: string, formData: any, router: any): Promise<any> {
   try {
