@@ -142,7 +142,7 @@ const TimeGraph = ({
   }, [linePosition]);
   console.log(patientWithMedicationLogsToday.length, "lenght");
   return (
-    <div className="w-full h-full ">
+    <div className="w-full  ">
       <div className="w-[320vh] h-full overflow-hidden ">
         <div className=" relative z-10">
           <div
@@ -200,18 +200,18 @@ const TimeGraph = ({
                     return (
                       <td
                         key={`${dataIndex}_${col.time}`}
-                        className={`text-center border-x border-dashed max-h-[15px] border-black overflow text-nowrap text-ellipsis overflow-hidden  ${
+                        className={`text-center border-x border-dashed h-[204px] border-black overflow text-nowrap text-ellipsis overflow-hidden  ${
                           parseInt(col.time) <= parseInt(currentTime) - 100
                             ? "bg-[#E4E4E4] "
                             : "bg-white"
                         }`}
-                        style={{ maxHeight: "20px" }} // Set fixed height for table cells
+                        // style={{ maxHeight: "20px" }} // Set fixed height for table cells
                       >
                         <div
                           className={` h-full ${
                             isLastColumn &&
                             patientWithMedicationLogsToday.length != 1
-                              ? "border-b-[9px]"
+                              ? "border-b-[10px]"
                               : patientWithMedicationLogsToday.length === 1
                               ? "border-b-0"
                               : "border-b-[10px]"
