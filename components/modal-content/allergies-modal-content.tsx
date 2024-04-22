@@ -8,6 +8,8 @@ import { X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 
 import React, { useEffect, useState } from "react";
+import { ToastAction } from "../ui/toast";
+import { useToast } from "../ui/use-toast";
 
 interface Modalprops {
   isEdit: boolean;
@@ -39,7 +41,7 @@ export const AllergiesModalContent = ({
   }>();
 
   console.log(allergy, "allergy");
-
+  const { toast } = useToast();
   const patientId = params.id.toUpperCase();
   // const patientId = params.id;
   const router = useRouter();
@@ -113,6 +115,22 @@ export const AllergiesModalContent = ({
         onFailed();
         isModalOpen(false);
         console.log("conflict error");
+      } else if (error.message == "Network Error") {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
+        });
       }
       setError("Failed to add allergy");
     }

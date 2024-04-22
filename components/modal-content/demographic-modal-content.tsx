@@ -5,6 +5,8 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { ToastAction } from "../ui/toast";
+import { useToast } from "../ui/use-toast";
 
 interface Modalprops {
   label: string;
@@ -23,6 +25,7 @@ export const DemographicModalContent = ({
   onSuccess,
   onFailed,
 }: Modalprops) => {
+  const {toast } = useToast()
   const [selectedCodeStatus, setSelectedCodeStatus] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
   const [countryList, setCountryList] = useState<any[]>([]);
@@ -124,7 +127,24 @@ export const DemographicModalContent = ({
       try {
         const countries = await fetchCountryList(router);
         setCountryList(countries);
-      } catch (error) {
+      } catch (error:any) {
+        if (error.message == "Network Error") {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
+        });
+      }
         console.error("Error fetching country list:");
       }
     };

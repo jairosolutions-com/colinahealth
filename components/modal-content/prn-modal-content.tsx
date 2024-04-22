@@ -6,6 +6,8 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { ToastAction } from "../ui/toast";
+import { useToast } from "../ui/use-toast";
 
 interface ModalProps {
   isEdit: boolean;
@@ -40,6 +42,7 @@ export const PrnModalContent = ({
     tag: string;
     item: string;
   }>();
+  const {toast} = useToast()
   console.log(isEdit, "isEdit");
   const patientId = params.id ? params.id.toUpperCase() : uuid.toUpperCase();
   console.log(patientId, "patientId");
@@ -126,6 +129,22 @@ export const PrnModalContent = ({
         onFailed();
         isModalOpen(false);
         console.log("conflict error");
+      } else if (error.message == "Network Error") {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
+        });
       }
       setError("Failed to add PRN Med");
     }
