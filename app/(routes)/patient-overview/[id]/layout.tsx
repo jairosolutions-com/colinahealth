@@ -322,7 +322,7 @@ export default function PatientOverviewLayout({
                         </p>
                       </div>
                       <div>
-                        <p className="flex items-center mr-11">
+                        <p className="flex items-center mr-10 ml-1">
                           Gender: {patientData[0]?.gender}
                         </p>
                       </div>
@@ -349,7 +349,7 @@ export default function PatientOverviewLayout({
                       height="26"
                     />
                     <div className="">
-                      <h1 className={`flex items-center mr-11 gap-1`}>
+                      <h1 className={`flex items-center`}>
                         Code Status:
                         <p
                           className={` 
@@ -357,7 +357,7 @@ export default function PatientOverviewLayout({
                             patientData[0]?.codeStatus === "DNR"
                               ? "text-red-500"
                               : "text-blue-500"
-                          } ml-1`}
+                          } ml-1 w-[100px]`}
                         >
                           {patientData[0]?.codeStatus}
                         </p>
@@ -366,7 +366,7 @@ export default function PatientOverviewLayout({
 
                     <div className="">
                       <div>
-                        <p className="flex items-center ml-4">
+                        <p className="flex items-center">
                           Allergy:{" "}
                           {patientData[0]?.allergies
                             ? patientData[0]?.allergies
