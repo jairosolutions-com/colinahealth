@@ -70,7 +70,13 @@ export const PrescriptionModalContent = ({
       [name]: value,
     }));
   };
-
+  const handleFrequencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
@@ -161,15 +167,25 @@ export const PrescriptionModalContent = ({
                 >
                   FREQUENCY
                 </label>
-                <div className="mt-2.5">
-                  <input
-                    type="text"
+                <div className="mt-2.5 flex">
+                  <select
                     required
-                    className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                    placeholder="input frequency"
+                    className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
                     name="frequency"
                     value={formData.frequency}
-                    onChange={handleChange}
+                    onChange={handleFrequencyChange}
+                  >
+                    <option value="">Select Frequency</option>
+                    <option value="Once Daily">Once Daily</option>
+                    <option value="Twice Daily">Twice Daily</option>
+                    <option value="Thrice Daily">Thrice Daily</option>
+                  </select>
+                  <Image
+                    className="absolute mt-4   ml-[255px] pointer-events-none"
+                    width={20}
+                    height={20}
+                    src={"/svgs/chevron-up.svg"}
+                    alt={""}
                   />
                 </div>
               </div>
@@ -227,7 +243,7 @@ export const PrescriptionModalContent = ({
                     onChange={handleStatusChange}
                     required
                   >
-                    <option value="">select status</option>
+                    <option value="">Select Status</option>
                     <option value="active">ACTIVE</option>
                     <option value="inactive">INACTIVE</option>
                   </select>

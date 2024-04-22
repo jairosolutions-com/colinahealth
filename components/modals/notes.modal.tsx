@@ -12,11 +12,11 @@ interface Modalprops {
 }
 
 export const NotesModal = ({ isEdit,
-  notesToEdit,
-  label,
-  isOpen,
-  isModalOpen,
-  onSuccess}: Modalprops) => {
+  notesToEdit: any;
+  label: string;
+  isOpen: boolean;
+  isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;}: Modalprops) => {
     const params = useParams<{
       id: any;
       tag: string;
