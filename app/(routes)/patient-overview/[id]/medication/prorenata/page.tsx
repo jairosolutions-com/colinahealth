@@ -195,34 +195,44 @@ const Prorenata = () => {
 
   return (
     <div className="  w-full">
-      <div className="flex justify-between ">
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center">
-            <h1 className="p-title">Medication Logs</h1>
-            <h1 className="p-title mx-2">{">"} </h1>
-            <h1
+      <div className="w-full justify-between flex mb-2">
+        <div className="flex-row">
+          <div className="flex gap-2">
+            <p className="p-title">Medication Logs</p>
+            <span className="slash">{">"}</span>
+            <span
               onClick={() => {
-                setIsLoading(true);
                 onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/medication/scheduled`
                 );
+                setIsLoading(true);
               }}
-              className="p-title cursor-pointer text-gray-600"
+              className="bread"
             >
               Scheduled
-            </h1>
-            <h1 className="p-title mx-2">{">"} </h1>
-            <h1 className="p-title cursor-pointer text-[#007C85]">PRN</h1>
+            </span>
+            <span className="slash">{">"}</span>
+            <span className="active">PRN</span>
           </div>
-          {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
-            Total of {totalPRNMeds} PRN Medication Logs
-          </p>
+          <div>
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+              Total of {totalPRNMeds} PRN Medication Logs
+            </p>
+          </div>
         </div>
-        <div className="flex flex-row justify-end mt-[15px]">
-          <Add onClick={() => isModalOpen(true)} />
-          <DownloadPDF></DownloadPDF>
+        <div className="flex gap-2">
+          <button
+            onClick={() => isModalOpen(true)}
+            className="flex items-center justify-center hover:bg-[#2267B9] bg-[#1B84FF] text-white font-semibold w-[100px] h-[52px] rounded gap-2"
+          >
+            <img src="/imgs/add.svg" alt="" />
+            <p className="text-[18px]">Add</p>
+          </button>
+          <button className="btn-pdfs flex items-center justify-center border-[2px] text-black font-semibold w-[228px] rounded h-[52px] gap-2">
+            <img src="/imgs/downloadpdf.svg" alt="" />
+            <p className="text-[18px]">Download PDF</p>
+          </button>
         </div>
       </div>
 

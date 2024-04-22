@@ -27,14 +27,14 @@ export default function FormsTab() {
   const [patientForms, setPatientForms] = useState<any[]>([]);
   const [sortBy, setSortBy] = useState("dateIssued");
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [totalNotes, setTotalNotes] = useState<number>(0);
+  const [totalForms, setTotalForms] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState("");
   const [gotoError, setGotoError] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState("");
   const [term, setTerm] = useState<string>("");
   const [isEdit, setIsEdit] = useState(false);
-  const [notesToEdit, setNotesToEdit] = useState<any[]>([]);
+  const [formsToEdit, setFormsToEdit] = useState<any[]>([]);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
@@ -153,7 +153,7 @@ export default function FormsTab() {
         );
         setPatientForms(response.data);
         setTotalPages(response.totalPages);
-        setTotalNotes(response.totalCount);
+        setTotalForms(response.totalCount);
         setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
@@ -172,17 +172,44 @@ export default function FormsTab() {
   console.log(patientForms, "patientForms");
   return (
     <div className="  w-full">
-      <div className="flex justify-between items-center">
-        <div className="flex flex-col">
-          <h1 className="font-bold text-[20px]">Forms</h1>
+      <div className="w-full justify-between flex mb-2">
+        <div className="flex-row">
+          <div className="flex gap-2">
+            <p className="p-title">Form</p>
+            <span className="slash">{">"}</span>
+            <span
+              onClick={() => {
+                onNavigate(
+                  router,
+                  `/patient-overview/${patientId.toLowerCase()}/forms/archive`
+                );
+                setIsLoading(true);
+              }}
+              className="bread"
+            >
+              Archived
+            </span>
+          </div>
+          <div>
+            <p>Total of 6 logs</p>
+          </div>
         </div>
-        <div className="flex flex-row justify-end">
-          <Add
-            onClick={() => {
-              isModalOpen(true);
-            }}
-          ></Add>
-          <DownloadPDF></DownloadPDF>
+        <div className="flex gap-2">
+          <button className="flex items-center justify-center hover:bg-[#E7EAEE] border-[2px] text-black font-semibold w-[139px] h-[52px] rounded gap-2">
+            <img src="/svgs/archive.svg" alt="" />
+            <p className="text-[18px]">Archive</p>
+          </button>
+          <button
+            onClick={() => isModalOpen(true)}
+            className="flex items-center justify-center hover:bg-[#2267B9] bg-[#1B84FF] text-white font-semibold w-[100px] h-[52px] rounded gap-2"
+          >
+            <img src="/imgs/add.svg" alt="" />
+            <p className="text-[18px]">Add</p>
+          </button>
+          <button className="btn-pdfs flex items-center justify-center border-[2px] text-black font-semibold w-[228px] rounded h-[52px] gap-2">
+            <img src="/imgs/downloadpdf.svg" alt="" />
+            <p className="text-[18px]">Download PDF</p>
+          </button>
         </div>
       </div>
 
@@ -236,8 +263,36 @@ export default function FormsTab() {
         {/* START OF TABLE */}
         <div>
           <table className="w-full text-left rtl:text-right">
-            <thead className=""></thead>
-            <tbody></tbody>
+            <thead>
+              <tr className="uppercase text-[#64748B] border-y  ">
+                <th scope="col" className="px-7 py-3 h-[60px] w-[250px]">
+                  NAME OF DOCUMENT
+                </th>
+                <th scope="col" className="px-7 py-3 h-[60px] w-[200px]">
+                  DATE ISSUED
+                </th>
+                <th scope="col" className="px-7 py-3 h-[60px] w-[900px]">
+                  NOTES
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  ACTION
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group">
+                <th className="px-7 py-3 h-[60px] ">Patient Details</th>
+                <td className="px-7 py-3 h-[60px]">10/12/2024</td>
+                <td className="px-7 py-3 h-[60px]">
+                  Patient reports occasional headaches. Advised to monitor and
+                  follow up.
+                </td>
+
+                <td className="px-7 py-3 h-[60px]">
+                  <Edit></Edit>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
         {/* END OF TABLE */}

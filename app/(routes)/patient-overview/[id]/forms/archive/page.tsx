@@ -1,50 +1,45 @@
 "use client";
+
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import Edit from "@/components/shared/buttons/edit";
+import Edit from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { SurgeriesModal } from "@/components/modals/surgeries.modal";
-import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries.api";
-import { SuccessModal } from "@/components/shared/success";
-import { ErrorModal } from "@/components/shared/error";
-import { SurgeriesModalContent } from "@/components/modal-content/surgeries-modal-content";
+import { FormsModalContent } from "@/components/modals/forms.modal";
+import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
 import Modal from "@/components/reusable/modal";
+import { fetchFormsByPatient } from "@/app/api/forms-api/forms.api";
+import { SuccessModal } from "@/components/shared/success";
 
-export default function Surgeries() {
-  const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
-  const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-  const [patientSurgeries, setPatientSurgeries] = useState<any[]>([]);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [totalSurgeries, setTotalSurgeries] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [pageNumber, setPageNumber] = useState("");
-  const [gotoError, setGotoError] = useState(false);
-  const [term, setTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("DESC");
-  const [surgeryUuid, setSurgeryUuid] = useState("");
+export default function ArchiveTab() {
   const router = useRouter();
-  const [sortBy, setSortBy] = useState("typeOfSurgery");
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const [surgeryData, setSurgeryData] = useState<any[]>([]);
-  const [isErrorOpen, setIsErrorOpen] = useState(false);
-  const [isUpdated, setIsUpdated] = useState(false);
   const params = useParams<{
     id: any;
     tag: string;
     item: string;
   }>();
   const patientId = params.id.toUpperCase();
-
-  // const patientId = params.id;
+  const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
+  const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
+  const [sortOrder, setSortOrder] = useState("ASC");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [patientForms, setPatientForms] = useState<any[]>([]);
+  const [sortBy, setSortBy] = useState("dateIssued");
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalNotes, setTotalNotes] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState("");
+  const [gotoError, setGotoError] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState("");
+  const [term, setTerm] = useState<string>("");
+  const [isEdit, setIsEdit] = useState(false);
+  const [notesToEdit, setNotesToEdit] = useState<any[]>([]);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
   const handleOrderOptionClick = (option: string) => {
-    setIsOpenOrderedBy(false);
     if (option === "Ascending") {
       setSortOrder("ASC");
     } else {
@@ -53,25 +48,32 @@ export default function Surgeries() {
   };
 
   const handleSortOptionClick = (option: string) => {
-    setIsOpenSortedBy(false);
-    if (option === "Type") {
-      setSortBy("typeOfSurgery");
-    } else if (option === "Surgery") {
-      setSortBy("surgery");
-    } else {
-      setSortBy("notes");
+    if (option == "Age") {
+      setSortBy("age");
+    } else if (option == "Name") {
+      setSortBy("firstName");
+    } else if (option == "Gender") {
+      setSortBy("gender");
     }
-    console.log("option", option);
+    console.log(sortBy, "option");
   };
+
   const optionsOrderedBy = [
     { label: "Ascending", onClick: handleOrderOptionClick },
     { label: "Descending", onClick: handleOrderOptionClick },
   ];
   const optionsSortBy = [
-    { label: "Type", onClick: handleSortOptionClick },
-    { label: "Surgery", onClick: handleSortOptionClick },
-    { label: "Notes", onClick: handleSortOptionClick },
+    { label: "Vital Sign ID", onClick: handleSortOptionClick },
+    { label: "Date", onClick: handleSortOptionClick },
+    { label: "Time", onClick: handleSortOptionClick },
+    { label: "Blood Pressure", onClick: handleSortOptionClick },
+    { label: "Heart Rate", onClick: handleSortOptionClick },
+    { label: "Temperature", onClick: handleSortOptionClick },
+    { label: "Respiratory", onClick: handleSortOptionClick },
   ];
+  // end of orderby & sortby function
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
@@ -79,8 +81,6 @@ export default function Surgeries() {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "visible";
-      setIsEdit(false);
-      setSurgeryData([]);
     }
   };
 
@@ -119,19 +119,7 @@ export default function Surgeries() {
       console.error("Invalid page number:", pageNumber);
     }
   };
-  const formatDate = (dateOfSurgery: string | number | Date) => {
-    // Create a new Date object from the provided createdAt date string
-    const date = new Date(dateOfSurgery);
 
-    // Get the month, day, and year
-    const month = date.toLocaleString("default", { month: "short" });
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    const formattedDate = `${month} ${day}, ${year}`;
-
-    return formattedDate;
-  };
   const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPageNumber(e.target.value);
   };
@@ -153,11 +141,10 @@ export default function Surgeries() {
     }
     return pageNumbers;
   };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchSurgeriesByPatient(
+        const response = await fetchFormsByPatient(
           patientId,
           term,
           currentPage,
@@ -165,13 +152,9 @@ export default function Surgeries() {
           sortOrder as "ASC" | "DESC",
           router
         );
-
-        //convert date to ISO string
-
-        setPatientSurgeries(response.data);
-        console.log("Patient list after setting state:", response.data);
+        setPatientForms(response.data);
         setTotalPages(response.totalPages);
-        setTotalSurgeries(response.totalCount);
+        setTotalNotes(response.totalCount);
         setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
@@ -180,63 +163,39 @@ export default function Surgeries() {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, sortBy, term, isOpen]);
-
-  if (isLoading) {
-    return (
-      <div className="w-full h-full flex justify-center items-center ">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-      </div>
-    );
-  }
+  }, [currentPage, sortOrder, sortBy, term, isSuccessOpen]);
 
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
-    isModalOpen(false);
   };
 
-  const onFailed = () => {
-    setIsErrorOpen(true);
-    setIsEdit(false);
-  };
-  console.log(patientSurgeries, "PatientSurgeries");
+  console.log(patientForms, "patientForms");
   return (
     <div className="  w-full">
       <div className="w-full justify-between flex mb-2">
         <div className="flex-row">
           <div className="flex gap-2">
-            <p className="p-title">Medical History</p>
-            <span className="slash">{">"}</span>
-            <span
+            <p
               onClick={() => {
                 onNavigate(
                   router,
-                  `/patient-overview/${patientId.toLowerCase()}/medical-history/allergies`
+                  `/patient-overview/${patientId.toLowerCase()}/forms`
                 );
                 setIsLoading(true);
               }}
-              className="bread"
+              className="p-title hover:underline cursor-pointer"
             >
-              Allergies
-            </span>
+              Form
+            </p>
             <span className="slash">{">"}</span>
-            <span className="active">Surgeries</span>
+            <span className="active">Archived</span>
           </div>
           <div>
-            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
-              Total of {totalSurgeries} Surgeries
-            </p>
+            <p>Total of 6 logs</p>
           </div>
         </div>
         <div className="flex gap-2">
-          <button
-            onClick={() => isModalOpen(true)}
-            className="flex items-center justify-center hover:bg-[#2267B9] bg-[#1B84FF] text-white font-semibold w-[100px] h-[52px] rounded gap-2"
-          >
-            <img src="/imgs/add.svg" alt="" />
-            <p className="text-[18px]">Add</p>
-          </button>
           <button className="btn-pdfs flex items-center justify-center border-[2px] text-black font-semibold w-[228px] rounded h-[52px] gap-2">
             <img src="/imgs/downloadpdf.svg" alt="" />
             <p className="text-[18px]">Download PDF</p>
@@ -244,25 +203,20 @@ export default function Surgeries() {
         </div>
       </div>
 
-      <div className="w-full sm:rounded-lg items-center">
+      <div className="w-full sm:rounded-lg items-center pt-2">
         <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
           <form className="">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE] text-[15px]"
+                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
                 type="text"
                 placeholder="Search by reference no. or name..."
-                value={term}
-                onChange={(event) => {
-                  setTerm(event.target.value);
-                  setCurrentPage(1);
-                }}
               />
             </div>
           </form>
-          <div className="flex w-full justify-end items-center gap-[12px] text-[15px]">
+          <div className="flex w-full justify-end items-center gap-[12px]">
             <p className="text-[#191D23] opacity-[60%] font-semibold">
               Order by
             </p>
@@ -271,15 +225,14 @@ export default function Surgeries() {
                 label,
                 onClick: () => {
                   onClick(label);
-                  console.log("label", label);
                 },
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Ascending"}
+              label={"Select"}
             />
 
-            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+            <p className="text-[#191D23] opacity-[60%] font-semibold">
               Sort by
             </p>
             <DropdownMenu
@@ -299,76 +252,31 @@ export default function Surgeries() {
 
         {/* START OF TABLE */}
         <div>
-          {patientSurgeries.length == 0 ? (
-            <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700 text-center">
-                No Surgeries Found <br />
-                •ω•
-              </p>
-            </div>
-          ) : (
-            <table className="w-full text-left rtl:text-right">
-              <thead className="">
-                <tr className="uppercase text-[#64748B] border-y text-[15px] ">
-                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                    Surgery ID
-                  </th>
-                  <th scope="col" className="px-2 py-3 w-[300px] h-[70px]">
-                    DATE OF SURGERY
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    TYPE
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    SURGERY
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    NOTES
-                  </th>
-
-                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {patientSurgeries.map((surgery, index) => (
-                  <tr
-                    key={index}
-                    className="group hover:bg-[#f4f4f4]  even:bg-gray-50  border-b text-[15px]"
-                  >
-                    <th
-                      scope="row"
-                      className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                    >
-                      {surgery.surgeries_uuid}
-                    </th>
-                    <td className="px-2 py-4">
-                      {formatDate(surgery.surgeries_dateOfSurgery)}
-                    </td>
-                    <td className="px-6 py-4">
-                      {surgery.surgeries_typeOfSurgery}
-                    </td>
-                    <td className=" max-w-[552px] px-6 py-4">
-                      {surgery.surgeries_surgery}
-                    </td>
-                    <td className="px-6 py-4">{surgery.surgeries_notes}</td>
-                    <td className="px-[50px] py-4 flex items-center justify-center  ">
-                      <div
-                        onClick={() => {
-                          isModalOpen(true);
-                          setIsEdit(true);
-                          setSurgeryData(surgery);
-                        }}
-                      >
-                        <Edit></Edit>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+          <table className="w-full text-left rtl:text-right">
+            <thead>
+              <tr className="uppercase text-[#64748B] border-y  ">
+                <th scope="col" className="px-7 py-3 h-[60px] w-[250px]">
+                  NAME OF DOCUMENT
+                </th>
+                <th scope="col" className="px-7 py-3 h-[60px] w-[200px]">
+                  DATE ISSUED
+                </th>
+                <th scope="col" className="px-7 py-3 h-[60px] w-[900px]">
+                  NOTES
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group">
+                <th className="px-7 py-3 h-[60px] ">Patient Details</th>
+                <td className="px-7 py-3 h-[60px]">10/12/2024</td>
+                <td className="px-7 py-3 h-[60px]">
+                  Patient reports occasional headaches. Advised to monitor and
+                  follow up.
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         {/* END OF TABLE */}
       </div>
@@ -440,38 +348,21 @@ export default function Surgeries() {
       {isOpen && (
         <Modal
           content={
-            <SurgeriesModalContent
+            <FormsviewModalContent
               isModalOpen={isModalOpen}
-              isOpen={isOpen}
-              isEdit={isEdit}
-              surgeryData={surgeryData}
-              label="sample label"
               onSuccess={onSuccess}
-              onFailed={onFailed}
-              setErrorMessage={setError}
-              setIsUpdated={setIsUpdated}
             />
           }
           isModalOpen={isModalOpen}
         />
       )}
-
       {isSuccessOpen && (
         <SuccessModal
-          label="Success"
+          label={isEdit ? "Edit Note" : "Add Note"}
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
           isUpdated={isUpdated}
           setIsUpdated={setIsUpdated}
-        />
-      )}
-      {isErrorOpen && (
-        <ErrorModal
-          label="Surgery already exist"
-          isAlertOpen={isErrorOpen}
-          toggleModal={setIsErrorOpen}
-          isEdit={isEdit}
-          errorMessage={error}
         />
       )}
     </div>

@@ -144,8 +144,8 @@ body,
   padding: 10px 20px 10px 20px;
   border: solid #d0d5dd 2px;
   text-decoration: none;
-  width: 200px;
-  height: 40px;
+  width: 228px;
+  height: 52px;
 }
 
 .btn-pdfs:hover {
@@ -233,19 +233,32 @@ body,
 }
 
 .p-title {
-  height: 32px;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 20px;
-  /* w-[1157px] h-[32px] leading-[42px] font-bold */
+  color: black;
 }
 
 .slash {
-  height: 32px;
   font-weight: 500;
-  font-size: 24px;
-  color: #191d23;
-  opacity: 60%;
-  /* w-[1157px] h-[32px] leading-[42px] font-bold */
+  font-size: 20px;
+  color: #191d2360;
+}
+
+.active {
+  font-weight: 500;
+  font-size: 20px;
+  color: #007c85;
+}
+
+.bread {
+  font-weight: 500;
+  font-size: 20px;
+  color: #191d2360;
+  cursor: pointer;
+}
+
+.bread:hover {
+  color: #007c85;
 }
 
 .table-row {
