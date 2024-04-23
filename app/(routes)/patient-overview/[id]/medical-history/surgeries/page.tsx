@@ -306,7 +306,6 @@ export default function Surgeries() {
             <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
               <p className="text-xl font-semibold text-gray-700 text-center">
                 No Surgeries Found <br />
-                •ω•
               </p>
             </div>
           ) : (
