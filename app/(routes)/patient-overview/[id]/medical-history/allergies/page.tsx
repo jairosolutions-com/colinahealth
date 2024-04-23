@@ -287,7 +287,6 @@ const Allergies = () => {
             <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
               <p className="text-xl font-semibold text-gray-700 text-center text-[15px]">
                 No Allergies Found <br />
-                •ω•
               </p>
             </h1>
           ) : (

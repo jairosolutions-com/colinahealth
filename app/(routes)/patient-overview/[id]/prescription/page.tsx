@@ -276,7 +276,6 @@ export default function prescription() {
             <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
               <p className="text-xl font-semibold text-gray-700 text-center text-[15px]">
                 No Prescription/s <br />
-                •ω•
               </p>
             </div>
           ) : (
