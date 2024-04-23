@@ -309,7 +309,7 @@ const Prorenata = () => {
                 <th scope="col" className="px-6 py-3 w-[300px]">
                   Medication
                 </th>
-                <th scope="col" className="px-5 py-3 w-[400px]">
+                <th scope="col" className="px-5 py-3 w-[200px]">
                   Notes
                 </th>
                 <th scope="col" className="px-6 py-3 w-[100px]">
@@ -366,8 +366,22 @@ const Prorenata = () => {
                       {prnMed.medicationlogs_medicationLogsName}
                     </td>
                     <td className="px-5 py-4">{prnMed.medicationlogs_notes}</td>
-                    <td className="px-6 py-4">
-                      {prnMed.medicationlogs_medicationLogStatus}
+                    <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                      <div
+                        className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
+                          prnMed.medicationlogs_medicationLogStatus === "Given"
+                            ? "bg-[#dfffea] text-[#17C653] text-[15px]" // Green color for Given
+                            : prnMed.medicationlogs_medicationLogStatus ===
+                              "Held"
+                            ? "bg-[#E7EAEE] text-[#3C3C3C] text-[15px]" // Dark color for Held
+                            : prnMed.medicationlogs_medicationLogStatus ===
+                              "Refused"
+                            ? "bg-[#FEE9E9] text-[#EF4C6A] text-[15px]" // Red color for Refused
+                            : prnMed.medicationlogs_medicationLogStatus
+                        }`}
+                      >
+                        {prnMed.medicationlogs_medicationLogStatus}
+                      </div>
                     </td>
 
                     <td className="px-[70px] py-4">
