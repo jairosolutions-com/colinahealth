@@ -346,7 +346,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
                   >
                     <th
                       scope="row"
-                      className="truncate flex items-center max-w-[286px] text-left px-6 py-5  font-medium text-gray-900 whitespace-nowrap gap-2"
+                      className="truncate flex items-center max-w-[300px] text-left px-6 py-5  font-medium text-gray-900 whitespace-nowrap gap-2"
                     >
                       <img
                         className="rounded-full"
