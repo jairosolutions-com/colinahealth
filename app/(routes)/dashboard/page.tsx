@@ -245,7 +245,6 @@ const Dashboard = () => {
                   <div className="flex mt-10 items-center text-center justify-center font-semibold text-3xl w-full h-full ">
                     No Upcoming Appointments/s
                     <br />
-                    •ω•
                   </div>
                 )}
               </div>
@@ -304,7 +303,6 @@ const Dashboard = () => {
               <div className="flex items-center text-center justify-center font-semibold text-3xl w-full h-full -mt-10">
                 No Due Medication/s
                 <br />
-                •ω•
               </div>
             )}
 
