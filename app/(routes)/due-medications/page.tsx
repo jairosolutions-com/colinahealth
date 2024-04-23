@@ -324,16 +324,16 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
             <table className="w-full h-full justify-center items-start text-[15px]">
               <thead className=" text-left rtl:text-right">
                 <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
-                  <th scope="col" className="px-6 py-3 w-[286px] h-[70px]">
+                  <th scope="col" className="px-6 py-3 w-[460px] h-[70px]">
                     Name
                   </th>
-                  <th scope="col" className="px-6 py-3 w-[352px]">
+                  <th scope="col" className="px-6 py-3 w-[452px]">
                     Date
                   </th>
-                  <th scope="col" className="px-6 py-3 w-[277px]">
+                  <th scope="col" className="px-6 py-3 w-[377px]">
                     Time
                   </th>
-                  <th scope="col" className="px-6 py-3 w-[277px]">
+                  <th scope="col" className="px-6 py-3 w-[200px]">
                     Medication
                   </th>
                 </tr>
@@ -346,14 +346,14 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
                   >
                     <th
                       scope="row"
-                      className="truncate flex items-center max-w-[286px] text-left px-6 py-5  font-medium text-gray-900 whitespace-nowrap gap-2"
+                      className="truncate flex items-center max-w-[300px] text-left px-6 py-2  font-medium text-gray-900 whitespace-nowrap gap-4"
                     >
                       <img
                         className="rounded-full"
                         src="/imgs/dennis.svg"
                         alt="Icon"
-                        width={51}
-                        height={51}
+                        width={45}
+                        height={45}
                       />
                       {dueMedication.patient_firstName}{" "}
                       {dueMedication.patient_lastName}
