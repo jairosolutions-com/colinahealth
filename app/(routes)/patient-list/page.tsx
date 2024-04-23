@@ -208,7 +208,7 @@ export default function PatientPage({ patient }: { patient: any }) {
   };
 
   return (
-    <div className="w-full px-[150px] py-[90px]">
+    <div className="w-full  px-[150px] pt-[90px]">
       <div className="flex justify-end">
         <p
           onClick={() => {
@@ -431,11 +431,6 @@ export default function PatientPage({ patient }: { patient: any }) {
             />
           }
           isModalOpen={isModalOpen}
-          // isOpen={isOpen}
-          label="sample label"
-          onSuccess={onSuccess}
-          onFailed={onFailed}
-          setErrorMessage={setError}
         />
       )}
       {isSuccessOpen && (
