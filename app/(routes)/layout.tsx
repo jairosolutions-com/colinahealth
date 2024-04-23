@@ -15,21 +15,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <div className="h-screen flex flex-col justify-between">
         <Navbar setIsLoading={setIsLoading} />
-        <>
+        <div className="flex-grow flex justify-center">
           {isLoading ? (
-            <div className="w-full h-full flex justify-center items-center">
-              <Image
-                // className="w-[100px] h-[100px]"
-                src="/imgs/colina-logo-animation.gif"
-                alt="logo"
-                width={100}
-                height={100}
-              />
-            </div>
+            <Image
+              src="/imgs/colina-logo-animation.gif"
+              alt="logo"
+              width={100}
+              height={100}
+            />
           ) : (
-            <div className="w-full h-full flex">{children}</div>
+            <div>{children}</div>
           )}
-        </>
+        </div>
         <Footer />
       </div>
     </>
