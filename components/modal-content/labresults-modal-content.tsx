@@ -45,7 +45,6 @@ export const LabresultsModalContent = ({
   const patientId = params.id.toUpperCase();
   const [labFiles, setLabFiles] = useState<any[]>([]); //
 
-
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
 
   const router = useRouter();
@@ -86,22 +85,23 @@ export const LabresultsModalContent = ({
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [fileTypes, setFileTypes] = useState<string[]>([]);
   const { toast } = useToast();
-  const toggleMaxFilesToast = (): void => {
+
+  const toggleMaxFilesToast = (maxFiles: number): void => {
     toast({
       variant: "destructive",
-      title: "Maximum of 5 Files Attached!",
-      description: "Please try again.",
+      title: "Maximum Number of Files Exceeded!",
+      description: `You can only add ${maxFiles} more file(s). Please try again.`,
     });
   };
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    setSelectedFileNames([""]);
+    // setSelectedFileNames([""]);
 
     if (files && files.length > 0) {
       if (files.length > 5) {
         // Show toast indicating maximum file limit exceeded
-        toggleMaxFilesToast();
+        toggleMaxFilesToast(files.length - 5);
         e.target.value = "";
 
         return;
@@ -135,8 +135,9 @@ export const LabresultsModalContent = ({
       // Update state variables with arrays
       setSelectedLabFiles(newFiles);
       setFileNames(newFileNames);
-      console.log(selectedFileNames.length, "newFileNames");
+      console.log(selectedFileNames.length, "selectedFileNames");
       setFileTypes(newFileTypes);
+      console.log(selectedFileNames, "selectedFileNames");
     } else {
       console.warn("No files selected");
     }
@@ -145,45 +146,47 @@ export const LabresultsModalContent = ({
     console.log(labResultData, "labResultData");
     console.log(formData, "formData");
   }
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("SUBMITTING FORM DATA", selectedFileNames, selectedFiles.length);
     const getUuid = labResultData.labResults_uuid;
+  
+    const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
+    console.log("Current file count:", currentFileCount);
+    // Define the maximum allowed files based on the current count
+    const maxAllowedFiles = currentFileCount === 0 ? 5 : 5 - currentFileCount;
+    if (selectedFiles.length > maxAllowedFiles) {
+      toggleMaxFilesToast(maxAllowedFiles);
+      return;
+    }
+    console.log("FILES TO ADD", maxAllowedFiles);
+  
     console.log("Lab UUID:", getUuid);
-
+  
     try {
       if (isEdit) {
-        const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
-        console.log("Current file count:", currentFileCount);
-        // Define the maximum allowed files based on the current count
-        const maxAllowedFiles = 5 - currentFileCount;
-
-        if (selectedFiles.length > maxAllowedFiles) {
-          // Show toast indicating that the maximum file limit has been exceeded
-          toggleMaxFilesToast();
-          return;
-        } else
-          await updateLabResultOfPatient(
-            labResultData.labResults_uuid,
-            formData,
-            router
-          );
-
+        await updateLabResultOfPatient(
+          labResultData.labResults_uuid,
+          formData,
+          router
+        );
+  
         // Iterate through each selected file
         if (selectedFiles && selectedFiles.length > 0) {
           // Iterate through each selected file
           for (let i = 0; i < selectedFiles.length; i++) {
             const labFileFormData = new FormData();
             labFileFormData.append("labfile", selectedFiles[i], fileNames[i]);
-
+  
             // Add lab file
             const addLabFiles = await addLabFile(
               getUuid,
               labFileFormData,
               router
             );
-
+  
             console.log(
               `Lab FILE ${fileNames[i]} added successfully:`,
               addLabFiles
@@ -205,21 +208,21 @@ export const LabresultsModalContent = ({
         console.log("Lab Result added successfully:", labResult);
         const getUuid = labResult.uuid;
         console.log("Lab UUID:", getUuid);
-
+  
         // Iterate through each selected file
         if (selectedFiles && selectedFiles.length > 0) {
           // Iterate through each selected file
           for (let i = 0; i < selectedFiles.length; i++) {
             const labFileFormData = new FormData();
             labFileFormData.append("labfile", selectedFiles[i], fileNames[i]);
-
+  
             // Add lab file
             const addLabFiles = await addLabFile(
               getUuid,
               labFileFormData,
               router
             );
-
+  
             console.log(
               `Lab FILE ${fileNames[i]} added successfully:`,
               addLabFiles
@@ -486,23 +489,23 @@ export const LabresultsModalContent = ({
                         />
                       </div>
                     </div>
-                    {labFiles.length === 5 && isEdit? (
+                    {labFiles.length === 5 && isEdit ? (
                       <div className="">
-                      <label className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2">
-                        <>
-                          <Image
-                            className="w-10 h-10 mr-1"
-                            width={50}
-                            height={50}
-                            src={"/svgs/filein.svg"}
-                            alt=""
-                          />
-                          <div className="flex pb-5 text-nowrap text-[12px]">
-                            <p className="mt-2">MAXIMUM FILES UPLOADED</p>
-                          </div>
-                        </>
-                      </label>
-                    </div>
+                        <label className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2">
+                          <>
+                            <Image
+                              className="w-10 h-10 mr-1"
+                              width={50}
+                              height={50}
+                              src={"/svgs/filein.svg"}
+                              alt=""
+                            />
+                            <div className="flex pb-5 text-nowrap text-[12px]">
+                              <p className="mt-2">MAXIMUM FILES UPLOADED</p>
+                            </div>
+                          </>
+                        </label>
+                      </div>
                     ) : (
                       <div className="">
                         <label
@@ -542,11 +545,14 @@ export const LabresultsModalContent = ({
                               ) : (
                                 // Display the file name if one file is attached, or the number of files if more than one are attached
                                 <span>
-                                  {selectedFileNames.length === 1
-                                    ? // Display the file name if one file is attached
-                                      selectedFileNames[0]
-                                    : // Display the number of files if more than one are attached
-                                      `${selectedFileNames.length}/5 files attached`}
+                                  {selectedFileNames.length < 6
+                                    ? // Display the file name if the number of files is less than or equal to 5
+                                      selectedFileNames.length === 1
+                                      ? selectedFileNames[0]
+                                      : `${selectedFileNames.length}/5 files attached`
+                                    : // Display a message indicating that the maximum limit has been reached
+                                      `Maximum of 5 files allowed`}
+                                    
                                 </span>
                               )}
                             </span>
@@ -560,10 +566,8 @@ export const LabresultsModalContent = ({
                           className="hidden"
                           name="file"
                           onChange={(e) => handleFile(e)}
-                          max={5}
                         />
                       </div>
-                     
                     )}
                   </div>
                 </div>
