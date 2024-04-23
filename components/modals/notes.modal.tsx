@@ -12,11 +12,11 @@ interface Modalprops {
 }
 
 export const NotesModal = ({ isEdit,
-  notesToEdit,
-  label,
-  isOpen,
-  isModalOpen,
-  onSuccess}: Modalprops) => {
+  notesToEdit: any;
+  label: string;
+  isOpen: boolean;
+  isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;}: Modalprops) => {
     const params = useParams<{
       id: any;
       tag: string;
@@ -58,12 +58,12 @@ export const NotesModal = ({ isEdit,
           isModalOpen(false);
           return;
         } else {
-          const vitalSign = await createNotesOfPatient(
+          const notes = await createNotesOfPatient(
             patientId,
             formData,
             router
           );
-          console.log("vital sign added successfully:", vitalSign);
+          console.log("notesadded successfully:", notes);
   
           // Reset the form data after successful submission
           setFormData({

@@ -9,16 +9,16 @@ import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchAllergiesByPatient } from "@/app/api/medical-history-api/allergies.api";
-import Loading from "./loading";
 import { AllergyModal } from "@/components/modals/allergies.modal";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
-
+import Modal from "@/components/reusable/modal";
+import { AllergiesModalContent } from "@/components/modal-content/allergies-modal-content";
 const Allergies = () => {
   const router = useRouter();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-  const [sortOrder, setSortOrder] = useState<string>("ASC");
+  const [sortOrder, setSortOrder] = useState<string>("DESC");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [patientAllergies, setPatientAllergies] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -76,7 +76,7 @@ const Allergies = () => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setIsEdit(false);
       setAllergyToEdit([]);
     }
@@ -166,7 +166,11 @@ const Allergies = () => {
 
   console.log(allergyToEdit, "allergy uuid");
   if (isLoading) {
-    <Loading></Loading>;
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
   }
 
   const onSuccess = () => {
@@ -181,14 +185,14 @@ const Allergies = () => {
   console.log(error, "error");
   return (
     <div className="w-full">
-      <div className="flex justify-between ">
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center">
-            <h1 className="p-title">Medical History</h1>
-            <h1 className="slash mx-2">{"/"} </h1>
-            <h1 className="font-medium text-[20px] text-[#007C85] cursor-pointer">Allergies</h1>
-            <h1 className="slash mx-2">{"/"} </h1>
-            <h1
+      <div className="w-full justify-between flex mb-2">
+        <div className="flex-row">
+          <div className="flex gap-2">
+            <p className="p-title">Medical History</p>
+            <span className="slash">{">"}</span>
+            <span className="active">Allergies</span>
+            <span className="slash">{">"}</span>
+            <span
               onClick={() => {
                 onNavigate(
                   router,
@@ -196,40 +200,56 @@ const Allergies = () => {
                 );
                 setIsLoading(true);
               }}
-              className="font-medium text-[20px] cursor-pointer text-gray-600"
+              className="bread"
             >
               Surgeries
-            </h1>
+            </span>
           </div>
-          {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
-            Total of {totalAllergies} Allergies
-          </p>
+          <div>
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+              Total of {totalAllergies} Allergies
+            </p>
+          </div>
         </div>
-        <div className="flex flex-row justify-end mt-[15px]">
-          <Add onClick={() => isModalOpen(true)} />
-          <DownloadPDF></DownloadPDF>
+        <div className="flex gap-2">
+          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+            <img src="/imgs/add.svg" alt="" />
+            <p className="text-[18px]">Add</p>
+          </button>
+          <button className="btn-pdfs gap-2">
+            <img src="/imgs/downloadpdf.svg" alt="" />
+            <p className="text-[18px]">Download PDF</p>
+          </button>
         </div>
       </div>
 
       <div className="w-full m:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
-          <form className="">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+          <form className="mr-5 relative">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE] text-[15px]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
                 type="text"
-                onChange={(event) => {
-                  setTerm(event.target.value);
+                placeholder="Search by reference no. or name..."
+                value={term}
+                onChange={(e) => {
+                  setTerm(e.target.value);
                   setCurrentPage(1);
                 }}
-                placeholder="Search by reference no. or name..."
+              />
+              <img
+                src="/svgs/search.svg"
+                alt="Search"
+                width="20"
+                height="20"
+                className="absolute left-8 top-9 pointer-events-none"
               />
             </div>
           </form>
-          <div className="flex w-full justify-end items-center gap-[12px]">
+
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
             <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
@@ -242,9 +262,8 @@ const Allergies = () => {
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Ascending"}
+              label={"Select"}
             />
-
             <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
@@ -262,7 +281,6 @@ const Allergies = () => {
             />
           </div>
         </div>
-
         {/* START OF TABLE */}
         <div>
           {patientAllergies.length === 0 ? (
@@ -420,16 +438,21 @@ const Allergies = () => {
         </div>
       )}
       {isOpen && (
-        <AllergyModal
+        <Modal
+          content={
+            <AllergiesModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              isEdit={isEdit}
+              allergy={allergyToEdit}
+              setIsUpdated={setIsUpdated}
+              label="sample label"
+              onSuccess={onSuccess}
+              onFailed={onFailed}
+              setErrorMessage={setError}
+            />
+          }
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          isEdit={isEdit}
-          allergy={allergyToEdit}
-          setIsUpdated={setIsUpdated}
-          label="sample label"
-          onSuccess={onSuccess}
-          onFailed={onFailed}
-          setErrorMessage={setError}
         />
       )}
       {isSuccessOpen && (

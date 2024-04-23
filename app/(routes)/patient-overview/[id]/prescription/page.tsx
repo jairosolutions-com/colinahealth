@@ -11,7 +11,8 @@ import { fetchPrescriptionByPatient as fetchPrescriptionsByPatient } from "@/app
 import { PrescriptionModal } from "@/components/modals/prescription.modal";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
-// import { Modal } from "@/components/shared/modalss";
+import Modal from "@/components/reusable/modal";
+import { PrescriptionModalContent } from "@/components/modal-content/prescription-modal-content";
 
 export default function prescription() {
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function prescription() {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setPrescriptionData([]);
       setIsEdit(false);
     }
@@ -188,42 +189,55 @@ export default function prescription() {
   };
   return (
     <div className=" w-full">
-      <div className="flex justify-between items-center">
-        <div className="flex flex-col">
-          <h1 className="p-title">Prescription </h1>
-          {/* number of patients */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
-            Total of {totalPrescription} Prescriptions
-          </p>
+      <div className="w-full justify-between flex mb-2">
+        <div className="flex-row">
+          <p className="p-title">Prescription</p>
+
+          <div>
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+              Total of {totalPrescription} Prescriptions
+            </p>
+          </div>
         </div>
-        <div className="flex flex-row justify-end">
-          <Add
-            onClick={() => {
-              isModalOpen(true);
-            }}
-          ></Add>{" "}
-          <DownloadPDF></DownloadPDF>
+        <div className="flex gap-2">
+          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+            <img src="/imgs/add.svg" alt="" />
+            <p className="text-[18px]">Add</p>
+          </button>
+          <button className="btn-pdfs gap-2">
+            <img src="/imgs/downloadpdf.svg" alt="" />
+            <p className="text-[18px]">Download PDF</p>
+          </button>
         </div>
       </div>
 
       <div className="w-full sm:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
-          <form className="">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+          <form className="mr-5 relative">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE] text-[15px]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
                 type="text"
                 placeholder="Search by reference no. or name..."
-                onChange={(event) => {
-                  setTerm(event.target.value);
+                value={term}
+                onChange={(e) => {
+                  setTerm(e.target.value);
                   setCurrentPage(1);
                 }}
               />
+              <img
+                src="/svgs/search.svg"
+                alt="Search"
+                width="20"
+                height="20"
+                className="absolute left-8 top-9 pointer-events-none"
+              />
             </div>
           </form>
-          <div className="flex w-full justify-end items-center gap-[12px]">
+
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
             <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
@@ -232,14 +246,12 @@ export default function prescription() {
                 label,
                 onClick: () => {
                   onClick(label);
-                  console.log("label", label);
                 },
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Ascending"}
+              label={"Select"}
             />
-
             <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
@@ -263,7 +275,8 @@ export default function prescription() {
           {patientPrescriptions.length == 0 ? (
             <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
               <p className="text-xl font-semibold text-gray-700 text-center text-[15px]">
-                No Prescription/s <br/>•ω•
+                No Prescription/s <br />
+                •ω•
               </p>
             </div>
           ) : (
@@ -410,16 +423,21 @@ export default function prescription() {
         </div>
       )}
       {isOpen && (
-        <PrescriptionModal
+        <Modal
+          content={
+            <PrescriptionModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              label="sample label"
+              isEdit={isEdit}
+              prescriptionData={prescriptionData}
+              onSuccess={onSuccess}
+              onFailed={onFailed}
+              setErrorMessage={setError}
+              setIsUpdated={setIsUpdated}
+            />
+          }
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          label="sample label"
-          isEdit={isEdit}
-          prescriptionData={prescriptionData}
-          onSuccess={onSuccess}
-          onFailed={onFailed}
-          setErrorMessage={setError}
-          setIsUpdated={setIsUpdated}
         />
       )}
 

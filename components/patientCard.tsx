@@ -18,11 +18,13 @@ const PatientCard = ({
   setPatientUuid,
   setPatientName,
   isModalOpen,
+  setIsLoading,
 }: {
   patientWithMedicationLogsToday: any;
   setPatientUuid: any;
   setPatientName: any;
   isModalOpen: any;
+  setIsLoading: any;
 }) => {
   const router = useRouter();
   const [currentTime, setCurrentTime] = useState(moment().format("HHmm"));
@@ -70,31 +72,22 @@ const PatientCard = ({
     );
   };
 
-  console.log(patientWithMedicationLogsToday, "patientCard");
-  console.log(
-    patientWithMedicationLogsToday[0].medicationlogs,
-    "medicationlogs"
-  );
-  console.log(
-    patientWithMedicationLogsToday[0].medicationlogs.length,
-    "medicationlogs length"
-  );
-  console.log(
-    patientWithMedicationLogsToday[0]?.medicationlogs[0]?.medicationLogsTime,
-    "logs time"
-  );
+  
   return (
-    <div className="w-full h-full pt-8 pb-4">
-      <div className="flex w-full h-full flex-col  bg-[#F4F4F4] items-center  md:border-dashed md:border-r md:border-r-black   right-0 justify-end">
-        <p className="absolute top-8 right-10 text-lg text-gray-500 font-light ">
+    <div className="w-full pl-3 mt-[46px] ">
+      <div className="flex w-full  flex-col  bg-[#F4F4F4] items-center  md:border-dashed md:border-r md:border-r-black   right-0 ">
+        <p className="absolute top-2 right-10 text-lg text-gray-500 font-light ">
           Prior
         </p>
         {patientWithMedicationLogsToday.map((patient: any, index: number) => (
           <div className="w-full " key={index}>
             <div className="flex flex-row  bg-white border-2 border-b-8 border-l-8  h-[203px] w-full rounded-lg border-[#F4F4F4] right-0">
               <div
-                className="w-4/6 h-full cursor-pointer"
-                onClick={() => handlePatientClick(patient.uuid)}
+                className="w-4/6 h-full cursor-pointer min-w-[250px] "
+                onClick={() => {
+                  setIsLoading(true);
+                  handlePatientClick(patient.uuid);
+                }}
               >
                 <div className="flex p-3 pl-5 flex-row w-full mt-2">
                   <div className="rounded-full max-h-[60px] max-w-[60px] p-1 bg-[#007C854D]">
@@ -105,8 +98,8 @@ const PatientCard = ({
                       width={50}
                     />
                   </div>
-                  <div className="ml-5 flex flex-col truncate text-ellipsis ">
-                    <p className="font-semibold text-lg justify-start items-start flex truncate text-ellipsis">
+                  <div className="ml-5 max-w-[250px]  flex flex-col truncate text-ellipsis ">
+                    <p className=" font-semibold text-lg justify-start items-start flex truncate text-ellipsis">
                       {patient.firstName} {patient.middleName}{" "}
                       {patient.lastName}
                     </p>
@@ -115,14 +108,14 @@ const PatientCard = ({
                     </p>
                   </div>
                 </div>
-                <div className="max-w-[340px] h-full flex flex-col justify-start items-start gap-1 mt-2 ml-5 pr-5 pb-5">
+                <div className="max-w-[2500px] h-full flex flex-col justify-start items-start gap-1 mt-2 ml-5 pr-5 pb-5">
                   <p>
                     Attending -{" "}
                     <span className="text-gray-400">Nurse Name</span>
                   </p>
-                  <p className="truncate text-ellipsis max-w-[300px] flex justify-start items-start">
+                  <p className="truncate text-ellipsis max-w-[250px] flex justify-start items-start">
                     Allergies - {"  "}
-                    <span className="max-w-[340px] flex justify-start items-start text-gray-400 truncate text-ellipsis">
+                    <span className="max-w-[250px] flex justify-start items-start text-gray-400 truncate text-ellipsis">
                       {getDistinctAllergyTypes(patient.allergies).length > 0
                         ? getDistinctAllergyTypes(patient.allergies)
                         : "None"}
@@ -153,7 +146,7 @@ const PatientCard = ({
                   />
                   Orders
                   <p
-                    className={`absolute h-4 w-4 text-white bg-red-500 text-xs pointer-events-none select-none -mt-7 -mr-7 rounded-full -z-[0] ${
+                    className={`absolute flex justify-center items-center h-4 w-4 text-white bg-red-500 text-xs pointer-events-none select-none -mt-7 -mr-7  rounded-full -z-[0] ${
                       patient.medicationlogs.length === 0 ? "hidden" : ""
                     }`}
                   >
@@ -180,7 +173,7 @@ const PatientCard = ({
                     ([type, count]) => (
                       <span
                         key={type}
-                        className={`absolute z-10 h-4 w-4 text-white bg-red-500 text-xs select-none pointer-events-none -mt-7 -mr-7 rounded-full ${
+                        className={`absolute flex justify-center items-center z-10 h-4 w-4 text-white bg-red-500 text-xs select-none pointer-events-none -mt-7 -mr-7 rounded-full ${
                           count === 0 ? "hidden" : ""
                         }`}
                       >
@@ -243,8 +236,8 @@ const PatientCard = ({
                               width={20}
                               className="pointer-events-none select-none"
                             />
-                            <div className=" h-full absolute -mt-6 ml-5">
-                              <span className="absolute h-4 w-4 text-xs font-light rounded-full bg-red-600 text-white pointer-events-none select-none">
+                            <div className=" h-full  absolute -mt-6 ml-5">
+                              <span className="absolute flex justify-center items-center h-4 w-4 text-xs font-light rounded-full bg-red-600 text-white pointer-events-none select-none">
                                 {
                                   patient.medicationlogs.filter(
                                     (log: any) =>

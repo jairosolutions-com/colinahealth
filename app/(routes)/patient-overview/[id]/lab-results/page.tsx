@@ -4,14 +4,16 @@ import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/edit";
+import View from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchLabResultsByPatient } from "@/app/api/lab-results-api/lab-results.api";
 import { LabResultModal } from "@/components/modals/labresults.modal";
-
+import Modal from "@/components/reusable/modal";
 import { SuccessModal } from "@/components/shared/success";
-
+import { LabresultsModalContent } from "@/components/modal-content/labresults-modal-content";
+import { LabResultsViewModalContent } from "@/components/modal-content/labresultsview-modal-content";
 export default function Laboratoryresults() {
   const router = useRouter();
   // start of orderby & sortby function
@@ -32,8 +34,10 @@ export default function Laboratoryresults() {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState<string>("ASC");
-  const [sortBy, setSortBy] = useState("date");
+  const [sortBy, setSortBy] = useState("uuid");
   const [isEdit, setIsEdit] = useState(false);
+  const [isView, setIsView] = useState(false);
+
   const [isUpdated, setIsUpdated] = useState(false);
 
   const handleOrderOptionClick = (option: string) => {
@@ -55,8 +59,10 @@ export default function Laboratoryresults() {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setIsEdit(false);
+      setIsView(false);
+
       setLabResultData([]);
     }
   };
@@ -181,6 +187,8 @@ export default function Laboratoryresults() {
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
+    setIsView(false);
+
     isModalOpen(false);
   };
 
@@ -189,39 +197,50 @@ export default function Laboratoryresults() {
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="p-title">Laboratory Results </h1>
-          {/* number of patiens */}
+          {/* number of patients */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
             Total of {totalLabResults} Lab Results
           </p>
         </div>
-        <div className="flex flex-row justify-end">
-          <Add
-            onClick={() => {
-              isModalOpen(true);
-            }}
-          ></Add>
-          <DownloadPDF></DownloadPDF>
+        <div className="flex gap-2">
+          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+            <img src="/imgs/add.svg" alt="" />
+            <p className="text-[18px]">Add</p>
+          </button>
+          <button className="btn-pdfs gap-2">
+            <img src="/imgs/downloadpdf.svg" alt="" />
+            <p className="text-[18px]">Download PDF</p>
+          </button>
         </div>
       </div>
 
       <div className="w-full sm:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
-          <form className="">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+          <form className="mr-5 relative">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE] text-[15px]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
                 type="text"
                 placeholder="Search by reference no. or name..."
-                onChange={(event) => {
-                  setTerm(event.target.value);
+                value={term}
+                onChange={(e) => {
+                  setTerm(e.target.value);
                   setCurrentPage(1);
                 }}
               />
+              <img
+                src="/svgs/search.svg"
+                alt="Search"
+                width="20"
+                height="20"
+                className="absolute left-8 top-9 pointer-events-none"
+              />
             </div>
           </form>
-          <div className="flex w-full justify-end items-center gap-[12px]">
+
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
             <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
@@ -234,9 +253,8 @@ export default function Laboratoryresults() {
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Ascending"}
+              label={"Select"}
             />
-
             <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
@@ -257,7 +275,6 @@ export default function Laboratoryresults() {
 
         {/* START OF TABLE */}
         <div>
-
           {patientLabResults.length === 0 ? (
             <div>
               <table className="w-full text-left rtl:text-right">
@@ -301,7 +318,8 @@ export default function Laboratoryresults() {
               </table>
               <div className="py-5 flex justify-center items-center">
                 <p className="text-xl font-semibold text-gray-700 text-center">
-                  No Lab Result/s <br/>•ω•
+                  No Lab Result/s <br />
+                  •ω•
                 </p>
               </div>
             </div>
@@ -342,14 +360,16 @@ export default function Laboratoryresults() {
                   <th scope="col" className="pl-[80px] py-3 w-[10px] ">
                     ACTION
                   </th>
-
                 </tr>
               </thead>
               <tbody>
                 {patientLabResults.length > 0 && (
                   <>
                     {patientLabResults.map((labResult, index) => (
-                      <tr key={index} className="  even:bg-gray-50  border-b text-[15px]">
+                      <tr
+                        key={index}
+                        className="  even:bg-gray-50  border-b text-[15px]"
+                      >
                         <th
                           scope="row"
                           className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
@@ -360,9 +380,7 @@ export default function Laboratoryresults() {
                           scope="row"
                           className=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                         >
-                          {new Date(
-                            labResult.labResults_createdAt
-                          ).toLocaleDateString()}
+                          {labResult.labResults_date}
                         </th>
                         <td className="px-0 py-4">
                           {labResult.labResults_hemoglobinA1c}%
@@ -391,6 +409,16 @@ export default function Laboratoryresults() {
                             }}
                           >
                             <Edit></Edit>
+                          </p>
+                          <p
+                            onClick={() => {
+                              isModalOpen(true);
+                              setIsView(true);
+                              
+                              setLabResultData(labResult);
+                            }}
+                          >
+                            <View></View>
                           </p>
                         </td>
                       </tr>
@@ -469,14 +497,23 @@ export default function Laboratoryresults() {
         </div>
       )}
       {isOpen && (
-        <LabResultModal
-          isModalOpen={isModalOpen}
+        <Modal
+          content={<LabresultsModalContent   
+            isModalOpen={isModalOpen}
           isEdit={isEdit}
           labResultData={labResultData}
-          isOpen={isOpen}
-          label="sample label"
           onSuccess={onSuccess}
-          setIsUpdated={setIsUpdated}
+          setIsUpdated={setIsUpdated} />}
+          isModalOpen={isModalOpen} />
+      )}
+      {isView && (
+        <Modal 
+          content={<LabResultsViewModalContent  
+            isModalOpen={isModalOpen}
+          isView={isView}
+          labResultsData={labResultData}
+       />}
+          isModalOpen={isModalOpen}
         />
       )}
 

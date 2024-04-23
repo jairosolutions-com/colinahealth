@@ -8,17 +8,16 @@ import Edit from "@/components/shared/buttons/edit";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { PRNMedModal } from "@/components/modals/prn-medication.modal";
-import Loading from "../loading";
 import { fetchPRNMedByPatient } from "@/app/api/medication-logs-api/prn-med-api";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
-
+import Modal from "@/components/reusable/modal";
+import { PrnModalContent } from "@/components/modal-content/prn-modal-content";
 const Prorenata = () => {
   const router = useRouter();
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
-  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortOrder, setSortOrder] = useState("DESC");
   const [sortBy, setSortBy] = useState("createdAt");
   const [pageNumber, setPageNumber] = useState("");
   const [patientPRNMed, setPatientPRNMed] = useState<any[]>([]);
@@ -36,7 +35,6 @@ const Prorenata = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
 
-
   interface Modalprops {
     label: string;
     isOpen: boolean;
@@ -48,8 +46,8 @@ const Prorenata = () => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
-      setIsEdit(false)
+      document.body.style.overflow = "visible";
+      setIsEdit(false);
       setPRNData([]);
     }
   };
@@ -186,19 +184,23 @@ const Prorenata = () => {
   };
 
   if (isLoading) {
-    return <Loading></Loading>;
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
   }
 
   console.log(patientPRNMed, "prn med");
 
   return (
     <div className="  w-full">
-      <div className="flex justify-between ">
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center">
-            <h1 className="p-title">Medication Logs</h1>
-            <h1 className="p-title mx-2">{">"} </h1>
-            <h1
+      <div className="w-full justify-between flex mb-2">
+        <div className="flex-row">
+          <div className="flex gap-2">
+            <p className="p-title">Medication Logs</p>
+            <span className="slash">{">"}</span>
+            <span
               onClick={() => {
                 onNavigate(
                   router,
@@ -206,41 +208,59 @@ const Prorenata = () => {
                 );
                 setIsLoading(true);
               }}
-              className="p-title cursor-pointer text-gray-600"
+              className="bread"
             >
               Scheduled
-            </h1>
-            <h1 className="p-title mx-2">{">"} </h1>
-            <h1 className="p-title cursor-pointer text-[#007C85]">PRN</h1>
+            </span>
+            <span className="slash">{">"}</span>
+            <span className="active">PRN</span>
           </div>
-          {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
-            Total of {totalPRNMeds} PRN Medication Logs
-          </p>
+          <div>
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+              Total of {totalPRNMeds} PRN Medication Logs
+            </p>
+          </div>
         </div>
-        <div className="flex flex-row justify-end mt-[15px]">
-          <Add onClick={() => isModalOpen(true)} />
-          <DownloadPDF></DownloadPDF>
+        <div className="flex gap-2">
+          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+            <img src="/imgs/add.svg" alt="" />
+            <p className="text-[18px]">Add</p>
+          </button>
+          <button className="btn-pdfs gap-2">
+            <img src="/imgs/downloadpdf.svg" alt="" />
+            <p className="text-[18px]">Download PDF</p>
+          </button>
         </div>
       </div>
 
       <div className="w-full m:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
-          <form className="">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+          <form className="mr-5 relative">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
                 type="text"
                 placeholder="Search by reference no. or name..."
                 value={term}
-                onChange={(e) => {setTerm(e.target.value)}}
+                onChange={(e) => {
+                  setTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
+              />
+              <img
+                src="/svgs/search.svg"
+                alt="Search"
+                width="20"
+                height="20"
+                className="absolute left-8 top-9 pointer-events-none"
               />
             </div>
           </form>
-          <div className="flex w-full justify-end items-center gap-[12px]">
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
             <DropdownMenu
@@ -248,15 +268,13 @@ const Prorenata = () => {
                 label,
                 onClick: () => {
                   onClick(label);
-                  console.log("label", label);
                 },
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
               label={"Select"}
             />
-
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
             <DropdownMenu
@@ -307,7 +325,8 @@ const Prorenata = () => {
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="text-xl font-semibold text-gray-700 text-center">
-                      No PRN Medication Log/s <br/>•ω•
+                      No PRN Medication Log/s <br />
+                      •ω•
                     </p>
                   </td>
                 </tr>
@@ -437,18 +456,23 @@ const Prorenata = () => {
         </div>
       )}
       {isOpen && (
-        <PRNMedModal
+        <Modal
+          content={
+            <PrnModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              uuid={""}
+              name=""
+              isEdit={isEdit}
+              setIsUpdated={setIsUpdated}
+              PRNData={PRNData}
+              label="sample label"
+              onSuccess={onSuccess}
+              onFailed={onFailed}
+              setErrorMessage={setError}
+            />
+          }
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          uuid={""}
-          name=""
-          isEdit={isEdit}
-          setIsUpdated={setIsUpdated}
-          PRNData={PRNData}
-          label="sample label"
-          onSuccess={onSuccess}
-          onFailed={onFailed}
-          setErrorMessage={setError}
         />
       )}
       {isSuccessOpen && (

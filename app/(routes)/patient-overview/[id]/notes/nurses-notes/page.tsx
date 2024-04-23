@@ -11,7 +11,8 @@ import { useParams, useRouter } from "next/navigation";
 import { NotesModal } from "@/components/modals/notes.modal";
 import { fetchNotesByPatient } from "@/app/api/notes-api/notes-api";
 import { SuccessModal } from "@/components/shared/success";
-import Loading from "../loading";
+import { NursenotesModalContent } from "@/components/modal-content/nursenotes-modal-content";
+import Modal from "@/components/reusable/modal";
 
 const Notes = () => {
   const router = useRouter();
@@ -33,6 +34,7 @@ const Notes = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+  const type = "nn";
 
   const params = useParams<{
     id: any;
@@ -78,7 +80,7 @@ const Notes = () => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setNotesToEdit([]);
       setIsEdit(false);
     }
@@ -147,6 +149,7 @@ const Notes = () => {
         const response = await fetchNotesByPatient(
           patientId,
           term,
+          type,
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
@@ -173,19 +176,23 @@ const Notes = () => {
   };
 
   if (isLoading) {
-    return <Loading></Loading>;
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
   }
 
   return (
     <div className="  w-full">
-      <div className="flex justify-between ">
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center">
-            <h1 className="p-title">Notes</h1>
-            <h1 className="slash mx-2">{"/"} </h1>
-            <h1 className="font-medium text-[20px] text-[#007C85] cursor-pointer">Nurse's Notes</h1>
-            <h1 className="slash mx-2">{"/"} </h1>
-          <h1
+      <div className="w-full justify-between flex mb-2">
+        <div className="flex-row">
+          <div className="flex gap-2">
+            <p className="p-title">Notes</p>
+            <span className="slash">{">"}</span>
+            <span className="active">Nurse's Notes</span>
+            <span className="slash">{">"}</span>
+            <span
               onClick={() => {
                 onNavigate(
                   router,
@@ -193,54 +200,57 @@ const Notes = () => {
                 );
                 setIsLoading(true);
               }}
-              className="font-medium text-[20px] cursor-pointer text-gray-600"
+              className="bread"
             >
               Incident Report
-            </h1>
-            </div>
-          {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
-            Total of {totalNotes} Notes
-          </p>
+            </span>
+          </div>
+          <div>
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+              Total of {totalNotes} Notes
+            </p>
+          </div>
         </div>
-        <div className="flex flex-row justify-end mt-[15px]">
-          <button
-            onClick={() => isModalOpen(true)}
-            className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu"
-          >
-            <img
-              src="/imgs/add.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Add
+        <div className="flex gap-2">
+          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+            <img src="/imgs/add.svg" alt="" />
+            <p className="text-[18px]">Add</p>
           </button>
-          <button className="btn-pdfs hover:bg-[#007C85] h-[42px] hover:border-[#007C85] hover:text-white flex items-center justify-center rounded-lg font-manrope text-black text-lg px-8 py-4 border-2 border-gray-300 text-center w-64 relative ">
-            <img
-              src="/imgs/downloadpdf.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Download PDF
+          <button className="btn-pdfs gap-2">
+            <img src="/imgs/downloadpdf.svg" alt="" />
+            <p className="text-[18px]">Download PDF</p>
           </button>
         </div>
       </div>
 
       <div className="w-full m:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
-          <form className="">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+          <form className="mr-5 relative">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
                 type="text"
                 placeholder="Search by reference no. or name..."
+                value={term}
+                onChange={(e) => {
+                  setTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
+              />
+              <img
+                src="/svgs/search.svg"
+                alt="Search"
+                width="20"
+                height="20"
+                className="absolute left-8 top-9 pointer-events-none"
               />
             </div>
           </form>
-          <div className="flex w-full justify-end items-center gap-[12px]">
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
             <DropdownMenu
@@ -254,8 +264,7 @@ const Notes = () => {
               width={"165px"}
               label={"Select"}
             />
-
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
             <DropdownMenu
@@ -298,9 +307,6 @@ const Notes = () => {
                   <th scope="col" className="px-6 py-3 w-[400px]">
                     NOTES
                   </th>
-                  <th scope="col" className=" px-[90px] py-3 w-10">
-                    ACTION
-                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -322,17 +328,6 @@ const Notes = () => {
                       {note.notes_subject}
                     </td>
                     <td className="px-6 py-3">{note.notes_notes}</td>
-                    <td className="px-[90px] py-3">
-                      <p
-                        onClick={() => {
-                          isModalOpen(true);
-                          setIsEdit(true);
-                          setNotesToEdit(note);
-                        }}
-                      >
-                        <Edit></Edit>
-                      </p>
-                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -407,13 +402,16 @@ const Notes = () => {
         </div>
       )}
       {isOpen && (
-        <NotesModal
-          isEdit={isEdit}
+        <Modal
+          content={
+            <NursenotesModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              label="sample label"
+              onSuccess={onSuccess}
+            />
+          }
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          label={isEdit ? "Edit Note" : "Add Note"}
-          notesToEdit={notesToEdit}
-          onSuccess={onSuccess}
         />
       )}
 

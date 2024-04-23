@@ -4,21 +4,25 @@ import { onNavigate } from "@/actions/navigation";
 import { fetchUpcomingAppointments } from "@/app/api/appointments-api/upcoming-appointments-api";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { fetchDueMedication } from "@/app/api/medication-logs-api/due-medication-api";
+import { ToastAction } from "@/components/ui/toast";
 import { Edit, View } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
   const router = useRouter();
   if (!getAccessToken()) {
     onNavigate(router, "/login");
   }
-
+  const { toast } = useToast();
   const [term, setTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [dueMedSortBy, setDueMedSortBy] = useState("medicationLogsTime");
   const [upcomingSortBy, setUpcomingSortBy] = useState("appointmentDate");
   const [sortOrder, setSortOrder] = useState("ASC");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
   const [dueMedicationList, setDueMedicationList] = useState<
     {
       patient_uuid: string;
@@ -41,12 +45,10 @@ const Dashboard = () => {
       appointments_appointmentDate: string;
       appointments_appointmentEndTime: string;
       appointments_appointmentTime: string;
-
     }[]
   >([]);
   const [upcomingTotalPages, setUpcomingTotalPages] = useState(0);
   const [totalUpcoming, setTotalUpcoming] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,7 +114,25 @@ const Dashboard = () => {
         setUpcomingAppointments(upcomingAppoinments.data);
         setTotalUpcoming(upcomingAppoinments.totalCount);
         setUpcomingTotalPages(upcomingAppoinments.totalPages);
-      } catch (error) {}
+      } catch (error: any) {
+        setError(error.message);
+        console.log("error");
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
+        });
+      }
     };
     fetchData();
   }, [currentPage]);
@@ -149,6 +169,14 @@ const Dashboard = () => {
 
   console.log(dueMedicationList, "dueMedicationList");
 
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full">
       <div className="justify-center items-center mx-[154px] mt-[90px] overflow-hidden">
@@ -166,9 +194,13 @@ const Dashboard = () => {
 
           <div className="w-[930px] min-w-max-[930px] max-h-[670px] h-[670px] min-h-max-[670px]">
             <div className="border-[1px] h-[95px] px-18 pt-3">
-              <p className="p-title mx-[30px] pt-2">Upcoming Appointment<span>{upcomingAppointments.length > 1? "s":""}</span></p>
+              <p className="p-title mx-[30px] pt-2">
+                Upcoming Appointment
+                <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
+              </p>
               <p className="font-normal text-[15px] text-[#71717A] mx-[30px] pt-3">
-                Total of {totalUpcoming} Appointment <span>{upcomingAppointments.length > 1? "s":""}</span>
+                Total of {totalUpcoming} Appointment{" "}
+                <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
               </p>
             </div>
             {/* {/ content /} */}
@@ -194,14 +226,17 @@ const Dashboard = () => {
                         </p>
                         <div className=" items-center flex flex-col w-1/4">
                           <p className="font-bold text-[15px]">
-                           {upcomingAppointment.appointments_appointmentDate}
+                            {upcomingAppointment.appointments_appointmentDate}
                           </p>
-                         
                         </div>
                         <p className="text-[#71717A] font-medium text-[15px] w-1/4 text-center">
-                          {formatTime(upcomingAppointment.appointments_appointmentTime)}
+                          {formatTime(
+                            upcomingAppointment.appointments_appointmentTime
+                          )}
                           -
-                          {formatTime(upcomingAppointment.appointments_appointmentEndTime)}
+                          {formatTime(
+                            upcomingAppointment.appointments_appointmentEndTime
+                          )}
                         </p>
                       </div>
                     ))}
@@ -221,9 +256,13 @@ const Dashboard = () => {
       {/ Start of Due Medications /} */}
           <div className="w-[621px] h-[666px] border-[1px] border-[#E4E4E7] py-3 select-none px-[40px]">
             <div className="">
-              <p className="p-title pt-2">Due Medication<span>{dueMedicationList.length > 1? "s":""}</span></p>
+              <p className="p-title pt-2">
+                Due Medication
+                <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
+              </p>
               <p className="font-normal text-[15px] text-[#71717A] pt-3 mb-3">
-                Total of {totalDueMedication} Due Medication<span>{dueMedicationList.length > 1? "s":""}</span>
+                Total of {totalDueMedication} Due Medication
+                <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
               </p>
             </div>
             {dueMedicationList.length > 0 ? (
@@ -282,9 +321,9 @@ const Dashboard = () => {
                 <path
                   d="M2.14795 2.15826L8.7739 8.78421L2.14795 15.4102"
                   stroke="currentColor"
-                  stroke-width="2.43402"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2.43402"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </div>

@@ -10,8 +10,9 @@ import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchNotesByPatient } from "@/app/api/notes-api/notes-api";
 import { SuccessModal } from "@/components/shared/success";
-import Loading from "../loading";
 import { IncidentReportModal } from "@/components/modals/incident-report.modal";
+import { IncidentreportModalContent } from "@/components/modal-content/incidentreport-modal-content";
+import Modal from "@/components/reusable/modal";
 
 const Notes = () => {
   const router = useRouter();
@@ -33,7 +34,7 @@ const Notes = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
-
+  const type = "ir";
   const params = useParams<{
     id: any;
     tag: string;
@@ -78,7 +79,7 @@ const Notes = () => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setNotesToEdit([]);
       setIsEdit(false);
     }
@@ -147,6 +148,7 @@ const Notes = () => {
         const response = await fetchNotesByPatient(
           patientId,
           term,
+          type,
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
@@ -173,75 +175,81 @@ const Notes = () => {
   };
 
   if (isLoading) {
-    return <Loading></Loading>;
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
   }
 
   return (
     <div className="  w-full">
-      <div className="flex justify-between ">
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center">
-            <h1 className="p-title">Notes</h1>
-            <h1 className="slash mx-2">{"/"} </h1>
-            <h1 className="font-medium text-[20px] text-gray-600 cursor-pointer"
-            onClick={() => {
+      <div className="w-full justify-between flex mb-2">
+        <div className="flex-row">
+          <div className="flex gap-2">
+            <p className="p-title">Notes</p>
+            <span className="slash">{">"}</span>
+            <span
+              onClick={() => {
                 onNavigate(
                   router,
                   `/patient-overview/${patientId.toLowerCase()}/notes/nurses-notes`
                 );
                 setIsLoading(true);
               }}
-              >Nurses Notes</h1>
-            <h1 className="slash mx-2">{"/"} </h1>
-          <h1
-              className="font-medium text-[20px] cursor-pointer text-[#007C85]"
+              className="bread"
             >
-              Incident Report
-            </h1>
-            </div>
-          {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
-            Total of {totalNotes} Notes
-          </p>
+              Nurse's Notes
+            </span>
+            <span className="slash">{">"}</span>
+            <span className="active">Incident Report</span>
+          </div>
+          <div>
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+              Total of {totalNotes} Notes
+            </p>
+          </div>
         </div>
-        <div className="flex flex-row justify-end mt-[15px]">
-          <button
-            onClick={() => isModalOpen(true)}
-            className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu"
-          >
-            <img
-              src="/imgs/add.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Add
+        <div className="flex gap-2">
+          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+            <img src="/imgs/add.svg" alt="" />
+            <p className="text-[18px]">Add</p>
           </button>
-          <button className="btn-pdfs hover:bg-[#007C85] h-[42px] hover:border-[#007C85] hover:text-white flex items-center justify-center rounded-lg font-manrope text-black text-lg px-8 py-4 border-2 border-gray-300 text-center w-64 relative ">
-            <img
-              src="/imgs/downloadpdf.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Download PDF
+          <button className="btn-pdfs gap-2">
+            <img src="/imgs/downloadpdf.svg" alt="" />
+            <p className="text-[18px]">Download PDF</p>
           </button>
         </div>
       </div>
 
       <div className="w-full m:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
-          <form className="">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+          <form className="mr-5 relative">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
                 type="text"
                 placeholder="Search by reference no. or name..."
+                value={term}
+                onChange={(e) => {
+                  setTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
+              />
+              <img
+                src="/svgs/search.svg"
+                alt="Search"
+                width="20"
+                height="20"
+                className="absolute left-8 top-9 pointer-events-none"
               />
             </div>
           </form>
-          <div className="flex w-full justify-end items-center gap-[12px]">
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
             <DropdownMenu
@@ -255,8 +263,7 @@ const Notes = () => {
               width={"165px"}
               label={"Select"}
             />
-
-            <p className="text-[#191D23] opacity-[60%] font-semibold">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
             <DropdownMenu
@@ -276,61 +283,48 @@ const Notes = () => {
 
         {/* START OF TABLE */}
         <div>
-            <table className="w-full text-left rtl:text-right">
-              <thead>
-                <tr className="uppercase text-[#64748B] border-y  ">
-                  <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                    NOTES ID
-                  </th>
-                  <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                    DATE
-                  </th>
-                  <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                    TIME
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[250px]">
-                    SUBJECT
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[200px]">
-                   Details of Incident
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[200px]">
-                   Reported By
-                  </th>
-                  <th scope="col" className=" px-[90px] py-3 w-10">
-                    ACTION
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group">
-                <th
-                  scope="row"
-                  className="  font-medium text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
-                >
-                  March 22, 2024
+          <table className="w-full text-left rtl:text-right">
+            <thead>
+              <tr className="uppercase text-[#64748B] border-y  ">
+                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
+                  NOTES ID
                 </th>
-                <td className="truncate max-w-[552px] px-6 py-3">
-                  10:00 AM
-                </td>
-                <td className="truncate max-w-[552px] px-6 py-3">
-                 Health Problem
-                </td>
-                <td className="px-6 py-3">
-                Advised to monitor and follow up.
-                </td>
-                <td className="px-6 py-3">
-                Ansel, David A, MD
-                </td>
-                <td className="px-6 py-3">
-                Advised to monitor and follow up.
-                </td>
-                <td className="px-[90px] py-3">
-                  <Edit></Edit>
-                </td>
+                {/* <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
+                  DATE
+                </th>
+                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
+                  TIME
+                </th> */}
+                <th scope="col" className="px-6 py-3 w-[250px]">
+                  SUBJECT
+                </th>
+                <th scope="col" className="px-6 py-3 w-[200px]">
+                  Details of Incident
+                </th>
               </tr>
-              </tbody>
-            </table>
+            </thead>
+            <tbody>
+              {patientNotes.map((notes, index) => (
+                <tr
+                  key={index}
+                  className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
+                >
+                  <th
+                    scope="row"
+                    className="  font-medium text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
+                  >
+                    {notes.notes_uuid}
+                  </th>
+                  <td className="truncate max-w-[552px] px-6 py-3">
+                    {notes.notes_subject}
+                  </td>
+                  <td className="truncate max-w-[552px] px-6 py-3">
+                    {notes.notes_notes}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
         {/* END OF TABLE */}
       </div>
@@ -400,13 +394,16 @@ const Notes = () => {
         </div>
       )}
       {isOpen && (
-        <IncidentReportModal
-          isEdit={isEdit}
+        <Modal
+          content={
+            <IncidentreportModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              label={isEdit ? "Edit Note" : "Add Note"}
+              onSuccess={onSuccess}
+            />
+          }
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          label={isEdit ? "Edit Note" : "Add Note"}
-          notesToEdit={notesToEdit}
-          onSuccess={onSuccess}
         />
       )}
 

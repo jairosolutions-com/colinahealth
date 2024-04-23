@@ -12,12 +12,18 @@ import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
+import Modal from "@/components/reusable/modal";
+import { DemographicModalContent } from "@/components/modal-content/demographic-modal-content";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+
 
 export default function PatientPage({ patient }: { patient: any }) {
   const router = useRouter();
-  if(!getAccessToken()){
+  if (!getAccessToken()) {
     onNavigate(router, "/login");
   }
+  const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortBy, setSortBy] = useState("firstName");
@@ -67,6 +73,11 @@ export default function PatientPage({ patient }: { patient: any }) {
 
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else if (!isOpen) {
+      document.body.style.overflow = "visible";
+    }
   };
 
   const goToPreviousPage = () => {
@@ -150,7 +161,22 @@ export default function PatientPage({ patient }: { patient: any }) {
         setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
-        setIsLoading(false);
+        console.log("error", error.message);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
+        });
       }
     };
 
@@ -186,7 +212,10 @@ export default function PatientPage({ patient }: { patient: any }) {
     <div className="w-full px-[150px] py-[90px]">
       <div className="flex justify-end">
         <p
-          onClick={() => onNavigate(router, "/dashboard")}
+          onClick={() => {
+            setIsLoading(true);
+            onNavigate(router, "/dashboard");
+          }}
           className="text-[#64748B] underline cursor-pointer text-[15px]"
         >
           Back to Dashboard
@@ -197,25 +226,23 @@ export default function PatientPage({ patient }: { patient: any }) {
           <p className="p-title">Patients List Records</p>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
-            Total of {totalPatient} Patients
+            Total of {patientList.length == 0 ? "0" : totalPatient} Patients
           </p>
         </div>
         <div className="flex flex-row justify-end">
-          
-          <Add  onClick={() => isModalOpen(true)}></Add>
+          <Add onClick={() => isModalOpen(true)}></Add>
           <DownloadPDF></DownloadPDF>
-  
         </div>
       </div>
 
       <div className="w-full sm:rounded-lg items-center">
         <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
-          <form className=" mr-5">
+          <form className="mr-5 relative">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE] text-[15px]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
                 type="text"
                 placeholder="Search by reference no. or name..."
                 value={term}
@@ -224,10 +251,18 @@ export default function PatientPage({ patient }: { patient: any }) {
                   setCurrentPage(1);
                 }}
               />
+              <img
+                src="/svgs/search.svg"
+                alt="Search"
+                width="20"
+                height="20"
+                className="absolute left-8 top-9 pointer-events-none"
+              />
             </div>
           </form>
+
           <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-            <p className="text-[#191D23] opacity-[60% font-semibold] text-[15px]">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
             <DropdownMenu
@@ -264,13 +299,14 @@ export default function PatientPage({ patient }: { patient: any }) {
           {patientList.length === 0 ? (
             <div>
               <div className="w-full flex justify-center py-5 text-center text-[15px]">
-                No Patient Found! <br/>•ω•
+                No Patient Found! <br />
+                •ω•
               </div>
             </div>
           ) : (
             <table className="w-full h-full justify-center items-start text-[15px]">
               <thead className=" text-left rtl:text-right">
-                <tr className="uppercase text-[#64748B] border border-[#E7EAEE]">
+                <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
                   <th scope="col" className="px-6 py-3 w-[286px] h-[70px]">
                     Patient ID
                   </th>
@@ -385,13 +421,24 @@ export default function PatientPage({ patient }: { patient: any }) {
         </div>
       )}
       {isOpen && (
-        <DemographicModal
+        <Modal
+          content={
+            <DemographicModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              label="sample label"
+              onSuccess={onSuccess}
+              onFailed={onFailed}
+              setErrorMessage={setError}
+            />
+          }
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
+          // isOpen={isOpen}
           label="sample label"
           onSuccess={onSuccess}
           onFailed={onFailed}
           setErrorMessage={setError}
+
         />
       )}
       {isSuccessOpen && (
@@ -399,8 +446,8 @@ export default function PatientPage({ patient }: { patient: any }) {
           label="Success"
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          setIsUpdated=''
-          isUpdated=''
+          setIsUpdated=""
+          isUpdated=""
         />
       )}
       {isErrorOpen && (

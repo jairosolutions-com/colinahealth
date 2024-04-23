@@ -1,81 +1,81 @@
 @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+@tailwind components;
+@tailwind utilities;
 
-  @layer base {
-    :root {
-      --background: 0 0% 100%;
-      --foreground: 222.2 84% 4.9%;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-      --card: 0 0% 100%;
-      --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
 
-      --popover: 0 0% 100%;
-      --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-      --primary: 222.2 47.4% 11.2%;
-      --primary-foreground: 210 40% 98%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
 
-      --secondary: 210 40% 96.1%;
-      --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-      --muted: 210 40% 96.1%;
-      --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-      --accent: 210 40% 96.1%;
-      --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-      --destructive: 0 84.2% 60.2%;
-      --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-      --border: 214.3 31.8% 91.4%;
-      --input: 214.3 31.8% 91.4%;
-      --ring: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
 
-      --radius: 0.5rem;
-    }
-
-    .dark {
-      --background: 222.2 84% 4.9%;
-      --foreground: 210 40% 98%;
-
-      --card: 222.2 84% 4.9%;
-      --card-foreground: 210 40% 98%;
-
-      --popover: 222.2 84% 4.9%;
-      --popover-foreground: 210 40% 98%;
-
-      --primary: 210 40% 98%;
-      --primary-foreground: 222.2 47.4% 11.2%;
-
-      --secondary: 217.2 32.6% 17.5%;
-      --secondary-foreground: 210 40% 98%;
-
-      --muted: 217.2 32.6% 17.5%;
-      --muted-foreground: 215 20.2% 65.1%;
-
-      --accent: 217.2 32.6% 17.5%;
-      --accent-foreground: 210 40% 98%;
-
-      --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 210 40% 98%;
-
-      --border: 217.2 32.6% 17.5%;
-      --input: 217.2 32.6% 17.5%;
-      --ring: 212.7 26.8% 83.9%;
-    }
+    --radius: 0.5rem;
   }
 
-  @layer base {
-    * {
-      @apply border-border;
-    }
-    body {
-      @apply bg-background text-foreground;
-    }
-  }
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
 
-  html,
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+html,
 body,
 :root {
   height: 100%;
@@ -106,8 +106,12 @@ body,
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* start buttons add/pdf */
@@ -119,8 +123,8 @@ body,
   background-color: #1b84ff;
   color: white;
   font-weight: bold;
-  width: 104px;
-  height: 40px;
+  width: 100px;
+  height: 45px;
 
   border-radius: 5px;
 }
@@ -140,8 +144,8 @@ body,
   padding: 10px 20px 10px 20px;
   border: solid #d0d5dd 2px;
   text-decoration: none;
-  width: 200px;
-  height: 40px;
+  width: 229px;
+  height: 45px;
 }
 
 .btn-pdfs:hover {
@@ -229,19 +233,32 @@ body,
 }
 
 .p-title {
-  height: 32px;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 20px;
-  /* w-[1157px] h-[32px] leading-[42px] font-bold */
+  color: black;
 }
 
 .slash {
-  height: 32px;
   font-weight: 500;
-  font-size: 24px;
-  color: #191d23;
-  opacity: 60%;
-  /* w-[1157px] h-[32px] leading-[42px] font-bold */
+  font-size: 20px;
+  color: #191d2360;
+}
+
+.active {
+  font-weight: 500;
+  font-size: 20px;
+  color: #007c85;
+}
+
+.bread {
+  font-weight: 500;
+  font-size: 20px;
+  color: #191d2360;
+  cursor: pointer;
+}
+
+.bread:hover {
+  color: #007c85;
 }
 
 .table-row {
@@ -306,4 +323,34 @@ body,
   border-radius: 8px;
   background-color: white;
   box-shadow: #000000;
+}
+select {
+  /* Firefox */
+  -moz-appearance: none;
+  /* Chrome, Safari, Edge, Opera */
+  -webkit-appearance: none;
+  /* Remove default arrow in IE */
+  appearance: none;
+}
+
+.status-icon-scheduled::before {
+  content: "●";
+  margin-right: 5px;
+  color: #48dc23;
+}
+.status-icon-done::before {
+  content: "●";
+  margin-right: 5px;
+  color: #a7a59b;
+}
+.status-icon-missed::before {
+  content: "●";
+  margin-right: 5px;
+  color: #ee4d4d;
+}
+input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
 }
