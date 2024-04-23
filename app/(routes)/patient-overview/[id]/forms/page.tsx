@@ -12,6 +12,7 @@ import { FormsviewModalContent } from "@/components/modal-content/formsview-moda
 import Modal from "@/components/reusable/modal";
 import { fetchFormsByPatient } from "@/app/api/forms-api/forms.api";
 import { SuccessModal } from "@/components/shared/success";
+
 export default function FormsTab() {
   const router = useRouter();
   const params = useParams<{
@@ -152,6 +153,7 @@ export default function FormsTab() {
           router
         );
         setPatientForms(response.data);
+        console.log("DATAAAAA:", response.data);
         setTotalPages(response.totalPages);
         setTotalForms(response.totalCount);
         setIsLoading(false);
@@ -176,7 +178,7 @@ export default function FormsTab() {
       </div>
     );
   }
-  console.log(patientForms, "patientForms");
+
   return (
     <div className="  w-full">
       <div className="w-full justify-between flex mb-2">
@@ -199,7 +201,7 @@ export default function FormsTab() {
             </span>
           </div>
           <div>
-            <p>Total of 6 logs</p>
+            <p>Total of {totalForms} logs</p>
           </div>
         </div>
         <div className="flex gap-2">
@@ -275,38 +277,54 @@ export default function FormsTab() {
 
         {/* START OF TABLE */}
         <div>
-          <table className="w-full text-left rtl:text-right">
-            <thead>
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-7 py-3 h-[60px] w-[250px]">
-                  NAME OF DOCUMENT
-                </th>
-                <th scope="col" className="px-7 py-3 h-[60px] w-[200px]">
-                  DATE ISSUED
-                </th>
-                <th scope="col" className="px-7 py-3 h-[60px] w-[900px]">
-                  NOTES
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  ACTION
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group">
-                <th className="px-7 py-3 h-[60px] ">Patient Details</th>
-                <td className="px-7 py-3 h-[60px]">10/12/2024</td>
-                <td className="px-7 py-3 h-[60px]">
-                  Patient reports occasional headaches. Advised to monitor and
-                  follow up.
-                </td>
-
-                <td className="px-7 py-3 h-[60px]">
-                  <Edit></Edit>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          {patientForms.length === 0 ? (
+            <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+              <p className="text-xl font-semibold text-gray-700 text-center">
+                No Forms <br />
+                •ω•
+              </p>
+            </h1>
+          ) : (
+            <table className="w-full text-left rtl:text-right">
+              <thead>
+                <tr className="uppercase text-[#64748B] border-y  ">
+                  <th scope="col" className="px-7 py-3 h-[60px] w-[250px]">
+                    NAME OF DOCUMENT
+                  </th>
+                  <th scope="col" className="px-7 py-3 h-[60px] w-[200px]">
+                    DATE ISSUED
+                  </th>
+                  <th scope="col" className="px-7 py-3 h-[60px] w-[900px]">
+                    NOTES
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    ACTION
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {patientForms.map((form, index) => (
+                  <tr
+                    key={index}
+                    className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
+                  >
+                    <th className="px-7 py-3 h-[60px]">
+                      {form.forms_nameOfDocument}
+                    </th>
+                    <td className="px-7 py-3 h-[60px]">
+                      {form.forms_dateIssued}
+                    </td>
+                    <td className="px-7 py-3 h-[60px] max-w-[200px] truncate">
+                      {form.forms_notes}
+                    </td>
+                    <td className="px-7 py-3 h-[60px]">
+                      <Edit></Edit>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
         {/* END OF TABLE */}
       </div>
@@ -388,7 +406,7 @@ export default function FormsTab() {
       )}
       {isSuccessOpen && (
         <SuccessModal
-          label={isEdit ? "Edit Note" : "Add Note"}
+          label={isEdit ? "Edit Form" : "Add Form"}
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
           isUpdated={isUpdated}
