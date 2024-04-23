@@ -319,7 +319,6 @@ export default function Laboratoryresults() {
               <div className="py-5 flex justify-center items-center">
                 <p className="text-xl font-semibold text-gray-700 text-center">
                   No Lab Result/s <br />
-                  •ω•
                 </p>
               </div>
             </div>
@@ -414,7 +413,7 @@ export default function Laboratoryresults() {
                             onClick={() => {
                               isModalOpen(true);
                               setIsView(true);
-                              
+
                               setLabResultData(labResult);
                             }}
                           >
@@ -498,21 +497,27 @@ export default function Laboratoryresults() {
       )}
       {isOpen && (
         <Modal
-          content={<LabresultsModalContent   
-            isModalOpen={isModalOpen}
-          isEdit={isEdit}
-          labResultData={labResultData}
-          onSuccess={onSuccess}
-          setIsUpdated={setIsUpdated} />}
-          isModalOpen={isModalOpen} />
+          content={
+            <LabresultsModalContent
+              isModalOpen={isModalOpen}
+              isEdit={isEdit}
+              labResultData={labResultData}
+              onSuccess={onSuccess}
+              setIsUpdated={setIsUpdated}
+            />
+          }
+          isModalOpen={isModalOpen}
+        />
       )}
       {isView && (
-        <Modal 
-          content={<LabResultsViewModalContent  
-            isModalOpen={isModalOpen}
-          isView={isView}
-          labResultsData={labResultData}
-       />}
+        <Modal
+          content={
+            <LabResultsViewModalContent
+              isModalOpen={isModalOpen}
+              isView={isView}
+              labResultsData={labResultData}
+            />
+          }
           isModalOpen={isModalOpen}
         />
       )}
