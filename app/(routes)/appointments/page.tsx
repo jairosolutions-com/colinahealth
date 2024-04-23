@@ -26,10 +26,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { fetchAllAppointments } from "@/app/api/appointments-api/fetch-all-appointments.api";
 
 export default function AppointmentPage() {
-  const [startDate, setStartDate] = React.useState<Date>();
-  const [endDate, setEndDate] = React.useState<Date>();
   const router = useRouter();
 
   if (!getAccessToken()) {
@@ -55,7 +54,8 @@ export default function AppointmentPage() {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [totalUpcoming, setTotalUpcoming] = useState(0);
   const [upcomingTotalPages, setUpcomingTotalPages] = useState(0);
-
+  const [startDate, setStartDate] = React.useState<Date>();
+  const [endDate, setEndDate] = React.useState<Date>();
   const [upcomingAppointments, setUpcomingAppointments] = useState<
     {
       patient_firstName: string;
@@ -66,7 +66,10 @@ export default function AppointmentPage() {
       appointments_appointmentTime: string;
     }[]
   >([]);
-
+  const startD = startDate
+    ? startDate.toISOString().slice(0, 10)
+    : "2021-01-01";
+  const endD = endDate ? endDate.toISOString().slice(0, 10) : "2300-01-01";
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const isEdit = false;
   const handleOrderOptionClick = (option: string) => {
@@ -167,24 +170,25 @@ export default function AppointmentPage() {
     const fetchData = async () => {
       setIsLoading(false);
       try {
-        const upcomingAppoinments = await fetchUpcomingAppointments(
+        const upcomingAppoinments = await fetchAllAppointments(
           term,
           currentPage,
           upcomingSortBy,
           sortOrder as "ASC" | "DESC",
+          startD,
+          endD,
           router
         );
 
-        const appointmentsArray = Object.values(upcomingAppoinments);
+        const appointmentsArray = Object.values(upcomingAppoinments.data);
 
         setAppointmentList(appointmentsArray);
-        console.log("Appointments:", appointmentsArray);
 
         return upcomingAppoinments;
       } catch (error) {}
     };
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, startDate, endDate]);
 
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
@@ -194,7 +198,8 @@ export default function AppointmentPage() {
       `/patient-overview/${lowercasePatientId}/medical-history/allergies`
     );
   };
-
+  console.log(startD, "startDate");
+  console.log(appointmentList, "appointmentList");
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -357,40 +362,23 @@ export default function AppointmentPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr className="odd:bg-white hover:bg-[#f4f4f4] group border-b">
-                  <td className="px-6 py-4">
-                    <span className="w-[400px] h-[5px] px-3 bg-[#dfffea] mr-2 font-semibold text-[#17C653] rounded-[30px]">
-                      <span className="inline-block h-3 w-3 rounded-full bg-[#0EB146] mr-2 shadow-md"></span>
-                      Upcoming Appointment
-                    </span>
-                  </td>
+                {appointmentList.map((appointment, index) => (
+                  <tr
+                    key={index}
+                    className="odd:bg-white hover:bg-[#f4f4f4] group border-b"
+                  >
+                    <td className="px-6 py-4">
+                      <span className="w-[400px] h-[5px] px-3 bg-[#dfffea] mr-2 font-semibold text-[#17C653] rounded-[30px]">
+                        <span className="inline-block h-3 w-3 rounded-full bg-[#0EB146] mr-2 shadow-md"></span>
+                        {appointment.appointments_appointmentStatus} Appointment
+                      </span>
+                    </td>
 
-                  <td className="px-6 py-4">10/02/1992</td>
-                  <td className="px-6 py-4">10:00AM</td>
-                  <td className="px-6 py-4">3:00PM</td>
-                </tr>
-                <tr className="odd:bg-white hover:bg-[#f4f4f4] group border-b">
-                  <td className="px-6 py-4">
-                    <span className="w-[400px] h-[5px] px-3 bg-[#E7EAEE] mr-2 font-semibold text-[#71717A] rounded-[30px]">
-                      <span className="inline-block h-3 w-3 rounded-full bg-[#7E7E7E] mr-2 shadow-md"></span>
-                      Done Appointment
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">10/02/1992</td>
-                  <td className="px-6 py-4">10:00AM</td>
-                  <td className="px-6 py-4">3:00PM</td>
-                </tr>
-                <tr className="odd:bg-white hover:bg-[#f4f4f4] group border-b">
-                  <td className="px-6 py-4">
-                    <span className="w-[400px] h-[5px] px-3 bg-[#FFE8EC] mr-2 font-semibold text-[#EF4C6A] rounded-[30px]">
-                      <span className="inline-block h-3 w-3 rounded-full bg-[#EE4D4D] mr-2 shadow-md"></span>
-                      Missed Appointment
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">10/02/1992</td>
-                  <td className="px-6 py-4">10:00AM</td>
-                  <td className="px-6 py-4">3:00PM</td>
-                </tr>
+                    <td className="px-6 py-4">{appointment.appointments_appointmentDate}</td>
+                    <td className="px-6 py-4">{appointment.appointments_appointmentTime}</td>
+                    <td className="px-6 py-4">{appointment.appointments_appointmentEndTime}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           )}
