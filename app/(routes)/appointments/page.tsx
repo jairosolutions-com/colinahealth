@@ -347,10 +347,10 @@ export default function AppointmentPage() {
             <table className="w-full h-full justify-center items-start text-[15px]">
               <thead className=" text-left rtl:text-right">
                 <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
-                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                  <th scope="col" className="px-6 py-3 w-[250px] h-[70px]">
                     Status
                   </th>
-                  <th scope="col" className="px-6 py-3 w-[200px]">
+                  <th scope="col" className="px-6 py-3 w-[230px]">
                     Date
                   </th>
                   <th scope="col" className="px-6 py-3 w-[200px]">
@@ -367,16 +367,63 @@ export default function AppointmentPage() {
                     key={index}
                     className="odd:bg-white hover:bg-[#f4f4f4] group border-b"
                   >
-                    <td className="px-6 py-4">
-                      <span className="w-[400px] h-[5px] px-3 bg-[#dfffea] mr-2 font-semibold text-[#17C653] rounded-[30px]">
-                        <span className="inline-block h-3 w-3 rounded-full bg-[#0EB146] mr-2 shadow-md"></span>
+                    <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                      <div
+                        className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
+                          appointment.appointments_appointmentStatus ===
+                          "Scheduled"
+                            ? "bg-[#dfffea] text-[#17C653]" // Green color for Scheduled
+                            : appointment.appointments_appointmentStatus ===
+                              "Done"
+                            ? "bg-[#E7EAEE] text-[#71717A]" // Dark color for Done
+                            : appointment.appointments_appointmentStatus ===
+                                "Patient-IN" ||
+                              appointment.appointments_appointmentStatus ===
+                                "On-going"
+                            ? "bg-[#FFFCDB] text-[#E0BD03]" // Yellow for On Going
+                            : appointment.appointments_appointmentStatus ===
+                              "Missed"
+                            ? "bg-[#FEE9E9] text-[#EF4C6A]" // Red color for Missed
+                            : appointment.appointments_appointmentStatus ===
+                              "Cancelled"
+                            ? "bg-[#FEE9E9] text-[#EF4C6A]" // Red color for Cancelled
+                            : ""
+                        }`}
+                      >
+                        <span
+                          className={`inline-block h-2 w-2 rounded-full mr-1 ${
+                            appointment.appointments_appointmentStatus ===
+                            "Scheduled"
+                              ? "bg-green-500" // Green color for Scheduled
+                              : appointment.appointments_appointmentStatus ===
+                                "Done"
+                              ? "bg-[#7E7E7E]" // Dark color for Done
+                              : appointment.appointments_appointmentStatus ===
+                                  "Patient-IN" ||
+                                appointment.appointments_appointmentStatus ===
+                                  "On-going"
+                              ? "bg-[#E0BD03]" // Yellow for On Going
+                              : appointment.appointments_appointmentStatus ===
+                                  "Missed" ||
+                                appointment.appointments_appointmentStatus ===
+                                  "Cancelled"
+                              ? "bg-[#EF4C6A]" // Red color for Missed and Cancelled
+                              : ""
+                          }`}
+                        ></span>
                         {appointment.appointments_appointmentStatus} Appointment
-                      </span>
+                      </div>
                     </td>
 
-                    <td className="px-6 py-4">{appointment.appointments_appointmentDate}</td>
-                    <td className="px-6 py-4">{appointment.appointments_appointmentTime}</td>
-                    <td className="px-6 py-4">{appointment.appointments_appointmentEndTime}</td>
+                    <td className="px-6 py-4">
+                      {appointment.appointments_appointmentDate}
+                    </td>
+                    <td className="px-6 py-4">
+                      {appointment.appointments_appointmentTime}
+                    </td>
+                    <td className="px-6 py-4">
+                      {appointment.appointments_appointmentEndTime}
+                    </td>
                   </tr>
                 ))}
               </tbody>
