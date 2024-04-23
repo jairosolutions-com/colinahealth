@@ -4,6 +4,8 @@ import { getAccessToken } from "../api/login-api/accessToken";
 import { useRouter } from "next/navigation";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useState } from "react";
+import Footer from "@/components/footer";
+import Image from "next/image";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -11,14 +13,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Navbar setIsLoading={setIsLoading} />
-      {isLoading ? (
-        <div className="w-full h-full flex justify-center items-center ">
-          <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-        </div>
-      ) : (
-        <div className="h-full w-full flex">{children}</div>
-      )}
+      <div className="h-screen flex flex-col justify-between">
+        <Navbar setIsLoading={setIsLoading} />
+        <>
+          {isLoading ? (
+            <div className="w-full h-full flex justify-center items-center">
+              <Image
+                // className="w-[100px] h-[100px]"
+                src="/imgs/colina-logo-animation.gif"
+                alt="logo"
+                width={100}
+                height={100}
+              />
+            </div>
+          ) : (
+            <div className="w-full h-full flex">{children}</div>
+          )}
+        </>
+        <Footer />
+      </div>
     </>
   );
 }
