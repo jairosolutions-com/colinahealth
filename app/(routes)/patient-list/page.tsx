@@ -401,7 +401,7 @@ export default function PatientPage({ patient }: { patient: any }) {
                             e.key !== "ArrowLeft" &&
                             e.key !== "ArrowRight"
                           ) {
-                            e.preventDefault();
+                            e.preventDefault(); 
                           }
                         }}
                       />
