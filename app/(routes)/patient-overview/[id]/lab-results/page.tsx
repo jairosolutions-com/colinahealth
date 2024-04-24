@@ -399,7 +399,7 @@ export default function Laboratoryresults() {
                         <td className="px-6 py-4">
                           {labResult.labResults_triglycerides}mg/dL
                         </td>
-                        <td className="px-[70px] py-4">
+                        <td className="px-[70px] py-4 flex gap-2">
                           <p
                             onClick={() => {
                               isModalOpen(true);
