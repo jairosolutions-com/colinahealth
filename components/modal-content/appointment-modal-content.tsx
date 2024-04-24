@@ -394,8 +394,13 @@ export const AppointmentModalContent = ({
                 </label>
                 <div className="mt-2.5 flex ">
                   <select
+                    disabled={formData.appointmentStatus === "Missed"}
                     id="status"
-                    className="block w-full h-12 cursor-pointer rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                    className={`${
+                      formData.appointmentStatus === "Missed"
+                        ? "cursor-not-allowed"
+                        : "cursor-pointer"
+                    } block w-full h-12  rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6`}
                     value={formData.appointmentStatus}
                     onChange={handleStatusChange}
                     defaultValue="select status"
@@ -425,8 +430,9 @@ export const AppointmentModalContent = ({
                 Cancel
               </button>
               <button
+              disabled={formData.appointmentStatus === "Missed"}
                 type="submit"
-                className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md"
+                className={`${formData.appointmentStatus === "Missed" ? "cursor-not-allowed":"cursor-pointer"} w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md`}
               >
                 {isEditable ? "Update" : "Submit"}
               </button>
