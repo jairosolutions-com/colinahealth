@@ -210,8 +210,7 @@ export default function Surgeries() {
             <span className="slash">{">"}</span>
             <span
               onClick={() => {
-                onNavigate(
-                  router,
+                router.push(
                   `/patient-overview/${patientId.toLowerCase()}/medical-history/allergies`
                 );
                 setIsLoading(true);

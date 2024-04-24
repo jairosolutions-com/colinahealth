@@ -186,8 +186,7 @@ export default function ArchiveTab() {
             <p
               onClick={() => {
                 setIsLoading(true);
-                onNavigate(
-                  router,
+                router.push(
                   `/patient-overview/${patientId.toLowerCase()}/forms`
                 );
                 setIsLoading(true);

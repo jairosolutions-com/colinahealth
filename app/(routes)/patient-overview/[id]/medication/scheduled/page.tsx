@@ -206,8 +206,7 @@ const Scheduled = () => {
             <span className="slash">{">"}</span>
             <span
               onClick={() => {
-                onNavigate(
-                  router,
+                router.push(
                   `/patient-overview/${patientId.toLowerCase()}/medication/prorenata`
                 );
                 setIsLoading(true);

@@ -22,7 +22,7 @@ export default function PatientOverviewLayout({
     item: string;
   }>();
   if (!getAccessToken()) {
-    onNavigate(router, "/login");
+    router.push("/login");
   }
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
@@ -114,7 +114,7 @@ export default function PatientOverviewLayout({
     setActiveTab(tabIndex);
     setDetailsClicked(false);
 
-    onNavigate(router, url);
+    router.push(url);
   };
   console.log(pathname, "pathname");
   useEffect(() => {

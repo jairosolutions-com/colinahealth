@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 export default function ChartPage() {
   const router = useRouter();
   if (!getAccessToken()) {
-    onNavigate(router, "/login");
+    router.push("/login");
   }
   const { toast } = useToast();
   const [patientList, setPatientList] = useState<any[]>([]);
@@ -208,13 +208,14 @@ export default function ChartPage() {
       </div>
     );
   }
-console.log(patientWithMedicationLogsToday, "patientWithMedicationLogsToday");
+  console.log(patientWithMedicationLogsToday, "patientWithMedicationLogsToday");
   return (
     <div className=" w-full px-[150px]">
       <div className="w-full flex-col  flex justify-center items-center">
         {patientWithMedicationLogsToday.length == 0 && !term ? (
           <div className="w-full h-screen flex  flex-col justify-center items-center -mt-14">
-           <p className="mt-10"> No Data Yet</p> <span> Create a prescription for patient </span>
+            <p className="mt-10"> No Data Yet</p>{" "}
+            <span> Create a prescription for patient </span>
           </div>
         ) : (
           <div className="bg-[#F4F4F4] h-full w-full">
