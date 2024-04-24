@@ -184,7 +184,7 @@ export default function PatientOverviewLayout({
           <div className="flex">
             <div className="flex flex-col">
               <img
-                src="/imgs/hulka.png"
+                src="/imgs/drake.png"
                 alt="profile"
                 width="200"
                 height="200"
