@@ -288,6 +288,36 @@ export const LabResultsViewModalContent = ({
     }
   };
 
+  const downloadImage = () => {
+    // Create a Blob from the base64 string
+    const byteCharacters = atob(base64String);
+    const byteArrays = [];
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+      const slice = byteCharacters.slice(offset, offset + 512);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+    const blob = new Blob(byteArrays, { type: `image/${fileType}` });
+
+    // Create a temporary URL for the Blob
+    const url = window.URL.createObjectURL(blob);
+
+    // Create a link element and simulate a click on it
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `image.${fileType}`;
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
       {defaultLabFiles?.length === 0 && isLoading === false ? (
@@ -337,8 +367,19 @@ export const LabResultsViewModalContent = ({
                     className="w-7 h-7 text-black flex items-center mt-2 mr-4"
                   />
                 </div>
+
                 <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
-                  Document Files
+                  Document Files{" "}
+                  <span>
+                    -{" "}
+                    <a
+                      href={`data:application/pdf;base64,${base64String}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Full Screen
+                    </a>
+                  </span>
                 </p>
               </div>
               <form className="" onSubmit={handleSubmit}>
@@ -360,7 +401,6 @@ export const LabResultsViewModalContent = ({
                                 width="600px"
                                 height="550px"
                                 className="shadow-md rounded-lg"
-                                onClick={toggleModal}
                               ></iframe>
                             ) : (
                               <Image
