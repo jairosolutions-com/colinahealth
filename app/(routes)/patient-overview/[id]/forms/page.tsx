@@ -7,7 +7,7 @@ import Edit from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { FormsModalContent } from "@/components/modals/forms.modal";
+import { FormsModalContent } from "@/components/modal-content/forms-modal-content";
 import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
 import Modal from "@/components/reusable/modal";
 import { fetchFormsByPatient } from "@/app/api/forms-api/forms.api";
@@ -83,6 +83,18 @@ export default function FormsTab() {
       document.body.style.overflow = "visible";
     }
   };
+
+  // add form
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const isAddModalOpen = (isAddOpen: boolean) => {
+    setIsAddOpen(isAddOpen);
+    if (isAddOpen) {
+      document.body.style.overflow = "hidden";
+    } else if (!isAddOpen) {
+      document.body.style.overflow = "visible";
+    }
+  };
+  // add form
 
   const goToPreviousPage = () => {
     if (currentPage > 1) {
@@ -205,7 +217,12 @@ export default function FormsTab() {
           </div>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+          <button
+            onClick={() => {
+              setIsAddOpen(true);
+            }}
+            className="btn-add gap-2"
+          >
             <img src="/imgs/add.svg" alt="" />
             <p className="text-[18px]">Add</p>
           </button>
@@ -277,48 +294,88 @@ export default function FormsTab() {
 
         {/* START OF TABLE */}
         <div>
-          {patientForms.length === 0 ? (
-            <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700 text-center">
-                No Forms <br />
-                •ω•
-              </p>
-            </h1>
+          {patientForms.length == 0 ? (
+            <div>
+              <div className="w-full flex-col justify-center items-center">
+                <table className="w-full block text-left rtl:text-right border-b">
+                  <thead className="w-full ">
+                    <tr className=" text-[#64748B] text-[15px]">
+                      <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
+                        NAME OF DOCUMENT
+                      </th>
+                      <th scope="col" className="px-6 py-3 w-[400px]">
+                        DATE ISSUED
+                      </th>
+                      <th scope="col" className="px-6 py-3 w-[750px]">
+                        NOTES
+                      </th>
+                      <th scope="col" className="px-6 py-3 max-w-[300px]">
+                        ACTION
+                      </th>
+                    </tr>
+                  </thead>
+                </table>
+                <div className="py-5 flex justify-center items-center">
+                  <p className="text-xl font-semibold text-gray-700 text-center">
+                    No Form/s <br />
+                    •ω•
+                  </p>
+                </div>
+              </div>
+            </div>
           ) : (
-            <table className="w-full text-left rtl:text-right">
-              <thead>
-                <tr className="uppercase text-[#64748B] border-y  ">
-                  <th scope="col" className="px-7 py-3 h-[60px] w-[250px]">
+            <table className="w-full block text-left rtl:text-right border-b">
+              <thead className="w-full">
+                <tr className=" text-[#64748B] text-[15px]">
+                  <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
                     NAME OF DOCUMENT
                   </th>
-                  <th scope="col" className="px-7 py-3 h-[60px] w-[200px]">
+                  <th scope="col" className="px-6 py-3 w-[400px]">
                     DATE ISSUED
                   </th>
-                  <th scope="col" className="px-7 py-3 h-[60px] w-[900px]">
+                  <th scope="col" className="px-6 py-3 w-[750px]">
                     NOTES
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-6 py-3 max-w-[300px]">
                     ACTION
                   </th>
                 </tr>
               </thead>
-              <tbody>
+
+              <tbody className="overflow-y-scroll">
                 {patientForms.map((form, index) => (
                   <tr
                     key={index}
-                    className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
+                    className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
                   >
-                    <th className="px-7 py-3 h-[60px]">
+                    <th
+                      scope="row"
+                      className="truncate px-6 py-3 w-[400px] font-medium text-gray-900 whitespace-nowrap"
+                    >
                       {form.forms_nameOfDocument}
                     </th>
-                    <td className="px-7 py-3 h-[60px]">
+                    <td className="px-6 py-3 w-[400px]">
                       {form.forms_dateIssued}
                     </td>
-                    <td className="px-7 py-3 h-[60px] max-w-[200px] truncate">
+                    <td className="px-6 py-3 w-[750px] max-w-[750px] truncate">
                       {form.forms_notes}
                     </td>
-                    <td className="px-7 py-3 h-[60px]">
-                      <Edit></Edit>
+
+                    <td className="px-6 py-3 max-w-[300px] flex gap-2">
+                      <p
+                        onClick={() => {
+                          isModalOpen(true);
+                          setIsEdit(true);
+                          setFormsToEdit(form);
+                        }}
+                      >
+                        <Edit />
+                      </p>
+                      <p>
+                        <button className="w-[90px] h-[35px] rounded bg-[#E7EAEE]  hover:!text-white hover:!bg-[#007C85] group-hover:bg-white group-hover:text-black ">
+                          Archive
+                        </button>
+                      </p>
                     </td>
                   </tr>
                 ))}
@@ -411,6 +468,17 @@ export default function FormsTab() {
           toggleModal={setIsSuccessOpen}
           isUpdated={isUpdated}
           setIsUpdated={setIsUpdated}
+        />
+      )}
+      {isAddOpen && (
+        <Modal
+          content={
+            <FormsModalContent
+              isModalOpen={setIsAddOpen}
+              onSuccess={onSuccess}
+            />
+          }
+          isModalOpen={isAddModalOpen}
         />
       )}
     </div>
