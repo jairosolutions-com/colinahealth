@@ -32,18 +32,8 @@ export default function PatientOverviewLayout({
   const [detailsClicked, setDetailsClicked] = useState<boolean>(false); // State to track if "See more details" is clicked
   const patientId = params.id.toUpperCase();
   const pathname = usePathname();
-  const [isAllergy, setIsAllergy] = useState(true);
-  const [isSurgery, setIsSurgery] = useState(false);
-  const [isMedicationLog, setIsMedicationLog] = useState(false);
-  const [isPrescription, setIsPrescription] = useState(false);
-  const [isVitalSign, setIsVitalSign] = useState(false);
-  const [isLabRes, setIsLabRes] = useState(false);
-  const [isAppointment, setIsAppointment] = useState(false);
-  const [isNotes, setIsNotes] = useState(false);
-  const [isForms, setIsForms] = useState(false);
   const inputRef = useRef<HTMLSpanElement>(null);
 
-  console.log(getAccessToken, "getAccessToken");
   const tabs = [
     {
       label: "Medical History",
@@ -130,26 +120,6 @@ export default function PatientOverviewLayout({
   useEffect(() => {
     const pathParts = pathname.split("/");
     const tabUrl = pathParts[pathParts.length - 1];
-
-    if (tabUrl === "allergies") {
-      setIsAllergy(true);
-    } else if (tabUrl === "surgeries") {
-      setIsSurgery(true);
-    } else if (tabUrl === "medication") {
-      setIsMedicationLog(true);
-    } else if (tabUrl === "prescription") {
-      setIsPrescription(true);
-    } else if (tabUrl === "vital-signs") {
-      setIsVitalSign(true);
-    } else if (tabUrl === "lab-results") {
-      setIsLabRes(true);
-    } else if (tabUrl === "patient-appointment") {
-      setIsAppointment(true);
-    } else if (tabUrl === "notes") {
-      setIsNotes(true);
-    } else if (tabUrl === "forms") {
-      setIsForms(true);
-    }
     const fetchData = async () => {
       try {
         const response = await fetchPatientOverview(patientId, router);
@@ -333,7 +303,8 @@ export default function PatientOverviewLayout({
                         tab.label === "Medical History") ||
                       (tabUrl === "prorenata" &&
                         tab.label === "Medication Log") ||
-                      (tabUrl === "incident-report" && tab.label === "Notes")
+                      (tabUrl === "incident-report" && tab.label === "Notes") ||
+                      (tabUrl === "archived" && tab.label === "Forms")
                         ? "text-[#007C85] border-b-2 border-[#007C85] text-[15px] pb-1"
                         : "hover:text-[#007C85] hover:border-b-2 pb-1 h-[31px] border-[#007C85] text-[15px]"
                     }`}

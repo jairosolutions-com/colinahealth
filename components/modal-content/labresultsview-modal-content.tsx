@@ -161,7 +161,8 @@ export const LabResultsViewModalContent = ({
     toast({
       variant: "warning",
       title: "Maximum Files Uploaded",
-      description: "You have already uploaded 5 files. Delete some files to update.",
+      description:
+        "You have already uploaded 5 files. Delete some files to update.",
     });
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -249,8 +250,8 @@ export const LabResultsViewModalContent = ({
         }
       });
 
-      // Update state variables with arrays    
-      
+      // Update state variables with arrays
+
       setSelectedLabFiles(newFiles);
       setFileNames(newFileNames);
       setFileTypes(newFileTypes);
@@ -286,6 +287,37 @@ export const LabResultsViewModalContent = ({
       // Optionally, set error state to display an error message to the user
       setError("Failed to delete file");
     }
+  };
+ 
+  const downloadImage = () => {
+    // Create a Blob from the base64 string
+    const byteCharacters = atob(base64String);
+    const byteArrays = [];
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+      const slice = byteCharacters.slice(offset, offset + 512);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+    const blob = new Blob(byteArrays, { type: `image/${fileType}` });
+
+    // Create a temporary URL for the Blob
+    const url = window.URL.createObjectURL(blob);
+
+
+    // Create a link element and simulate a click on it
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `image.${fileType}`;
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   };
 
   return (
@@ -447,7 +479,7 @@ export const LabResultsViewModalContent = ({
                     {/* Modal */}
                     {modalOpen && (
                       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
-                        <div className="bg-white p-6 max-w-lg rounded-lg">
+                        <div className="w-full h-full rounded-lg flex items-center justify-center">
                           <button
                             type="button"
                             className="absolute top-0 left-0 m-4 ml-10 text-white hover:underline flex text-[20px]"
@@ -464,6 +496,7 @@ export const LabResultsViewModalContent = ({
                           <button
                             type="button"
                             className="absolute top-0 left-0 m-4 ml-36 text-white hover:underline flex text-[20px]"
+                            onClick={downloadImage}
                           >
                             <Image
                               className="mr-2"
@@ -553,7 +586,6 @@ export const LabResultsViewModalContent = ({
                       Submit
                     </button>
                   </div>
-
                 </div>
               </form>
               {/* {toast()} */}
