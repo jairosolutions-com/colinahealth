@@ -116,6 +116,8 @@ export const LabResultsViewModalContent = ({
           setCurrentFile(response.data[0]);
           setFileIndex(0);
           setIsLoading(false);
+          const maxAllowedFiles = 5 - labFiles.length;
+          setNumFilesCanAdd(maxAllowedFiles);
         }
         if (defaultLabFiles?.length === 0) {
           setIsNoFileModalOpen(true);
@@ -222,6 +224,7 @@ export const LabResultsViewModalContent = ({
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     const MAX_FILE_SIZE_MB = 15;
+
     const MAX_NUM_FILES = 5;
     if (files) {
       const totalSize = Array.from(files).reduce(
@@ -235,7 +238,7 @@ export const LabResultsViewModalContent = ({
         e.target.value = ""; // Clear the input field
       }
       if (files.length > numFilesCanAdd) {
-        alert(`You can only upload up to ${numFilesCanAdd} files.`);
+        alert(`You can only upload up to ${numFilesCanAdd} file(s).`);
         e.target.value = ""; // Clear the input field
       }
     }
@@ -272,8 +275,7 @@ export const LabResultsViewModalContent = ({
       setSelectedLabFiles(newFiles);
       setFileNames(newFileNames);
       setFileTypes(newFileTypes);
-      const maxAllowedFiles = 5 - labFiles.length;
-      setNumFilesCanAdd(maxAllowedFiles);
+    
     } else {
       console.warn("No files selected");
     }

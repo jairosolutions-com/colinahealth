@@ -85,9 +85,29 @@ export const NofileviewModalContent = ({
       // setError("Failed to add Lab Result");
     }
   };
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+  const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
 
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const maxAllowedFiles = 5 - labFiles.length;
+    setNumFilesCanAdd(maxAllowedFiles);
+    const files = e.target.files;
+    const MAX_FILE_SIZE_MB = 15;
+    if (files) {
+      const totalSize = Array.from(files).reduce(
+        (acc, file) => acc + file.size,
+        0
+      );
+      const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
+
+      if (totalSizeMB > MAX_FILE_SIZE_MB) {
+        alert("Total size of selected files exceeds the limit of 15MB!");
+        e.target.value = ""; // Clear the input field
+      }
+      if (files.length > numFilesCanAdd) {
+        alert(`You can only upload up to ${numFilesCanAdd} file(s).`);
+        e.target.value = ""; // Clear the input field
+      }
+    }
     if (files && files.length > 0) {
       const newFiles: File[] = [];
       const newFileNames: string[] = [];
@@ -119,6 +139,8 @@ export const NofileviewModalContent = ({
       setSelectedLabFiles(newFiles);
       setFileNames(newFileNames);
       setFileTypes(newFileTypes);
+      const maxAllowedFiles = 5 - labFiles.length;
+      setNumFilesCanAdd(maxAllowedFiles);
     } else {
       console.warn("No files selected");
     }
@@ -187,15 +209,20 @@ const toggleMaxFilesToast = (maxFiles: number): void => {
                 No image/document found!
               </div>
               <div className="">
-                {selectedFileNames.length > 0 ? (
+                {/* {selectedFileNames.length > 0 ? (
                   // Display selected filenames
                   <div className="text-[12px] w-full truncate mx-2">
                     {selectedFileNames.join(", ")}
                   </div>
-                ) : (
+                ) : ( */}
                   <div className="flex flex-row justify-center">
-                    <p className="border-2 rounded-l-md px-2 py-2 text-gray-400 text-[12px]">
-                      Upload or Attach Files or
+                    <p className="border-2   w-[156px]   rounded-l-md px-2 py-2 text-gray-400 text-[12px]">
+                    {selectedFiles.length > 0
+                                  ? `${selectedFiles.length}/${numFilesCanAdd}selected`
+                                  : defaultLabFiles.length < 5
+                                  ? "Upload or Attach Files or"
+                                  : "Max Files Uploaded"}
+                      
                     </p>
                     <label
                       htmlFor="imageUploads"
@@ -204,12 +231,12 @@ const toggleMaxFilesToast = (maxFiles: number): void => {
                       Browse
                     </label>
                   </div>
-                )}
+                {/* )} */}
                 <input
                   type="file"
                   id="imageUploads"
                   multiple={true}
-                  accept="image/*,pdf"
+                  accept="image/*,.pdf"
                   className="hidden"
                   name="file"
                   onChange={(e) => handleFile(e)}
