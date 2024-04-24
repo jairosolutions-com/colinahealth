@@ -161,7 +161,8 @@ export const LabResultsViewModalContent = ({
     toast({
       variant: "warning",
       title: "Maximum Files Uploaded",
-      description: "You have already uploaded 5 files. Delete some files to update.",
+      description:
+        "You have already uploaded 5 files. Delete some files to update.",
     });
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -221,7 +222,24 @@ export const LabResultsViewModalContent = ({
   };
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+    const MAX_FILE_SIZE_MB = 15;
+    const MAX_NUM_FILES = 5;
+    if (files) {
+      const totalSize = Array.from(files).reduce(
+        (acc, file) => acc + file.size,
+        0
+      );
+      const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
 
+      if (totalSizeMB > MAX_FILE_SIZE_MB) {
+        alert("Total size of selected files exceeds the limit of 15MB!");
+        e.target.value = ""; // Clear the input field
+      }
+      if (files.length > numFilesCanAdd) {
+        alert(`You can only upload up to ${numFilesCanAdd} files.`);
+        e.target.value = ""; // Clear the input field
+      }
+    }
     if (files && files.length > 0) {
       const newFiles: File[] = [];
       const newFileNames: string[] = [];
@@ -249,8 +267,8 @@ export const LabResultsViewModalContent = ({
         }
       });
 
-      // Update state variables with arrays    
-      
+      // Update state variables with arrays
+
       setSelectedLabFiles(newFiles);
       setFileNames(newFileNames);
       setFileTypes(newFileTypes);
@@ -403,7 +421,7 @@ export const LabResultsViewModalContent = ({
                                 type="file"
                                 id="fileupload"
                                 multiple={true}
-                                accept="image/*,pdf"
+                                accept="image/*,.pdf"
                                 className="hidden"
                                 name="file"
                                 disabled={defaultLabFiles.length === 5}
