@@ -170,10 +170,7 @@ export const LabResultsViewModalContent = ({
     const getUuid = labResultUuid;
 
     console.log("submit clicked");
-    if (selectedFiles.length === 0) {
-      toggleNoFilesToast();
-      return;
-    }
+
     if (labFiles.length === 5) {
       toggleFullFilesToast();
       return;
@@ -186,6 +183,7 @@ export const LabResultsViewModalContent = ({
       toggleMaxFilesToast(maxAllowedFiles);
       return;
     }
+
     try {
       console.log(getUuid, "getUuid");
       // Iterate through each selected file
@@ -214,6 +212,7 @@ export const LabResultsViewModalContent = ({
         // Call the onSuccess callback function
       } else {
         console.warn("No files selected to upload");
+        toggleNoFilesToast();
       }
     } catch (error) {
       console.error("Error adding Lab Result:", error);
@@ -251,6 +250,7 @@ export const LabResultsViewModalContent = ({
           newFiles.push(file);
           newFileNames.push(file.name);
           newFileTypes.push(file.type.split("/")[1]);
+
           if (files && files.length > 0) {
             // Push file names to selectedFileNames array
             if (file && file.name) {
@@ -538,6 +538,7 @@ export const LabResultsViewModalContent = ({
                     <div className="flex space-x-4 mt-4 ml-[115px] text-[15px]">
                       {fileIndex > 0 && (
                         <button
+                          type="button"
                           className="w-[80px] h-[30px] text-blue-500 bg-white-500 border-2 border-blue-500"
                           onClick={prevFile}
                         >
@@ -546,6 +547,7 @@ export const LabResultsViewModalContent = ({
                       )}
                       {fileIndex < labFiles.length - 1 && (
                         <button
+                          type="button"
                           onClick={nextFile}
                           className="w-[80px] h-[30px] text-white bg-blue-500 hover:bg-blue-700"
                         >
@@ -571,7 +573,6 @@ export const LabResultsViewModalContent = ({
                       Submit
                     </button>
                   </div>
-
                 </div>
               </form>
               {/* {toast()} */}
