@@ -138,7 +138,7 @@ const Scheduled = () => {
       pageNumbers.push(
         <button
           key={i}
-          className={`flex border border-px items-center justify-center  w-[49px]  ${
+          className={`flex ring-1 ring-gray-300 items-center justify-center  w-[49px]  ${
             currentPage === i ? "btn-pagination" : ""
           }`}
           onClick={() => setCurrentPage(i)}
@@ -326,7 +326,7 @@ const Scheduled = () => {
               {patientScheduledMed.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-xl font-semibold text-gray-700 flex text-center">
+                    <p className="text-[15px] font-normal text-gray-700 flex text-center">
                       No Scheduled Medication Log/s <br />
                     </p>
                   </td>
@@ -420,34 +420,33 @@ const Scheduled = () => {
       ) : (
         <div className="mt-5 pb-5">
           <div className="flex justify-between">
-            <p className="font-medium size-[18px] w-[138px] items-center">
+            <p className="font-medium size-[18px] text-[15px] w-[138px] items-center">
               Page {currentPage} of {totalPages}
             </p>
             <div>
               <nav>
-                <div className="flex -space-x-px text-sm">
-                  <div>
+                <div className="flex text-[15px] ">
+                  <div className="flex">
                     <button
                       onClick={goToPreviousPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Prev
                     </button>
-                  </div>
-                  {renderPageNumbers()}
 
-                  <div className="ml-5">
+                    {renderPageNumbers()}
+
                     <button
                       onClick={goToNextPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Next
                     </button>
                   </div>
                   <form onSubmit={handleGoToPage}>
-                    <div className="flex px-5 ">
+                    <div className="flex pl-4 ">
                       <input
-                        className={`ipt-pagination appearance-none  text-center border ring-1 ${
+                        className={`ipt-pagination appearance-none  text-center ring-1 ${
                           gotoError ? "ring-red-500" : "ring-gray-300"
                         } border-gray-100`}
                         type="text"
@@ -466,8 +465,11 @@ const Scheduled = () => {
                           }
                         }}
                       />
-                      <div className="px-5">
-                        <button type="submit" className="btn-pagination ">
+                      <div className="">
+                        <button
+                          type="submit"
+                          className="btn-pagination ring-1 ring-[#007C85]"
+                        >
                           Go{" "}
                         </button>
                       </div>

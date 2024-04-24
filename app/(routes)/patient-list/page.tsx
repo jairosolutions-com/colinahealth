@@ -125,7 +125,7 @@ export default function PatientPage({ patient }: { patient: any }) {
       pageNumbers.push(
         <button
           key={i}
-          className={`flex border border-px items-center justify-center  w-[49px]  ${
+          className={`flex ring-1 ring-gray-300 items-center justify-center  w-[49px]  ${
             currentPage === i ? "btn-pagination" : ""
           }`}
           onClick={() => setCurrentPage(i)}
@@ -295,61 +295,62 @@ export default function PatientPage({ patient }: { patient: any }) {
 
         {/* START OF TABLE */}
         <div className="w-full h-full">
-          {patientList.length === 0 ? (
-            <div>
-              <div className="w-full flex justify-center py-5 text-center text-[15px]">
-                No Patient Found! <br />
-              </div>
-            </div>
-          ) : (
-            <table className="w-full h-full justify-center items-start text-[15px]">
-              <thead className=" text-left rtl:text-right">
-                <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
-                  <th scope="col" className="px-6 py-3 w-[286px] h-[70px]">
-                    Patient ID
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[352px]">
-                    Name
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[277px]">
-                    Age
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[277px]">
-                    Gender
-                  </th>
+          <table className="w-full h-full justify-center items-start text-[15px]">
+            <thead className=" text-left rtl:text-right">
+              <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
+                <th scope="col" className="px-6 py-3 w-[286px] h-[70px]">
+                  Patient ID
+                </th>
+                <th scope="col" className="px-6 py-3 w-[352px]">
+                  Name
+                </th>
+                <th scope="col" className="px-6 py-3 w-[277px]">
+                  Age
+                </th>
+                <th scope="col" className="px-6 py-3 w-[277px]">
+                  Gender
+                </th>
 
-                  <th scope="col" className="px-[65px] py-3 w-[10px] ">
-                    Action
-                  </th>
+                <th scope="col" className="px-[65px] py-3 w-[10px] ">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {patientList.length === 0 && (
+                <tr>
+                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                    <p className="text-[15px] font-normal text-gray-700 flex text-center">
+                      No Patient Found! <br />
+                    </p>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {patientList.map((patient, index) => (
-                  <tr
-                    key={index}
-                    className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
+              )}
+              {patientList.map((patient, index) => (
+                <tr
+                  key={index}
+                  className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
+                >
+                  <th
+                    scope="row"
+                    className="truncate max-w-[286px] text-left px-6 py-5  font-medium text-gray-900 whitespace-nowrap"
                   >
-                    <th
-                      scope="row"
-                      className="truncate max-w-[286px] text-left px-6 py-5  font-medium text-gray-900 whitespace-nowrap"
-                    >
-                      {patient.uuid}
-                    </th>
-                    <td className="px-6">
-                      {patient.firstName} {patient.lastName}
-                    </td>
-                    <td className="px-6">{patient.age}</td>
-                    <td className="px-6">{patient.gender}</td>
-                    <td className="px-[50px]">
-                      <p onClick={() => handlePatientClick(patient.uuid)}>
-                        <Edit></Edit>
-                      </p>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                    {patient.uuid}
+                  </th>
+                  <td className="px-6">
+                    {patient.firstName} {patient.lastName}
+                  </td>
+                  <td className="px-6">{patient.age}</td>
+                  <td className="px-6">{patient.gender}</td>
+                  <td className="px-[50px]">
+                    <p onClick={() => handlePatientClick(patient.uuid)}>
+                      <Edit></Edit>
+                    </p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
         {/* END OF TABLE */}
       </div>
@@ -357,36 +358,35 @@ export default function PatientPage({ patient }: { patient: any }) {
       {totalPages <= 1 ? (
         <div></div>
       ) : (
-        <div className="mt-5">
+        <div className="mt-5 pb-5">
           <div className="flex justify-between">
-            <p className="font-medium size-[18px] w-[138px] items-center">
+            <p className="font-medium size-[18px] text-[15px] w-[138px] items-center">
               Page {currentPage} of {totalPages}
             </p>
             <div>
               <nav>
-                <div className="flex -space-x-px text-sm">
-                  <div>
+                <div className="flex text-[15px] ">
+                  <div className="flex">
                     <button
                       onClick={goToPreviousPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Prev
                     </button>
-                  </div>
-                  {renderPageNumbers()}
 
-                  <div className="ml-5">
+                    {renderPageNumbers()}
+
                     <button
                       onClick={goToNextPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Next
                     </button>
                   </div>
                   <form onSubmit={handleGoToPage}>
-                    <div className="flex px-5 ">
+                    <div className="flex pl-4 ">
                       <input
-                        className={`ipt-pagination appearance-none  text-center border ring-1 ${
+                        className={`ipt-pagination appearance-none  text-center ring-1 ${
                           gotoError ? "ring-red-500" : "ring-gray-300"
                         } border-gray-100`}
                         type="text"
@@ -405,8 +405,11 @@ export default function PatientPage({ patient }: { patient: any }) {
                           }
                         }}
                       />
-                      <div className="px-5">
-                        <button type="submit" className="btn-pagination ">
+                      <div className="">
+                        <button
+                          type="submit"
+                          className="btn-pagination ring-1 ring-[#007C85]"
+                        >
                           Go{" "}
                         </button>
                       </div>

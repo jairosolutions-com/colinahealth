@@ -143,7 +143,7 @@ export default function prescription() {
       pageNumbers.push(
         <button
           key={i}
-          className={`flex border border-px items-center justify-center  w-[49px]  ${
+          className={`flex ring-1 ring-gray-300 items-center justify-center  w-[49px]  ${
             currentPage === i ? "btn-pagination" : ""
           }`}
           onClick={() => setCurrentPage(i)}
@@ -278,53 +278,76 @@ export default function prescription() {
 
         {/* START OF TABLE */}
         <div>
-          {patientPrescriptions.length == 0 ? (
-            <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700 text-center text-[15px]">
-                No Prescription/s <br />
-              </p>
-            </div>
-          ) : (
-            <table className="w-full text-left rtl:text-right">
-              <thead className="">
-                <tr className=" text-[#64748B] border-y text-[15px]  ">
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    PRESCRIPTION ID
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                    MEDICINE NAME
-                  </th>
-                  <th scope="col" className="px-0 py-3 w-[300px]">
-                    FREQUENCY
-                  </th>
-                  <th scope="col" className="px-3 py-3 w-[300px]">
-                    INTERVAL (hr/s)
-                  </th>
-                  <th scope="col" className="px-20  py-3 w-[300px]">
-                    DOSAGE
-                  </th>
-                  <th scope="col" className="pl-10 pr-6 py-3 w-[200px] ">
-                    STATUS
-                  </th>
-                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                    ACTION
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {patientPrescriptions.length > 0 && (
-                  <>
-                    {patientPrescriptions.map((prescription, index) => (
-                      <tr
-                        key={index}
-                        className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4] text-[15px]"
+          <table className="w-full text-left rtl:text-right">
+            <thead className="">
+              <tr className=" text-[#64748B] border-y text-[15px]  ">
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  PRESCRIPTION ID
+                </th>
+                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                  MEDICINE NAME
+                </th>
+                <th scope="col" className="px-0 py-3 w-[300px]">
+                  FREQUENCY
+                </th>
+                <th scope="col" className="px-3 py-3 w-[300px]">
+                  INTERVAL (hr/s)
+                </th>
+                <th scope="col" className="px-20  py-3 w-[300px]">
+                  DOSAGE
+                </th>
+                <th scope="col" className="pl-10 pr-6 py-3 w-[200px] ">
+                  STATUS
+                </th>
+                <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                  ACTION
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {patientPrescriptions.length == 0 && (
+                <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                  <p className="text-[15px] font-normal text-gray-700 text-center">
+                    No Prescription/s <br />
+                  </p>
+                </div>
+              )}
+              {patientPrescriptions.length > 0 && (
+                <>
+                  {patientPrescriptions.map((prescription, index) => (
+                    <tr
+                      key={index}
+                      className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4] text-[15px]"
+                    >
+                      <td className="truncate max-w-[286px] px-6 py-4">
+                        {prescription.prescriptions_uuid}
+                      </td>
+                      <th
+                        scope="row"
+                        className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                       >
-                        <td className="truncate max-w-[286px] px-6 py-4">
-                          {prescription.prescriptions_uuid}
-                        </td>
-                        <th
-                          scope="row"
-                          className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                        {prescription.prescriptions_name}
+                      </th>
+                      <td className="truncate max-w-[286px] px-0 py-4">
+                        {prescription.prescriptions_frequency}
+                      </td>
+                      <td className="truncate max-w-[286px] px-3 py-4 tb-med">
+                        {prescription.prescriptions_interval} hours
+                      </td>
+                      <td className="truncate max-w-[286px] px-20 py-4">
+                        {prescription.prescriptions_dosage}
+                      </td>
+                      <td className="px-12 py-4">
+                        {" "}
+                        {prescription.prescriptions_status}
+                      </td>
+                      <td className="px-[70px] py-4">
+                        <p
+                          onClick={() => {
+                            isModalOpen(true);
+                            setIsEdit(true);
+                            setPrescriptionData(prescription);
+                          }}
                         >
                           {prescription.prescriptions_name}
                         </th>
@@ -378,34 +401,33 @@ export default function prescription() {
       ) : (
         <div className="mt-5 pb-5">
           <div className="flex justify-between">
-            <p className="font-medium size-[18px] w-[138px] items-center">
+            <p className="font-medium size-[18px] text-[15px] w-[138px] items-center">
               Page {currentPage} of {totalPages}
             </p>
             <div>
               <nav>
-                <div className="flex -space-x-px text-sm">
-                  <div>
+                <div className="flex text-[15px] ">
+                  <div className="flex">
                     <button
                       onClick={goToPreviousPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Prev
                     </button>
-                  </div>
-                  {renderPageNumbers()}
 
-                  <div className="ml-5">
+                    {renderPageNumbers()}
+
                     <button
                       onClick={goToNextPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Next
                     </button>
                   </div>
                   <form onSubmit={handleGoToPage}>
-                    <div className="flex px-5 ">
+                    <div className="flex pl-4 ">
                       <input
-                        className={`ipt-pagination appearance-none  text-center border ring-1 ${
+                        className={`ipt-pagination appearance-none  text-center ring-1 ${
                           gotoError ? "ring-red-500" : "ring-gray-300"
                         } border-gray-100`}
                         type="text"
@@ -424,8 +446,11 @@ export default function prescription() {
                           }
                         }}
                       />
-                      <div className="px-5">
-                        <button type="submit" className="btn-pagination ">
+                      <div className="">
+                        <button
+                          type="submit"
+                          className="btn-pagination ring-1 ring-[#007C85]"
+                        >
                           Go{" "}
                         </button>
                       </div>
