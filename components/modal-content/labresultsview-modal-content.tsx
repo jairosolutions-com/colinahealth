@@ -115,9 +115,9 @@ export const LabResultsViewModalContent = ({
           console.log(response.data, "LabFiles Data");
           setCurrentFile(response.data[0]);
           setFileIndex(0);
-          setIsLoading(false);
           const maxAllowedFiles = 5 - labFiles.length;
           setNumFilesCanAdd(maxAllowedFiles);
+          setIsLoading(false);  
         }
         if (defaultLabFiles?.length === 0) {
           setIsNoFileModalOpen(true);
@@ -219,6 +219,9 @@ export const LabResultsViewModalContent = ({
     } catch (error) {
       console.error("Error adding Lab Result:", error);
       // setError("Failed to add Lab Result");
+    } finally {
+      // Update loading state after all files are processed
+      setIsLoading(false);
     }
   };
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -275,7 +278,6 @@ export const LabResultsViewModalContent = ({
       setSelectedLabFiles(newFiles);
       setFileNames(newFileNames);
       setFileTypes(newFileTypes);
-    
     } else {
       console.warn("No files selected");
     }
