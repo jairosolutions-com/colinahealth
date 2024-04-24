@@ -37,20 +37,13 @@ export const LabResultsViewModalContent = ({
   };
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
 
-  const params = useParams<{ id: any; tag: string; item: string }>();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [labResultUuid, setLabResultUuid] = useState("");
   const [isUpdated, setIsUpdated] = useState(false);
-
-  const patientId = params.id.toUpperCase();
   const [labFiles, setLabFiles] = useState<LabFile[]>([]);
   const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState<Uint8Array>(new Uint8Array());
-  const [labResultData, setLabResultData] = useState<any>({});
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [showCheckboxes, setShowCheckboxes] = useState(false);
-  const [editMode, setEditMode] = useState(false);
   const [isNoFileModalOpen, setIsNoFileModalOpen] = useState(false);
   // update isNoFileModalOpen state
   const handleNoFileModalClose = (isModalOpen: boolean) => {
@@ -85,12 +78,11 @@ export const LabResultsViewModalContent = ({
     }
   };
   const defaultLabFiles = Array.isArray(labFiles) ? labFiles : [];
-
   const [base64String, setBase64String] = useState("");
   const [fileType, setFileType] = useState<string>("");
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-
+//switching to through previews
   useEffect(() => {
     if (labFiles && labFiles.length > 0) {
       const file = labFiles[fileIndex];
@@ -108,7 +100,7 @@ export const LabResultsViewModalContent = ({
     }
   }, [fileIndex, labFiles,
   ]);
-
+//fetching lab files from database
   useEffect(() => {
     const fetchData = async () => {
       setLabResultUuid(labResultsData.labResults_uuid);
@@ -141,8 +133,8 @@ export const LabResultsViewModalContent = ({
     router,
     deleteModalOpen,
     isNoFileModalOpen,
-    // defaultLabFiles,
-  ]);
+
+      ]);
 
   // Define a state to track the selected filenames
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
@@ -179,8 +171,9 @@ export const LabResultsViewModalContent = ({
       console.log(getUuid, "getUuid");
       // Iterate through each selected file
       if (selectedFiles && selectedFiles.length > 0) {
-        // Iterate through each selected file
+        setIsLoading(true)
         for (let i = 0; i < selectedFiles.length; i++) {
+          
           const labFileFormData = new FormData();
           labFileFormData.append("labfile", selectedFiles[i], fileNames[i]);
 
@@ -190,7 +183,7 @@ export const LabResultsViewModalContent = ({
             labFileFormData,
             router
           );
-
+          
           console.log(
             `Lab FILE ${fileNames[i]} added successfully:`,
             addLabFiles
