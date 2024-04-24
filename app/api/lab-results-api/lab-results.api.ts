@@ -226,3 +226,37 @@ export async function fetchLabResultFiles(
     );
   }
 }
+
+export async function getCurrentFileCountFromDatabase(
+  labResultUuid: string,
+): Promise<any> {
+  console.log(labResultUuid);
+  try {
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("Access token not found in local storage");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    const response = await axios.get(
+      `${apiUrl}/lab-results/${labResultUuid}/files/count`,
+      { headers }
+    );
+
+    console.log(response.data, 'api fetch COUNT');
+    return response.data;
+
+  } catch (error) {
+    if ((error as AxiosError).response?.status === 401) {
+      setAccessToken("");
+      return Promise.reject(new Error("Unauthorized access"));
+    }
+    console.error(
+      "Error searching lab result files:",
+      (error as AxiosError).message
+    );
+  }
+}

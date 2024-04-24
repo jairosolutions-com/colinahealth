@@ -4,10 +4,13 @@ import React, { useEffect, useState } from "react";
 import {
   fetchLabResultFiles,
   deleteLabFiles,
+  addLabFile,
+  getCurrentFileCountFromDatabase,
 } from "@/app/api/lab-results-api/lab-results.api";
 import Image from "next/image";
 import { NofileviewModalContent } from "./nofileview-modal-content";
 import { SuccessModal } from "../shared/success";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ModalProps {
   labResultsData: any;
@@ -30,25 +33,18 @@ export const LabResultsViewModalContent = ({
   const onSuccess = () => {
     setIsSuccessOpen(true);
 
-    isModalOpen(false);
+    // isModalOpen(false);
   };
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
 
-  const params = useParams<{ id: any; tag: string; item: string }>();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [labResultUuid, setLabResultUuid] = useState("");
   const [isUpdated, setIsUpdated] = useState(false);
-
-  const patientId = params.id.toUpperCase();
   const [labFiles, setLabFiles] = useState<LabFile[]>([]);
   const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState<Uint8Array>(new Uint8Array());
-  const [labResultData, setLabResultData] = useState<any>({});
   const [modalOpen, setModalOpen] = useState(false);
+
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [showCheckboxes, setShowCheckboxes] = useState(false);
-  const [toast, setToast] = useState(false);
-  const [editMode, setEditMode] = useState(false);
   const [isNoFileModalOpen, setIsNoFileModalOpen] = useState(false);
   // update isNoFileModalOpen state
   const handleNoFileModalClose = (isModalOpen: boolean) => {
@@ -83,12 +79,11 @@ export const LabResultsViewModalContent = ({
     }
   };
   const defaultLabFiles = Array.isArray(labFiles) ? labFiles : [];
-
   const [base64String, setBase64String] = useState("");
   const [fileType, setFileType] = useState<string>("");
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-
+  //switching to through previews
   useEffect(() => {
     if (labFiles && labFiles.length > 0) {
       const file = labFiles[fileIndex];
@@ -105,7 +100,7 @@ export const LabResultsViewModalContent = ({
       }
     }
   }, [fileIndex, labFiles]);
-
+  //fetching lab files from database
   useEffect(() => {
     const fetchData = async () => {
       setLabResultUuid(labResultsData.labResults_uuid);
@@ -138,8 +133,133 @@ export const LabResultsViewModalContent = ({
     router,
     deleteModalOpen,
     isNoFileModalOpen,
+    isSuccessOpen,
   ]);
 
+  // Define a state to track the selected filenames
+  const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
+  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
+  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [fileTypes, setFileTypes] = useState<string[]>([]);
+  const [selectedFiles, setSelectedLabFiles] = useState<File[]>([]);
+  const { toast } = useToast();
+  const toggleMaxFilesToast = (maxFiles: number): void => {
+    toast({
+      variant: "destructive",
+      title: "Maximum Number of Files Exceeded!",
+      description: `You can only add ${maxFiles} more file(s). Please try again.`,
+    });
+  };
+  const toggleNoFilesToast = (): void => {
+    toast({
+      variant: "warning",
+      title: "No Files Uploaded",
+      description: `Please try again.`,
+    });
+  };
+  const toggleFullFilesToast = (): void => {
+    toast({
+      variant: "warning",
+      title: "Maximum Files Uploaded",
+      description: "You have already uploaded 5 files. Delete some files to update.",
+    });
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const getUuid = labResultUuid;
+
+    console.log("submit clicked");
+    if (selectedFiles.length === 0) {
+      toggleNoFilesToast();
+      return;
+    }
+    if (labFiles.length === 5) {
+      toggleFullFilesToast();
+      return;
+    }
+    const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
+    const maxAllowedFiles = 5 - currentFileCount;
+    console.log("FILES TO ADD", maxAllowedFiles);
+
+    if (selectedFiles.length > maxAllowedFiles) {
+      toggleMaxFilesToast(maxAllowedFiles);
+      return;
+    }
+    try {
+      console.log(getUuid, "getUuid");
+      // Iterate through each selected file
+      if (selectedFiles && selectedFiles.length > 0) {
+        setIsLoading(true);
+        for (let i = 0; i < selectedFiles.length; i++) {
+          const labFileFormData = new FormData();
+          labFileFormData.append("labfile", selectedFiles[i], fileNames[i]);
+
+          // Add lab file
+          const addLabFiles = await addLabFile(
+            getUuid,
+            labFileFormData,
+            router
+          );
+
+          console.log(
+            `Lab FILE ${fileNames[i]} added successfully:`,
+            addLabFiles
+          );
+        }
+        setSelectedFileNames([]);
+        setSelectedLabFiles([]);
+        onSuccess();
+
+        // Call the onSuccess callback function
+      } else {
+        console.warn("No files selected to upload");
+      }
+    } catch (error) {
+      console.error("Error adding Lab Result:", error);
+      // setError("Failed to add Lab Result");
+    }
+  };
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+
+    if (files && files.length > 0) {
+      const newFiles: File[] = [];
+      const newFileNames: string[] = [];
+      const newFileTypes: string[] = [];
+
+      Array.from(files).forEach((file) => {
+        if (file) {
+          // Add file, name, and type to arrays
+          newFiles.push(file);
+          newFileNames.push(file.name);
+          newFileTypes.push(file.type.split("/")[1]);
+          if (files && files.length > 0) {
+            // Push file names to selectedFileNames array
+            if (file && file.name) {
+              selectedFileNames.push(file.name);
+            }
+
+            console.log(selectedFileNames, "selected file names");
+            console.log(labFiles, "labFiles labFiles labFiles");
+
+            // Set selected file names
+            setSelectedFileNames(selectedFileNames);
+          }
+          // You can handle base64 conversion here if needed
+        }
+      });
+
+      // Update state variables with arrays    
+      
+      setSelectedLabFiles(newFiles);
+      setFileNames(newFileNames);
+      setFileTypes(newFileTypes);
+      const maxAllowedFiles = 5 - labFiles.length;
+      setNumFilesCanAdd(maxAllowedFiles);
+    } else {
+      console.warn("No files selected");
+    }
+  };
   const handleDeleteClick = async () => {
     console.log("Delete button clicked");
     console.log("Selected File UUID:", selectedFileUUID);
@@ -221,192 +341,222 @@ export const LabResultsViewModalContent = ({
                   Document Files
                 </p>
               </div>
-              <div className="mb-9 pt-4">
-                <div className="h-[380px] md:px-8 mt-5">
-                  <div className="even:bg-gray-50 cursor-pointer">
-                    {currentFile && (
-                      <div className="w-full max-w-xl flex justify-between gap-4">
-                        <div
-                          style={{
-                            overflow: "scroll",
-                            width: "400px",
-                            height: "350px",
-                          }}
-                        >
-                          {fileType === "pdf" ? (
-                            <iframe
-                              src={`data:application/pdf;base64,${base64String}`}
-                              width="600px"
-                              height="550px"
-                              className="shadow-md rounded-lg"
-                              onClick={toggleModal}
-                            ></iframe>
-                          ) : (
-                            <Image
-                              alt="file image"
-                              width="600"
-                              height="550"
-                              onClick={toggleModal}
-                              src={`data:image/${fileType};base64,${base64String}`}
-                            ></Image>
-                          )}
-                        </div>
-                        <div className="w-[220px]">
-                          <div className="w-full flex justify-between flex-row">
-                            <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-full flex justify-center hover:border-[#686868]  ">
-                              Choose files to upload
-                            </p>
-                            <label
-                              htmlFor="imageUpload"
-                              className="text-[13px] bg-[#007C85] px-2 py-1 text-white cursor-pointer rounded-r-md flex justify-center border-2 border-[#007C85]"
-                            >
-                              Browse
-                            </label>
+              <form className="" onSubmit={handleSubmit}>
+                <div className="mb-9 pt-4">
+                  <div className="h-[380px] md:px-8 mt-5">
+                    <div className="even:bg-gray-50 cursor-pointer">
+                      {currentFile && (
+                        <div className="w-full max-w-xl flex justify-between gap-4">
+                          <div
+                            style={{
+                              overflow: "scroll",
+                              width: "400px",
+                              height: "350px",
+                            }}
+                          >
+                            {fileType === "pdf" ? (
+                              <iframe
+                                src={`data:application/pdf;base64,${base64String}`}
+                                width="600px"
+                                height="550px"
+                                className="shadow-md rounded-lg"
+                                onClick={toggleModal}
+                              ></iframe>
+                            ) : (
+                              <Image
+                                alt="file image"
+                                width="600"
+                                height="550"
+                                onClick={toggleModal}
+                                src={`data:image/${fileType};base64,${base64String}`}
+                              ></Image>
+                            )}
                           </div>
-                          {defaultLabFiles.map((file: LabFile, index) => (
+                          <div className="w-[220px]">
                             <div
-                              className="flex justify-between px-1 bg-white rounded-md border-2 mt-4 hover:border-[#686868] text-overflow truncate cursor-pointer"
-                              key={index}
-                              onClick={() => {
-                                setFileIndex(index);
-                                setCurrentFile(file);
-                              }}
+                              className={`w-full flex justify-between flex-row ${
+                                defaultLabFiles.length === 5
+                                  ? "cursor-not-allowed"
+                                  : "cursor-pointer"
+                              }`}
                             >
-                              <h2 className="text-[12px] px-1 text-gray-400 py-1">
-                                {file.filename}
-                              </h2>
-                              {/* Delete button for each file */}
-                              <X
-                                onClick={(e) => {
-                                  setSelectedFileUUID(file.fileId);
-                                  console.log("Delete button clicked");
-                                  console.log(
-                                    "File UUID:",
-                                    file.fileId,
-                                    selectedFileUUID
-                                  );
-                                  toggleDeleteModal();
-                                }}
-                                className="w-3 h-3 text-gray-400 flex items-center mt-[6px] mr-2"
+                              <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-[150px]  hover:border-[#686868]">
+                                {selectedFiles.length > 0
+                                  ? `${selectedFiles.length}/${numFilesCanAdd}selected`
+                                  : defaultLabFiles.length < 5
+                                  ? "Choose files to upload"
+                                  : "Max Files Uploaded"}
+                              </p>
+                              <label
+                                htmlFor="fileupload"
+                                className={` ${
+                                  defaultLabFiles.length === 5
+                                    ? "cursor-not-allowed"
+                                    : "cursor-pointer"
+                                }
+                                text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}
+                              >
+                                Browse
+                              </label>
+
+                              <input
+                                type="file"
+                                id="fileupload"
+                                multiple={true}
+                                accept="image/*,pdf"
+                                className="hidden"
+                                name="file"
+                                disabled={defaultLabFiles.length === 5}
+                                onChange={(e) => handleFile(e)}
+                                max={5}
                               />
                             </div>
-                          ))}
+                            {defaultLabFiles.map((file: LabFile, index) => (
+                              <div
+                                className="flex justify-between px-1 bg-white rounded-md border-2 mt-4 hover:border-[#686868] text-overflow truncate cursor-pointer"
+                                key={index}
+                                onClick={() => {
+                                  setFileIndex(index);
+                                  setCurrentFile(file);
+                                }}
+                              >
+                                <h2 className="text-[12px] px-1 text-gray-400 py-1">
+                                  {file.filename}
+                                </h2>
+                                {/* Delete button for each file */}
+                                <X
+                                  onClick={(e) => {
+                                    setSelectedFileUUID(file.fileId);
+                                    console.log("Delete button clicked");
+                                    console.log(
+                                      "File UUID:",
+                                      file.fileId,
+                                      selectedFileUUID
+                                    );
+                                    toggleDeleteModal();
+                                  }}
+                                  className="w-3 h-3 text-gray-400 flex items-center mt-[6px] mr-2"
+                                />
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Modal */}
-                  {modalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
-                      <div className="bg-white p-6 max-w-lg rounded-lg">
-                        <button
-                          type="button"
-                          className="absolute top-0 left-0 m-4 ml-10 text-white hover:underline flex text-[20px]"
-                        >
-                          <Image
-                            className="mr-2"
-                            src="/svgs/print.svg"
-                            alt="Icon"
-                            width={30}
-                            height={30}
-                          />
-                          Print
-                        </button>
-                        <button
-                          type="button"
-                          className="absolute top-0 left-0 m-4 ml-36 text-white hover:underline flex text-[20px]"
-                        >
-                          <Image
-                            className="mr-2"
-                            src="/svgs/download.svg"
-                            alt="Icon"
-                            width={30}
-                            height={30}
-                          />
-                          Download
-                        </button>
-                        <button
-                          className="absolute top-0 right-0 m-4 text-white hover:underline text-[20px]"
-                          onClick={toggleModal}
-                        >
-                          Close
-                        </button>
-                        <Image
-                          alt="Document Full Preview"
-                          width={1500}
-                          height={1200}
-                          src={`data:image/${fileType};base64,${base64String}`}
-                        />
-                      </div>
+                      )}
                     </div>
-                  )}
-                  {deleteModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#76898A99]">
-                      <div className="bg-white max-w-lg rounded-lg w-[700px] h-[146px]">
-                        <div className="flex justify-center items-center pt-6 pb-6">
-                          <h2 className="font-semibold text-[20px] text-[#667085]">
-                            Are you sure to delete this?
-                          </h2>
-                        </div>
-                        <div className="flex border-t-4">
+
+                    {/* Modal */}
+                    {modalOpen && (
+                      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
+                        <div className="bg-white p-6 max-w-lg rounded-lg">
                           <button
-                            onClick={() => setDeleteModalOpen(false)}
                             type="button"
-                            className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+                            className="absolute top-0 left-0 m-4 ml-10 text-white hover:underline flex text-[20px]"
                           >
-                            No
+                            <Image
+                              className="mr-2"
+                              src="/svgs/print.svg"
+                              alt="Icon"
+                              width={30}
+                              height={30}
+                            />
+                            Print
                           </button>
                           <button
                             type="button"
-                            onClick={handleDeleteClick}
-                            className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md"
+                            className="absolute top-0 left-0 m-4 ml-36 text-white hover:underline flex text-[20px]"
                           >
-                            Yes
+                            <Image
+                              className="mr-2"
+                              src="/svgs/download.svg"
+                              alt="Icon"
+                              width={30}
+                              height={30}
+                            />
+                            Download
                           </button>
+                          <button
+                            className="absolute top-0 right-0 m-4 text-white hover:underline text-[20px]"
+                            onClick={toggleModal}
+                          >
+                            Close
+                          </button>
+                          <Image
+                            alt="Document Full Preview"
+                            width={1500}
+                            height={1200}
+                            src={`data:image/${fileType};base64,${base64String}`}
+                          />
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                    {deleteModalOpen && (
+                      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#76898A99]">
+                        <div className="bg-white max-w-lg rounded-lg w-[700px] h-[146px]">
+                          <div className="flex justify-center items-center pt-6 pb-6">
+                            <h2 className="font-semibold text-[20px] text-[#667085]">
+                              Are you sure to delete this?
+                            </h2>
+                          </div>
+                          <div className="flex border-t-4">
+                            <button
+                              onClick={() => setDeleteModalOpen(false)}
+                              type="button"
+                              className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+                            >
+                              No
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleDeleteClick}
+                              className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md"
+                            >
+                              Yes
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
-                  <div className="flex space-x-4 mt-4 ml-[115px] text-[15px]">
-                    {fileIndex > 0 && (
-                      <button
-                        className="w-[80px] h-[30px] text-blue-500 bg-white-500 border-2 border-blue-500"
-                        onClick={prevFile}
-                      >
-                        Previous
-                      </button>
-                    )}
-                    {fileIndex < labFiles.length - 1 && (
-                      <button
-                        onClick={nextFile}
-                        className="w-[80px] h-[30px] text-white bg-blue-500 hover:bg-blue-700"
-                      >
-                        Next
-                      </button>
-                    )}
+                    <div className="flex space-x-4 mt-4 ml-[115px] text-[15px]">
+                      {fileIndex > 0 && (
+                        <button
+                          className="w-[80px] h-[30px] text-blue-500 bg-white-500 border-2 border-blue-500"
+                          onClick={prevFile}
+                        >
+                          Previous
+                        </button>
+                      )}
+                      {fileIndex < labFiles.length - 1 && (
+                        <button
+                          onClick={nextFile}
+                          className="w-[80px] h-[30px] text-white bg-blue-500 hover:bg-blue-700"
+                        >
+                          Next
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <div className="justify-center flex ">
-                  <button
-                    onClick={() => isModalOpen(false)}
-                    type="button"
-                    className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md"
-                  >
-                    Submit
-                  </button>
+                <div>
+                  <div className="justify-center flex border-t-4">
+                    <button
+                      onClick={() => isModalOpen(false)}
+                      type="button"
+                      className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md"
+                    >
+                      Submit
+                    </button>
+                  </div>
+
                 </div>
-              </div>
-              {toast}
+              </form>
+              {/* {toast()} */}
             </>
           )}
         </div>

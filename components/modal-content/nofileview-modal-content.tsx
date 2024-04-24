@@ -4,7 +4,7 @@ import Image from "next/image";
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { addLabFile } from "@/app/api/lab-results-api/lab-results.api";
+import { addLabFile, getCurrentFileCountFromDatabase } from "@/app/api/lab-results-api/lab-results.api";
 import { useRouter } from "next/navigation";
 interface ModalProps {
   labResultUuid: any;
@@ -36,13 +36,24 @@ export const NofileviewModalContent = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const getUuid = labResultUuid;
+
     console.log("submit clicked");
     if (selectedFiles.length === 0) {
       toggleToast();
       return;
     }
+    const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
+    const maxAllowedFiles = 5 - currentFileCount;
+
+    console.log("FILES TO ADD", maxAllowedFiles);  
+
+
+    if (selectedFiles.length > maxAllowedFiles) {
+      toggleMaxFilesToast(maxAllowedFiles);
+      return;
+    }
     try {
-      const getUuid = labResultUuid;
       console.log(getUuid, "getUuid");
       // Iterate through each selected file
       if (selectedFiles && selectedFiles.length > 0) {
@@ -120,6 +131,14 @@ export const NofileviewModalContent = ({
     });
   };
 
+  
+const toggleMaxFilesToast = (maxFiles: number): void => {
+  toast({
+    variant: "destructive",
+    title: "Maximum Number of Files Exceeded!",
+    description: `You can only add ${maxFiles} more file(s). Please try again.`,
+  });
+};
   useEffect(() => {
     // Initialize selected file names array
     let selectedFileNames: string[] = [];
