@@ -243,6 +243,7 @@ export const AppointmentModalContent = ({
                     alt="edit-icon"
                   />
                   <button
+                    disabled={formData.appointmentStatus === "Missed"}
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                     onClick={() => {
@@ -254,7 +255,11 @@ export const AppointmentModalContent = ({
                       isEditable
                         ? "ring-[#2867C7] hover:ring-0 text-[#1B84FF] hover:text-white hover:bg-[#1B84FF]"
                         : "hover:bg-[#D9D9D9]"
-                    } w-24 h-8  font-medium rounded text-[#000] ring-1 ring-gray-200 `}
+                    } ${
+                      formData.appointmentStatus === "Missed" &&
+                      "cursor-not-allowed"
+                    } 
+                    w-24 h-8  font-medium rounded text-[#000] ring-1 ring-gray-200 `}
                   >
                     <p className="w-full pl-5">Edit</p>
                   </button>

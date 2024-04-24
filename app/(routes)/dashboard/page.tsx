@@ -306,7 +306,12 @@ const Dashboard = () => {
               </div>
             )}
 
-            <div className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] py-[40px]">
+            <div 
+             onClick={() => {
+              setIsLoading(true);
+              onNavigate(router, "/due-medications");
+            }}
+            className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] py-[40px]">
               SEE ALL DUE
               <svg
                 className="text-[#71717A] ml-2 group-hover:text-[#007C85]"
