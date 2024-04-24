@@ -19,7 +19,7 @@ export const Navbar = ({
 
   const handleTabClick = (url: string, isActive: boolean) => {
     setIsActive(isActive);
-    onNavigate(router, url);
+    router.push(url);
   };
 
   const routes = [
@@ -60,7 +60,13 @@ export const Navbar = ({
   }, [dropdownOpen]);
 
   useEffect(() => {
-    if (pathname === '/due-medications' || pathname === '/patient-list' || pathname === '/chart' || pathname === '/appointments' || pathname === '/dashboard') {
+    if (
+      pathname === "/due-medications" ||
+      pathname === "/patient-list" ||
+      pathname === "/chart" ||
+      pathname === "/appointments" ||
+      pathname === "/dashboard"
+    ) {
       setIsLoading(false);
     }
   }, [pathname]);
@@ -75,7 +81,7 @@ export const Navbar = ({
         className="cursor-pointer"
         onClick={() => {
           setIsLoading(true);
-          onNavigate(router, "/dashboard");
+          router.push("/dashboard");
         }}
       />
       <div className="flex gap-[30px] items-center">
@@ -85,7 +91,7 @@ export const Navbar = ({
               className={`cursor-pointer text-white relative`}
               onClick={() => {
                 setIsLoading(true);
-                onNavigate(router, route.url);
+                router.push(route.url);
               }}
               key={index}
             >

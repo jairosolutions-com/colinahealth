@@ -20,7 +20,7 @@ import { fetchDueMedication } from "@/app/api/medication-logs-api/due-medication
 export default function DueMedicationPage({ patient }: { patient: any }) {
   const router = useRouter();
   if (!getAccessToken()) {
-    onNavigate(router, "/login");
+    router.push("/login");
   }
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -150,7 +150,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
     }
     return pageNumbers;
   };
-console.log(currentPage, "currentPage");
+  console.log(currentPage, "currentPage");
   useEffect(() => {
     const fetchData = async () => {
       try {

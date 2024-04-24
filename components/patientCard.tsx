@@ -66,13 +66,11 @@ const PatientCard = ({
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
 
-    onNavigate(
-      router,
+    router.push(
       `/patient-overview/${lowercasePatientId}/medical-history/allergies`
     );
   };
 
-  
   return (
     <div className="w-full pl-3 mt-[46px] ">
       <div className="flex w-full  flex-col  bg-[#F4F4F4] items-center  md:border-dashed md:border-r md:border-r-black   right-0 ">

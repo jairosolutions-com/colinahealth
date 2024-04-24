@@ -21,7 +21,7 @@ export const Login = () => {
   const router = useRouter();
   useEffect(() => {
     if (getAccessToken()) {
-      onNavigate(router, "/dashboard");
+      router.push("/dashboard");
       console.log("true");
     } else {
       setIsAccessed(false);
@@ -52,7 +52,7 @@ export const Login = () => {
       if (accessToken) {
         // Redirect to patient-list if login successful
         setAccessToken(accessToken);
-        onNavigate(router, "/dashboard");
+        router.push("/dashboard");
       } else {
         // Handle invalid login
         setPassword("");
@@ -98,7 +98,11 @@ export const Login = () => {
               <h2 className=" text-[20px] font-semibold  md:text-2xl lg:mb-10">
                 Sign in to your Account
               </h2>
-              <div className={`text-red-500 w-full md:mb-8 mb-4 -mt-5 text-md ${isInvalid?"block" : "hidden"}`}>
+              <div
+                className={`text-red-500 w-full md:mb-8 mb-4 -mt-5 text-md ${
+                  isInvalid ? "block" : "hidden"
+                }`}
+              >
                 <p className="">Your email or password was not recognized.</p>
                 <p> Please try again.</p>
               </div>
@@ -132,12 +136,17 @@ export const Login = () => {
                     >
                       {isInvalid ? "Email" : "Email"}
                     </label>
-                    <p className={`${isInvalid?"block":"hidden"} mt-2 text-red-500`}>Enter a valid email</p>
+                    <p
+                      className={`${
+                        isInvalid ? "block" : "hidden"
+                      } mt-2 text-red-500`}
+                    >
+                      Enter a valid email
+                    </p>
                   </div>
-                  
+
                   <div className="relative mb-4 flex flex-col">
                     <input
-                      
                       id="password"
                       type={!showPass ? "password" : "text"}
                       className={`${isInvalid ? "ring-1 ring-red-400" : ""}  
@@ -158,14 +167,26 @@ export const Login = () => {
                     >
                       {isInvalid ? "Password" : "Password"}
                     </label>
-                    <p className={`${isInvalid?"block":"hidden"} mt-2 text-red-500`}>Enter your password</p>
+                    <p
+                      className={`${
+                        isInvalid ? "block" : "hidden"
+                      } mt-2 text-red-500`}
+                    >
+                      Enter your password
+                    </p>
                     <div
-                      className={` absolute cursor-pointer right-3 flex items-center justify-center h-full ${isInvalid?"-top-3":""}`}
+                      className={` absolute cursor-pointer right-3 flex items-center justify-center h-full ${
+                        isInvalid ? "-top-3" : ""
+                      }`}
                       onClick={() => setShowPass(!showPass)}
                     >
                       <img
-                        className={`${password? "block":"hidden"}`}
-                        src={`${showPass ? "/icons/show-pass.svg" : "/icons/hide-pass.svg"}`}
+                        className={`${password ? "block" : "hidden"}`}
+                        src={`${
+                          showPass
+                            ? "/icons/show-pass.svg"
+                            : "/icons/hide-pass.svg"
+                        }`}
                         alt="show-pass"
                         width={25}
                       />

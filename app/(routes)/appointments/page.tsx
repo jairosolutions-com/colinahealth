@@ -32,10 +32,9 @@ export default function AppointmentPage() {
   const router = useRouter();
 
   if (!getAccessToken()) {
-    onNavigate(router, "/login");
+    router.push("/login");
   }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
-
 
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortBy, setSortBy] = useState("appointmentDate");

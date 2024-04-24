@@ -20,7 +20,7 @@ import { useToast } from "@/components/ui/use-toast";
 export default function PatientPage({ patient }: { patient: any }) {
   const router = useRouter();
   if (!getAccessToken()) {
-    onNavigate(router, "/login");
+    router.push("/login");
   }
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -185,8 +185,7 @@ export default function PatientPage({ patient }: { patient: any }) {
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
     setIsLoading(true);
-    onNavigate(
-      router,
+    router.push(
       `/patient-overview/${lowercasePatientId}/medical-history/allergies`
     );
   };
@@ -213,7 +212,7 @@ export default function PatientPage({ patient }: { patient: any }) {
         <p
           onClick={() => {
             setIsLoading(true);
-            onNavigate(router, "/dashboard");
+            router.push("/dashboard");
           }}
           className="text-[#64748B] underline cursor-pointer text-[15px]"
         >

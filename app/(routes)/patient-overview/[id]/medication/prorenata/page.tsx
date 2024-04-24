@@ -202,8 +202,7 @@ const Prorenata = () => {
             <span className="slash">{">"}</span>
             <span
               onClick={() => {
-                onNavigate(
-                  router,
+                router.push(
                   `/patient-overview/${patientId.toLowerCase()}/medication/scheduled`
                 );
                 setIsLoading(true);

@@ -13,7 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 const Dashboard = () => {
   const router = useRouter();
   if (!getAccessToken()) {
-    onNavigate(router, "/login");
+    router.push("/login");
   }
   const { toast } = useToast();
   const [term, setTerm] = useState("");

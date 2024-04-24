@@ -194,8 +194,7 @@ const Allergies = () => {
             <span className="slash">{">"}</span>
             <span
               onClick={() => {
-                onNavigate(
-                  router,
+                router.push(
                   `/patient-overview/${patientId.toLowerCase()}/medical-history/surgeries`
                 );
                 setIsLoading(true);
