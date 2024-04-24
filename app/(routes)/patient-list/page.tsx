@@ -295,61 +295,62 @@ export default function PatientPage({ patient }: { patient: any }) {
 
         {/* START OF TABLE */}
         <div className="w-full h-full">
-          {patientList.length === 0 ? (
-            <div>
-              <div className="w-full flex justify-center py-5 text-center text-[15px]">
-                No Patient Found! <br />
-              </div>
-            </div>
-          ) : (
-            <table className="w-full h-full justify-center items-start text-[15px]">
-              <thead className=" text-left rtl:text-right">
-                <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
-                  <th scope="col" className="px-6 py-3 w-[286px] h-[70px]">
-                    Patient ID
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[352px]">
-                    Name
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[277px]">
-                    Age
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[277px]">
-                    Gender
-                  </th>
+          <table className="w-full h-full justify-center items-start text-[15px]">
+            <thead className=" text-left rtl:text-right">
+              <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
+                <th scope="col" className="px-6 py-3 w-[286px] h-[70px]">
+                  Patient ID
+                </th>
+                <th scope="col" className="px-6 py-3 w-[352px]">
+                  Name
+                </th>
+                <th scope="col" className="px-6 py-3 w-[277px]">
+                  Age
+                </th>
+                <th scope="col" className="px-6 py-3 w-[277px]">
+                  Gender
+                </th>
 
-                  <th scope="col" className="px-[65px] py-3 w-[10px] ">
-                    Action
-                  </th>
+                <th scope="col" className="px-[65px] py-3 w-[10px] ">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {patientList.length === 0 && (
+                <tr>
+                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                    <p className="text-[15px] font-normal text-gray-700 flex text-center">
+                      No Patient Found! <br />
+                    </p>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {patientList.map((patient, index) => (
-                  <tr
-                    key={index}
-                    className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
+              )}
+              {patientList.map((patient, index) => (
+                <tr
+                  key={index}
+                  className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
+                >
+                  <th
+                    scope="row"
+                    className="truncate max-w-[286px] text-left px-6 py-5  font-medium text-gray-900 whitespace-nowrap"
                   >
-                    <th
-                      scope="row"
-                      className="truncate max-w-[286px] text-left px-6 py-5  font-medium text-gray-900 whitespace-nowrap"
-                    >
-                      {patient.uuid}
-                    </th>
-                    <td className="px-6">
-                      {patient.firstName} {patient.lastName}
-                    </td>
-                    <td className="px-6">{patient.age}</td>
-                    <td className="px-6">{patient.gender}</td>
-                    <td className="px-[50px]">
-                      <p onClick={() => handlePatientClick(patient.uuid)}>
-                        <Edit></Edit>
-                      </p>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                    {patient.uuid}
+                  </th>
+                  <td className="px-6">
+                    {patient.firstName} {patient.lastName}
+                  </td>
+                  <td className="px-6">{patient.age}</td>
+                  <td className="px-6">{patient.gender}</td>
+                  <td className="px-[50px]">
+                    <p onClick={() => handlePatientClick(patient.uuid)}>
+                      <Edit></Edit>
+                    </p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
         {/* END OF TABLE */}
       </div>

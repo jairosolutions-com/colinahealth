@@ -302,75 +302,74 @@ export default function Surgeries() {
 
         {/* START OF TABLE */}
         <div>
-          {patientSurgeries.length == 0 ? (
-            <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700 text-center">
-                No Surgeries Found <br />
-              </p>
-            </div>
-          ) : (
-            <table className="w-full text-left rtl:text-right">
-              <thead className="">
-                <tr className="uppercase text-[#64748B] border-y text-[15px] ">
-                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                    Surgery ID
-                  </th>
-                  <th scope="col" className="px-2 py-3 w-[300px] h-[70px]">
-                    DATE OF SURGERY
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    TYPE
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    SURGERY
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    NOTES
-                  </th>
+          <table className="w-full text-left rtl:text-right">
+            <thead className="">
+              <tr className="uppercase text-[#64748B] border-y text-[15px] ">
+                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                  Surgery ID
+                </th>
+                <th scope="col" className="px-2 py-3 w-[300px] h-[70px]">
+                  DATE OF SURGERY
+                </th>
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  TYPE
+                </th>
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  SURGERY
+                </th>
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  NOTES
+                </th>
 
-                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {patientSurgeries.map((surgery, index) => (
-                  <tr
-                    key={index}
-                    className="group hover:bg-[#f4f4f4]  even:bg-gray-50  border-b text-[15px]"
+                <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {patientSurgeries.length == 0 && (
+                <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                  <p className="text-[15px] font-normal text-gray-700 text-center">
+                    No Surgeries Found <br />
+                  </p>
+                </div>
+              )}
+              {patientSurgeries.map((surgery, index) => (
+                <tr
+                  key={index}
+                  className="group hover:bg-[#f4f4f4]  even:bg-gray-50  border-b text-[15px]"
+                >
+                  <th
+                    scope="row"
+                    className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
-                    <th
-                      scope="row"
-                      className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                    {surgery.surgeries_uuid}
+                  </th>
+                  <td className="px-2 py-4">
+                    {formatDate(surgery.surgeries_dateOfSurgery)}
+                  </td>
+                  <td className="px-6 py-4">
+                    {surgery.surgeries_typeOfSurgery}
+                  </td>
+                  <td className=" max-w-[552px] px-6 py-4">
+                    {surgery.surgeries_surgery}
+                  </td>
+                  <td className="px-6 py-4">{surgery.surgeries_notes}</td>
+                  <td className="px-[50px] py-4 flex items-center justify-center  ">
+                    <div
+                      onClick={() => {
+                        isModalOpen(true);
+                        setIsEdit(true);
+                        setSurgeryData(surgery);
+                      }}
                     >
-                      {surgery.surgeries_uuid}
-                    </th>
-                    <td className="px-2 py-4">
-                      {formatDate(surgery.surgeries_dateOfSurgery)}
-                    </td>
-                    <td className="px-6 py-4">
-                      {surgery.surgeries_typeOfSurgery}
-                    </td>
-                    <td className=" max-w-[552px] px-6 py-4">
-                      {surgery.surgeries_surgery}
-                    </td>
-                    <td className="px-6 py-4">{surgery.surgeries_notes}</td>
-                    <td className="px-[50px] py-4 flex items-center justify-center  ">
-                      <div
-                        onClick={() => {
-                          isModalOpen(true);
-                          setIsEdit(true);
-                          setSurgeryData(surgery);
-                        }}
-                      >
-                        <Edit></Edit>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                      <Edit></Edit>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
         {/* END OF TABLE */}
       </div>

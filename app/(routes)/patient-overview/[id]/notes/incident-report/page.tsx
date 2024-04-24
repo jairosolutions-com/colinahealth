@@ -289,12 +289,12 @@ const Notes = () => {
                 <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
                   NOTES ID
                 </th>
-                {/* <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
+                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
                   DATE
                 </th>
                 <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
                   TIME
-                </th> */}
+                </th>
                 <th scope="col" className="px-6 py-3 w-[250px]">
                   SUBJECT
                 </th>
@@ -304,6 +304,13 @@ const Notes = () => {
               </tr>
             </thead>
             <tbody>
+              {patientNotes.length === 0 && (
+                <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                  <p className="text-[15px] font-normal text-gray-700 text-center">
+                    No Incident Report/s <br />
+                  </p>
+                </h1>
+              )}
               {patientNotes.map((notes, index) => (
                 <tr
                   key={index}

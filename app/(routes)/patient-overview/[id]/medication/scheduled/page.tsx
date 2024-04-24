@@ -326,7 +326,7 @@ const Scheduled = () => {
               {patientScheduledMed.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-xl font-semibold text-gray-700 flex text-center">
+                    <p className="text-[15px] font-normal text-gray-700 flex text-center">
                       No Scheduled Medication Log/s <br />
                     </p>
                   </td>
