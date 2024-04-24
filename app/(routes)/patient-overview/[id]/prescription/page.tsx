@@ -4,6 +4,7 @@ import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/edit";
+import View from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useRouter, useParams } from "next/navigation";
@@ -13,6 +14,7 @@ import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
 import Modal from "@/components/reusable/modal";
 import { PrescriptionModalContent } from "@/components/modal-content/prescription-modal-content";
+import { PrescriptionViewModalContent } from "@/components/modal-content/prescriptionview-modal-content";
 
 export default function prescription() {
   const router = useRouter();
@@ -35,6 +37,8 @@ export default function prescription() {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+  const [isView, setIsView] = useState(false);
+
   interface Modalprops {
     label: string;
     isOpen: boolean;
@@ -46,8 +50,9 @@ export default function prescription() {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
       document.body.style.overflow = "visible";
-      setPrescriptionData([]);
       setIsEdit(false);
+      setIsView(false);
+      setPrescriptionData([]);
     }
   };
 
@@ -182,6 +187,7 @@ export default function prescription() {
     setIsSuccessOpen(true);
     setIsEdit(false);
     isModalOpen(false);
+    setIsView(false);
   };
   const onFailed = () => {
     setIsErrorOpen(true);
@@ -345,6 +351,16 @@ export default function prescription() {
                           >
                             <Edit></Edit>
                           </p>
+                          <p
+                            onClick={() => {
+                              isModalOpen(true);
+                              setIsView(true);
+
+                              setPrescriptionData(prescription);
+                            }}
+                          >
+                            <View></View>
+                          </p>
                         </td>
                       </tr>
                     ))}
@@ -434,6 +450,18 @@ export default function prescription() {
               onFailed={onFailed}
               setErrorMessage={setError}
               setIsUpdated={setIsUpdated}
+            />
+          }
+          isModalOpen={isModalOpen}
+        />
+      )}
+      {isView && (
+        <Modal
+          content={
+            <PrescriptionViewModalContent
+              isModalOpen={isModalOpen}
+              isView={isView}
+              prescriptionData={prescriptionData}
             />
           }
           isModalOpen={isModalOpen}

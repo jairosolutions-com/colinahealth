@@ -241,7 +241,7 @@ export const LabResultsViewModalContent = ({
         e.target.value = ""; // Clear the input field
       }
       if (files.length > numFilesCanAdd) {
-        alert(`You can only upload up to ${numFilesCanAdd} file(s).`);
+        toggleMaxFilesToast(numFilesCanAdd)
         e.target.value = ""; // Clear the input field
       }
     }
