@@ -150,7 +150,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
     }
     return pageNumbers;
   };
-
+console.log(currentPage, "currentPage");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -162,45 +162,16 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
           router
         );
 
-        // Filter data by distinct medicationLogsName for each patient
-        const filteredData = dueMedicationList.data.reduce(
-          (
-            acc: { [key: string]: any },
-            currentItem: {
-              patient_uuid: string;
-              medicationlogs_medicationLogsName: string;
-            }
-          ) => {
-            const key = `${currentItem.patient_uuid}-${currentItem.medicationlogs_medicationLogsName}`;
-            if (!acc[key]) {
-              acc[key] = currentItem;
-            }
-            return acc;
-          },
-          {}
-        );
-
-        const filteredArray: {
-          patient_uuid: string;
-          medicationlogs_medicationLogsName: string;
-          patient_firstName: string;
-          patient_lastName: string;
-          patient_middleName: string;
-          medicationlogs_medicationLogsDate: string;
-          medicationlogs_medicationLogsTime: string;
-        }[] = Object.values(filteredData);
-        const limitedArray = filteredArray.slice(0, 6);
-
-        setDueMedicationList(limitedArray);
-        setDueMedTotalPages(dueMedicationList.totalPages);
-        setTotalDueMedication(filteredArray.length);
+        setDueMedicationList(dueMedicationList.data);
+        setTotalPages(dueMedicationList.totalPages);
+        setTotalDueMedication(dueMedicationList.totalCount);
         setIsLoading(false);
       } catch (error) {
         // Handle error
       }
     };
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, term, sortBy, sortOrder]);
 
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
@@ -228,7 +199,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
   };
 
   return (
-    <div className="w-full px-[150px] py-[90px]">
+    <div className="w-full px-[150px] pt-[90px]">
       <div className="flex justify-end">
         <p
           onClick={() => {
@@ -245,7 +216,8 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
           <p className="p-title">Due Medication</p>
           {/* number of patiens */}
           <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
-            Total of {patientList.length == 0 ? "0" : totalPatient} Patients
+            Total of {totalDueMedication == 0 ? "0" : totalDueMedication} Due
+            Medication{totalDueMedication > 1 ? "s" : ""}
           </p>
         </div>
         <div className="flex flex-row justify-end">
