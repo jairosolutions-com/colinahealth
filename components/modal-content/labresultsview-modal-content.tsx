@@ -8,7 +8,7 @@ import {
   getCurrentFileCountFromDatabase,
 } from "@/app/api/lab-results-api/lab-results.api";
 import Image from "next/image";
-import { NofileviewModalContent } from "./nofileview-modal-content";
+import { NofileviewLabResultsModalContent } from "./nofileview-labresults-modal-content";
 import { SuccessModal } from "../shared/success";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -117,7 +117,7 @@ export const LabResultsViewModalContent = ({
           setFileIndex(0);
           const maxAllowedFiles = 5 - labFiles.length;
           setNumFilesCanAdd(maxAllowedFiles);
-          setIsLoading(false);  
+          setIsLoading(false);
         }
         if (defaultLabFiles?.length === 0) {
           setIsNoFileModalOpen(true);
@@ -310,7 +310,6 @@ export const LabResultsViewModalContent = ({
     }
   };
 
-
   const downloadImage = () => {
     // Create a Blob from the base64 string
     const byteCharacters = atob(base64String);
@@ -344,7 +343,7 @@ export const LabResultsViewModalContent = ({
   return (
     <div>
       {defaultLabFiles?.length === 0 && isLoading === false ? (
-        <NofileviewModalContent
+        <NofileviewLabResultsModalContent
           labResultUuid={labResultUuid}
           onClose={handleNoFileModalClose}
           isModalOpen={(isOpen: boolean): void => {

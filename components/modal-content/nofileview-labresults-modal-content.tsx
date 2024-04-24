@@ -4,7 +4,10 @@ import Image from "next/image";
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { addLabFile, getCurrentFileCountFromDatabase } from "@/app/api/lab-results-api/lab-results.api";
+import {
+  addLabFile,
+  getCurrentFileCountFromDatabase,
+} from "@/app/api/lab-results-api/lab-results.api";
 import { useRouter } from "next/navigation";
 interface ModalProps {
   labResultUuid: any;
@@ -18,7 +21,7 @@ interface LabFile {
   file_uuid: string;
 }
 
-export const NofileviewModalContent = ({
+export const NofileviewLabResultsModalContent = ({
   labResultUuid,
   isModalOpen,
   onClose, // Receive the callback function
@@ -46,8 +49,7 @@ export const NofileviewModalContent = ({
     const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
     const maxAllowedFiles = 5 - currentFileCount;
 
-    console.log("FILES TO ADD", maxAllowedFiles);  
-
+    console.log("FILES TO ADD", maxAllowedFiles);
 
     if (selectedFiles.length > maxAllowedFiles) {
       toggleMaxFilesToast(maxAllowedFiles);
@@ -153,14 +155,13 @@ export const NofileviewModalContent = ({
     });
   };
 
-  
-const toggleMaxFilesToast = (maxFiles: number): void => {
-  toast({
-    variant: "destructive",
-    title: "Maximum Number of Files Exceeded!",
-    description: `You can only add ${maxFiles} more file(s). Please try again.`,
-  });
-};
+  const toggleMaxFilesToast = (maxFiles: number): void => {
+    toast({
+      variant: "destructive",
+      title: "Maximum Number of Files Exceeded!",
+      description: `You can only add ${maxFiles} more file(s). Please try again.`,
+    });
+  };
   useEffect(() => {
     // Initialize selected file names array
     let selectedFileNames: string[] = [];
@@ -215,22 +216,21 @@ const toggleMaxFilesToast = (maxFiles: number): void => {
                     {selectedFileNames.join(", ")}
                   </div>
                 ) : ( */}
-                  <div className="flex flex-row justify-center">
-                    <p className="border-2   w-[156px]   rounded-l-md px-2 py-2 text-gray-400 text-[12px]">
+                <div className="flex flex-row justify-center">
+                  <p className="border-2   w-[156px]   rounded-l-md px-2 py-2 text-gray-400 text-[12px]">
                     {selectedFiles.length > 0
-                                  ? `${selectedFiles.length}/${numFilesCanAdd}selected`
-                                  : defaultLabFiles.length < 5
-                                  ? "Upload or Attach Files or"
-                                  : "Max Files Uploaded"}
-                      
-                    </p>
-                    <label
-                      htmlFor="imageUploads"
-                      className="decoration-solid text-[12px] bg-[#007C85] px-2 py-2 text-white border-r-md cursor-pointer rounded-r-lg border-2 border-[#007C85]"
-                    >
-                      Browse
-                    </label>
-                  </div>
+                      ? `${selectedFiles.length}/${numFilesCanAdd}selected`
+                      : defaultLabFiles.length < 5
+                      ? "Upload or Attach Files or"
+                      : "Max Files Uploaded"}
+                  </p>
+                  <label
+                    htmlFor="imageUploads"
+                    className="decoration-solid text-[12px] bg-[#007C85] px-2 py-2 text-white border-r-md cursor-pointer rounded-r-lg border-2 border-[#007C85]"
+                  >
+                    Browse
+                  </label>
+                </div>
                 {/* )} */}
                 <input
                   type="file"
@@ -266,4 +266,4 @@ const toggleMaxFilesToast = (maxFiles: number): void => {
     </div>
   );
 };
-export default NofileviewModalContent;
+export default NofileviewLabResultsModalContent;
