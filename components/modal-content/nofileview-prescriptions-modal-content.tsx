@@ -4,8 +4,9 @@ import Image from "next/image";
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import  {addPrescriptionFile,
-getCurrentPrescriptionFileCountFromDatabase
+import {
+  addPrescriptionFile,
+  getCurrentPrescriptionFileCountFromDatabase,
 } from "@/app/api/prescription-api/prescription.api";
 import { useRouter } from "next/navigation";
 
@@ -26,11 +27,12 @@ export const NofileviewPrescriptionsModalContent = ({
   isModalOpen,
   onClose, // Receive the callback function
 }: ModalProps) => {
-  const [modalOpen, setModalOpen] = useState(false);
   const { toast } = useToast();
 
   const [prescriptionFiles, setPrescriptionFiles] = useState<any[]>([]); //
-  const defeaultPrescriptionFiles = Array.isArray(prescriptionFiles) ? prescriptionFiles : [];
+  const defeaultPrescriptionFiles = Array.isArray(prescriptionFiles)
+    ? prescriptionFiles
+    : [];
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileNames, setFileNames] = useState<string[]>([]);
@@ -46,11 +48,12 @@ export const NofileviewPrescriptionsModalContent = ({
       toggleToast();
       return;
     }
-    const currentFileCount = await getCurrentPrescriptionFileCountFromDatabase(getUuid);
+    const currentFileCount = await getCurrentPrescriptionFileCountFromDatabase(
+      getUuid
+    );
     const maxAllowedFiles = 5 - currentFileCount;
 
-    console.log("FILES TO ADD", maxAllowedFiles);  
-
+    console.log("FILES TO ADD", maxAllowedFiles);
 
     if (selectedFiles.length > maxAllowedFiles) {
       toggleMaxFilesToast(maxAllowedFiles);
@@ -63,11 +66,16 @@ export const NofileviewPrescriptionsModalContent = ({
         // Iterate through each selected file
         for (let i = 0; i < selectedFiles.length; i++) {
           const prescriptionFormData = new FormData();
-          prescriptionFormData.append("prescriptionfile", selectedFiles[i], fileNames[i]);
+          prescriptionFormData.append(
+            "prescriptionfile",
+            selectedFiles[i],
+            fileNames[i]
+          );
 
           const addPrescriptionFiles = await addPrescriptionFile(
             getUuid,
-            prescriptionFormData );
+            prescriptionFormData
+          );
 
           console.log(
             `Prescription FILE ${fileNames[i]} added successfully:`,
@@ -97,13 +105,12 @@ export const NofileviewPrescriptionsModalContent = ({
         0
       );
       const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
-
       if (totalSizeMB > MAX_FILE_SIZE_MB) {
-        alert("Total size of selected files exceeds the limit of 15MB!");
+        toggleMaxSizeToast();
         e.target.value = ""; // Clear the input field
       }
       if (files.length > numFilesCanAdd) {
-        alert(`You can only upload up to ${numFilesCanAdd} file(s).`);
+        toggleMaxFilesToast(numFilesCanAdd);
         e.target.value = ""; // Clear the input field
       }
     }
@@ -152,14 +159,20 @@ export const NofileviewPrescriptionsModalContent = ({
     });
   };
 
-  
-const toggleMaxFilesToast = (maxFiles: number): void => {
-  toast({
-    variant: "destructive",
-    title: "Maximum Number of Files Exceeded!",
-    description: `You can only add ${maxFiles} more file(s). Please try again.`,
-  });
-};
+  const toggleMaxSizeToast = (): void => {
+    toast({
+      variant: "destructive",
+      title: "File Size Too Big!",
+      description: `Total size of selected files exceeds the limit of 15MB!`,
+    });
+  };
+  const toggleMaxFilesToast = (maxFiles: number): void => {
+    toast({
+      variant: "destructive",
+      title: "Maximum Number of Files Exceeded!",
+      description: `You can only add ${maxFiles} more file(s). Please try again.`,
+    });
+  };
   useEffect(() => {
     // Initialize selected file names array
     let selectedFileNames: string[] = [];
@@ -211,22 +224,21 @@ const toggleMaxFilesToast = (maxFiles: number): void => {
                     {selectedFileNames.join(", ")}
                   </div>
                 ) : ( */}
-                  <div className="flex flex-row justify-center">
-                    <p className="border-2   w-[156px]   rounded-l-md px-2 py-2 text-gray-400 text-[12px]">
+                <div className="flex flex-row justify-center">
+                  <p className="border-2   w-[156px]   rounded-l-md px-2 py-2 text-gray-400 text-[12px]">
                     {selectedFiles.length > 0
-                                  ? `${selectedFiles.length}/${numFilesCanAdd}selected`
-                                  : defeaultPrescriptionFiles.length < 5
-                                  ? "Upload or Attach Files or"
-                                  : "Max Files Uploaded"}
-                      
-                    </p>
-                    <label
-                      htmlFor="imageUploads"
-                      className="decoration-solid text-[12px] bg-[#007C85] px-2 py-2 text-white border-r-md cursor-pointer rounded-r-lg border-2 border-[#007C85]"
-                    >
-                      Browse
-                    </label>
-                  </div>
+                      ? `${selectedFiles.length}/${numFilesCanAdd}selected`
+                      : defeaultPrescriptionFiles.length < 5
+                      ? "Upload or Attach Files or"
+                      : "Max Files Uploaded"}
+                  </p>
+                  <label
+                    htmlFor="imageUploads"
+                    className="decoration-solid text-[12px] bg-[#007C85] px-2 py-2 text-white border-r-md cursor-pointer rounded-r-lg border-2 border-[#007C85]"
+                  >
+                    Browse
+                  </label>
+                </div>
                 {/* )} */}
                 <input
                   type="file"

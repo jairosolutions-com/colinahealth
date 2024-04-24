@@ -85,7 +85,13 @@ export const LabresultsModalContent = ({
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [fileTypes, setFileTypes] = useState<string[]>([]);
   const { toast } = useToast();
-
+  const toggleMaxSizeToast = (): void => {
+    toast({
+      variant: "destructive",
+      title: "File Size Too Big!",
+      description: `Total size of selected files exceeds the limit of 15MB!`,
+    });
+  };
   const toggleMaxFilesToast = (maxFiles: number): void => {
     toast({
       variant: "destructive",
@@ -105,12 +111,13 @@ export const LabresultsModalContent = ({
       );
       const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
 
+  
       if (totalSizeMB > MAX_FILE_SIZE_MB) {
-        alert("Total size of selected files exceeds the limit of 15MB!");
+        toggleMaxSizeToast(); 
         e.target.value = ""; // Clear the input field
       }
       if (files.length > numFilesCanAdd) {
-        alert(`You can only upload up to ${numFilesCanAdd} file(s).`);
+        toggleMaxFilesToast(numFilesCanAdd)
         e.target.value = ""; // Clear the input field
       }
     }

@@ -148,8 +148,15 @@ export const LabResultsViewModalContent = ({
   const toggleMaxFilesToast = (maxFiles: number): void => {
     toast({
       variant: "destructive",
-      title: "Maximum Number of Files Exceeded!",
+      title: "File Number of Files Exceeded!",
       description: `You can only add ${maxFiles} more file(s). Please try again.`,
+    });
+  };
+  const toggleMaxSizeToast = (): void => {
+    toast({
+      variant: "destructive",
+      title: "File Size Too Big!",
+      description: `Total size of selected files exceeds the limit of 15MB!`,
     });
   };
   const toggleNoFilesToast = (): void => {
@@ -237,7 +244,7 @@ export const LabResultsViewModalContent = ({
       const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
 
       if (totalSizeMB > MAX_FILE_SIZE_MB) {
-        alert("Total size of selected files exceeds the limit of 15MB!");
+        toggleMaxSizeToast(); 
         e.target.value = ""; // Clear the input field
       }
       if (files.length > numFilesCanAdd) {
