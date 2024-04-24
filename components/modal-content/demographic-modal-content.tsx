@@ -25,7 +25,7 @@ export const DemographicModalContent = ({
   onSuccess,
   onFailed,
 }: Modalprops) => {
-  const {toast } = useToast()
+  const { toast } = useToast();
   const [selectedCodeStatus, setSelectedCodeStatus] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
   const [countryList, setCountryList] = useState<any[]>([]);
@@ -127,24 +127,24 @@ export const DemographicModalContent = ({
       try {
         const countries = await fetchCountryList(router);
         setCountryList(countries);
-      } catch (error:any) {
+      } catch (error: any) {
         if (error.message == "Network Error") {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: error.message,
-          action: (
-            <ToastAction
-              altText="Try again"
-              onClick={() => {
-                window.location.reload();
-              }}
-            >
-              Try again
-            </ToastAction>
-          ),
-        });
-      }
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error.message,
+            action: (
+              <ToastAction
+                altText="Try again"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Try again
+              </ToastAction>
+            ),
+          });
+        }
         console.error("Error fetching country list:");
       }
     };
@@ -158,7 +158,7 @@ export const DemographicModalContent = ({
 
   return (
     <>
-      <div className="w-[1200px] h-[645px]">
+      <div className="w-[1200px] h-[642px]">
         <form className="" onSubmit={handleSubmit}>
           <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
             <div className="items-center flex justify-between px-8">
@@ -510,7 +510,7 @@ export const DemographicModalContent = ({
                   </label>
                   <div className="mt-1">
                     <input
-                      type="text"
+                      type="email"
                       required
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                       placeholder="input email"
@@ -572,7 +572,7 @@ export const DemographicModalContent = ({
                 </div>
               </div>
             </div>
-            <div className="justify-center flex border-t-4 ">
+            <div className="justify-center flex ">
               <button
                 onClick={() => isModalOpen(false)}
                 type="button"

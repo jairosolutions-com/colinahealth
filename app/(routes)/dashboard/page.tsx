@@ -245,7 +245,6 @@ const Dashboard = () => {
                   <div className="flex mt-10 items-center text-center justify-center font-semibold text-3xl w-full h-full ">
                     No Upcoming Appointments/s
                     <br />
-                    •ω•
                   </div>
                 )}
               </div>
@@ -304,11 +303,15 @@ const Dashboard = () => {
               <div className="flex items-center text-center justify-center font-semibold text-3xl w-full h-full -mt-10">
                 No Due Medication/s
                 <br />
-                •ω•
               </div>
             )}
 
-            <div className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] py-[40px]">
+            <div 
+             onClick={() => {
+              setIsLoading(true);
+              onNavigate(router, "/due-medications");
+            }}
+            className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] py-[40px]">
               SEE ALL DUE
               <svg
                 className="text-[#71717A] ml-2 group-hover:text-[#007C85]"

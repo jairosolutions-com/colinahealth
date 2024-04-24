@@ -17,7 +17,6 @@ import { DemographicModalContent } from "@/components/modal-content/demographic-
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
-
 export default function PatientPage({ patient }: { patient: any }) {
   const router = useRouter();
   if (!getAccessToken()) {
@@ -209,7 +208,7 @@ export default function PatientPage({ patient }: { patient: any }) {
   };
 
   return (
-    <div className="w-full px-[150px] py-[90px]">
+    <div className="w-full  px-[150px] pt-[90px]">
       <div className="flex justify-end">
         <p
           onClick={() => {
@@ -300,7 +299,6 @@ export default function PatientPage({ patient }: { patient: any }) {
             <div>
               <div className="w-full flex justify-center py-5 text-center text-[15px]">
                 No Patient Found! <br />
-                •ω•
               </div>
             </div>
           ) : (
@@ -433,12 +431,6 @@ export default function PatientPage({ patient }: { patient: any }) {
             />
           }
           isModalOpen={isModalOpen}
-          // isOpen={isOpen}
-          label="sample label"
-          onSuccess={onSuccess}
-          onFailed={onFailed}
-          setErrorMessage={setError}
-
         />
       )}
       {isSuccessOpen && (

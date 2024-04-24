@@ -299,7 +299,7 @@ export const LabResultsViewModalContent = ({
           }}
         />
       ) : (
-        <div className="w-[676px] h-[594px]">
+        <div className="w-[676px] h-[590px]">
           {isLoading ? (
             // Loading state
             <>
@@ -553,6 +553,7 @@ export const LabResultsViewModalContent = ({
                       Submit
                     </button>
                   </div>
+
                 </div>
               </form>
               {/* {toast()} */}

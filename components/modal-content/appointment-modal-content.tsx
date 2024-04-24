@@ -181,7 +181,7 @@ export const AppointmentModalContent = ({
   return (
     <div
       className={`${
-        isView ? "h-[640px]" : charactersFull ? "h-[551px]" : "h-[541px]"
+        isView ? "h-[640px]" : charactersFull ? "h-[551px]" : "h-[537px]"
       } w-[676px]  bg-[#FFFFFF] rounded-md`}
     >
       <form className="" onSubmit={handleSubmit}>
@@ -243,6 +243,7 @@ export const AppointmentModalContent = ({
                     alt="edit-icon"
                   />
                   <button
+                    disabled={formData.appointmentStatus === "Missed"}
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                     onClick={() => {
@@ -254,7 +255,11 @@ export const AppointmentModalContent = ({
                       isEditable
                         ? "ring-[#2867C7] hover:ring-0 text-[#1B84FF] hover:text-white hover:bg-[#1B84FF]"
                         : "hover:bg-[#D9D9D9]"
-                    } w-24 h-8  font-medium rounded text-[#000] ring-1 ring-gray-200 `}
+                    } ${
+                      formData.appointmentStatus === "Missed" &&
+                      "cursor-not-allowed"
+                    } 
+                    w-24 h-8  font-medium rounded text-[#000] ring-1 ring-gray-200 `}
                   >
                     <p className="w-full pl-5">Edit</p>
                   </button>
@@ -389,8 +394,13 @@ export const AppointmentModalContent = ({
                 </label>
                 <div className="mt-2.5 flex ">
                   <select
+                    disabled={formData.appointmentStatus === "Missed"}
                     id="status"
-                    className="block w-full h-12 cursor-pointer rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                    className={`${
+                      formData.appointmentStatus === "Missed"
+                        ? "cursor-not-allowed"
+                        : "cursor-pointer"
+                    } block w-full h-12  rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6`}
                     value={formData.appointmentStatus}
                     onChange={handleStatusChange}
                     defaultValue="select status"
@@ -411,7 +421,7 @@ export const AppointmentModalContent = ({
             </div>
           </div>
           <div className={`${charactersFull ? "mt-[30px]" : "mt-5"}`}>
-            <div className="justify-center flex border-t-4 pt-26">
+            <div className="justify-center flex pt-26">
               <button
                 onClick={() => isModalOpen(false)}
                 type="button"
@@ -420,8 +430,9 @@ export const AppointmentModalContent = ({
                 Cancel
               </button>
               <button
+              disabled={formData.appointmentStatus === "Missed"}
                 type="submit"
-                className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md"
+                className={`${formData.appointmentStatus === "Missed" ? "cursor-not-allowed":"cursor-pointer"} w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md`}
               >
                 {isEditable ? "Update" : "Submit"}
               </button>

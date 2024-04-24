@@ -16,7 +16,7 @@ export const AppointmentemailModalContent = ({ isModalOpen }: Modalprops) => {
 
   return (
     <>
-      <div className="w-[1200px] h-[645px]">
+      <div className="w-[1200px] h-[641px]">
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between px-8">
             <h2 className="p-title text-left text-[#071437] mt-5 w-full pl-2">
@@ -87,7 +87,7 @@ export const AppointmentemailModalContent = ({ isModalOpen }: Modalprops) => {
               </div>
             </form>
           </div>
-          <div className="justify-center flex border-t-4 ">
+          <div className="justify-center flex ">
             <button
               onClick={() => isModalOpen(false)}
               type="button"
