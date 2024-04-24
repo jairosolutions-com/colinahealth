@@ -115,7 +115,9 @@ export const LabResultsViewModalContent = ({
           console.log(response.data, "LabFiles Data");
           setCurrentFile(response.data[0]);
           setFileIndex(0);
-          setIsLoading(false);
+          const maxAllowedFiles = 5 - labFiles.length;
+          setNumFilesCanAdd(maxAllowedFiles);
+          setIsLoading(false);  
         }
         if (defaultLabFiles?.length === 0) {
           setIsNoFileModalOpen(true);
@@ -170,10 +172,7 @@ export const LabResultsViewModalContent = ({
     const getUuid = labResultUuid;
 
     console.log("submit clicked");
-    if (selectedFiles.length === 0) {
-      toggleNoFilesToast();
-      return;
-    }
+
     if (labFiles.length === 5) {
       toggleFullFilesToast();
       return;
@@ -186,6 +185,7 @@ export const LabResultsViewModalContent = ({
       toggleMaxFilesToast(maxAllowedFiles);
       return;
     }
+
     try {
       console.log(getUuid, "getUuid");
       // Iterate through each selected file
@@ -214,15 +214,37 @@ export const LabResultsViewModalContent = ({
         // Call the onSuccess callback function
       } else {
         console.warn("No files selected to upload");
+        toggleNoFilesToast();
       }
     } catch (error) {
       console.error("Error adding Lab Result:", error);
       // setError("Failed to add Lab Result");
+    } finally {
+      // Update loading state after all files are processed
+      setIsLoading(false);
     }
   };
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+    const MAX_FILE_SIZE_MB = 15;
 
+    const MAX_NUM_FILES = 5;
+    if (files) {
+      const totalSize = Array.from(files).reduce(
+        (acc, file) => acc + file.size,
+        0
+      );
+      const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
+
+      if (totalSizeMB > MAX_FILE_SIZE_MB) {
+        alert("Total size of selected files exceeds the limit of 15MB!");
+        e.target.value = ""; // Clear the input field
+      }
+      if (files.length > numFilesCanAdd) {
+        alert(`You can only upload up to ${numFilesCanAdd} file(s).`);
+        e.target.value = ""; // Clear the input field
+      }
+    }
     if (files && files.length > 0) {
       const newFiles: File[] = [];
       const newFileNames: string[] = [];
@@ -234,6 +256,7 @@ export const LabResultsViewModalContent = ({
           newFiles.push(file);
           newFileNames.push(file.name);
           newFileTypes.push(file.type.split("/")[1]);
+
           if (files && files.length > 0) {
             // Push file names to selectedFileNames array
             if (file && file.name) {
@@ -255,8 +278,6 @@ export const LabResultsViewModalContent = ({
       setSelectedLabFiles(newFiles);
       setFileNames(newFileNames);
       setFileTypes(newFileTypes);
-      const maxAllowedFiles = 5 - labFiles.length;
-      setNumFilesCanAdd(maxAllowedFiles);
     } else {
       console.warn("No files selected");
     }
@@ -435,7 +456,7 @@ export const LabResultsViewModalContent = ({
                                 type="file"
                                 id="fileupload"
                                 multiple={true}
-                                accept="image/*,pdf"
+                                accept="image/*,.pdf"
                                 className="hidden"
                                 name="file"
                                 disabled={defaultLabFiles.length === 5}
@@ -553,6 +574,7 @@ export const LabResultsViewModalContent = ({
                     <div className="flex space-x-4 mt-4 ml-[115px] text-[15px]">
                       {fileIndex > 0 && (
                         <button
+                          type="button"
                           className="w-[80px] h-[30px] text-blue-500 bg-white-500 border-2 border-blue-500"
                           onClick={prevFile}
                         >
@@ -561,6 +583,7 @@ export const LabResultsViewModalContent = ({
                       )}
                       {fileIndex < labFiles.length - 1 && (
                         <button
+                          type="button"
                           onClick={nextFile}
                           className="w-[80px] h-[30px] text-white bg-blue-500 hover:bg-blue-700"
                         >

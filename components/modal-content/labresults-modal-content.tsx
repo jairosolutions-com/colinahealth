@@ -93,19 +93,29 @@ export const LabresultsModalContent = ({
       description: `You can only add ${maxFiles} more file(s). Please try again.`,
     });
   };
+  const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+   
     const files = e.target.files;
-    // setSelectedFileNames([""]);
+    const MAX_FILE_SIZE_MB = 15;
+    if (files) {
+      const totalSize = Array.from(files).reduce(
+        (acc, file) => acc + file.size,
+        0
+      );
+      const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
 
-    if (files && files.length > 0) {
-      if (files.length > 5) {
-        // Show toast indicating maximum file limit exceeded
-        toggleMaxFilesToast(files.length - 5);
-        e.target.value = "";
-
-        return;
+      if (totalSizeMB > MAX_FILE_SIZE_MB) {
+        alert("Total size of selected files exceeds the limit of 15MB!");
+        e.target.value = ""; // Clear the input field
       }
+      if (files.length > numFilesCanAdd) {
+        alert(`You can only upload up to ${numFilesCanAdd} file(s).`);
+        e.target.value = ""; // Clear the input field
+      }
+    }
+    if (files && files.length > 0) {
       const newFiles: File[] = [];
       const newFileNames: string[] = [];
       const newFileTypes: string[] = [];
@@ -116,6 +126,7 @@ export const LabresultsModalContent = ({
           newFiles.push(file);
           newFileNames.push(file.name);
           newFileTypes.push(file.type.split("/")[1]);
+
           if (files && files.length > 0) {
             // Push file names to selectedFileNames array
             if (file && file.name) {
@@ -126,18 +137,18 @@ export const LabresultsModalContent = ({
             console.log(labFiles, "labFiles labFiles labFiles");
 
             // Set selected file names
-            setSelectedFileNames(newFileNames);
+            setSelectedFileNames(selectedFileNames);
           }
           // You can handle base64 conversion here if needed
         }
       });
 
       // Update state variables with arrays
+
       setSelectedLabFiles(newFiles);
       setFileNames(newFileNames);
-      console.log(selectedFileNames.length, "selectedFileNames");
       setFileTypes(newFileTypes);
-      console.log(selectedFileNames, "selectedFileNames");
+    
     } else {
       console.warn("No files selected");
     }
@@ -248,6 +259,7 @@ export const LabresultsModalContent = ({
       setError("Failed to add Lab Result");
     }
   };
+  //for edit files and storing num of files in the state 
   useEffect(() => {
     // Initialize selected file names array
     let selectedFileNames: string[] = [];
@@ -264,7 +276,8 @@ export const LabresultsModalContent = ({
 
       console.log(selectedFileNames, "selected file names");
       console.log(labFiles, "labFiles labFiles labFiles");
-
+      const maxAllowedFiles = 5 - selectedFileNames.length;
+      setNumFilesCanAdd(maxAllowedFiles);
       // Set selected file names
       setSelectedFileNames(selectedFileNames);
     } else {
@@ -274,7 +287,7 @@ export const LabresultsModalContent = ({
       setSelectedFileNames([]);
     }
   }, [labFiles, setSelectedFileNames]);
-
+// for fetching data 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -287,6 +300,8 @@ export const LabresultsModalContent = ({
         if (response.data && response.data.length > 0) {
           setLabFiles(response.data);
           console.log(response.data, "LAB.data");
+          const maxAllowedFiles = 5 - labFiles.length;
+          setNumFilesCanAdd(maxAllowedFiles);
           setIsLoading(false);
         }
       } catch (error: any) {
@@ -541,11 +556,11 @@ export const LabresultsModalContent = ({
                             <span className="text-[10px] font-normal absolute bottom-2 text-[#667085] ml-10">
                               {selectedFileNames.length === 0 ? (
                                 // Display "Maximum File Size: 10MB" if no files are attached
-                                <span>Maximum File Size: 10MB</span>
+                                <span>Maximum File Size: 15MB</span>
                               ) : (
                                 // Display the file name if one file is attached, or the number of files if more than one are attached
                                 <span>
-                                  {selectedFileNames.length < 6
+                                  {selectedFileNames.length < 5
                                     ? // Display the file name if the number of files is less than or equal to 5
                                       selectedFileNames.length === 1
                                       ? selectedFileNames[0]
