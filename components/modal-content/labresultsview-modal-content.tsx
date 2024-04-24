@@ -33,7 +33,7 @@ export const LabResultsViewModalContent = ({
   const onSuccess = () => {
     setIsSuccessOpen(true);
 
-    isModalOpen(false);
+    // isModalOpen(false);
   };
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
 
@@ -43,6 +43,7 @@ export const LabResultsViewModalContent = ({
   const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState<Uint8Array>(new Uint8Array());
   const [modalOpen, setModalOpen] = useState(false);
+
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isNoFileModalOpen, setIsNoFileModalOpen] = useState(false);
   // update isNoFileModalOpen state
@@ -82,7 +83,7 @@ export const LabResultsViewModalContent = ({
   const [fileType, setFileType] = useState<string>("");
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-//switching to through previews
+  //switching to through previews
   useEffect(() => {
     if (labFiles && labFiles.length > 0) {
       const file = labFiles[fileIndex];
@@ -98,9 +99,8 @@ export const LabResultsViewModalContent = ({
         setFileType(newFileType as string);
       }
     }
-  }, [fileIndex, labFiles,
-  ]);
-//fetching lab files from database
+  }, [fileIndex, labFiles]);
+  //fetching lab files from database
   useEffect(() => {
     const fetchData = async () => {
       setLabResultUuid(labResultsData.labResults_uuid);
@@ -133,10 +133,11 @@ export const LabResultsViewModalContent = ({
     router,
     deleteModalOpen,
     isNoFileModalOpen,
-
-      ]);
+    isSuccessOpen,
+  ]);
 
   // Define a state to track the selected filenames
+  const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [fileTypes, setFileTypes] = useState<string[]>([]);
@@ -149,18 +150,35 @@ export const LabResultsViewModalContent = ({
       description: `You can only add ${maxFiles} more file(s). Please try again.`,
     });
   };
+  const toggleNoFilesToast = (): void => {
+    toast({
+      variant: "warning",
+      title: "No Files Uploaded",
+      description: `Please try again.`,
+    });
+  };
+  const toggleFullFilesToast = (): void => {
+    toast({
+      variant: "warning",
+      title: "Maximum Files Uploaded",
+      description: "You have already uploaded 5 files. Delete some files to update.",
+    });
+  };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const getUuid = labResultUuid;
 
     console.log("submit clicked");
-    // if (selectedFiles.length === 0) {
-    //   toggleToast();
-    //   return;
-    // }
+    if (selectedFiles.length === 0) {
+      toggleNoFilesToast();
+      return;
+    }
+    if (labFiles.length === 5) {
+      toggleFullFilesToast();
+      return;
+    }
     const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
     const maxAllowedFiles = 5 - currentFileCount;
-
     console.log("FILES TO ADD", maxAllowedFiles);
 
     if (selectedFiles.length > maxAllowedFiles) {
@@ -171,9 +189,8 @@ export const LabResultsViewModalContent = ({
       console.log(getUuid, "getUuid");
       // Iterate through each selected file
       if (selectedFiles && selectedFiles.length > 0) {
-        setIsLoading(true)
+        setIsLoading(true);
         for (let i = 0; i < selectedFiles.length; i++) {
-          
           const labFileFormData = new FormData();
           labFileFormData.append("labfile", selectedFiles[i], fileNames[i]);
 
@@ -183,12 +200,15 @@ export const LabResultsViewModalContent = ({
             labFileFormData,
             router
           );
-          
+
           console.log(
             `Lab FILE ${fileNames[i]} added successfully:`,
             addLabFiles
           );
         }
+        setSelectedFileNames([]);
+        setSelectedLabFiles([]);
+        onSuccess();
 
         // Call the onSuccess callback function
       } else {
@@ -229,10 +249,13 @@ export const LabResultsViewModalContent = ({
         }
       });
 
-      // Update state variables with arrays
+      // Update state variables with arrays    
+      
       setSelectedLabFiles(newFiles);
       setFileNames(newFileNames);
       setFileTypes(newFileTypes);
+      const maxAllowedFiles = 5 - labFiles.length;
+      setNumFilesCanAdd(maxAllowedFiles);
     } else {
       console.warn("No files selected");
     }
@@ -318,7 +341,7 @@ export const LabResultsViewModalContent = ({
                   Document Files
                 </p>
               </div>
-              <form onSubmit={handleSubmit}>
+              <form className="" onSubmit={handleSubmit}>
                 <div className="mb-9 pt-4">
                   <div className="h-[380px] md:px-8 mt-5">
                     <div className="even:bg-gray-50 cursor-pointer">
@@ -350,20 +373,32 @@ export const LabResultsViewModalContent = ({
                             )}
                           </div>
                           <div className="w-[220px]">
-                            <div className="w-full flex justify-between flex-row">
-                              <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-full flex justify-center hover:border-[#686868]">
+                            <div
+                              className={`w-full flex justify-between flex-row ${
+                                defaultLabFiles.length === 5
+                                  ? "cursor-not-allowed"
+                                  : "cursor-pointer"
+                              }`}
+                            >
+                              <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-[150px]  hover:border-[#686868]">
                                 {selectedFiles.length > 0
-                                  ? `${selectedFiles.length}/5 selected`
+                                  ? `${selectedFiles.length}/${numFilesCanAdd}selected`
                                   : defaultLabFiles.length < 5
                                   ? "Choose files to upload"
                                   : "Max Files Uploaded"}
                               </p>
                               <label
                                 htmlFor="fileupload"
-                                className="text-[13px] bg-[#007C85] px-2 py-1 text-white cursor-pointer rounded-r-md flex justify-center border-2 border-[#007C85]"
+                                className={` ${
+                                  defaultLabFiles.length === 5
+                                    ? "cursor-not-allowed"
+                                    : "cursor-pointer"
+                                }
+                                text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}
                               >
                                 Browse
                               </label>
+
                               <input
                                 type="file"
                                 id="fileupload"
