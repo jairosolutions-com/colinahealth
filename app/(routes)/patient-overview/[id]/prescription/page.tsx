@@ -272,87 +272,86 @@ export default function prescription() {
 
         {/* START OF TABLE */}
         <div>
-          {patientPrescriptions.length == 0 ? (
-            <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700 text-center text-[15px]">
-                No Prescription/s <br />
-              </p>
-            </div>
-          ) : (
-            <table className="w-full text-left rtl:text-right">
-              <thead className="">
-                <tr className=" text-[#64748B] border-y text-[15px]  ">
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    PRESCRIPTION ID
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                    MEDICINE NAME
-                  </th>
-                  <th scope="col" className="px-0 py-3 w-[300px]">
-                    FREQUENCY
-                  </th>
-                  <th scope="col" className="px-3 py-3 w-[300px]">
-                    INTERVAL (hr/s)
-                  </th>
-                  <th scope="col" className="px-20  py-3 w-[300px]">
-                    DOSAGE
-                  </th>
-                  <th scope="col" className="pl-10 pr-6 py-3 w-[200px] ">
-                    STATUS
-                  </th>
-                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                    ACTION
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {patientPrescriptions.length > 0 && (
-                  <>
-                    {patientPrescriptions.map((prescription, index) => (
-                      <tr
-                        key={index}
-                        className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4] text-[15px]"
+          <table className="w-full text-left rtl:text-right">
+            <thead className="">
+              <tr className=" text-[#64748B] border-y text-[15px]  ">
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  PRESCRIPTION ID
+                </th>
+                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                  MEDICINE NAME
+                </th>
+                <th scope="col" className="px-0 py-3 w-[300px]">
+                  FREQUENCY
+                </th>
+                <th scope="col" className="px-3 py-3 w-[300px]">
+                  INTERVAL (hr/s)
+                </th>
+                <th scope="col" className="px-20  py-3 w-[300px]">
+                  DOSAGE
+                </th>
+                <th scope="col" className="pl-10 pr-6 py-3 w-[200px] ">
+                  STATUS
+                </th>
+                <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                  ACTION
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {patientPrescriptions.length == 0 && (
+                <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                  <p className="text-[15px] font-normal text-gray-700 text-center">
+                    No Prescription/s <br />
+                  </p>
+                </div>
+              )}
+              {patientPrescriptions.length > 0 && (
+                <>
+                  {patientPrescriptions.map((prescription, index) => (
+                    <tr
+                      key={index}
+                      className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4] text-[15px]"
+                    >
+                      <td className="truncate max-w-[286px] px-6 py-4">
+                        {prescription.prescriptions_uuid}
+                      </td>
+                      <th
+                        scope="row"
+                        className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                       >
-                        <td className="truncate max-w-[286px] px-6 py-4">
-                          {prescription.prescriptions_uuid}
-                        </td>
-                        <th
-                          scope="row"
-                          className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                        {prescription.prescriptions_name}
+                      </th>
+                      <td className="truncate max-w-[286px] px-0 py-4">
+                        {prescription.prescriptions_frequency}
+                      </td>
+                      <td className="truncate max-w-[286px] px-3 py-4 tb-med">
+                        {prescription.prescriptions_interval} hours
+                      </td>
+                      <td className="truncate max-w-[286px] px-20 py-4">
+                        {prescription.prescriptions_dosage}
+                      </td>
+                      <td className="px-12 py-4">
+                        {" "}
+                        {prescription.prescriptions_status}
+                      </td>
+                      <td className="px-[70px] py-4">
+                        <p
+                          onClick={() => {
+                            isModalOpen(true);
+                            setIsEdit(true);
+                            setPrescriptionData(prescription);
+                          }}
                         >
-                          {prescription.prescriptions_name}
-                        </th>
-                        <td className="truncate max-w-[286px] px-0 py-4">
-                          {prescription.prescriptions_frequency}
-                        </td>
-                        <td className="truncate max-w-[286px] px-3 py-4 tb-med">
-                          {prescription.prescriptions_interval} hours
-                        </td>
-                        <td className="truncate max-w-[286px] px-20 py-4">
-                          {prescription.prescriptions_dosage}
-                        </td>
-                        <td className="px-12 py-4">
-                          {" "}
-                          {prescription.prescriptions_status}
-                        </td>
-                        <td className="px-[70px] py-4">
-                          <p
-                            onClick={() => {
-                              isModalOpen(true);
-                              setIsEdit(true);
-                              setPrescriptionData(prescription);
-                            }}
-                          >
-                            <Edit></Edit>
-                          </p>
-                        </td>
-                      </tr>
-                    ))}
-                  </>
-                )}
-              </tbody>
-            </table>
-          )}
+                          <Edit></Edit>
+                        </p>
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              )}
+            </tbody>
+          </table>
         </div>
         {/* END OF TABLE */}
       </div>

@@ -284,54 +284,53 @@ const Notes = () => {
 
         {/* START OF TABLE */}
         <div>
-          {patientNotes.length === 0 ? (
-            <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700 text-center">
-                No Notes <br />
-              </p>
-            </h1>
-          ) : (
-            <table className="w-full text-left rtl:text-right">
-              <thead>
-                <tr className="uppercase text-[#64748B] border-y  ">
-                  <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                    NOTES ID
-                  </th>
-                  <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                    DATE
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[250px]">
-                    SUBJECT
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[400px]">
-                    NOTES
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {patientNotes.map((note, index) => (
-                  <tr
-                    key={index}
-                    className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
+          <table className="w-full text-left rtl:text-right">
+            <thead>
+              <tr className="uppercase text-[#64748B] border-y  ">
+                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
+                  NOTES ID
+                </th>
+                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
+                  DATE
+                </th>
+                <th scope="col" className="px-6 py-3 w-[250px]">
+                  SUBJECT
+                </th>
+                <th scope="col" className="px-6 py-3 w-[400px]">
+                  NOTES
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {patientNotes.length === 0 && (
+                <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                  <p className="text-[15px] font-normal text-gray-700 text-center">
+                    No Note/s <br />
+                  </p>
+                </h1>
+              )}
+              {patientNotes.map((note, index) => (
+                <tr
+                  key={index}
+                  className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
+                >
+                  <td className="truncate max-w-[552px] px-6 py-3">
+                    {note.notes_uuid}
+                  </td>
+                  <th
+                    scope="row"
+                    className="font-medium text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
                   >
-                    <td className="truncate max-w-[552px] px-6 py-3">
-                      {note.notes_uuid}
-                    </td>
-                    <th
-                      scope="row"
-                      className="font-medium text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
-                    >
-                      {new Date(note.notes_createdAt).toLocaleDateString()}
-                    </th>
-                    <td className="truncate max-w-[552px] px-6 py-3">
-                      {note.notes_subject}
-                    </td>
-                    <td className="px-6 py-3">{note.notes_notes}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                    {new Date(note.notes_createdAt).toLocaleDateString()}
+                  </th>
+                  <td className="truncate max-w-[552px] px-6 py-3">
+                    {note.notes_subject}
+                  </td>
+                  <td className="px-6 py-3">{note.notes_notes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
         {/* END OF TABLE */}
       </div>

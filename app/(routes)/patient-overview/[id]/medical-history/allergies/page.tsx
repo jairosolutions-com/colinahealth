@@ -283,91 +283,85 @@ const Allergies = () => {
         </div>
         {/* START OF TABLE */}
         <div>
-          {patientAllergies.length === 0 ? (
-            <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700 text-center text-[15px]">
-                No Allergies Found <br />
-              </p>
-            </h1>
-          ) : (
-            <table className="w-full text-left rtl:text-right">
-              <thead className="">
-                <tr className="uppercase text-[#64748B] border-y text-[15px]">
-                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                    Allergy ID
-                  </th>
-                  <th scope="col" className="px-2 py-3 w-[300px]">
-                    Date
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    Type
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    Allergen
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    Severity
-                  </th>
+          <table className="w-full text-left rtl:text-right">
+            <thead className="">
+              <tr className="uppercase text-[#64748B] border-y text-[15px]">
+                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                  Allergy ID
+                </th>
+                <th scope="col" className="px-2 py-3 w-[300px]">
+                  Date
+                </th>
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  Type
+                </th>
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  Allergen
+                </th>
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  Severity
+                </th>
 
-                  <th scope="col" className="px-6 py-3 w-[300px] ">
-                    Reaction
-                  </th>
-                  <th scope="col" className="px-2 py-3 w-[350px] ">
-                    Notes
-                  </th>
-                  <th scope="col" className="px-[70px] py-3">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {patientAllergies.map((allergy, index) => (
-                  <tr
-                    key={index}
-                    className=" group even:bg-gray-50 hover:bg-[#f4f4f4]  border-b text-[15px] "
+                <th scope="col" className="px-6 py-3 w-[300px] ">
+                  Reaction
+                </th>
+                <th scope="col" className="px-2 py-3 w-[350px] ">
+                  Notes
+                </th>
+                <th scope="col" className="px-[70px] py-3">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {patientAllergies.length === 0 && (
+                <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                  <p className="text-[15px] font-normal text-gray-700 text-center">
+                    No Allergies Found <br />
+                  </p>
+                </h1>
+              )}
+              {patientAllergies.map((allergy, index) => (
+                <tr
+                  key={index}
+                  className=" group even:bg-gray-50 hover:bg-[#f4f4f4]  border-b text-[15px] "
+                >
+                  <th
+                    scope="row"
+                    className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
-                    <th
-                      scope="row"
-                      className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                    {allergy.allergies_uuid}
+                  </th>
+                  <td className="px-2 py-4">
+                    {" "}
+                    {new Date(allergy.allergies_createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4">{allergy.allergies_type}</td>
+                  <td className=" max-w-[552px] px-6 py-4">
+                    {allergy.allergies_allergen}
+                  </td>
+
+                  <td className="px-6 py-4">{allergy.allergies_severity}</td>
+                  <td className="px-6 py-4">{allergy.allergies_reaction}</td>
+                  <td className="px-2 py-4">
+                    {allergy.allergies_notes ? allergy.allergies_notes : "None"}
+                  </td>
+
+                  <td className="px-[50px] py-4 flex items-center justify-center">
+                    <p
+                      onClick={() => {
+                        isModalOpen(true);
+                        setIsEdit(true);
+                        setAllergyToEdit(allergy);
+                      }}
                     >
-                      {allergy.allergies_uuid}
-                    </th>
-                    <td className="px-2 py-4">
-                      {" "}
-                      {new Date(
-                        allergy.allergies_createdAt
-                      ).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4">{allergy.allergies_type}</td>
-                    <td className=" max-w-[552px] px-6 py-4">
-                      {allergy.allergies_allergen}
-                    </td>
-
-                    <td className="px-6 py-4">{allergy.allergies_severity}</td>
-                    <td className="px-6 py-4">{allergy.allergies_reaction}</td>
-                    <td className="px-2 py-4">
-                      {allergy.allergies_notes
-                        ? allergy.allergies_notes
-                        : "None"}
-                    </td>
-
-                    <td className="px-[50px] py-4 flex items-center justify-center">
-                      <p
-                        onClick={() => {
-                          isModalOpen(true);
-                          setIsEdit(true);
-                          setAllergyToEdit(allergy);
-                        }}
-                      >
-                        <Edit></Edit>
-                      </p>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                      <Edit></Edit>
+                    </p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
         {/* END OF TABLE */}
       </div>
