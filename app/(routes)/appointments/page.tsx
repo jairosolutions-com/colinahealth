@@ -15,7 +15,7 @@ import { AppointmentsModal } from "@/components/modals/appointments.modal";
 import { fetchUpcomingAppointments } from "@/app/api/appointments-api/upcoming-appointments-api";
 import Image from "next/image";
 import * as React from "react";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { Calendar as CalendarIcon, Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -35,10 +35,10 @@ export default function AppointmentPage() {
     onNavigate(router, "/login");
   }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
-  const [upcomingSortBy, setUpcomingSortBy] = useState("appointmentDate");
+
 
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-  const [sortBy, setSortBy] = useState("firstName");
+  const [sortBy, setSortBy] = useState("appointmentDate");
   const [appointmentList, setAppointmentList] = useState<any[]>([]);
   const [patientIdappointmentList, setPatientId] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -82,13 +82,13 @@ export default function AppointmentPage() {
 
   const handleSortOptionClick = (option: string) => {
     if (option == "Status") {
-      setSortBy("Status");
+      setSortBy("appointmentStatus");
     } else if (option == "Date") {
-      setSortBy("Date");
+      setSortBy("appointmentDate");
     } else if (option == "Time") {
-      setSortBy("Time");
+      setSortBy("appointmentTime");
     } else if (option == "Endtime") {
-      setSortBy("Endtime");
+      setSortBy("appointmentEndTime");
     }
     console.log(sortBy, "ooption");
   };
@@ -173,7 +173,7 @@ export default function AppointmentPage() {
         const upcomingAppoinments = await fetchAllAppointments(
           term,
           currentPage,
-          upcomingSortBy,
+          sortBy,
           sortOrder as "ASC" | "DESC",
           startD,
           endD,
@@ -181,14 +181,14 @@ export default function AppointmentPage() {
         );
 
         const appointmentsArray = Object.values(upcomingAppoinments.data);
-
+        setTotalPages(upcomingAppoinments.totalPages);
         setAppointmentList(appointmentsArray);
-
+        setTotalAppointments(upcomingAppoinments.totalCount);
         return upcomingAppoinments;
       } catch (error) {}
     };
     fetchData();
-  }, [currentPage, startDate, endDate]);
+  }, [currentPage, startDate, endDate, sortBy, sortOrder, term]);
 
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
@@ -216,7 +216,7 @@ export default function AppointmentPage() {
   };
 
   return (
-    <div className="w-full px-[150px] py-[90px]">
+    <div className="w-full px-[150px] pt-[90px]">
       <div className="flex justify-end">
         <p
           onClick={() => onNavigate(router, "/dashboard")}
@@ -246,6 +246,11 @@ export default function AppointmentPage() {
               type="text"
               placeholder="Search by reference no. or name..."
               className="flex-grow focus:outline-none text-gray-700"
+              value={term}
+              onChange={(e) => {
+                setTerm(e.target.value);
+                setCurrentPage(1);
+              }}
             />
           </div>
 
