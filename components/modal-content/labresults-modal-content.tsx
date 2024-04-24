@@ -577,7 +577,7 @@ export const LabresultsModalContent = ({
                           type="file"
                           id="imageUpload"
                           multiple={true}
-                          accept="image/*,pdf"
+                          accept="image/*,.pdf"
                           className="hidden"
                           name="file"
                           onChange={(e) => handleFile(e)}
