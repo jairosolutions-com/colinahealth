@@ -356,7 +356,7 @@ export default function Laboratoryresults() {
                   <th scope="col" className="px-6  py-3 w-[200px]">
                     TRIGLYCERIDES (mg/dL)
                   </th>
-                  <th scope="col" className="pl-[80px] py-3 w-[10px] ">
+                  <th scope="col" className="pl-[50px] py-3 w-[10px] ">
                     ACTION
                   </th>
                 </tr>
@@ -399,7 +399,7 @@ export default function Laboratoryresults() {
                         <td className="px-6 py-4">
                           {labResult.labResults_triglycerides}mg/dL
                         </td>
-                        <td className="px-[70px] py-4 flex gap-2">
+                        <td className="px-[50px] py-5 flex gap-2">
                           <p
                             onClick={() => {
                               isModalOpen(true);
