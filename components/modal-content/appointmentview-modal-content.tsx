@@ -18,7 +18,7 @@ export const AppointmentviewModalContent = ({ isModalOpen }: Modalprops) => {
   };
 
   return (
-    <div className="w-[676px] h-[644px]">
+    <div className="w-[676px] h-[640px]">
       <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
         <h2 className="p-title text-left text-[#071437] pl-10 mt-7">
           Appointment Details
@@ -173,7 +173,7 @@ export const AppointmentviewModalContent = ({ isModalOpen }: Modalprops) => {
           </form>
         </div>
         <div className="">
-          <div className="justify-center flex border-t-4 pt-26">
+          <div className="justify-center flex pt-26">
             <button
               onClick={() => isModalOpen(false)}
               type="button"

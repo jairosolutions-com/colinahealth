@@ -302,7 +302,7 @@ export const LabresultsModalContent = ({
 
   return (
     <>
-      <div className="w-[676px] h-[575px]">
+      <div className="w-[676px] h-[571px]">
         {isLoading && isEdit ? (
           // Loading state
           <>
@@ -572,7 +572,7 @@ export const LabresultsModalContent = ({
                   </div>
                 </div>
                 <div className="pt-26">
-                  <div className="justify-center flex border-t-4 pt-26">
+                  <div className="justify-center flex pt-26">
                     <button
                       onClick={() => isModalOpen(false)}
                       type="button"

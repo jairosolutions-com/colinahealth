@@ -212,14 +212,11 @@ const Notes = () => {
           </div>
         </div>
         <div className="flex gap-2">
-          <button
-            onClick={() => isModalOpen(true)}
-            className="flex items-center justify-center hover:bg-[#2267B9] bg-[#1B84FF] text-white font-semibold w-[100px] h-[52px] rounded gap-2"
-          >
+          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
             <img src="/imgs/add.svg" alt="" />
             <p className="text-[18px]">Add</p>
           </button>
-          <button className="btn-pdfs flex items-center justify-center border-[2px] text-black font-semibold w-[228px] rounded h-[52px] gap-2">
+          <button className="btn-pdfs gap-2">
             <img src="/imgs/downloadpdf.svg" alt="" />
             <p className="text-[18px]">Download PDF</p>
           </button>
@@ -291,7 +288,6 @@ const Notes = () => {
             <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
               <p className="text-xl font-semibold text-gray-700 text-center">
                 No Notes <br />
-                •ω•
               </p>
             </h1>
           ) : (
