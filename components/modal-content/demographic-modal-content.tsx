@@ -572,17 +572,17 @@ export const DemographicModalContent = ({
                 </div>
               </div>
             </div>
-            <div className="justify-center flex ">
+            <div className="justify-end flex mr-10">
               <button
                 onClick={() => isModalOpen(false)}
                 type="button"
-                className="w-[600px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mt-4 mr-[3px] rounded-bl-md  "
+                className="w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm "
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="w-[600px] bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff]  font-medium mt-4 rounded-br-md"
+                className="w-[200px] bg-[#007C85] hover:bg-[#03595B]  text-[#ffff]  font-medium  rounded-sm"
               >
                 Submit
               </button>
