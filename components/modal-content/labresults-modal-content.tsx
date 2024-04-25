@@ -1,5 +1,3 @@
-"use client";
-
 import { X } from "lucide-react";
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
@@ -48,9 +46,9 @@ export const LabresultsModalContent = ({
   const [fileType, setFileType] = useState<string>("");
 
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     date: labResultData.labResults_date || "",
     hemoglobinA1c: labResultData.labResults_hemoglobinA1c || "",
@@ -89,7 +87,23 @@ export const LabresultsModalContent = ({
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+    const MAX_FILE_SIZE_MB = 15;
+    if (files) {
+      const totalSize = Array.from(files).reduce(
+        (acc, file) => acc + file.size,
+        0
+      );
+      const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
 
+      if (totalSizeMB > MAX_FILE_SIZE_MB) {
+        toggleMaxSizeToast();
+        e.target.value = ""; // Clear the input field
+      }
+      if (files.length > numFilesCanAdd) {
+        toggleMaxFilesToast(numFilesCanAdd);
+        e.target.value = ""; // Clear the input field
+      }
+    }
     if (files && files.length > 0) {
       const newFiles: File[] = [];
       const newFileNames: string[] = [];
