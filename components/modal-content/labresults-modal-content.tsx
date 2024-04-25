@@ -111,13 +111,12 @@ export const LabresultsModalContent = ({
       );
       const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
 
-  
       if (totalSizeMB > MAX_FILE_SIZE_MB) {
-        toggleMaxSizeToast(); 
+        toggleMaxSizeToast();
         e.target.value = ""; // Clear the input field
       }
       if (files.length > numFilesCanAdd) {
-        toggleMaxFilesToast(numFilesCanAdd)
+        toggleMaxFilesToast(numFilesCanAdd);
         e.target.value = ""; // Clear the input field
       }
     }
@@ -595,17 +594,17 @@ export const LabresultsModalContent = ({
                   </div>
                 </div>
                 <div className="pt-26">
-                  <div className="justify-center flex pt-26">
+                  <div className="justify-end flex mr-10">
                     <button
                       onClick={() => isModalOpen(false)}
                       type="button"
-                      className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+                      className="w-[170px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md"
+                      className="w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium rounded-sm"
                     >
                       Submit
                     </button>

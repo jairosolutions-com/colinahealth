@@ -421,18 +421,22 @@ export const AppointmentModalContent = ({
             </div>
           </div>
           <div className={`${charactersFull ? "mt-[30px]" : "mt-5"}`}>
-            <div className="justify-center flex pt-26">
+            <div className="justify-end flex mr-10">
               <button
                 onClick={() => isModalOpen(false)}
                 type="button"
-                className="w-[600px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mt-4 mr-[3px] rounded-bl-md"
+                className="w-[170px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm"
               >
                 Cancel
               </button>
               <button
-              disabled={formData.appointmentStatus === "Missed"}
+                disabled={formData.appointmentStatus === "Missed"}
                 type="submit"
-                className={`${formData.appointmentStatus === "Missed" ? "cursor-not-allowed":"cursor-pointer"} w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md`}
+                className={`${
+                  formData.appointmentStatus === "Missed"
+                    ? "cursor-not-allowed"
+                    : "cursor-pointer"
+                } w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
               >
                 {isEditable ? "Update" : "Submit"}
               </button>
