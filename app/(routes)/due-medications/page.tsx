@@ -307,8 +307,8 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
               {dueMedicationList.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-[15px] font-normal text-gray-700 flex text-center">
-                      No Patient Found! <br />
+                    <p className="text-[15px] font-normal text-gray-700  text-center">
+                      No Due Medication Found! 
                     </p>
                   </td>
                 </tr>

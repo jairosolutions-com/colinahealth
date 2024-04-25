@@ -111,6 +111,7 @@ export const FormsviewModalContent = ({
                     name="nameOfDocument"
                     value={formData.nameOfDocument}
                     onChange={handleChange}
+                    required
                   />
                 </div>
               </div>
@@ -129,6 +130,7 @@ export const FormsviewModalContent = ({
                     name="dateIssued"
                     value={formData.dateIssued}
                     onChange={handleChange}
+                    required
                   />
                   <Image
                     className="absolute ml-[560px]  mt-4 pointer-events-none cursor-pointer"
@@ -155,6 +157,7 @@ export const FormsviewModalContent = ({
                     name="notes"
                     value={formData.notes}
                     onChange={handleTextChange}
+                    required
                   />
                 </div>
               </div>

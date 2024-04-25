@@ -316,8 +316,7 @@ export default function FormsTab() {
                 </table>
                 <div className="py-5 flex justify-center items-center">
                   <p className="text-xl font-semibold text-gray-700 text-center">
-                    No Form/s <br />
-                    •ω•
+                    No Form/s
                   </p>
                 </div>
               </div>
