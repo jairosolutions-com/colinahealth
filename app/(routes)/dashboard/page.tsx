@@ -13,7 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 const Dashboard = () => {
   const router = useRouter();
   if (!getAccessToken()) {
-    onNavigate(router, "/login");
+    router.push("/login");
   }
   const { toast } = useToast();
   const [term, setTerm] = useState("");
@@ -213,9 +213,9 @@ const Dashboard = () => {
                         key={index}
                         className="h-[95px] flex justify-evenly items-center hover:bg-slate-50 px-4 min-w-max"
                       >
-                        <div className="flex bg-[#FEF9C3] px-2 me-2 py-0.5 items-center">
+                        <div className="flex bg-[#FEF9C3] px-2 me-2 py-0.5 items-center rounded-[30px]">
                           <p className="text-[#FACC15] text-[15px] mr-2">●</p>
-                          <span className="pr-1 text-[#713F12] font-medium text-[15px]">
+                          <span className="pr-1 text-[#713F12] font-semibold text-[15px]">
                             Pending
                           </span>
                         </div>
@@ -245,7 +245,6 @@ const Dashboard = () => {
                   <div className="flex mt-10 items-center text-center justify-center font-semibold text-3xl w-full h-full ">
                     No Upcoming Appointments/s
                     <br />
-                    •ω•
                   </div>
                 )}
               </div>
@@ -276,7 +275,7 @@ const Dashboard = () => {
                       <img src="/imgs/tao1.svg" alt="" width={58} height={58} />
                     </div>
                     <div className="flex w-4/6">
-                      <div className="flex flex-col justify-center">
+                      <div className="flex flex-col justify-center gap-1">
                         <p className="font-bold text-[15px] truncate hover:text-wrap">
                           {dueMedication.patient_firstName}{" "}
                           {dueMedication.patient_middleName}{" "}
@@ -287,11 +286,11 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="w-1/6  flex flex-col justify-center items-start ">
-                      <p className="font-bold text-[15px] flex">
+                    <div className="w-1/6  flex flex-col justify-center items-start gap-1">
+                      <p className="font-semibold text-[15px] flex">
                         {dueMedication.medicationlogs_medicationLogsDate}
                       </p>
-                      <p className="text-[#71717A] font-medium text-[15px]">
+                      <p className="text-[#71717A] font-medium text-[15px] ml-4">
                         {formatTime(
                           dueMedication.medicationlogs_medicationLogsTime
                         )}
@@ -304,11 +303,16 @@ const Dashboard = () => {
               <div className="flex items-center text-center justify-center font-semibold text-3xl w-full h-full -mt-10">
                 No Due Medication/s
                 <br />
-                •ω•
               </div>
             )}
 
-            <div className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] py-[40px]">
+            <div
+              onClick={() => {
+                setIsLoading(true);
+                onNavigate(router, "/due-medications");
+              }}
+              className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] py-[40px]"
+            >
               SEE ALL DUE
               <svg
                 className="text-[#71717A] ml-2 group-hover:text-[#007C85]"

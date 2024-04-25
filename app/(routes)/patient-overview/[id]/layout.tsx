@@ -22,7 +22,7 @@ export default function PatientOverviewLayout({
     item: string;
   }>();
   if (!getAccessToken()) {
-    onNavigate(router, "/login");
+    router.push("/login");
   }
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
@@ -32,18 +32,8 @@ export default function PatientOverviewLayout({
   const [detailsClicked, setDetailsClicked] = useState<boolean>(false); // State to track if "See more details" is clicked
   const patientId = params.id.toUpperCase();
   const pathname = usePathname();
-  const [isAllergy, setIsAllergy] = useState(true);
-  const [isSurgery, setIsSurgery] = useState(false);
-  const [isMedicationLog, setIsMedicationLog] = useState(false);
-  const [isPrescription, setIsPrescription] = useState(false);
-  const [isVitalSign, setIsVitalSign] = useState(false);
-  const [isLabRes, setIsLabRes] = useState(false);
-  const [isAppointment, setIsAppointment] = useState(false);
-  const [isNotes, setIsNotes] = useState(false);
-  const [isForms, setIsForms] = useState(false);
   const inputRef = useRef<HTMLSpanElement>(null);
 
-  console.log(getAccessToken, "getAccessToken");
   const tabs = [
     {
       label: "Medical History",
@@ -124,32 +114,12 @@ export default function PatientOverviewLayout({
     setActiveTab(tabIndex);
     setDetailsClicked(false);
 
-    onNavigate(router, url);
+    router.push(url);
   };
   console.log(pathname, "pathname");
   useEffect(() => {
     const pathParts = pathname.split("/");
     const tabUrl = pathParts[pathParts.length - 1];
-
-    if (tabUrl === "allergies") {
-      setIsAllergy(true);
-    } else if (tabUrl === "surgeries") {
-      setIsSurgery(true);
-    } else if (tabUrl === "medication") {
-      setIsMedicationLog(true);
-    } else if (tabUrl === "prescription") {
-      setIsPrescription(true);
-    } else if (tabUrl === "vital-signs") {
-      setIsVitalSign(true);
-    } else if (tabUrl === "lab-results") {
-      setIsLabRes(true);
-    } else if (tabUrl === "patient-appointment") {
-      setIsAppointment(true);
-    } else if (tabUrl === "notes") {
-      setIsNotes(true);
-    } else if (tabUrl === "forms") {
-      setIsForms(true);
-    }
     const fetchData = async () => {
       try {
         const response = await fetchPatientOverview(patientId, router);
@@ -180,11 +150,11 @@ export default function PatientOverviewLayout({
   }, [patientId, router, params]);
 
   if (isLoading) {
-     return (
-       <div className="w-full h-full flex justify-center items-center ">
-         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
-       </div>
-     );
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      </div>
+    );
   }
   console.log(patientData, "patientData");
 
@@ -205,7 +175,7 @@ export default function PatientOverviewLayout({
   };
 
   return (
-    <div className="flex flex-col w-full px-[150px] py-[90px]">
+    <div className="flex flex-col w-full px-[150px] pt-[90px]">
       <div className="flex flex-col gap-[3px]">
         <div className="p-title pb-2">
           <h1>Patient Overview</h1>
@@ -214,7 +184,7 @@ export default function PatientOverviewLayout({
           <div className="flex">
             <div className="flex flex-col">
               <img
-                src="/imgs/dennis.svg"
+                src="/imgs/drake.png"
                 alt="profile"
                 width="200"
                 height="200"
@@ -333,7 +303,8 @@ export default function PatientOverviewLayout({
                         tab.label === "Medical History") ||
                       (tabUrl === "prorenata" &&
                         tab.label === "Medication Log") ||
-                      (tabUrl === "incident-report" && tab.label === "Notes")
+                      (tabUrl === "incident-report" && tab.label === "Notes") ||
+                      (tabUrl === "archived" && tab.label === "Forms")
                         ? "text-[#007C85] border-b-2 border-[#007C85] text-[15px] pb-1"
                         : "hover:text-[#007C85] hover:border-b-2 pb-1 h-[31px] border-[#007C85] text-[15px]"
                     }`}

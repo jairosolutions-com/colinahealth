@@ -83,7 +83,7 @@ export async function createLabResultOfPatient(patientId: string, formData: any,
     throw error; // Rethrow the error to handle it in the component
   }
 }
-//chzzz
+
 export async function addLabFile(labResultUuid: string, formData: any, router: any): Promise<any> {
   try {
       const accessToken = getAccessToken();
@@ -218,6 +218,40 @@ export async function fetchLabResultFiles(
     if ((error as AxiosError).response?.status === 401) {
       setAccessToken("");
       onNavigate(router, "/login");
+      return Promise.reject(new Error("Unauthorized access"));
+    }
+    console.error(
+      "Error searching lab result files:",
+      (error as AxiosError).message
+    );
+  }
+}
+
+export async function getCurrentFileCountFromDatabase(
+  labResultUuid: string,
+): Promise<any> {
+  console.log(labResultUuid);
+  try {
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("Access token not found in local storage");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    const response = await axios.get(
+      `${apiUrl}/lab-results/${labResultUuid}/files/count`,
+      { headers }
+    );
+
+    console.log(response.data, 'api fetch COUNT');
+    return response.data;
+
+  } catch (error) {
+    if ((error as AxiosError).response?.status === 401) {
+      setAccessToken("");
       return Promise.reject(new Error("Unauthorized access"));
     }
     console.error(

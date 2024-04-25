@@ -15,7 +15,7 @@ import { AppointmentsModal } from "@/components/modals/appointments.modal";
 import { fetchUpcomingAppointments } from "@/app/api/appointments-api/upcoming-appointments-api";
 import Image from "next/image";
 import * as React from "react";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { Calendar as CalendarIcon, Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -26,20 +26,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { fetchAllAppointments } from "@/app/api/appointments-api/fetch-all-appointments.api";
 
 export default function AppointmentPage() {
-  const [startDate, setStartDate] = React.useState<Date>();
-  const [endDate, setEndDate] = React.useState<Date>();
   const router = useRouter();
 
   if (!getAccessToken()) {
-    onNavigate(router, "/login");
+    router.push("/login");
   }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
-  const [upcomingSortBy, setUpcomingSortBy] = useState("appointmentDate");
 
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-  const [sortBy, setSortBy] = useState("firstName");
+  const [sortBy, setSortBy] = useState("appointmentDate");
   const [appointmentList, setAppointmentList] = useState<any[]>([]);
   const [patientIdappointmentList, setPatientId] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -55,7 +53,8 @@ export default function AppointmentPage() {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [totalUpcoming, setTotalUpcoming] = useState(0);
   const [upcomingTotalPages, setUpcomingTotalPages] = useState(0);
-
+  const [startDate, setStartDate] = React.useState<Date>();
+  const [endDate, setEndDate] = React.useState<Date>();
   const [upcomingAppointments, setUpcomingAppointments] = useState<
     {
       patient_firstName: string;
@@ -66,7 +65,10 @@ export default function AppointmentPage() {
       appointments_appointmentTime: string;
     }[]
   >([]);
-
+  const startD = startDate
+    ? startDate.toISOString().slice(0, 10)
+    : "2021-01-01";
+  const endD = endDate ? endDate.toISOString().slice(0, 10) : "2300-01-01";
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const isEdit = false;
   const handleOrderOptionClick = (option: string) => {
@@ -79,13 +81,13 @@ export default function AppointmentPage() {
 
   const handleSortOptionClick = (option: string) => {
     if (option == "Status") {
-      setSortBy("Status");
+      setSortBy("appointmentStatus");
     } else if (option == "Date") {
-      setSortBy("Date");
+      setSortBy("appointmentDate");
     } else if (option == "Time") {
-      setSortBy("Time");
+      setSortBy("appointmentTime");
     } else if (option == "Endtime") {
-      setSortBy("Endtime");
+      setSortBy("appointmentEndTime");
     }
     console.log(sortBy, "ooption");
   };
@@ -167,24 +169,25 @@ export default function AppointmentPage() {
     const fetchData = async () => {
       setIsLoading(false);
       try {
-        const upcomingAppoinments = await fetchUpcomingAppointments(
+        const upcomingAppoinments = await fetchAllAppointments(
           term,
           currentPage,
-          upcomingSortBy,
+          sortBy,
           sortOrder as "ASC" | "DESC",
+          startD,
+          endD,
           router
         );
 
-        const appointmentsArray = Object.values(upcomingAppoinments);
-
+        const appointmentsArray = Object.values(upcomingAppoinments.data);
+        setTotalPages(upcomingAppoinments.totalPages);
         setAppointmentList(appointmentsArray);
-        console.log("Appointments:", appointmentsArray);
-
+        setTotalAppointments(upcomingAppoinments.totalCount);
         return upcomingAppoinments;
       } catch (error) {}
     };
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, startDate, endDate, sortBy, sortOrder, term]);
 
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
@@ -194,7 +197,8 @@ export default function AppointmentPage() {
       `/patient-overview/${lowercasePatientId}/medical-history/allergies`
     );
   };
-
+  console.log(startD, "startDate");
+  console.log(appointmentList, "appointmentList");
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -211,7 +215,7 @@ export default function AppointmentPage() {
   };
 
   return (
-    <div className="w-full px-[150px] py-[90px]">
+    <div className="w-full px-[150px] pt-[90px]">
       <div className="flex justify-end">
         <p
           onClick={() => onNavigate(router, "/dashboard")}
@@ -241,6 +245,11 @@ export default function AppointmentPage() {
               type="text"
               placeholder="Search by reference no. or name..."
               className="flex-grow focus:outline-none text-gray-700"
+              value={term}
+              onChange={(e) => {
+                setTerm(e.target.value);
+                setCurrentPage(1);
+              }}
             />
           </div>
 
@@ -331,69 +340,99 @@ export default function AppointmentPage() {
         </div>
 
         <div className="w-full h-full">
-          {appointmentList.length === 0 ? (
-            <div>
-              <div className="w-full flex justify-center py-5 text-center text-[15px]">
-                No Appointments Found! <br />
-                •ω•
-              </div>
-            </div>
-          ) : (
-            <table className="w-full h-full justify-center items-start text-[15px]">
-              <thead className=" text-left rtl:text-right">
-                <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
-                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                    Status
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[200px]">
-                    Date
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[200px]">
-                    Time
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-10">
-                    End time
-                  </th>
+          <table className="w-full h-full justify-center items-start text-[15px]">
+            <thead className=" text-left rtl:text-right">
+              <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
+                <th scope="col" className="px-6 py-3 w-[250px] h-[70px]">
+                  Status
+                </th>
+                <th scope="col" className="px-6 py-3 w-[230px]">
+                  Date
+                </th>
+                <th scope="col" className="px-6 py-3 w-[200px]">
+                  Time
+                </th>
+                <th scope="col" className="px-6 py-3 w-10">
+                  End time
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {appointmentList.length === 0 && (
+                <tr>
+                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                    <p className="text-[15px] font-normal text-gray-700 flex text-center">
+                      No Appointments Found! <br />
+                    </p>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                <tr className="odd:bg-white hover:bg-[#f4f4f4] group border-b">
-                  <td className="px-6 py-4">
-                    <span className="w-[400px] h-[5px] px-3 bg-[#dfffea] mr-2 font-semibold text-[#17C653] rounded-[30px]">
-                      <span className="inline-block h-3 w-3 rounded-full bg-[#0EB146] mr-2 shadow-md"></span>
-                      Upcoming Appointment
-                    </span>
+              )}
+              {appointmentList.map((appointment, index) => (
+                <tr
+                  key={index}
+                  className="odd:bg-white hover:bg-[#f4f4f4] group border-b"
+                >
+                  <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                    <div
+                      className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
+                        appointment.appointments_appointmentStatus ===
+                        "Scheduled"
+                          ? "bg-[#dfffea] text-[#17C653]" // Green color for Scheduled
+                          : appointment.appointments_appointmentStatus ===
+                            "Done"
+                          ? "bg-[#E7EAEE] text-[#71717A]" // Dark color for Done
+                          : appointment.appointments_appointmentStatus ===
+                              "Patient-IN" ||
+                            appointment.appointments_appointmentStatus ===
+                              "On-going"
+                          ? "bg-[#FFFCDB] text-[#E0BD03]" // Yellow for On Going
+                          : appointment.appointments_appointmentStatus ===
+                            "Missed"
+                          ? "bg-[#FEE9E9] text-[#EF4C6A]" // Red color for Missed
+                          : appointment.appointments_appointmentStatus ===
+                            "Cancelled"
+                          ? "bg-[#FEE9E9] text-[#EF4C6A]" // Red color for Cancelled
+                          : ""
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-2 w-2 rounded-full mr-1 ${
+                          appointment.appointments_appointmentStatus ===
+                          "Scheduled"
+                            ? "bg-green-500" // Green color for Scheduled
+                            : appointment.appointments_appointmentStatus ===
+                              "Done"
+                            ? "bg-[#7E7E7E]" // Dark color for Done
+                            : appointment.appointments_appointmentStatus ===
+                                "Patient-IN" ||
+                              appointment.appointments_appointmentStatus ===
+                                "On-going"
+                            ? "bg-[#E0BD03]" // Yellow for On Going
+                            : appointment.appointments_appointmentStatus ===
+                                "Missed" ||
+                              appointment.appointments_appointmentStatus ===
+                                "Cancelled"
+                            ? "bg-[#EF4C6A]" // Red color for Missed and Cancelled
+                            : ""
+                        }`}
+                      ></span>
+                      {appointment.appointments_appointmentStatus} Appointment
+                    </div>
                   </td>
 
-                  <td className="px-6 py-4">10/02/1992</td>
-                  <td className="px-6 py-4">10:00AM</td>
-                  <td className="px-6 py-4">3:00PM</td>
-                </tr>
-                <tr className="odd:bg-white hover:bg-[#f4f4f4] group border-b">
                   <td className="px-6 py-4">
-                    <span className="w-[400px] h-[5px] px-3 bg-[#E7EAEE] mr-2 font-semibold text-[#71717A] rounded-[30px]">
-                      <span className="inline-block h-3 w-3 rounded-full bg-[#7E7E7E] mr-2 shadow-md"></span>
-                      Done Appointment
-                    </span>
+                    {appointment.appointments_appointmentDate}
                   </td>
-                  <td className="px-6 py-4">10/02/1992</td>
-                  <td className="px-6 py-4">10:00AM</td>
-                  <td className="px-6 py-4">3:00PM</td>
-                </tr>
-                <tr className="odd:bg-white hover:bg-[#f4f4f4] group border-b">
                   <td className="px-6 py-4">
-                    <span className="w-[400px] h-[5px] px-3 bg-[#FFE8EC] mr-2 font-semibold text-[#EF4C6A] rounded-[30px]">
-                      <span className="inline-block h-3 w-3 rounded-full bg-[#EE4D4D] mr-2 shadow-md"></span>
-                      Missed Appointment
-                    </span>
+                    {appointment.appointments_appointmentTime}
                   </td>
-                  <td className="px-6 py-4">10/02/1992</td>
-                  <td className="px-6 py-4">10:00AM</td>
-                  <td className="px-6 py-4">3:00PM</td>
+                  <td className="px-6 py-4">
+                    {appointment.appointments_appointmentEndTime}
+                  </td>
                 </tr>
-              </tbody>
-            </table>
-          )}
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 

@@ -142,7 +142,7 @@ const Appointment = () => {
       pageNumbers.push(
         <button
           key={i}
-          className={`flex border border-px items-center justify-center  w-[49px]  ${
+          className={`flex ring-1 ring-gray-300 items-center justify-center  w-[49px]  ${
             currentPage === i ? "btn-pagination" : ""
           }`}
           onClick={() => setCurrentPage(i)}
@@ -223,7 +223,7 @@ const Appointment = () => {
             <label className=""></label>
             <div className="flex">
               <input
-                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat"
                 type="text"
                 placeholder="Search by reference no. or name..."
                 value={term}
@@ -305,7 +305,6 @@ const Appointment = () => {
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="font-semibold text-gray-700 text-center text-[15px]">
                       No Appointment/s <br />
-                      •ω•
                     </p>
                   </td>
                 </tr>
@@ -317,40 +316,65 @@ const Appointment = () => {
                       key={index}
                       className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                     >
-                      <th
-                        className={`text-15px me-1 px-6 py-5 rounded-full flex justify-start ${
-                          appointments.appointments_appointmentStatus ===
-                          "Scheduled"
-                            ? "text-[#2A7D15]" // Green color for Scheduled
-                            : appointments.appointments_appointmentStatus ===
-                              "Done"
-                            ? "text-[#3C3C3C]" // Dark color for Done
-                            : appointments.appointments_appointmentStatus ===
-                                "Patient-IN" ||
+                      <th className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                        <div
+                          className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
+                            appointments.appointments_appointmentStatus ===
+                            "Scheduled"
+                              ? "bg-[#dfffea] text-[#17C653] text-[15px]" // Green color for Scheduled
+                              : appointments.appointments_appointmentStatus ===
+                                "Done"
+                              ? "bg-[#E7EAEE] text-[#3C3C3C] text-[15px]" // Dark color for Done
+                              : appointments.appointments_appointmentStatus ===
+                                  "Patient-IN" ||
+                                appointments.appointments_appointmentStatus ===
+                                  "On-going"
+                              ? "bg-[#FFFCDB] text-[#E0BD03] text-[15px]" // Yellow for On Going
+                              : appointments.appointments_appointmentStatus ===
+                                  "Missed" ||
+                                appointments.appointments_appointmentStatus ===
+                                  "Cancelled"
+                              ? "bg-[#FEE9E9] text-[#EF4C6A] text-[15px]" // Red color for Missed and Cancelled
+                              : ""
+                          }`}
+                        >
+                          <span
+                            className={`inline-block h-2 w-2 rounded-full mr-1 ${
                               appointments.appointments_appointmentStatus ===
-                                "On-going"
-                            ? "text-[#E0BD03]" // Yellow for On Going
-                            : appointments.appointments_appointmentStatus ===
-                              "Missed"
-                            ? "text-[#B81C1C]" // Red color for Missed
-                            : ""
-                        }`}
-                      >
-                        <span className="pr-1">●</span>
-                        {appointments.appointments_appointmentStatus}
+                              "Scheduled"
+                                ? "bg-green-500" // Green color for Scheduled
+                                : appointments.appointments_appointmentStatus ===
+                                  "Done"
+                                ? "bg-[#E7EAEE]" // Dark color for Done
+                                : appointments.appointments_appointmentStatus ===
+                                    "Patient-IN" ||
+                                  appointments.appointments_appointmentStatus ===
+                                    "On-going"
+                                ? "bg-[#E0BD03]" // Yellow for On Going
+                                : appointments.appointments_appointmentStatus ===
+                                    "Missed" ||
+                                  appointments.appointments_appointmentStatus ===
+                                    "Cancelled"
+                                ? "bg-[#EF4C6A]" // Red color for Missed and Cancelled
+                                : ""
+                            }`}
+                          ></span>
+                          {appointments.appointments_appointmentStatus}
+                        </div>
                       </th>
-                      <td className="px-6 py-3">
+
+                      <td className="px-6 py-3 text-[15px]">
                         {formatDate(appointments.appointments_appointmentDate)}
                       </td>
-                      <td className="px-6 py-3">
+                      <td className="px-6 py-3 text-[15px]">
                         {formatTime(appointments.appointments_appointmentTime)}
                       </td>
-                      <td className="px-6 py-3">
+                      <td className="px-6 py-3 text-[15px]">
                         {formatTime(
                           appointments.appointments_appointmentEndTime
                         )}
                       </td>
-                      <td className="px-6 py-3">
+                      <td className="px-6 py-3 text-[15px]">
                         {appointments.appointments_details}
                       </td>
                       <td className="px-[90px] py-3">
@@ -379,34 +403,33 @@ const Appointment = () => {
       ) : (
         <div className="mt-5 pb-5">
           <div className="flex justify-between">
-            <p className="font-medium size-[18px] w-[138px] items-center">
+            <p className="font-medium size-[18px] text-[15px] w-[138px] items-center">
               Page {currentPage} of {totalPages}
             </p>
             <div>
               <nav>
-                <div className="flex -space-x-px text-sm">
-                  <div>
+                <div className="flex text-[15px] ">
+                  <div className="flex">
                     <button
                       onClick={goToPreviousPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Prev
                     </button>
-                  </div>
-                  {renderPageNumbers()}
 
-                  <div className="ml-5">
+                    {renderPageNumbers()}
+
                     <button
                       onClick={goToNextPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Next
                     </button>
                   </div>
                   <form onSubmit={handleGoToPage}>
-                    <div className="flex px-5 ">
+                    <div className="flex pl-4 ">
                       <input
-                        className={`ipt-pagination appearance-none  text-center border ring-1 ${
+                        className={`ipt-pagination appearance-none  text-center ring-1 ${
                           gotoError ? "ring-red-500" : "ring-gray-300"
                         } border-gray-100`}
                         type="text"
@@ -425,8 +448,11 @@ const Appointment = () => {
                           }
                         }}
                       />
-                      <div className="px-5">
-                        <button type="submit" className="btn-pagination ">
+                      <div className="">
+                        <button
+                          type="submit"
+                          className="btn-pagination ring-1 ring-[#007C85]"
+                        >
                           Go{" "}
                         </button>
                       </div>

@@ -22,7 +22,7 @@ const Pagination = () => {
                 {/* wala pay active function */}
                 <a
                   href="#"
-                  className="flex border border-px items-center justify-center  w-[49px] h-full"
+                  className="flex items-center justify-center  w-[49px] h-full"
                 >
                   1
                 </a>
@@ -53,14 +53,14 @@ const Pagination = () => {
                   Next
                 </a>
               </div>
-              <div className="flex px-5 ">
+              <div className="flex   ">
                 <input
                   className="ipt-pagination text-center border ring-1 ring-gray-300 border-gray-100"
                   type="text"
                   placeholder="-"
                 />
-                <div className="px-5">
-                  <button className="btn-pagination ">Go </button>
+                <div className="">
+                  <button className="btn-pagination  ">Go </button>
                 </div>
               </div>
             </div>

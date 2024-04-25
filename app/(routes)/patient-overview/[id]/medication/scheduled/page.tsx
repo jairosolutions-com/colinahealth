@@ -138,7 +138,7 @@ const Scheduled = () => {
       pageNumbers.push(
         <button
           key={i}
-          className={`flex border border-px items-center justify-center  w-[49px]  ${
+          className={`flex ring-1 ring-gray-300 items-center justify-center  w-[49px]  ${
             currentPage === i ? "btn-pagination" : ""
           }`}
           onClick={() => setCurrentPage(i)}
@@ -206,8 +206,7 @@ const Scheduled = () => {
             <span className="slash">{">"}</span>
             <span
               onClick={() => {
-                onNavigate(
-                  router,
+                router.push(
                   `/patient-overview/${patientId.toLowerCase()}/medication/prorenata`
                 );
                 setIsLoading(true);
@@ -311,7 +310,7 @@ const Scheduled = () => {
                 <th scope="col" className="px-6 py-3 w-[300px]">
                   Medication
                 </th>
-                <th scope="col" className="px-5 py-3 w-[400px]">
+                <th scope="col" className="px-5 py-3 w-[200px]">
                   Notes
                 </th>
                 <th scope="col" className="px-6 py-3 w-[100px]">
@@ -326,9 +325,8 @@ const Scheduled = () => {
               {patientScheduledMed.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-xl font-semibold text-gray-700 flex text-center">
+                    <p className="text-[15px] font-normal text-gray-700 flex text-center">
                       No Scheduled Medication Log/s <br />
-                      •ω•
                     </p>
                   </td>
                 </tr>
@@ -376,8 +374,23 @@ const Scheduled = () => {
                       <td className="px-5 py-4">
                         {schedMed.medicationlogs_notes}
                       </td>
-                      <td className="px-6 py-4">
-                        {schedMed.medicationlogs_medicationLogStatus}
+                      <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                        <div
+                          className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
+                            schedMed.medicationlogs_medicationLogStatus ===
+                            "Given"
+                              ? "bg-[#dfffea] text-[#17C653] text-[15px]" // Green color for Given
+                              : schedMed.medicationlogs_medicationLogStatus ===
+                                "Held"
+                              ? "bg-[#E7EAEE] text-[#3C3C3C] text-[15px]" // Dark color for Held
+                              : schedMed.medicationlogs_medicationLogStatus ===
+                                "Refused"
+                              ? "bg-[#FEE9E9] text-[#EF4C6A] text-[15px]" // Red color for Refused
+                              : schedMed.medicationlogs_medicationLogStatus
+                          }`}
+                        >
+                          {schedMed.medicationlogs_medicationLogStatus}
+                        </div>
                       </td>
 
                       <td className="px-[70px] py-4">
@@ -406,34 +419,33 @@ const Scheduled = () => {
       ) : (
         <div className="mt-5 pb-5">
           <div className="flex justify-between">
-            <p className="font-medium size-[18px] w-[138px] items-center">
+            <p className="font-medium size-[18px] text-[15px] w-[138px] items-center">
               Page {currentPage} of {totalPages}
             </p>
             <div>
               <nav>
-                <div className="flex -space-x-px text-sm">
-                  <div>
+                <div className="flex text-[15px] ">
+                  <div className="flex">
                     <button
                       onClick={goToPreviousPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Prev
                     </button>
-                  </div>
-                  {renderPageNumbers()}
 
-                  <div className="ml-5">
+                    {renderPageNumbers()}
+
                     <button
                       onClick={goToNextPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Next
                     </button>
                   </div>
                   <form onSubmit={handleGoToPage}>
-                    <div className="flex px-5 ">
+                    <div className="flex pl-4 ">
                       <input
-                        className={`ipt-pagination appearance-none  text-center border ring-1 ${
+                        className={`ipt-pagination appearance-none  text-center ring-1 ${
                           gotoError ? "ring-red-500" : "ring-gray-300"
                         } border-gray-100`}
                         type="text"
@@ -452,8 +464,11 @@ const Scheduled = () => {
                           }
                         }}
                       />
-                      <div className="px-5">
-                        <button type="submit" className="btn-pagination ">
+                      <div className="">
+                        <button
+                          type="submit"
+                          className="btn-pagination ring-1 ring-[#007C85]"
+                        >
                           Go{" "}
                         </button>
                       </div>

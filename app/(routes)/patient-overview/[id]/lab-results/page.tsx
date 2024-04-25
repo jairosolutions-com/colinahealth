@@ -317,9 +317,8 @@ export default function Laboratoryresults() {
                 </thead>
               </table>
               <div className="py-5 flex justify-center items-center">
-                <p className="text-xl font-semibold text-gray-700 text-center">
+                <p className="text-[15px] font-normal text-gray-700 text-center">
                   No Lab Result/s <br />
-                  •ω•
                 </p>
               </div>
             </div>
@@ -357,7 +356,7 @@ export default function Laboratoryresults() {
                   <th scope="col" className="px-6  py-3 w-[200px]">
                     TRIGLYCERIDES (mg/dL)
                   </th>
-                  <th scope="col" className="pl-[80px] py-3 w-[10px] ">
+                  <th scope="col" className="pl-[50px] py-3 w-[10px] ">
                     ACTION
                   </th>
                 </tr>
@@ -400,7 +399,7 @@ export default function Laboratoryresults() {
                         <td className="px-6 py-4">
                           {labResult.labResults_triglycerides}mg/dL
                         </td>
-                        <td className="px-[70px] py-4">
+                        <td className="px-[50px] py-5 flex gap-2">
                           <p
                             onClick={() => {
                               isModalOpen(true);
@@ -414,7 +413,7 @@ export default function Laboratoryresults() {
                             onClick={() => {
                               isModalOpen(true);
                               setIsView(true);
-                              
+
                               setLabResultData(labResult);
                             }}
                           >
@@ -437,34 +436,33 @@ export default function Laboratoryresults() {
       ) : (
         <div className="mt-5 pb-5">
           <div className="flex justify-between">
-            <p className="font-medium size-[18px] w-[138px] items-center">
+            <p className="font-medium size-[18px] text-[15px] w-[138px] items-center">
               Page {currentPage} of {totalPages}
             </p>
             <div>
               <nav>
-                <div className="flex -space-x-px text-sm">
-                  <div>
+                <div className="flex text-[15px] ">
+                  <div className="flex">
                     <button
                       onClick={goToPreviousPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Prev
                     </button>
-                  </div>
-                  {renderPageNumbers()}
 
-                  <div className="ml-5">
+                    {renderPageNumbers()}
+
                     <button
                       onClick={goToNextPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Next
                     </button>
                   </div>
                   <form onSubmit={handleGoToPage}>
-                    <div className="flex px-5 ">
+                    <div className="flex pl-4 ">
                       <input
-                        className={`ipt-pagination appearance-none  text-center border ring-1 ${
+                        className={`ipt-pagination appearance-none  text-center ring-1 ${
                           gotoError ? "ring-red-500" : "ring-gray-300"
                         } border-gray-100`}
                         type="text"
@@ -483,8 +481,11 @@ export default function Laboratoryresults() {
                           }
                         }}
                       />
-                      <div className="px-5">
-                        <button type="submit" className="btn-pagination ">
+                      <div className="">
+                        <button
+                          type="submit"
+                          className="btn-pagination ring-1 ring-[#007C85]"
+                        >
                           Go{" "}
                         </button>
                       </div>
@@ -498,21 +499,27 @@ export default function Laboratoryresults() {
       )}
       {isOpen && (
         <Modal
-          content={<LabresultsModalContent   
-            isModalOpen={isModalOpen}
-          isEdit={isEdit}
-          labResultData={labResultData}
-          onSuccess={onSuccess}
-          setIsUpdated={setIsUpdated} />}
-          isModalOpen={isModalOpen} />
+          content={
+            <LabresultsModalContent
+              isModalOpen={isModalOpen}
+              isEdit={isEdit}
+              labResultData={labResultData}
+              onSuccess={onSuccess}
+              setIsUpdated={setIsUpdated}
+            />
+          }
+          isModalOpen={isModalOpen}
+        />
       )}
       {isView && (
-        <Modal 
-          content={<LabResultsViewModalContent  
-            isModalOpen={isModalOpen}
-          isView={isView}
-          labResultsData={labResultData}
-       />}
+        <Modal
+          content={
+            <LabResultsViewModalContent
+              isModalOpen={isModalOpen}
+              isView={isView}
+              labResultsData={labResultData}
+            />
+          }
           isModalOpen={isModalOpen}
         />
       )}

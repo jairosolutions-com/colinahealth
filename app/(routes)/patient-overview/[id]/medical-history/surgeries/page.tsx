@@ -142,7 +142,7 @@ export default function Surgeries() {
       pageNumbers.push(
         <button
           key={i}
-          className={`flex border border-px items-center justify-center  w-[49px]  ${
+          className={`flex ring-1 ring-gray-300 items-center justify-center  w-[49px]  ${
             currentPage === i ? "btn-pagination" : ""
           }`}
           onClick={() => setCurrentPage(i)}
@@ -210,8 +210,7 @@ export default function Surgeries() {
             <span className="slash">{">"}</span>
             <span
               onClick={() => {
-                onNavigate(
-                  router,
+                router.push(
                   `/patient-overview/${patientId.toLowerCase()}/medical-history/allergies`
                 );
                 setIsLoading(true);
@@ -302,76 +301,74 @@ export default function Surgeries() {
 
         {/* START OF TABLE */}
         <div>
-          {patientSurgeries.length == 0 ? (
-            <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700 text-center">
-                No Surgeries Found <br />
-                •ω•
-              </p>
-            </div>
-          ) : (
-            <table className="w-full text-left rtl:text-right">
-              <thead className="">
-                <tr className="uppercase text-[#64748B] border-y text-[15px] ">
-                  <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
-                    Surgery ID
-                  </th>
-                  <th scope="col" className="px-2 py-3 w-[300px] h-[70px]">
-                    DATE OF SURGERY
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    TYPE
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    SURGERY
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[300px]">
-                    NOTES
-                  </th>
+          <table className="w-full text-left rtl:text-right">
+            <thead className="">
+              <tr className="uppercase text-[#64748B] border-y text-[15px] ">
+                <th scope="col" className="px-6 py-3 w-[300px] h-[70px]">
+                  Surgery ID
+                </th>
+                <th scope="col" className="px-2 py-3 w-[300px] h-[70px]">
+                  DATE OF SURGERY
+                </th>
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  TYPE
+                </th>
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  SURGERY
+                </th>
+                <th scope="col" className="px-6 py-3 w-[300px]">
+                  NOTES
+                </th>
 
-                  <th scope="col" className="px-[80px] py-3 w-[10px] ">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {patientSurgeries.map((surgery, index) => (
-                  <tr
-                    key={index}
-                    className="group hover:bg-[#f4f4f4]  even:bg-gray-50  border-b text-[15px]"
+                <th scope="col" className="px-[80px] py-3 w-[10px] ">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {patientSurgeries.length == 0 && (
+                <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                  <p className="text-[15px] font-normal text-gray-700 text-center">
+                    No Surgeries Found <br />
+                  </p>
+                </div>
+              )}
+              {patientSurgeries.map((surgery, index) => (
+                <tr
+                  key={index}
+                  className="group hover:bg-[#f4f4f4]  even:bg-gray-50  border-b text-[15px]"
+                >
+                  <th
+                    scope="row"
+                    className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
-                    <th
-                      scope="row"
-                      className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                    {surgery.surgeries_uuid}
+                  </th>
+                  <td className="px-2 py-4">
+                    {formatDate(surgery.surgeries_dateOfSurgery)}
+                  </td>
+                  <td className="px-6 py-4">
+                    {surgery.surgeries_typeOfSurgery}
+                  </td>
+                  <td className=" max-w-[552px] px-6 py-4">
+                    {surgery.surgeries_surgery}
+                  </td>
+                  <td className="px-6 py-4">{surgery.surgeries_notes}</td>
+                  <td className="px-[50px] py-4 flex items-center justify-center  ">
+                    <div
+                      onClick={() => {
+                        isModalOpen(true);
+                        setIsEdit(true);
+                        setSurgeryData(surgery);
+                      }}
                     >
-                      {surgery.surgeries_uuid}
-                    </th>
-                    <td className="px-2 py-4">
-                      {formatDate(surgery.surgeries_dateOfSurgery)}
-                    </td>
-                    <td className="px-6 py-4">
-                      {surgery.surgeries_typeOfSurgery}
-                    </td>
-                    <td className=" max-w-[552px] px-6 py-4">
-                      {surgery.surgeries_surgery}
-                    </td>
-                    <td className="px-6 py-4">{surgery.surgeries_notes}</td>
-                    <td className="px-[50px] py-4 flex items-center justify-center  ">
-                      <div
-                        onClick={() => {
-                          isModalOpen(true);
-                          setIsEdit(true);
-                          setSurgeryData(surgery);
-                        }}
-                      >
-                        <Edit></Edit>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                      <Edit></Edit>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
         {/* END OF TABLE */}
       </div>
@@ -381,34 +378,33 @@ export default function Surgeries() {
       ) : (
         <div className="mt-5 pb-5">
           <div className="flex justify-between">
-            <p className="font-medium size-[18px] w-[138px] items-center">
+            <p className="font-medium size-[18px] text-[15px] w-[138px] items-center">
               Page {currentPage} of {totalPages}
             </p>
             <div>
               <nav>
-                <div className="flex -space-x-px text-sm">
-                  <div>
+                <div className="flex text-[15px] ">
+                  <div className="flex">
                     <button
                       onClick={goToPreviousPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Prev
                     </button>
-                  </div>
-                  {renderPageNumbers()}
 
-                  <div className="ml-5">
+                    {renderPageNumbers()}
+
                     <button
                       onClick={goToNextPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
+                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
                     >
                       Next
                     </button>
                   </div>
                   <form onSubmit={handleGoToPage}>
-                    <div className="flex px-5 ">
+                    <div className="flex pl-4 ">
                       <input
-                        className={`ipt-pagination appearance-none  text-center border ring-1 ${
+                        className={`ipt-pagination appearance-none  text-center ring-1 ${
                           gotoError ? "ring-red-500" : "ring-gray-300"
                         } border-gray-100`}
                         type="text"
@@ -427,8 +423,11 @@ export default function Surgeries() {
                           }
                         }}
                       />
-                      <div className="px-5">
-                        <button type="submit" className="btn-pagination ">
+                      <div className="">
+                        <button
+                          type="submit"
+                          className="btn-pagination ring-1 ring-[#007C85]"
+                        >
                           Go{" "}
                         </button>
                       </div>

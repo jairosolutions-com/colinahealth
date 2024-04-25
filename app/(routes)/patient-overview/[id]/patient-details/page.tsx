@@ -1,18 +1,22 @@
 "use client";
 
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { fetchPatientDetails, updatePatient } from "@/app/api/patients-api/patientDetails.api";
+import {
+  fetchPatientDetails,
+  updatePatient,
+} from "@/app/api/patients-api/patientDetails.api";
 import { fetchCountryList } from "@/app/api/country-api/countryList.api";
 
 export default function PatientDetails() {
-  const [patientDetails, setPatientDetails] = useState<any>([])
+  const [patientDetails, setPatientDetails] = useState<any>([]);
   const [patientEditMode, setPatientEditMode] = useState(false);
   const [emergencyEditMode, setEmergencyEditMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [countryList, setCountryList] = useState<any[]>([]);
-  const [error, setError] = useState("")
-  const [isSuccessful, setIsSuccessFul] = useState(false)
+  const [error, setError] = useState("");
+  const [isSuccessful, setIsSuccessFul] = useState(false);
   const router = useRouter();
   const params = useParams<{
     id: any;
@@ -23,27 +27,27 @@ export default function PatientDetails() {
   const patientId = params.id.toUpperCase();
 
   const [formData, setFormData] = useState({
-    firstName: '', 
-    lastName: '', 
-    middleName: '', 
-    gender: '', 
-    age: '', 
-    dateOfBirth: '', 
-    phoneNo: '',
-    address1: '', 
-    city: '', 
-    address2: '', 
-    state: '', 
-    country: '', 
-    zip: '', 
-    admissionDate: '', 
-    codeStatus: '', 
-    email: '', 
-  })
+    firstName: "",
+    lastName: "",
+    middleName: "",
+    gender: "",
+    age: "",
+    dateOfBirth: "",
+    phoneNo: "",
+    address1: "",
+    city: "",
+    address2: "",
+    state: "",
+    country: "",
+    zip: "",
+    admissionDate: "",
+    codeStatus: "",
+    email: "",
+  });
 
   useEffect(() => {
     if (patientDetails && patientDetails[0]) {
-      setFormData(prevState => ({
+      setFormData((prevState) => ({
         ...prevState,
         firstName: patientDetails[0]?.firstName || "",
         lastName: patientDetails[0]?.lastName || "",
@@ -74,7 +78,7 @@ export default function PatientDetails() {
   };
 
   const handlePatientEditClick = () => {
-    window.history.pushState(null, '', '#edit');
+    window.history.pushState(null, "", "#edit");
     setPatientEditMode(!patientEditMode);
   };
 
@@ -85,11 +89,8 @@ export default function PatientDetails() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsSuccessFul(false)
-        const response = await fetchPatientDetails(
-          patientId,
-          router
-        );
+        setIsSuccessFul(false);
+        const response = await fetchPatientDetails(patientId, router);
         setPatientDetails(response.data);
         setIsLoading(false);
       } catch (error: any) {
@@ -107,7 +108,6 @@ export default function PatientDetails() {
       country: countryId,
     }));
   };
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -127,7 +127,7 @@ export default function PatientDetails() {
       await updatePatient(patientId, formData, router);
       setIsSuccessFul(true);
       setPatientEditMode(false);
-      window.history.pushState(null, '', '#saved');
+      window.history.pushState(null, "", "#saved");
       return;
     } catch (error) {
       console.error("Error adding allergy:", error);
@@ -135,8 +135,8 @@ export default function PatientDetails() {
     }
   };
 
-console.log(patientDetails,"patientDetails")
-console.log(formData,"formData")
+  console.log(patientDetails, "patientDetails");
+  console.log(formData, "formData");
   return (
     <div className="flex flex-col w-full">
       <div className="text-xl font-semibold px-16 w-full h-[50px] pt-3 ring-1 ring-gray-300 pl-[110px]">
@@ -144,12 +144,12 @@ console.log(formData,"formData")
       </div>
       <div className=" w-full h-full ring-1 ring-gray-300 px-5 pt-5 pb-5 ">
         <div className="grid grid-cols-2 grid-rows-1 pl-[90px] mb-7">
-        <div className="grid  max-w-[736px] w-full h-full">
+          <div className="grid  max-w-[736px] w-full h-full">
             <div className="mt-8 flex items-center">
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[99px] text-nowrap">
                 First Name
               </label>
-              {patientEditMode? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   name="firstName"
@@ -170,7 +170,7 @@ console.log(formData,"formData")
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[99px] text-nowrap">
                 Last Name
               </label>
-              {patientEditMode? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   name="lastName"
@@ -178,7 +178,6 @@ console.log(formData,"formData")
                   placeholder="Last Name"
                   value={formData.lastName}
                   onChange={handleChange}
-                  
                 />
               ) : (
                 <p className=" font-normal text-gray-400 text-md h-[36px] flex items-center ml-3">
@@ -192,7 +191,7 @@ console.log(formData,"formData")
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[80px] text-nowrap">
                 Middle Name
               </label>
-              {patientEditMode? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   name="middleName"
@@ -203,25 +202,43 @@ console.log(formData,"formData")
                 />
               ) : (
                 <p className=" font-regular text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>{patientDetails[0]?.middleName ? patientDetails[0]?.middleName : "N/A"}</span>
+                  <span>
+                    {patientDetails[0]?.middleName
+                      ? patientDetails[0]?.middleName
+                      : "N/A"}
+                  </span>
                 </p>
               )}
             </div>
           </div>
           <div className="grid max-w-[736px] w-full">
             <div className="mt-8 flex items-center">
-              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[119px] text-nowrap">
+              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[118px] text-nowrap">
                 Gender:
               </label>
-              {patientEditMode? (
-                <input
-                  type="text"
-                  name="gender"
-                  className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
-                  placeholder="Gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                />
+              {patientEditMode ? (
+                <div className="relative">
+                  <select
+                    id="status"
+                    name="gender"
+                    className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
+                    placeholder="Gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                  >
+                    <option value="">select gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                  <div className="absolute top-0 right-0 mt-2 mr-2 pointer-events-none">
+                    <Image
+                      width={20}
+                      height={20}
+                      src={"/svgs/chevron-up.svg"}
+                      alt={""}
+                    />
+                  </div>
+                </div>
               ) : (
                 <p className=" font-normal text-gray-400 text-md h-[36px] flex items-center ml-3">
                   <span>{patientDetails[0]?.gender}</span>
@@ -234,7 +251,7 @@ console.log(formData,"formData")
               <label className=" font-manrope font-medium text-[#191D23] text-md mr-[144px] text-nowrap">
                 Age:
               </label>
-              {patientEditMode? (
+              {patientEditMode ? (
                 <input
                   type="text"
                   name="age"
@@ -256,13 +273,23 @@ console.log(formData,"formData")
                 Date of Birth:
               </label>
               {patientEditMode ? (
-                <input
-                  type="date"
-                  name="dateOfBirth"
-                  className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
-                  value={formData.dateOfBirth}
-                  onChange={handleChange}
-                />
+                <div className="relative">
+                  <input
+                    type="date"
+                    name="dateOfBirth"
+                    className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
+                    value={formData.dateOfBirth}
+                    onChange={handleChange}
+                  />
+                  <div className="absolute top-0 right-0 mt-2 mr-2 pointer-events-none">
+                    <Image
+                      width={20}
+                      height={20}
+                      src={"/svgs/calendark.svg"}
+                      alt={""}
+                    />
+                  </div>
+                </div>
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
                   <span>{patientDetails[0]?.dateOfBirth}</span>
@@ -293,7 +320,7 @@ console.log(formData,"formData")
           </div>
           <div className="grid grid-rows-1 max-w-[736px] w-full">
             <div className="mt-8 flex items-center ">
-              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[106px] text-nowrap">
+              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[105px] text-nowrap">
                 Address1:
               </label>
               {patientEditMode ? (
@@ -307,7 +334,11 @@ console.log(formData,"formData")
                 />
               ) : (
                 <p className=" font-normal text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>{patientDetails[0]?.address1 ? patientDetails[0]?.address1 : "N/A"}</span>
+                  <span>
+                    {patientDetails[0]?.address1
+                      ? patientDetails[0]?.address1
+                      : "N/A"}
+                  </span>
                 </p>
               )}
             </div>
@@ -335,7 +366,7 @@ console.log(formData,"formData")
           </div>
           <div className="grid  grid-rows-1 max-w-[736px] w-full">
             <div className="mt-8 flex items-center ">
-              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[105px] text-nowrap">
+              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[102px] text-nowrap">
                 Address2:
               </label>
               {patientEditMode ? (
@@ -349,7 +380,11 @@ console.log(formData,"formData")
                 />
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>{patientDetails[0]?.address2 ? patientDetails[0]?.address2 : "N/A"}</span>
+                  <span>
+                    {patientDetails[0]?.address2
+                      ? patientDetails[0]?.address2
+                      : "N/A"}
+                  </span>
                 </p>
               )}
             </div>
@@ -377,25 +412,35 @@ console.log(formData,"formData")
           </div>
           <div className="grid  grid-rows-1 max-w-[736px] w-full">
             <div className="mt-8 flex items-center ">
-              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[116px] text-nowrap">
+              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[112px] text-nowrap">
                 Country:
               </label>
               {patientEditMode ? (
-                <select
-                className="w-full"
-                  name="country"
-                  value={formData.country}
-                  onChange={(event) =>
-                    handleCountryChange(event.target.value)
-                  }
-                >
-                  <option >Select a country</option>
-                  {countryList.map((country) => (
-                    <option key={country.countryId} value={country.id}>
-                      {country.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    className="h-9  w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
+                    name="country"
+                    value={formData.country}
+                    onChange={(event) =>
+                      handleCountryChange(event.target.value)
+                    }
+                  >
+                    <option>Select a country</option>
+                    {countryList.map((country) => (
+                      <option key={country.countryId} value={country.id}>
+                        {country.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute top-0 right-0 mt-2 mr-2 pointer-events-none">
+                    <Image
+                      width={20}
+                      height={20}
+                      src={"/svgs/chevron-up.svg"}
+                      alt={""}
+                    />
+                  </div>
+                </div>
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
                   <span>{patientDetails[0]?.country}</span>
@@ -405,7 +450,7 @@ console.log(formData,"formData")
           </div>
           <div className="grid  grid-rows-1 max-w-[736px] w-full">
             <div className="mt-8 flex items-center ">
-              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[156px] text-nowrap">
+              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[151px] text-nowrap">
                 Zip:
               </label>
               {patientEditMode ? (
@@ -426,18 +471,28 @@ console.log(formData,"formData")
           </div>
           <div className="grid  grid-rows-1 max-w-[736px] w-full">
             <div className="mt-8 flex items-center ">
-              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[55px] text-nowrap">
+              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[58px] text-nowrap">
                 Admission Date:
               </label>
               {patientEditMode ? (
-                <input
-                  type="date"
-                  name="admissionDate"
-                  className="h-9  w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
-                  placeholder="Admission Date"
-                  value={formData.admissionDate}
-                  onChange={handleChange}
-                />
+                <div className="relative">
+                  <input
+                    type="date"
+                    name="admissionDate"
+                    className="h-9  w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
+                    placeholder="Admission Date"
+                    value={formData.admissionDate}
+                    onChange={handleChange}
+                  />
+                  <div className="absolute top-0 right-0 mt-2 mr-2 pointer-events-none">
+                    <Image
+                      width={20}
+                      height={20}
+                      src={"/svgs/calendark.svg"}
+                      alt={""}
+                    />
+                  </div>
+                </div>
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
                   <span>{patientDetails[0]?.admissionDate}</span>
@@ -445,22 +500,39 @@ console.log(formData,"formData")
               )}
             </div>
           </div>
-          <div className="grid  grid-rows-1 max-w-[736px] w-full">
-            <div className="mt-8 flex items-center ">
-              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[87px] text-nowrap">
+          <div className="grid grid-rows-1 max-w-[736px] w-full">
+            <div className="mt-8 flex items-center relative">
+              <label className="font-manrope font-medium text-[#191D23] text-md mr-[81px] text-nowrap">
                 Code Status:
               </label>
               {patientEditMode ? (
-                <input
-                  type="text"
-                  name="codeStatus"
-                  className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
-                  placeholder="Code Status"
-                  value={formData.codeStatus}
-                  onChange={handleChange}
-                />
+                <div className="relative">
+                  <select
+                    id="status"
+                    name="codeStatus"
+                    className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200 relative"
+                    value={formData.codeStatus}
+                    onChange={handleChange}
+                  >
+                    <option value="">select status</option>
+                    <option value="DNR" className="text-red-500">
+                      DNR
+                    </option>
+                    <option value="FULL CODE" className="text-blue-500">
+                      FULL CODE
+                    </option>
+                  </select>
+                  <div className="absolute top-0 right-0 mt-2 mr-2 pointer-events-none">
+                    <Image
+                      width={20}
+                      height={20}
+                      src={"/svgs/chevron-up.svg"}
+                      alt={""}
+                    />
+                  </div>
+                </div>
               ) : (
-                <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
+                <p className="font-normal text-gray-400 text-md h-[36px] flex items-center ml-3">
                   <span>{patientDetails[0]?.codeStatus}</span>
                 </p>
               )}
@@ -468,12 +540,12 @@ console.log(formData,"formData")
           </div>
           <div className="grid  grid-rows-1 max-w-[736px] w-full">
             <div className="mt-8 flex items-center ">
-              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[132px] text-nowrap">
+              <label className=" font-manrope font-medium text-[#191D23] text-md mr-[135px] text-nowrap">
                 Email:
               </label>
-              {patientEditMode? (
+              {patientEditMode ? (
                 <input
-                  type="text"
+                  type="email"
                   name="email"
                   className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
                   placeholder="Email"
@@ -490,7 +562,7 @@ console.log(formData,"formData")
           <div></div>
           <div className="mb-4 w-full ">
             <div className="justify-end flex pt-5">
-            {patientEditMode && (
+              {patientEditMode && (
                 <button
                   type="button"
                   className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3 "
@@ -502,9 +574,11 @@ console.log(formData,"formData")
               <button
                 type="button"
                 className="bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8  "
-                onClick={patientEditMode? handleSubmit:handlePatientEditClick}
+                onClick={
+                  patientEditMode ? handleSubmit : handlePatientEditClick
+                }
               >
-                {patientEditMode? "Save" : "Edit"}
+                {patientEditMode ? "Save" : "Edit"}
               </button>
             </div>
           </div>
@@ -516,7 +590,7 @@ console.log(formData,"formData")
 
       <div className=" w-full h-full ring-1 ring-gray-300 px-5 pt-5 pb-5 ">
         <div className="pl-11">
-        <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
+          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
             <div className="mt-12 flex items-center">
               <label className=" font-medium text-md mr-[147px] text-nowrap">
                 First Name:
@@ -613,7 +687,7 @@ console.log(formData,"formData")
               </label>
               {emergencyEditMode ? (
                 <input
-                  type="text"
+                  type="email"
                   className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
                   placeholder="scarlette@gmail.com"
                 />
@@ -627,7 +701,7 @@ console.log(formData,"formData")
         </div>
         <div className="mb-4 ">
           <div className="justify-end flex pt-5">
-          {emergencyEditMode && (
+            {emergencyEditMode && (
               <button
                 type="button"
                 className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3"
@@ -644,8 +718,8 @@ console.log(formData,"formData")
             >
               {emergencyEditMode ? "Save" : "Edit"}
             </button>
-          </div>  
           </div>
+        </div>
       </div>
     </div>
   );
