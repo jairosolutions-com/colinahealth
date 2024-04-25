@@ -198,8 +198,7 @@ export default function FormsTab() {
             <span
               onClick={() => {
                 setIsLoading(true);
-                onNavigate(
-                  router,
+                router.push(
                   `/patient-overview/${patientId.toLowerCase()}/forms/archived`
                 );
                 setIsLoading(true);

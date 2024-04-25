@@ -1,3 +1,5 @@
+"use client";
+
 import { X } from "lucide-react";
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
@@ -7,8 +9,11 @@ import {
   addLabFile,
 } from "@/app/api/lab-results-api/lab-results.api";
 import { useParams, useRouter } from "next/navigation";
-import { fetchLabResultFiles } from "@/app/api/lab-results-api/lab-results.api";
-
+import {
+  fetchLabResultFiles,
+  getCurrentFileCountFromDatabase,
+} from "@/app/api/lab-results-api/lab-results.api";
+import { useToast } from "@/components/ui/use-toast";
 interface Modalprops {
   isEdit: any;
   labResultData: any;
@@ -39,16 +44,11 @@ export const LabresultsModalContent = ({
 
   const patientId = params.id.toUpperCase();
   const [labFiles, setLabFiles] = useState<any[]>([]); //
-  const [fileName, setFileName] = useState("");
-  const [fileData, setFileData] = useState(new Uint8Array());
-
-  const [base64String, setBase64String] = useState("");
-  const [fileType, setFileType] = useState<string>("");
 
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-
   const [formData, setFormData] = useState({
     date: labResultData.labResults_date || "",
     hemoglobinA1c: labResultData.labResults_hemoglobinA1c || "",
@@ -84,6 +84,22 @@ export const LabresultsModalContent = ({
   const [selectedFiles, setSelectedLabFiles] = useState<File[]>([]);
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [fileTypes, setFileTypes] = useState<string[]>([]);
+  const { toast } = useToast();
+  const toggleMaxSizeToast = (): void => {
+    toast({
+      variant: "destructive",
+      title: "File Size Too Big!",
+      description: `Total size of selected files exceeds the limit of 15MB!`,
+    });
+  };
+  const toggleMaxFilesToast = (maxFiles: number): void => {
+    toast({
+      variant: "destructive",
+      title: "Maximum Number of Files Exceeded!",
+      description: `You can only add ${maxFiles} more file(s). Please try again.`,
+    });
+  };
+  const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
