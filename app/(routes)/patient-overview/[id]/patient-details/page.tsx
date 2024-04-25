@@ -475,14 +475,24 @@ export default function PatientDetails() {
                 Admission Date:
               </label>
               {patientEditMode ? (
-                <input
-                  type="date"
-                  name="admissionDate"
-                  className="h-9  w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
-                  placeholder="Admission Date"
-                  value={formData.admissionDate}
-                  onChange={handleChange}
-                />
+                <div className="relative">
+                  <input
+                    type="date"
+                    name="admissionDate"
+                    className="h-9  w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
+                    placeholder="Admission Date"
+                    value={formData.admissionDate}
+                    onChange={handleChange}
+                  />
+                  <div className="absolute top-0 right-0 mt-2 mr-2 pointer-events-none">
+                    <Image
+                      width={20}
+                      height={20}
+                      src={"/svgs/calendark.svg"}
+                      alt={""}
+                    />
+                  </div>
+                </div>
               ) : (
                 <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
                   <span>{patientDetails[0]?.admissionDate}</span>
