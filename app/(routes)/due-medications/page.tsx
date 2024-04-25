@@ -285,22 +285,15 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
         </div>
 
         {/* START OF TABLE */}
-        <div className="w-full h-full">
+        <div>
           <table className="w-full h-full justify-center items-start text-[15px]">
             <thead className=" text-left rtl:text-right">
-              <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
-                <th scope="col" className="px-6 py-3 w-[460px] h-[70px]">
-                  Name
-                </th>
-                <th scope="col" className="px-6 py-3 w-[452px]">
-                  Date
-                </th>
-                <th scope="col" className="px-6 py-3 w-[377px]">
-                  Time
-                </th>
-                <th scope="col" className="px-6 py-3 w-[200px]">
-                  Medication
-                </th>
+              <tr className="uppercase font-semibold text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
+                <td className="px-6 py-5 ">Name</td>
+                <td className="px-6 py-5 ">DUE MED UID</td>
+                <td className="px-6 py-5 ">Date</td>
+                <td className="px-6 py-5 ">Time</td>
+                <td className="px-6 py-5">Medication</td>
               </tr>
             </thead>
             <tbody>
@@ -308,7 +301,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="text-[15px] font-normal text-gray-700  text-center">
-                      No Due Medication Found! 
+                      No Due Medication Found!
                     </p>
                   </td>
                 </tr>
@@ -318,10 +311,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
                   key={index}
                   className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
                 >
-                  <th
-                    scope="row"
-                    className="truncate flex items-center max-w-[300px] text-left px-6 py-2  font-medium text-gray-900 whitespace-nowrap gap-4"
-                  >
+                  <td className="px-6 py-5  flex items-center">
                     <img
                       className="rounded-full"
                       src="/imgs/dennis.svg"
@@ -331,14 +321,15 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
                     />
                     {dueMedication.patient_firstName}{" "}
                     {dueMedication.patient_lastName}
-                  </th>
-                  <td className="px-6">
+                  </td>
+                  <td className="px-6 py-5 ">{dueMedication.patient_uuid}</td>
+                  <td className="px-6 py-5 ">
                     {dueMedication.medicationlogs_medicationLogsDate}
                   </td>
-                  <td className="px-6">
+                  <td className="px-6 py-5 ">
                     {dueMedication.medicationlogs_medicationLogsTime}
                   </td>
-                  <td className="px-6">
+                  <td className="px-6 py-5">
                     {dueMedication.medicationlogs_medicationLogsName}
                   </td>
                 </tr>

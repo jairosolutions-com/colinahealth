@@ -293,26 +293,16 @@ export default function PatientPage({ patient }: { patient: any }) {
         </div>
 
         {/* START OF TABLE */}
-        <div className="w-full h-full">
-          <table className="w-full h-full justify-center items-start text-[15px]">
-            <thead className=" text-left rtl:text-right">
-              <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
-                <th scope="col" className="px-6 py-3 w-[286px] h-[70px]">
-                  Patient ID
-                </th>
-                <th scope="col" className="px-6 py-3 w-[352px]">
-                  Name
-                </th>
-                <th scope="col" className="px-6 py-3 w-[277px]">
-                  Age
-                </th>
-                <th scope="col" className="px-6 py-3 w-[277px]">
-                  Gender
-                </th>
+        <div>
+          <table className="w-full justify-center items-start text-[15px]">
+            <thead className="text-left rtl:text-right">
+              <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
+                <th className="px-6 py-3">Patient ID</th>
+                <th className="px-6 py-3">Name</th>
+                <th className="px-6 py-3">Age</th>
+                <th className="px-6 py-3">Gender</th>
 
-                <th scope="col" className="px-[65px] py-3 w-[10px] ">
-                  Action
-                </th>
+                <th className="px-20 py-3 items-center">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -330,18 +320,13 @@ export default function PatientPage({ patient }: { patient: any }) {
                   key={index}
                   className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
                 >
-                  <th
-                    scope="row"
-                    className="truncate max-w-[286px] text-left px-6 py-5  font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    {patient.uuid}
-                  </th>
-                  <td className="px-6">
+                  <td className="truncate px-6 py-5">{patient.uuid}</td>
+                  <td className="truncate px-6 py-5">
                     {patient.firstName} {patient.lastName}
                   </td>
-                  <td className="px-6">{patient.age}</td>
-                  <td className="px-6">{patient.gender}</td>
-                  <td className="px-[50px]">
+                  <td className="truncate px-6 py-5">{patient.age}</td>
+                  <td className="truncate px-6 py-5">{patient.gender}</td>
+                  <td className="px-[70px]">
                     <p onClick={() => handlePatientClick(patient.uuid)}>
                       <Edit></Edit>
                     </p>

@@ -339,22 +339,14 @@ export default function AppointmentPage() {
           </div>
         </div>
 
-        <div className="w-full h-full">
+        <div>
           <table className="w-full h-full justify-center items-start text-[15px]">
-            <thead className=" text-left rtl:text-right">
-              <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
-                <th scope="col" className="px-6 py-3 w-[250px] h-[70px]">
-                  Status
-                </th>
-                <th scope="col" className="px-6 py-3 w-[230px]">
-                  Date
-                </th>
-                <th scope="col" className="px-6 py-3 w-[200px]">
-                  Time
-                </th>
-                <th scope="col" className="px-6 py-3 w-10">
-                  End time
-                </th>
+            <thead className="text-left rtl:text-right">
+              <tr className="uppercase font-semibold text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
+                <td className="px-6 py-5 w-[450px]">Status</td>
+                <td className="px-6 py-5 w-[450px]">Date</td>
+                <td className="px-6 py-5 w-[450px]">Time</td>
+                <td className="px-6 py-5 w-[200px]">End time</td>
               </tr>
             </thead>
             <tbody>
@@ -372,7 +364,7 @@ export default function AppointmentPage() {
                   key={index}
                   className="odd:bg-white hover:bg-[#f4f4f4] group border-b"
                 >
-                  <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                  <td className="text-15px me-1 px-6 py-5 rounded-full  w-[450px] flex items-center">
                     <div
                       className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                         appointment.appointments_appointmentStatus ===
@@ -420,13 +412,13 @@ export default function AppointmentPage() {
                     </div>
                   </td>
 
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-5 w-[470px]">
                     {appointment.appointments_appointmentDate}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-5 w-[480px]">
                     {appointment.appointments_appointmentTime}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-5 w-[200px]">
                     {appointment.appointments_appointmentEndTime}
                   </td>
                 </tr>
@@ -441,12 +433,12 @@ export default function AppointmentPage() {
       ) : (
         <div className="mt-5">
           <div className="flex justify-between">
-            <p className="font-medium size-[18px] w-[138px] items-center">
+            <p className="font-medium text-[15px] w-[138px] items-center">
               Page {currentPage} of {totalPages}
             </p>
             <div>
               <nav>
-                <div className="flex -space-x-px text-sm">
+                <div className="flex -space-x-px text-[15px]">
                   <div>
                     <button
                       onClick={goToPreviousPage}
