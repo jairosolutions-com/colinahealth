@@ -292,6 +292,9 @@ const Notes = () => {
                 <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
                   DATE
                 </th>
+                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
+                  TIME
+                </th>
                 <th scope="col" className="px-6 py-3 w-[250px]">
                   SUBJECT
                 </th>
@@ -322,6 +325,16 @@ const Notes = () => {
                   >
                     {new Date(note.notes_createdAt).toLocaleDateString()}
                   </th>
+                  <td className="truncate max-w-[552px] px-6 py-3">
+                    {new Date(
+                      new Date(note.notes_createdAt).getTime() -
+                        new Date().getTimezoneOffset() * 60000
+                    ).toLocaleTimeString(navigator.language, {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                  </td>
                   <td className="truncate max-w-[552px] px-6 py-3">
                     {note.notes_subject}
                   </td>

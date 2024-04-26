@@ -142,6 +142,22 @@ const Notes = () => {
     return pageNumbers;
   };
 
+  const formatTime = (timeString: string) => {
+    // Split the time string into hours and minutes
+    const [hours, minutes] = timeString.split(":").map(Number);
+
+    // Format the hours part into 12-hour format
+    let formattedHours = hours % 12 || 12; // Convert 0 to 12
+    const ampm = hours < 12 ? "am" : "pm"; // Determine if it's AM or PM
+
+    // If minutes is undefined or null, set it to 0
+    const formattedMinutes =
+      minutes !== undefined ? minutes.toString().padStart(2, "0") : "00";
+
+    // Return the formatted time string
+    return `${formattedHours}:${formattedMinutes}${ampm}`;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -321,6 +337,19 @@ const Notes = () => {
                   >
                     {notes.notes_uuid}
                   </th>
+                  <td className="truncate max-w-[552px] px-6 py-3">
+                    {new Date(notes.notes_createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="truncate max-w-[552px] px-6 py-3">
+                    {new Date(
+                      new Date(notes.notes_createdAt).getTime() -
+                        new Date().getTimezoneOffset() * 60000
+                    ).toLocaleTimeString(navigator.language, {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                  </td>
                   <td className="truncate max-w-[552px] px-6 py-3">
                     {notes.notes_subject}
                   </td>
