@@ -53,13 +53,12 @@ export const PrescriptionModalContent = ({
   });
   const [prescriptionFiles, setPrescriptionFiles] = useState<any[]>([]); //
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [fileTypes, setFileTypes] = useState<string[]>([]);
   const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
-  console.log(label, "label");
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "interval" && (!/^\d*$/.test(value) || parseInt(value) > 12)) {
@@ -156,11 +155,11 @@ export const PrescriptionModalContent = ({
       const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
 
       if (totalSizeMB > MAX_FILE_SIZE_MB) {
-        toggleMaxSizeToast(); 
+        toggleMaxSizeToast();
         e.target.value = ""; // Clear the input field
       }
       if (files.length > numFilesCanAdd) {
-        toggleMaxFilesToast(numFilesCanAdd)
+        toggleMaxFilesToast(numFilesCanAdd);
         e.target.value = ""; // Clear the input field
       }
     }
@@ -210,11 +209,7 @@ export const PrescriptionModalContent = ({
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(
-      "SUBMITTING FORM DATA",
-      selectedFileNames,
-      selectedFiles.length
-    );
+    setIsSubmitted(true);
 
     try {
       if (isEdit) {
@@ -250,6 +245,7 @@ export const PrescriptionModalContent = ({
           console.warn("No files selected to upload");
         }
         setIsUpdated(true);
+        setIsSubmitted(false);
         onSuccess();
         isModalOpen(false);
       } else {
@@ -303,6 +299,7 @@ export const PrescriptionModalContent = ({
       if (error.message === "Request failed with status code 409") {
         setErrorMessage("Prescription already exists");
         onFailed();
+        setIsSubmitted(false);
         isModalOpen(false);
       } else if (error.message === "Network Error") {
         toast({
@@ -329,15 +326,19 @@ export const PrescriptionModalContent = ({
   return (
     <>
       <div className="w-[676px] h-[484px]">
-      {isLoading && isEdit ? (
+        {isLoading && isEdit ? (
           // Loading state
           <>
             <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
               <div className="items-center flex justify-between">
                 <h2 className="p-title text-left text-[#071437] pl-10 mt-7"></h2>
                 <X
-                  onClick={() => isModalOpen(false)}
-                  className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+                  onClick={() => {
+                    isSubmitted ? null : isModalOpen(false);
+                  }}
+                  className={`
+                 ${isSubmitted && " cursor-not-allowed"}
+                 w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
                 />
               </div>
               <p className="text-sm pl-10 text-gray-600 pb-10 pt-2"></p>
@@ -356,171 +357,149 @@ export const PrescriptionModalContent = ({
           </>
         ) : (
           <>
-          <form className="" onSubmit={handleSubmit}>
-            <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
-              <div className="items-center flex justify-between">
-                <h2 className="p-title text-left text-[#071437] pl-10 mt-7">
-                  {isEdit ? "Update" : "Add"} Prescription Schedule
-                </h2>
-                <X
-                  onClick={() => isModalOpen(false)}
-                  className="w-7 h-7 text-black flex items-center mt-2 mr-4"
-                />
+            <form className="" onSubmit={handleSubmit}>
+              <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
+                <div className="items-center flex justify-between">
+                  <h2 className="p-title text-left text-[#071437] pl-10 mt-7">
+                    {isEdit ? "Update" : "Add"} Prescription Schedule
+                  </h2>
+                  <X
+                    onClick={() => isModalOpen(false)}
+                    className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+                  />
+                </div>
+                <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
+                  Submit your log details.
+                </p>
               </div>
-              <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
-                Submit your log details.
-              </p>
-            </div>
-            <div className=" mb-9 pt-4">
-              <div className="w-full max-h-[300px] md:px-10 mt-5">
-                <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                  <div>
-                    <label
-                      htmlFor="first-name"
-                      className="block text-md font-bold leading-6 text-gray-900 required-field"
-                    >
-                      MEDICINE NAME
-                    </label>
-                    <div className="mt-2.5">
-                      <input
-                        type="text"
-                        required
-                        className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                        placeholder="input medicine name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="last-name"
-                      className="block text-md font-bold leading-6 text-gray-900 required-field"
-                    >
-                      FREQUENCY
-                    </label>
-                    <div className="mt-2.5 flex">
-                      <select
-                        required
-                        className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
-                        name="frequency"
-                        value={formData.frequency}
-                        onChange={handleFrequencyChange}
+              <div className=" mb-9 pt-4">
+                <div className="w-full max-h-[300px] md:px-10 mt-5">
+                  <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+                    <div>
+                      <label
+                        htmlFor="first-name"
+                        className="block text-md font-bold leading-6 text-gray-900 required-field"
                       >
-                        <option value="">Select Frequency</option>
-                        <option value="Once Daily">Once Daily</option>
-                        <option value="Twice Daily">Twice Daily</option>
-                        <option value="Thrice Daily">Thrice Daily</option>
-                      </select>
-                      <Image
-                        className="absolute mt-4   ml-[255px] pointer-events-none"
-                        width={20}
-                        height={20}
-                        src={"/svgs/chevron-up.svg"}
-                        alt={""}
-                      />
+                        MEDICINE NAME
+                      </label>
+                      <div className="mt-2.5">
+                        <input
+                          type="text"
+                          required
+                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                          placeholder="input medicine name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleChange}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="first-name"
-                      className="block text-md font-bold leading-6 text-gray-900 required-field"
-                    >
-                      INTERVAL
-                    </label>
-                    <div className="mt-2.5">
-                      <input
-                        type="text"
-                        required
-                        className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                        placeholder="input interval"
-                        name="interval"
-                        value={formData.interval}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="last-name"
-                      className="block text-md font-bold leading-6 text-gray-900 required-field"
-                    >
-                      DOSAGE
-                    </label>
-                    <div className="mt-2.5">
-                      <input
-                        type="text"
-                        required
-                        className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
-                        placeholder="input dosage"
-                        name="dosage"
-                        value={formData.dosage}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="status"
-                      className="block text-md font-bold leading-6 text-gray-900 required-field pb-2"
-                    >
-                      STATUS
-                    </label>
-                    <div className="relative">
-                      <select
-                        id="status"
-                        className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                        name="status"
-                        value={formData.status}
-                        onChange={handleStatusChange}
-                        required
+                    <div>
+                      <label
+                        htmlFor="last-name"
+                        className="block text-md font-bold leading-6 text-gray-900 required-field"
                       >
-                        <option value="">Select Status</option>
-                        <option value="active">ACTIVE</option>
-                        <option value="inactive">INACTIVE</option>
-                      </select>
-                      {/* <img
+                        FREQUENCY
+                      </label>
+                      <div className="mt-2.5 flex">
+                        <select
+                          required
+                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+                          name="frequency"
+                          value={formData.frequency}
+                          onChange={handleFrequencyChange}
+                        >
+                          <option value="">Select Frequency</option>
+                          <option value="Once Daily">Once Daily</option>
+                          <option value="Twice Daily">Twice Daily</option>
+                          <option value="Thrice Daily">Thrice Daily</option>
+                        </select>
+                        <Image
+                          className="absolute mt-4   ml-[255px] pointer-events-none"
+                          width={20}
+                          height={20}
+                          src={"/svgs/chevron-up.svg"}
+                          alt={""}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="first-name"
+                        className="block text-md font-bold leading-6 text-gray-900 required-field"
+                      >
+                        INTERVAL
+                      </label>
+                      <div className="mt-2.5">
+                        <input
+                          type="text"
+                          required
+                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                          placeholder="input interval"
+                          name="interval"
+                          value={formData.interval}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="last-name"
+                        className="block text-md font-bold leading-6 text-gray-900 required-field"
+                      >
+                        DOSAGE
+                      </label>
+                      <div className="mt-2.5">
+                        <input
+                          type="text"
+                          required
+                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
+                          placeholder="input dosage"
+                          name="dosage"
+                          value={formData.dosage}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="status"
+                        className="block text-md font-bold leading-6 text-gray-900 required-field pb-2"
+                      >
+                        STATUS
+                      </label>
+                      <div className="relative">
+                        <select
+                          id="status"
+                          className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                          name="status"
+                          value={formData.status}
+                          onChange={handleStatusChange}
+                          required
+                        >
+                          <option value="">Select Status</option>
+                          <option value="active">ACTIVE</option>
+                          <option value="inactive">INACTIVE</option>
+                        </select>
+                        {/* <img
                     className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                     src="svgs/chevron-up.svg"
                     alt="Dropdown Arrow"
                     style={{ width: '1rem', height: '1rem' }}
                       /> */}
-                      <Image
-                        className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
-                        width={20}
-                        height={20}
-                        src={"/svgs/chevron-up.svg"}
-                        alt={""}
-                      />
+                        <Image
+                          className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
+                          width={20}
+                          height={20}
+                          src={"/svgs/chevron-up.svg"}
+                          alt={""}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  {prescriptionFiles.length === 5 && isEdit ? (
-                    <div className="">
-                      <label className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2">
-                        <>
-                          <Image
-                            className="w-10 h-10 mr-1"
-                            width={50}
-                            height={50}
-                            src={"/svgs/filein.svg"}
-                            alt=""
-                          />
-                          <div className="flex pb-5 text-nowrap text-[12px]">
-                            <p className="mt-2">MAXIMUM FILES UPLOADED</p>
-                          </div>
-                        </>
-                      </label>
-                    </div>
-                  ) : (
-                    <div className="">
-                      <label
-                        htmlFor="imageUpload"
-                        className="relative h-12 w-full bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[31px]"
-                      >
-                        <>
-                          {selectedFileNames.length > 0 ? (
-                            // If files are selected, display filein.svg
+                    {prescriptionFiles.length === 5 && isEdit ? (
+                      <div className="">
+                        <label className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2">
+                          <>
                             <Image
                               className="w-10 h-10 mr-1"
                               width={50}
@@ -528,74 +507,102 @@ export const PrescriptionModalContent = ({
                               src={"/svgs/filein.svg"}
                               alt=""
                             />
-                          ) : (
-                            // If no files are selected, display folder-add.svg
-                            <Image
-                              className="w-10 h-10 mr-1"
-                              width={50}
-                              height={50}
-                              src={"/svgs/folder-add.svg"}
-                              alt=""
-                            />
-                          )}
-                          <div className="flex pb-5 text-nowrap text-[12px]">
-                            <p className="mt-2">Upload or Attach Files or</p>
-                            <p className="underline decoration-solid text-blue-500 ml-1 mt-2">
-                              Browse
-                            </p>
-                          </div>
-                          <span className="text-[10px] font-normal absolute bottom-2 text-[#667085] ml-10">
-                            {selectedFileNames.length === 0 ? (
-                              // Display "Maximum File Size: 10MB" if no files are attached
-                              <span>Maximum File Size: 15MB</span>
+                            <div className="flex pb-5 text-nowrap text-[12px]">
+                              <p className="mt-2">MAXIMUM FILES UPLOADED</p>
+                            </div>
+                          </>
+                        </label>
+                      </div>
+                    ) : (
+                      <div className="">
+                        <label
+                          htmlFor="imageUpload"
+                          className="relative h-12 w-full bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[31px]"
+                        >
+                          <>
+                            {selectedFileNames.length > 0 ? (
+                              // If files are selected, display filein.svg
+                              <Image
+                                className="w-10 h-10 mr-1"
+                                width={50}
+                                height={50}
+                                src={"/svgs/filein.svg"}
+                                alt=""
+                              />
                             ) : (
-                              // Display the file name if one file is attached, or the number of files if more than one are attached
-                              <span>
-                                {selectedFileNames.length < 5
-                                  ? // Display the file name if the number of files is less than or equal to 5
-                                    selectedFileNames.length === 1
-                                    ? selectedFileNames[0]
-                                    : `${selectedFileNames.length}/5 files attached`
-                                  : // Display a message indicating that the maximum limit has been reached
-                                    `Maximum of 5 files added`}
-                              </span>
+                              // If no files are selected, display folder-add.svg
+                              <Image
+                                className="w-10 h-10 mr-1"
+                                width={50}
+                                height={50}
+                                src={"/svgs/folder-add.svg"}
+                                alt=""
+                              />
                             )}
-                          </span>
-                        </>
-                      </label>
-                      <input
-                        type="file"
-                        id="imageUpload"
-                        multiple={true}
-                        accept="image/*,.pdf"
-                        className="hidden"
-                        name="file"
-                        onChange={(e) => handleFile(e)}
-                      />
-                    </div>
-                  )}
+                            <div className="flex pb-5 text-nowrap text-[12px]">
+                              <p className="mt-2">Upload or Attach Files or</p>
+                              <p className="underline decoration-solid text-blue-500 ml-1 mt-2">
+                                Browse
+                              </p>
+                            </div>
+                            <span className="text-[10px] font-normal absolute bottom-2 text-[#667085] ml-10">
+                              {selectedFileNames.length === 0 ? (
+                                // Display "Maximum File Size: 10MB" if no files are attached
+                                <span>Maximum File Size: 15MB</span>
+                              ) : (
+                                // Display the file name if one file is attached, or the number of files if more than one are attached
+                                <span>
+                                  {selectedFileNames.length < 5
+                                    ? // Display the file name if the number of files is less than or equal to 5
+                                      selectedFileNames.length === 1
+                                      ? selectedFileNames[0]
+                                      : `${selectedFileNames.length}/5 files attached`
+                                    : // Display a message indicating that the maximum limit has been reached
+                                      `Maximum of 5 files added`}
+                                </span>
+                              )}
+                            </span>
+                          </>
+                        </label>
+                        <input
+                          type="file"
+                          id="imageUpload"
+                          multiple={true}
+                          accept="image/*,.pdf"
+                          className="hidden"
+                          name="file"
+                          onChange={(e) => handleFile(e)}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="">
-              <div className="justify-center flex pt-26">
-                <button
-                  onClick={() => isModalOpen(false)}
-                  type="button"
-                  className="w-[600px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mt-4 mr-[3px] rounded-bl-md"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md"
-                >
-                  Submit
-                </button>
+              <div className="">
+                <div className="justify-end flex mr-10">
+                  <button
+                    onClick={() => isModalOpen(false)}
+                    disabled={isSubmitted}
+                    type="button"
+                    className={`
+                ${isSubmitted && " cursor-not-allowed"}
+                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    disabled={isSubmitted}
+                    type="submit"
+                    className={`
+                      ${isSubmitted && " cursor-not-allowed"}
+                      w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
+                  >
+                    {isEdit ? "Update" : "Submit"}
+                  </button>
+                </div>
               </div>
-            </div>
-          </form>
-        </>
+            </form>
+          </>
         )}
       </div>
     </>

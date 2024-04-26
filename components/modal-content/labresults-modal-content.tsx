@@ -49,6 +49,7 @@ export const LabresultsModalContent = ({
 
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     date: labResultData.labResults_date || "",
     hemoglobinA1c: labResultData.labResults_hemoglobinA1c || "",
@@ -86,6 +87,7 @@ export const LabresultsModalContent = ({
   const [fileTypes, setFileTypes] = useState<string[]>([]);
   const { toast } = useToast();
   const toggleMaxSizeToast = (): void => {
+    setIsSubmitted(false);
     toast({
       variant: "destructive",
       title: "File Size Too Big!",
@@ -93,6 +95,7 @@ export const LabresultsModalContent = ({
     });
   };
   const toggleMaxFilesToast = (maxFiles: number): void => {
+    setIsSubmitted(false);
     toast({
       variant: "destructive",
       title: "Maximum Number of Files Exceeded!",
@@ -102,6 +105,7 @@ export const LabresultsModalContent = ({
   const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSubmitted(true);
     const files = e.target.files;
     const MAX_FILE_SIZE_MB = 15;
     if (files) {
@@ -111,13 +115,12 @@ export const LabresultsModalContent = ({
       );
       const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
 
-  
       if (totalSizeMB > MAX_FILE_SIZE_MB) {
-        toggleMaxSizeToast(); 
+        toggleMaxSizeToast();
         e.target.value = ""; // Clear the input field
       }
       if (files.length > numFilesCanAdd) {
-        toggleMaxFilesToast(numFilesCanAdd)
+        toggleMaxFilesToast(numFilesCanAdd);
         e.target.value = ""; // Clear the input field
       }
     }
@@ -157,20 +160,13 @@ export const LabresultsModalContent = ({
     } else {
       console.warn("No files selected");
     }
+    setIsSubmitted(false);
   };
-  if (isEdit) {
-    console.log(labResultData, "labResultData");
-    console.log(formData, "formData");
-  }
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(
-      "SUBMITTING FORM DATA",
-      selectedFileNames,
-      selectedFiles.length
-    );
+    setIsSubmitted(true);
     const getUuid = labResultData.labResults_uuid;
 
     const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
@@ -267,6 +263,7 @@ export const LabresultsModalContent = ({
       console.error("Error adding Lab Result:", error);
       setError("Failed to add Lab Result");
     }
+    setIsSubmitted(false);
   };
   //for edit files and storing num of files in the state
   useEffect(() => {
@@ -334,8 +331,10 @@ export const LabresultsModalContent = ({
               <div className="items-center flex justify-between">
                 <h2 className="p-title text-left text-[#071437] pl-10 mt-7"></h2>
                 <X
-                  onClick={() => isModalOpen(false)}
-                  className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+                  onClick={() => {isSubmitted?null:isModalOpen(false)}}
+                  className={`
+                  ${isSubmitted && " cursor-not-allowed"}
+                  w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
                 />
               </div>
               <p className="text-sm pl-10 text-gray-600 pb-10 pt-2"></p>
@@ -595,17 +594,23 @@ export const LabresultsModalContent = ({
                   </div>
                 </div>
                 <div className="pt-26">
-                  <div className="justify-center flex pt-26">
+                  <div className="justify-end flex mr-10">
                     <button
                       onClick={() => isModalOpen(false)}
+                      disabled={isSubmitted}
                       type="button"
-                      className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+                      className={`
+                ${isSubmitted && " cursor-not-allowed"}
+                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
                     >
                       Cancel
                     </button>
                     <button
+                      disabled={isSubmitted}
                       type="submit"
-                      className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md"
+                      className={`
+                       ${isSubmitted && " cursor-not-allowed"}
+                       w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
                     >
                       Submit
                     </button>

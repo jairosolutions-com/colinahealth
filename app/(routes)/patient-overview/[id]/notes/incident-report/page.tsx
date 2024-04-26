@@ -310,7 +310,9 @@ const Notes = () => {
                   <td className=" px-6 py-3">
                     {new Date(notes.notes_createdAt).toLocaleDateString()}
                   </td>
-                  <td className=" px-6 py-3">{new Date(notes.notes_createdAt).toLocaleTimeString()}</td>
+                  <td className=" px-6 py-3">
+                    {new Date(notes.notes_createdAt).toLocaleTimeString()}
+                  </td>
                   <td className="px-6 py-3">{notes.notes_subject}</td>
                   <td className="px-6 py-3">{notes.notes_notes}</td>
                   <td className="px-6 py-3">Ansel MD</td>

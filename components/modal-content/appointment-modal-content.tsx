@@ -39,7 +39,7 @@ export const AppointmentModalContent = ({
   const [error, setError] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [charactersFull, setCharactersFull] = useState<boolean>(false);
-
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const handleEditToggle = () => {
     setIsEditable(!isEditable);
   };
@@ -114,6 +114,7 @@ export const AppointmentModalContent = ({
   });
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setIsSubmitted(true);
     try {
       if (isEditable || isView) {
         await updateAppointmentOfPatient(
@@ -175,6 +176,7 @@ export const AppointmentModalContent = ({
     } else {
       return "/icons/edit-icon.svg";
     }
+    setIsSubmitted(false);
   }
   console.log(formData, "formdata");
   console.log(formData.appointmentStatus, "status");
@@ -195,8 +197,10 @@ export const AppointmentModalContent = ({
                 : "Make an Appointment"}
             </h2>
             <X
-              onClick={() => isModalOpen(false)}
-              className="w-7 h-7 text-black flex items-center mt-2 mr-4 cursor-pointer"
+              onClick={() => {isSubmitted?null:isModalOpen(false)}}
+              className={`
+              ${isSubmitted && " cursor-not-allowed"}
+              w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
             />
           </div>
           <div className="text-sm text-start px-9 pr-10 text-gray-600 pb-10 pt-2">
@@ -394,10 +398,14 @@ export const AppointmentModalContent = ({
                 </label>
                 <div className="mt-2.5 flex ">
                   <select
-                    disabled={formData.appointmentStatus === "Missed"}
+                    disabled={
+                      formData.appointmentStatus === "Missed" ||
+                      formData.appointmentStatus === "Done"
+                    }
                     id="status"
                     className={`${
-                      formData.appointmentStatus === "Missed"
+                      formData.appointmentStatus === "Missed" ||
+                      formData.appointmentStatus === "Done"
                         ? "cursor-not-allowed"
                         : "cursor-pointer"
                     } block w-full h-12  rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6`}
@@ -421,18 +429,31 @@ export const AppointmentModalContent = ({
             </div>
           </div>
           <div className={`${charactersFull ? "mt-[30px]" : "mt-5"}`}>
-            <div className="justify-center flex pt-26">
+            <div className="justify-end flex mr-10">
               <button
                 onClick={() => isModalOpen(false)}
+                disabled={isSubmitted}
                 type="button"
-                className="w-[600px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mt-4 mr-[3px] rounded-bl-md"
+                className={`
+                ${isSubmitted && " cursor-not-allowed"}
+                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
               >
                 Cancel
               </button>
               <button
-              disabled={formData.appointmentStatus === "Missed"}
+                disabled={
+                  formData.appointmentStatus === "Missed" ||
+                  formData.appointmentStatus === "Done" ||
+                  isSubmitted
+                }
                 type="submit"
-                className={`${formData.appointmentStatus === "Missed" ? "cursor-not-allowed":"cursor-pointer"} w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md`}
+                className={`${
+                  formData.appointmentStatus === "Missed" ||
+                  formData.appointmentStatus === "Done" ||
+                  isSubmitted
+                    ? "cursor-not-allowed"
+                    : "cursor-pointer"
+                } w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
               >
                 {isEditable ? "Update" : "Submit"}
               </button>

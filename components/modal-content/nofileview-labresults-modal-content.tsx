@@ -35,9 +35,11 @@ export const NofileviewLabResultsModalContent = ({
   const [selectedFiles, setSelectedLabFiles] = useState<File[]>([]);
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [fileTypes, setFileTypes] = useState<string[]>([]);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setIsSubmitted(true);
     e.preventDefault();
     const getUuid = labResultUuid;
 
@@ -86,10 +88,12 @@ export const NofileviewLabResultsModalContent = ({
       console.error("Error adding Lab Result:", error);
       // setError("Failed to add Lab Result");
     }
+    setIsSubmitted(false);
   };
   const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSubmitted(true);
     const maxAllowedFiles = 5 - labFiles.length;
     setNumFilesCanAdd(maxAllowedFiles);
     const files = e.target.files;
@@ -101,13 +105,12 @@ export const NofileviewLabResultsModalContent = ({
       );
       const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
 
-   
       if (totalSizeMB > MAX_FILE_SIZE_MB) {
-        toggleMaxSizeToast(); 
+        toggleMaxSizeToast();
         e.target.value = ""; // Clear the input field
       }
       if (files.length > numFilesCanAdd) {
-        toggleMaxFilesToast(numFilesCanAdd)
+        toggleMaxFilesToast(numFilesCanAdd);
         e.target.value = ""; // Clear the input field
       }
     }
@@ -147,8 +150,10 @@ export const NofileviewLabResultsModalContent = ({
     } else {
       console.warn("No files selected");
     }
+    setIsSubmitted(false);
   };
   const toggleToast = (): void => {
+    setIsSubmitted(false);
     toast({
       variant: "destructive",
       title: "No File Attached!",
@@ -156,6 +161,7 @@ export const NofileviewLabResultsModalContent = ({
     });
   };
   const toggleMaxSizeToast = (): void => {
+    setIsSubmitted(false);
     toast({
       variant: "destructive",
       title: "File Size Too Big!",
@@ -163,6 +169,7 @@ export const NofileviewLabResultsModalContent = ({
     });
   };
   const toggleMaxFilesToast = (maxFiles: number): void => {
+    setIsSubmitted(false);
     toast({
       variant: "destructive",
       title: "Maximum Number of Files Exceeded!",
@@ -253,17 +260,23 @@ export const NofileviewLabResultsModalContent = ({
           </div>
         </div>
         <div className="pt-10">
-          <div className="justify-center flex">
+          <div className="justify-end flex mr-10">
             <button
               onClick={() => isModalOpen(false)}
+              disabled={isSubmitted}
               type="button"
-              className="w-[600px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mt-4 mr-[4px] rounded-bl-md"
+              className={`
+                ${isSubmitted && " cursor-not-allowed"}
+                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
             >
               Cancel
             </button>
             <button
+              disabled={isSubmitted}
               type="submit"
-              className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md"
+              className={`
+                ${isSubmitted && " cursor-not-allowed"}
+                w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
             >
               Submit
             </button>

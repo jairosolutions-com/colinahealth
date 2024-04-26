@@ -5,7 +5,6 @@ import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
-import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { FormsModalContent } from "@/components/modal-content/forms-modal-content";
 import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
@@ -20,6 +19,7 @@ export default function FormsTab() {
     tag: string;
     item: string;
   }>();
+  const [formViewdData, setFormViewData] = useState<any[]>([]);
   const patientId = params.id.toUpperCase();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
@@ -39,6 +39,7 @@ export default function FormsTab() {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+  const [isView, setIsView] = useState(false);
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -65,7 +66,7 @@ export default function FormsTab() {
   const optionsSortBy = [
     { label: "Form ID", onClick: handleSortOptionClick },
     { label: "Name", onClick: handleSortOptionClick },
-    { label: "Date", onClick: handleSortOptionClick },
+    { label: "Date Issued", onClick: handleSortOptionClick },
   ];
   // end of orderby & sortby function
 
@@ -200,7 +201,6 @@ export default function FormsTab() {
                 router.push(
                   `/patient-overview/${patientId.toLowerCase()}/forms/archived`
                 );
-                setIsLoading(true);
               }}
               className="bread"
             >
@@ -418,7 +418,7 @@ export default function FormsTab() {
           content={
             <FormsviewModalContent
               isModalOpen={isModalOpen}
-              onSuccess={onSuccess}
+              formData={formViewdData}
             />
           }
           isModalOpen={isModalOpen}

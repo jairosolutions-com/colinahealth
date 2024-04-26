@@ -43,11 +43,12 @@ export const LabResultsViewModalContent = ({
   const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState<Uint8Array>(new Uint8Array());
   const [modalOpen, setModalOpen] = useState(false);
-
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isNoFileModalOpen, setIsNoFileModalOpen] = useState(false);
   // update isNoFileModalOpen state
   const handleNoFileModalClose = (isModalOpen: boolean) => {
+    setIsSubmitted(false);
     setIsNoFileModalOpen(isModalOpen);
     setIsLoading(true);
     console.log("isNoFileModalOpen HANDLE", isNoFileModalOpen);
@@ -146,6 +147,7 @@ export const LabResultsViewModalContent = ({
   const [selectedFiles, setSelectedLabFiles] = useState<File[]>([]);
   const { toast } = useToast();
   const toggleMaxFilesToast = (maxFiles: number): void => {
+    setIsSubmitted(false);
     toast({
       variant: "destructive",
       title: "File Number of Files Exceeded!",
@@ -153,6 +155,7 @@ export const LabResultsViewModalContent = ({
     });
   };
   const toggleMaxSizeToast = (): void => {
+    setIsSubmitted(false);
     toast({
       variant: "destructive",
       title: "File Size Too Big!",
@@ -160,6 +163,7 @@ export const LabResultsViewModalContent = ({
     });
   };
   const toggleNoFilesToast = (): void => {
+    setIsSubmitted(false);
     toast({
       variant: "warning",
       title: "No Files Uploaded",
@@ -167,6 +171,7 @@ export const LabResultsViewModalContent = ({
     });
   };
   const toggleFullFilesToast = (): void => {
+    setIsSubmitted(false);
     toast({
       variant: "warning",
       title: "Maximum Files Uploaded",
@@ -175,6 +180,7 @@ export const LabResultsViewModalContent = ({
     });
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setIsSubmitted(true);
     e.preventDefault();
     const getUuid = labResultUuid;
 
@@ -230,8 +236,10 @@ export const LabResultsViewModalContent = ({
       // Update loading state after all files are processed
       setIsLoading(false);
     }
+    setIsSubmitted(false);
   };
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSubmitted(true);
     const files = e.target.files;
     const MAX_FILE_SIZE_MB = 15;
 
@@ -244,11 +252,11 @@ export const LabResultsViewModalContent = ({
       const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
 
       if (totalSizeMB > MAX_FILE_SIZE_MB) {
-        toggleMaxSizeToast(); 
+        toggleMaxSizeToast();
         e.target.value = ""; // Clear the input field
       }
       if (files.length > numFilesCanAdd) {
-        toggleMaxFilesToast(numFilesCanAdd)
+        toggleMaxFilesToast(numFilesCanAdd);
         e.target.value = ""; // Clear the input field
       }
     }
@@ -288,8 +296,10 @@ export const LabResultsViewModalContent = ({
     } else {
       console.warn("No files selected");
     }
+    setIsSubmitted(false);
   };
   const handleDeleteClick = async () => {
+    setIsSubmitted(true);
     console.log("Delete button clicked");
     console.log("Selected File UUID:", selectedFileUUID);
 
@@ -315,6 +325,7 @@ export const LabResultsViewModalContent = ({
       // Optionally, set error state to display an error message to the user
       setError("Failed to delete file");
     }
+    setIsSubmitted(false);
   };
 
   const downloadImage = () => {
@@ -392,8 +403,10 @@ export const LabResultsViewModalContent = ({
                     View Laboratory Result
                   </h2>
                   <X
-                    onClick={() => isModalOpen(false)}
-                    className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+                    onClick={() => {isSubmitted?null:isModalOpen(false)}}
+                    className={`
+                    ${isSubmitted && " cursor-not-allowed"}
+                    w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
                   />
                 </div>
 
@@ -576,9 +589,12 @@ export const LabResultsViewModalContent = ({
                               No
                             </button>
                             <button
+                              disabled={isSubmitted}
                               type="button"
                               onClick={handleDeleteClick}
-                              className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md"
+                              className={`
+                              ${isSubmitted && "cursor-not-allowed"}
+                              w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md`}
                             >
                               Yes
                             </button>
@@ -610,17 +626,23 @@ export const LabResultsViewModalContent = ({
                   </div>
                 </div>
                 <div>
-                  <div className="justify-center flex border-t-4">
+                  <div className="justify-end flex mr-10">
                     <button
                       onClick={() => isModalOpen(false)}
+                      disabled={isSubmitted}
                       type="button"
-                      className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+                      className={`
+                ${isSubmitted && " cursor-not-allowed"}
+                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
                     >
                       Cancel
                     </button>
                     <button
+                      disabled={isSubmitted}
                       type="submit"
-                      className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md"
+                      className={`
+                       ${isSubmitted && " cursor-not-allowed"}
+                       w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
                     >
                       Submit
                     </button>

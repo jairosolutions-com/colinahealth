@@ -33,7 +33,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalPatient, setTotalPatient] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [pageNumber, setPageNumber] = useState("");
   const [gotoError, setGotoError] = useState(false);
@@ -298,7 +298,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
               </tr>
             </thead>
             <tbody>
-              {dueMedicationList.length === 0 && (
+              {dueMedicationList.length === 0 &&  (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="text-[15px] font-normal text-gray-700  text-center">

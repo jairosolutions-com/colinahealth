@@ -195,10 +195,10 @@ const Notes = () => {
             <span className="slash">{"/"}</span>
             <span
               onClick={() => {
+                setIsLoading(true);
                 router.push(
                   `/patient-overview/${patientId.toLowerCase()}/notes/incident-report`
                 );
-                setIsLoading(true);
               }}
               className="bread"
             >
@@ -312,7 +312,16 @@ const Notes = () => {
                   <td className="truncate px-6 py-3">
                     {new Date(note.notes_createdAt).toLocaleDateString()}
                   </td>
-                  <td className="truncate px-6 py-3">{new Date(note.notes_createdAt).toLocaleTimeString()}</td>
+                  <td className="truncate max-w-[552px] px-6 py-3">
+                    {new Date(
+                      new Date(note.notes_createdAt).getTime() -
+                        new Date().getTimezoneOffset() * 60000
+                    ).toLocaleTimeString(navigator.language, {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                  </td>
                   <td className="truncate px-6 py-3">{note.notes_subject}</td>
                   <td className="truncate px-6 py-3 w-[200px]">
                     {note.notes_notes}

@@ -48,6 +48,7 @@ export const PrnModalContent = ({
   console.log(patientId, "patientId");
   const [error, setError] = useState<string | null>(null);
   const [charactersFull, setCharactersFull] = useState<boolean>(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     medicationLogsName: PRNData.medicationlogs_medicationLogsName || "",
     medicationLogsDate: PRNData.medicationlogs_medicationLogsDate || "",
@@ -92,6 +93,7 @@ export const PrnModalContent = ({
   };
 
   const handleSubmit = async (e: any) => {
+    setIsSubmitted(true);
     e.preventDefault();
     try {
       if (isEdit) {
@@ -148,6 +150,7 @@ export const PrnModalContent = ({
       }
       setError("Failed to add PRN Med");
     }
+    setIsSubmitted(false);
   };
   console.log(formData, "formData");
   return (
@@ -160,8 +163,12 @@ export const PrnModalContent = ({
               <span className="text-[#007C85]">{name ? name : ""}</span>
             </h2>
             <X
-              onClick={() => isModalOpen(false)}
-              className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+              onClick={() => {
+                isSubmitted ? null : isModalOpen(false);
+              }}
+              className={`
+              ${isSubmitted && " cursor-not-allowed"}
+              w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
             />
           </div>
           <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
@@ -308,17 +315,23 @@ export const PrnModalContent = ({
           </div>
         </div>
         <div className="">
-          <div className="justify-center flex pt-26">
+          <div className="justify-end flex mr-10">
             <button
               onClick={() => isModalOpen(false)}
+              disabled={isSubmitted}
               type="button"
-              className="w-[600px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mt-4 mr-[3px] rounded-bl-md"
+              className={`
+              ${isSubmitted && " cursor-not-allowed"}
+              w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
             >
               Cancel
             </button>
             <button
+              disabled={isSubmitted}
               type="submit"
-              className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE]  text-[#ffff] font-medium mt-4 rounded-br-md"
+              className={`
+              ${isSubmitted && " cursor-not-allowed"}
+              w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
             >
               {isEdit ? "Update" : "Submit"}
             </button>

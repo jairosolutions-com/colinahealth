@@ -167,7 +167,6 @@ export default function AppointmentPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(false);
       try {
         const upcomingAppoinments = await fetchAllAppointments(
           term,
@@ -183,6 +182,7 @@ export default function AppointmentPage() {
         setTotalPages(upcomingAppoinments.totalPages);
         setAppointmentList(appointmentsArray);
         setTotalAppointments(upcomingAppoinments.totalCount);
+        setIsLoading(false);
         return upcomingAppoinments;
       } catch (error) {}
     };

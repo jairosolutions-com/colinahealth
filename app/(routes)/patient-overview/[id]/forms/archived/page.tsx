@@ -189,7 +189,6 @@ export default function ArchiveTab() {
                 router.push(
                   `/patient-overview/${patientId.toLowerCase()}/forms`
                 );
-                setIsLoading(true);
               }}
               className="p-title hover:underline cursor-pointer"
             >
