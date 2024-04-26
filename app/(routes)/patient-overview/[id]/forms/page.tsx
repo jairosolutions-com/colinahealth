@@ -188,11 +188,11 @@ export default function FormsTab() {
     isArchived: true,
   });
 
-  const handleIsArchived = async (formUuid:string,e:any ) => {
+  const handleIsArchived = async (formUuid: string, e: any) => {
     e.preventDefault();
     try {
       await updateFormsOfPatient(formUuid, formData, router);
-      return
+      return;
     } catch (error) {}
   };
 
@@ -332,40 +332,36 @@ export default function FormsTab() {
                 >
                   <td className="truncate px-6 py-3">{form.forms_uuid}</td>
                   <td className="truncate px-6 py-3 ">
-                      {form.forms_nameOfDocument}
-                    </th>
-                    <td className="px-6 py-3 w-[400px]">
-                      {form.forms_dateIssued}
-                    </td>
-                    <td className="px-6 py-3 w-[750px] max-w-[750px] truncate">
-                      {form.forms_notes}
-                    </td>
+                    {form.forms_nameOfDocument}
+                  </td>
+                  <td className="truncate px-6 py-3 ">
+                    {form.forms_dateIssued}
+                  </td>
+                  <td className="truncate px-6 py-3 ">{form.forms_notes}</td>
 
-                    <td className="px-6 py-3 max-w-[300px] flex gap-2">
-                      <p
-                        onClick={() => {
-                          isModalOpen(true);
-                          setIsEdit(true);
-                          setFormViewData(form);
-                        }}
+                  <td className="px-6 py-3 flex gap-2">
+                    <p
+                      onClick={() => {
+                        isModalOpen(true);
+                        setIsEdit(true);
+                        setFormsToEdit(form);
+                      }}
+                    >
+                      <Edit />
+                    </p>
+                    <p>
+                      <button
+                        onClick={(e) => handleIsArchived(form.forms_uuid, e)}
+                        className="w-[90px] h-[35px] rounded bg-[#E7EAEE]  hover:!text-white hover:!bg-[#007C85] group-hover:bg-white group-hover:text-black"
                       >
-                        <Edit />
-                      </p>
-                      <p>
-                        <button
-                          onClick={(e) => handleIsArchived(form.forms_uuid,e)}
-                          className="w-[90px] h-[35px] rounded bg-[#E7EAEE]  hover:!text-white hover:!bg-[#007C85] group-hover:bg-white group-hover:text-black"
-                        >
-                          Archive
-                        </button>
-                      </p>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-
+                        Archive
+                      </button>
+                    </p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
         {/* END OF TABLE */}
       </div>
