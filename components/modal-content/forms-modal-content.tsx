@@ -3,77 +3,25 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { createFormsOfPatient } from "@/app/api/forms-api/forms.api";
+import { useToast } from "@/components/ui/use-toast";
 interface Modalprops {
+  passedFormData: any;
   isModalOpen: (isOpen: boolean) => void;
   onSuccess: () => void;
 }
-
-// export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
-//   const [selectedStatus, setSelectedStatus] = useState(""); // State to hold the selected status
 
 function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>): void {
   throw new Error("Function not implemented.");
 }
 
-//   const router = useRouter();
-//   const params = useParams<{
-//     id: any;
-//     tag: string;
-//     item: string;
-//   }>();
-//   const patientId = params.id.toUpperCase();
-//   const [isOpen, setIsOpen] = useState(false);
-//   const [error, setError] = useState<string | null>(null);
-//   const [formData, setFormData] = useState({
-//     dateIssued: "",
-//     nameOfDocument: "",
-//     notes: "",
-//   });
-//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = e.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       [name]: value,
-//     }));
-//   };
-//   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-//     const { name, value } = e.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       [name]: value,
-//     }));
-//   };
+const [formFiles, setformFiles] = useState<any[]>([]); //
 
-//   const handleModalOpen = (isOpen: boolean) => {
-//     // Rename the function
-//     setIsOpen(isOpen);
-//     if (isOpen) {
-//       document.body.style.overflow = "hidden";
-//     }
-//   };
-
-//   const handleSubmit = async (e: any) => {
-//     e.preventDefault();
-//     try {
-//       const forms = await createFormsOfPatient(patientId, formData, router);
-//       console.log("forms added successfully:", forms);
-
-//       // Reset the form data after successful submission
-//       setFormData({
-//         dateIssued: "",
-//         nameOfDocument: "",
-//         notes: "",
-//       });
-
-//       onSuccess();
-//     } catch (error) {
-//       console.error("Error adding forms:", error);
-//       setError("Failed to add forms");
-//     }
-//   };
-//   console.log(formData, "formData");
-
-export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
+export const FormsModalContent = ({
+  passedFormData,
+  isModalOpen,
+  onSuccess,
+}: Modalprops) => {
+  const [formFiles, setFormFiles] = useState<any[]>([]); //
   const router = useRouter();
   const params = useParams<{
     id: any;
@@ -111,26 +59,147 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
     }
   };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    try {
-      const forms = await createFormsOfPatient(patientId, formData, router);
-      console.log("forms added successfully:", forms);
+  console.log(formData, "formData");
 
-      // Reset the form data after successful submission
-      setFormData({
-        dateIssued: "",
-        nameOfDocument: "",
-        notes: "",
+  // De
+
+  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
+  const [selectedFiles, setSelectedLabFiles] = useState<File[]>([]);
+  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [fileTypes, setFileTypes] = useState<string[]>([]);
+  const { toast } = useToast();
+  const toggleMaxSizeToast = (): void => {
+    toast({
+      variant: "destructive",
+      title: "File Size Too Big!",
+      description: `Total size of selected files exceeds the limit of 15MB!`,
+    });
+  };
+  const toggleMaxFilesToast = (maxFiles: number): void => {
+    toast({
+      variant: "destructive",
+      title: "Maximum Number of Files Exceeded!",
+      description: `You can only add ${maxFiles} more file(s). Please try again.`,
+    });
+  };
+  const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    const MAX_FILE_SIZE_MB = 15;
+    if (files) {
+      const totalSize = Array.from(files).reduce(
+        (acc, file) => acc + file.size,
+        0
+      );
+      const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
+
+      if (totalSizeMB > MAX_FILE_SIZE_MB) {
+        toggleMaxSizeToast();
+        e.target.value = ""; // Clear the input field
+      }
+      if (files.length > numFilesCanAdd) {
+        toggleMaxFilesToast(numFilesCanAdd);
+        e.target.value = ""; // Clear the input field
+      }
+    }
+    if (files && files.length > 0) {
+      const newFiles: File[] = [];
+      const newFileNames: string[] = [];
+      const newFileTypes: string[] = [];
+
+      Array.from(files).forEach((file) => {
+        if (file) {
+          // Add file, name, and type to arrays
+          newFiles.push(file);
+          newFileNames.push(file.name);
+          newFileTypes.push(file.type.split("/")[1]);
+
+          if (files && files.length > 0) {
+            // Push file names to selectedFileNames array
+            if (file && file.name) {
+              selectedFileNames.push(file.name);
+            }
+
+            console.log(selectedFileNames, "selected file names");
+            console.log(formFiles, "labFiles labFiles labFiles");
+
+            // Set selected file names
+            setSelectedFileNames(selectedFileNames);
+          }
+          // You can handle base64 conversion here if needed
+        }
       });
 
-      onSuccess();
-    } catch (error) {
-      console.error("Error adding forms:", error);
-      setError("Failed to add forms");
+      // Update state variables with arrays
+
+      setSelectedLabFiles(newFiles);
+      setFileNames(newFileNames);
+      setFileTypes(newFileTypes);
+    } else {
+      console.warn("No files selected");
     }
   };
-  console.log(formData, "formData");
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  //for edit files and storing num of files in the state
+  useEffect(() => {
+    // Initialize selected file names array
+    let selectedFileNames: string[] = [];
+
+    // Only proceed if labFiles is not null and contains files
+    if (labFiles && labFiles.length > 0) {
+      // Push file names to selectedFileNames array
+      for (let file of labFiles) {
+        // Only push the filename if it's defined
+        if (file && file.filename) {
+          selectedFileNames.push(file.filename);
+        }
+      }
+
+      console.log(selectedFileNames, "selected file names");
+      console.log(labFiles, "labFiles labFiles labFiles");
+      const maxAllowedFiles = 5 - selectedFileNames.length;
+      setNumFilesCanAdd(maxAllowedFiles);
+      // Set selected file names
+      setSelectedFileNames(selectedFileNames);
+    } else {
+      // Log a message when there are no files in labFiles
+      console.log("No files in labFiles");
+      // Optionally, you can clear the selectedFileNames state here
+      setSelectedFileNames([]);
+    }
+  }, [formFiles, setSelectedFileNames]);
+  // for fetching data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchLabResultFiles(
+          labResultData.labResults_uuid,
+          router
+        );
+
+        // Only proceed if response.data is not null or empty
+        if (response.data && response.data.length > 0) {
+          setLabFiles(response.data);
+          console.log(response.data, "LAB.data");
+          const maxAllowedFiles = 5 - labFiles.length;
+          setNumFilesCanAdd(maxAllowedFiles);
+          setIsLoading(false);
+        }
+      } catch (error: any) {
+        setError(error.message);
+      }
+    };
+
+    // Call fetchData and fetchFile only if `labResultData.labResults_uuid` changes and is not null
+    if (labResultData.labResults_uuid) {
+      fetchData();
+    }
+  }, [labResultData.labResults_uuid]);
+
+  // Ed
 
   return (
     <div className="w-[676px] h-[621px] bg-[#FFFFFF] rounded-md">
@@ -214,31 +283,50 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
                   />
                 </div>
               </div>
-              <div className="grid-cols-1 grid">
-                <label className="relative h-[70px] w-[596px] bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-1.5">
-                  <Image
-                    className="w-10 h-10 mr-1"
-                    width={50}
-                    height={50}
-                    src={"/svgs/folder-add.svg"}
-                    alt={""}
+              {formFiles.length === 5 ? (
+                <div className="">
+                  <label className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2">
+                    <>
+                      <Image
+                        className="w-10 h-10 mr-1"
+                        width={50}
+                        height={50}
+                        src={"/svgs/filein.svg"}
+                        alt=""
+                      />
+                      <div className="flex pb-5 text-nowrap text-[12px]">
+                        <p className="mt-2">Maximum Files Uploaded</p>
+                      </div>
+                    </>
+                  </label>
+                </div>
+              ) : (
+                <div className="grid-cols-1 grid">
+                  <label className="relative h-[70px] w-[596px] bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-1.5">
+                    <Image
+                      className="w-10 h-10 mr-1"
+                      width={50}
+                      height={50}
+                      src={"/svgs/folder-add.svg"}
+                      alt={""}
+                    />
+                    <div className="flex pb-5 text-nowraptext-[15px] font-medium">
+                      <p className="">Upload or Attach Files or</p>
+                      <p className="underline text-blue-500 ml-1">Browse</p>
+                    </div>
+                    <span className="text-[15px] font-medium absolute bottom-2 text-[#667085] ml-10 pb-1">
+                      Minimum file size 100 MB.
+                    </span>
+                  </label>
+                  <input
+                    type="file"
+                    id="imageUpload"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleImageUpload(e)}
                   />
-                  <div className="flex pb-5 text-nowraptext-[15px] font-medium">
-                    <p className="">Upload or Attach Files or</p>
-                    <p className="underline text-blue-500 ml-1">Browse</p>
-                  </div>
-                  <span className="text-[15px] font-medium absolute bottom-2 text-[#667085] ml-10 pb-1">
-                    Minimum file size 100 MB.
-                  </span>
-                </label>
-                <input
-                  type="file"
-                  id="imageUpload"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => handleImageUpload(e)}
-                />
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
