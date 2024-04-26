@@ -289,7 +289,8 @@ const Notes = () => {
                 <td className="px-6 py-3 ">DATE</td>
                 <td className="px-6 py-3 ">TIME</td>
                 <td className="px-6 py-3 ">SUBJECT</td>
-                <td className="px-6 py-3 ">Details of Incident</td>
+                <td className="px-6 py-3 ">DETAILS OF INCIDENT</td>
+                <td className="px-6 py-3 ">REPORTED BY</td>
               </tr>
             </thead>
             <tbody>
@@ -310,6 +311,7 @@ const Notes = () => {
                   <td className=" px-6 py-3">{notes.notes_time}</td>
                   <td className="px-6 py-3">{notes.notes_subject}</td>
                   <td className="px-6 py-3">{notes.notes_notes}</td>
+                  <td className="px-6 py-3">Ansel MD</td>
                 </tr>
               ))}
             </tbody>

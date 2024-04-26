@@ -289,9 +289,10 @@ const Notes = () => {
               <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
                 <td className="px-6 py-3">NOTES UID</td>
                 <td className="px-6 py-3">DATE</td>
+                <td className="px-6 py-3">TIME</td>
                 <td className="px-6 py-3">SUBJECT</td>
                 <td className="px-6 py-3 w-[200px]">NOTES</td>
-                <td className="px-6 py-3 text-center">Action</td>
+                <td className="px-6 py-3 text-center">ACTION</td>
               </tr>
             </thead>
             <tbody className="h-[220px]">
@@ -308,9 +309,8 @@ const Notes = () => {
                   className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                 >
                   <td className="truncate px-6 py-3">{note.notes_uuid}</td>
-                  <td className="truncate px-6 py-3">
-                    {new Date(note.notes_createdAt).toLocaleDateString()}
-                  </td>
+                  <td className="truncate px-6 py-3">{note.notes_createdAt}</td>
+                  <td className="truncate px-6 py-3">{note.notes_time}</td>
                   <td className="truncate px-6 py-3">{note.notes_subject}</td>
                   <td className="truncate px-6 py-3 w-[200px]">
                     {note.notes_notes}
