@@ -184,15 +184,19 @@ export const LabResultsViewModalContent = ({
       toggleFullFilesToast();
       return;
     }
-    const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
-    const maxAllowedFiles = 5 - currentFileCount;
-    console.log("FILES TO ADD", maxAllowedFiles);
+    if (getUuid) {
+      const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
+      console.log("Current file count:", currentFileCount);
+      // Define the maximum allowed files based on the current count
+      const maxAllowedFiles = currentFileCount === 0 ? 5 : 5 - currentFileCount;
+      if (selectedFiles.length > maxAllowedFiles) {
+        toggleMaxFilesToast(maxAllowedFiles);
+        return;
+      }
+      console.log("FILES TO ADD", maxAllowedFiles);
 
-    if (selectedFiles.length > maxAllowedFiles) {
-      toggleMaxFilesToast(maxAllowedFiles);
-      return;
+      console.log("Lab UUID:", getUuid);
     }
-
     try {
       console.log(getUuid, "getUuid");
       // Iterate through each selected file
@@ -347,6 +351,72 @@ export const LabResultsViewModalContent = ({
     window.URL.revokeObjectURL(url);
   };
 
+  const [isHovering, setIsHovering] = useState(false);
+
+  const FileUploadWithHover = () => {
+    const handleMouseEnter = () => {
+      setIsHovering(true);
+    };
+
+    const handleMouseLeave = () => {
+      setIsHovering(false);
+    };
+
+    return (
+      <div
+        className="relative"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div className="w-[220px]">
+          <div
+            className={`w-full flex flex-row ${
+              defaultLabFiles.length === 5
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+          >
+            <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-full ">
+              {selectedFiles.length > 0
+                ? `${selectedFiles.length}/${numFilesCanAdd}selected`
+                : defaultLabFiles.length < 5
+                ? "Choose files to upload"
+                : "Max Files Uploaded"}
+            </p>
+            <label
+              htmlFor="fileupload"
+              className={` ${
+                defaultLabFiles.length === 5
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              }text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}>
+              Browse
+            </label>  
+            <input
+              type="file"
+              id="fileupload"
+              multiple={true}
+              accept=".jpeg,.jpg,.png,.pdf"
+              className="hidden"
+              name="file"
+              disabled={defaultLabFiles.length === 5}
+              onChange={(e) => handleFile(e)}
+              max={5}
+            />
+              {isHovering && selectedFiles.length > 0 && (
+              <div className="absolute bg-[#4E4E4E] text-[13px]  p-2 w-[220px] mt-[30px] text-white rounded-md shadow-md left-0">
+                <ul>
+                  {selectedFiles.map((file, index) => (
+                    <li key={index}>{file.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
   return (
     <div>
       {defaultLabFiles?.length === 0 && isLoading === false ? (
@@ -441,45 +511,8 @@ export const LabResultsViewModalContent = ({
                               ></Image>
                             )}
                           </div>
-                          <div className="w-[220px]">
-                            <div
-                              className={`w-full flex justify-between flex-row ${
-                                defaultLabFiles.length === 5
-                                  ? "cursor-not-allowed"
-                                  : "cursor-pointer"
-                              }`}
-                            >
-                              <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-[150px]  hover:border-[#686868]">
-                                {selectedFiles.length > 0
-                                  ? `${selectedFiles.length}/${numFilesCanAdd}selected`
-                                  : defaultLabFiles.length < 5
-                                  ? "Choose files to upload"
-                                  : "Max Files Uploaded"}
-                              </p>
-                              <label
-                                htmlFor="fileupload"
-                                className={` ${
-                                  defaultLabFiles.length === 5
-                                    ? "cursor-not-allowed"
-                                    : "cursor-pointer"
-                                }
-                                text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}
-                              >
-                                Browse
-                              </label>
-
-                              <input
-                                type="file"
-                                id="fileupload"
-                                multiple={true}
-                                accept="image/*,.pdf"
-                                className="hidden"
-                                name="file"
-                                disabled={defaultLabFiles.length === 5}
-                                onChange={(e) => handleFile(e)}
-                                max={5}
-                              />
-                            </div>
+                          <div className="filehover">
+                            <FileUploadWithHover />
                             {defaultLabFiles.map((file: LabFile, index) => (
                               <div
                                 className="flex justify-between px-1 bg-white rounded-md border-2 mt-4 hover:border-[#686868] text-overflow truncate cursor-pointer"
