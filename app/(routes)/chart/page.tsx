@@ -1,5 +1,4 @@
 "use client";
-import { onNavigate } from "@/actions/navigation";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { fetchPatientPrescriptions } from "@/app/api/patients-api/patientTimeGraph";
 import { PRNMedModal } from "@/components/modals/prn-medication.modal";

@@ -206,10 +206,10 @@ const Scheduled = () => {
             <span className="slash">{">"}</span>
             <span
               onClick={() => {
+                setIsLoading(true);
                 router.push(
                   `/patient-overview/${patientId.toLowerCase()}/medication/prorenata`
                 );
-                setIsLoading(true);
               }}
               className="bread"
             >

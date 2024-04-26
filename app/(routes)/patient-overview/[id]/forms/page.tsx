@@ -201,7 +201,6 @@ export default function FormsTab() {
                 router.push(
                   `/patient-overview/${patientId.toLowerCase()}/forms/archived`
                 );
-                setIsLoading(true);
               }}
               className="bread"
             >
