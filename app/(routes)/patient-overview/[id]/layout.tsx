@@ -239,7 +239,7 @@ export default function PatientOverviewLayout({
                         </p>
                       </div>
                       <div>
-                        <p className="flex items-center mr-10 ml-1">
+                        <p className="flex items-center mr-10 ml-1 ">
                           Gender: {patientData[0]?.gender}
                         </p>
                       </div>
