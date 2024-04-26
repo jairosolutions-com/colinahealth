@@ -212,7 +212,7 @@ export const Login = () => {
                           <input
                             type="checkbox"
                             name="checkbox"
-                            className="float-left -ml-[20px] mt-1"
+                            className="float-left -ml-[20px] mt-1 accent-[#0E646A]"
                             checked={rememberMe} // Bind checked attribute to rememberMe state
                             onChange={handleCheckboxChange} // Handle checkbox change
                           />
@@ -229,7 +229,11 @@ export const Login = () => {
                         <button
                           disabled={isSubmitted}
                           className={`
-                          ${isSubmitted ? "cursor-not-allowed" : "cursor-pointer"}
+                          ${
+                            isSubmitted
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }
                           inline-block w-full  text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
                           type="submit"
                         >
