@@ -86,7 +86,7 @@ export const PrescriptionModalContent = ({
   };
   useEffect(() => {
     // Initialize selected file names array
-    let selectedFileNames: string[] = [];
+    setSelectedFileNames([]);
 
     if (prescriptionFiles && prescriptionFiles.length > 0) {
       // Push file names to selectedFileNames array
@@ -174,20 +174,9 @@ export const PrescriptionModalContent = ({
           newFiles.push(file);
           newFileNames.push(file.name);
           newFileTypes.push(file.type.split("/")[1]);
-
-          if (files && files.length > 0) {
-            // Push file names to selectedFileNames array
-            if (file && file.name) {
-              selectedFileNames.push(file.name);
-            }
-
-            console.log(selectedFileNames, "selected file names");
-            console.log(prescriptionFiles, "prescriptionfiles");
-
-            // Set selected file names
-            setSelectedFileNames(selectedFileNames);
-          }
-          // You can handle base64 conversion here if needed
+          setSelectedFileNames(newFileNames);
+          console.log(selectedFileNames, "selected file names");
+          console.log(prescriptionFiles, "prescriptionfiles");
         }
       });
 
@@ -323,6 +312,113 @@ export const PrescriptionModalContent = ({
 
   console.log(prescriptionData, "prescriptionData");
   console.log(formData, "formData");
+  const [isHovering, setIsHovering] = useState(false);
+  const FileUploadWithHover = () => {
+    const handleMouseEnter = () => {
+      setIsHovering(true);
+    };
+
+    const handleMouseLeave = () => {
+      setIsHovering(false);
+    };
+
+    return (
+      <div
+        className="relative"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {prescriptionFiles.length === 5 && isEdit ? (
+          <div className="">
+            <label className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2">
+              <>
+                <Image
+                  className="w-10 h-10 mr-1"
+                  width={50}
+                  height={50}
+                  src={"/svgs/filein.svg"}
+                  alt=""
+                />
+                <div className="flex pb-5 text-nowrap text-[12px]">
+                  <p className="mt-2">Maximum Files Uploaded</p>
+                </div>
+              </>
+            </label>
+          </div>
+        ) : (
+          <div className="">
+            <label
+              htmlFor="imageUpload"
+              className="relative h-12 w-full bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[31px]"
+            >
+              <>
+                {selectedFileNames.length > 0 ? (
+                  // If files are selected, display filein.svg
+                  <Image
+                    className="w-10 h-10 mr-1"
+                    width={50}
+                    height={50}
+                    src={"/svgs/filein.svg"}
+                    alt=""
+                  />
+                ) : (
+                  // If no files are selected, display folder-add.svg
+                  <Image
+                    className="w-10 h-10 mr-1"
+                    width={50}
+                    height={50}
+                    src={"/svgs/folder-add.svg"}
+                    alt=""
+                  />
+                )}
+                <div className="flex pb-5 text-nowrap text-[12px]">
+                  <p className="mt-2">Upload or Attach Files or</p>
+                  <p className="underline decoration-solid text-blue-500 ml-1 mt-2">
+                    Browse
+                  </p>
+                </div>
+                <span className="text-[10px] font-normal absolute bottom-2 text-[#667085] ml-10">
+                  {selectedFileNames.length === 0 ? (
+                    // Display "Maximum File Size: 10MB" if no files are attached
+                    <span>Maximum File Size: 15MB</span>
+                  ) : (
+                    // Display the file name if one file is attached, or the number of files if more than one are attached
+                    <span>
+                      {selectedFiles.length < 5
+                        ? // Display the file name if the number of files is less than or equal to 5
+                          selectedFiles.length === 1
+                          ? selectedFileNames[0]
+                          : `${selectedFiles.length}/${numFilesCanAdd} files attached`
+                        : // Display a message indicating that the maximum limit has been reached
+                          `Maximum of 5 files added`}
+                    </span>
+                  )}
+                </span>
+              </>
+            </label>
+            <input
+              type="file"
+              id="imageUpload"
+              multiple={true}
+              accept=".jpeg,.jpg,.png,.pdf"
+              className="hidden"
+              name="file"
+              onChange={(e) => handleFile(e)}
+            />
+            {isHovering && selectedFiles.length > 0 && (
+              <div className="absolute bg-[#4E4E4E] p-2 w-[290px] text-white rounded-md shadow-md left-0 text-[13px]  ">
+                <ul>
+                  {selectedFiles.map((file, index) => (
+                    <li key={index}>{file.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
   return (
     <>
       <div className="w-[676px] h-[484px]">
@@ -496,85 +592,9 @@ export const PrescriptionModalContent = ({
                         />
                       </div>
                     </div>
-                    {prescriptionFiles.length === 5 && isEdit ? (
-                      <div className="">
-                        <label className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2">
-                          <>
-                            <Image
-                              className="w-10 h-10 mr-1"
-                              width={50}
-                              height={50}
-                              src={"/svgs/filein.svg"}
-                              alt=""
-                            />
-                            <div className="flex pb-5 text-nowrap text-[12px]">
-                              <p className="mt-2">MAXIMUM FILES UPLOADED</p>
-                            </div>
-                          </>
-                        </label>
-                      </div>
-                    ) : (
-                      <div className="">
-                        <label
-                          htmlFor="imageUpload"
-                          className="relative h-12 w-full bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[31px]"
-                        >
-                          <>
-                            {selectedFileNames.length > 0 ? (
-                              // If files are selected, display filein.svg
-                              <Image
-                                className="w-10 h-10 mr-1"
-                                width={50}
-                                height={50}
-                                src={"/svgs/filein.svg"}
-                                alt=""
-                              />
-                            ) : (
-                              // If no files are selected, display folder-add.svg
-                              <Image
-                                className="w-10 h-10 mr-1"
-                                width={50}
-                                height={50}
-                                src={"/svgs/folder-add.svg"}
-                                alt=""
-                              />
-                            )}
-                            <div className="flex pb-5 text-nowrap text-[12px]">
-                              <p className="mt-2">Upload or Attach Files or</p>
-                              <p className="underline decoration-solid text-blue-500 ml-1 mt-2">
-                                Browse
-                              </p>
-                            </div>
-                            <span className="text-[10px] font-normal absolute bottom-2 text-[#667085] ml-10">
-                              {selectedFileNames.length === 0 ? (
-                                // Display "Maximum File Size: 10MB" if no files are attached
-                                <span>Maximum File Size: 15MB</span>
-                              ) : (
-                                // Display the file name if one file is attached, or the number of files if more than one are attached
-                                <span>
-                                  {selectedFileNames.length < 5
-                                    ? // Display the file name if the number of files is less than or equal to 5
-                                      selectedFileNames.length === 1
-                                      ? selectedFileNames[0]
-                                      : `${selectedFileNames.length}/5 files attached`
-                                    : // Display a message indicating that the maximum limit has been reached
-                                      `Maximum of 5 files added`}
-                                </span>
-                              )}
-                            </span>
-                          </>
-                        </label>
-                        <input
-                          type="file"
-                          id="imageUpload"
-                          multiple={true}
-                          accept="image/*,.pdf"
-                          className="hidden"
-                          name="file"
-                          onChange={(e) => handleFile(e)}
-                        />
-                      </div>
-                    )}
+                    <div className="filehover">
+                      <FileUploadWithHover />
+                    </div>
                   </div>
                 </div>
               </div>

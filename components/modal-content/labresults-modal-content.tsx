@@ -135,19 +135,10 @@ export const LabresultsModalContent = ({
           newFiles.push(file);
           newFileNames.push(file.name);
           newFileTypes.push(file.type.split("/")[1]);
-
-          if (files && files.length > 0) {
-            // Push file names to selectedFileNames array
-            if (file && file.name) {
-              selectedFileNames.push(file.name);
-            }
-
-            console.log(selectedFileNames, "selected file names");
-            console.log(labFiles, "labFiles labFiles labFiles");
-
-            // Set selected file names
-            setSelectedFileNames(selectedFileNames);
-          }
+          console.log(labFiles, "labFiles labFiles labFiles");
+          // Set selected file names
+          setSelectedFileNames(newFileNames);
+          console.log(selectedFileNames, "selected file names");
           // You can handle base64 conversion here if needed
         }
       });
@@ -168,19 +159,19 @@ export const LabresultsModalContent = ({
     e.preventDefault();
     setIsSubmitted(true);
     const getUuid = labResultData.labResults_uuid;
+    if (getUuid) {
+      const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
+      console.log("Current file count:", currentFileCount);
+      // Define the maximum allowed files based on the current count
+      const maxAllowedFiles = currentFileCount === 0 ? 5 : 5 - currentFileCount;
+      if (selectedFiles.length > maxAllowedFiles) {
+        toggleMaxFilesToast(maxAllowedFiles);
+        return;
+      }
+      console.log("FILES TO ADD", maxAllowedFiles);
 
-    const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
-    console.log("Current file count:", currentFileCount);
-    // Define the maximum allowed files based on the current count
-    const maxAllowedFiles = currentFileCount === 0 ? 5 : 5 - currentFileCount;
-    if (selectedFiles.length > maxAllowedFiles) {
-      toggleMaxFilesToast(maxAllowedFiles);
-      return;
+      console.log("Lab UUID:", getUuid);
     }
-    console.log("FILES TO ADD", maxAllowedFiles);
-
-    console.log("Lab UUID:", getUuid);
-
     try {
       if (isEdit) {
         await updateLabResultOfPatient(
@@ -268,9 +259,7 @@ export const LabresultsModalContent = ({
   //for edit files and storing num of files in the state
   useEffect(() => {
     // Initialize selected file names array
-    let selectedFileNames: string[] = [];
-
-    // Only proceed if labFiles is not null and contains files
+    setSelectedFileNames([]);
     if (labFiles && labFiles.length > 0) {
       // Push file names to selectedFileNames array
       for (let file of labFiles) {
@@ -320,7 +309,113 @@ export const LabresultsModalContent = ({
       fetchData();
     }
   }, [labResultData.labResults_uuid]);
+  const [isHovering, setIsHovering] = useState(false);
+  const FileUploadWithHover = () => {
+    const handleMouseEnter = () => {
+      setIsHovering(true);
+    };
 
+    const handleMouseLeave = () => {
+      setIsHovering(false);
+    };
+
+    return (
+      <div
+        className="relative"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {labFiles.length === 5 && isEdit ? (
+          <div className="">
+            <label className="relative w-full bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold">
+              <>
+                <Image
+                  className="w-10 h-10 mr-1"
+                  width={50}
+                  height={50}
+                  src={"/svgs/filein.svg"}
+                  alt=""
+                />
+                <div className="flex pb-5 text-nowrap text-[12px]">
+                  <p className="mt-2">Maximum Files Uploaded</p>
+                </div>
+              </>
+            </label>
+          </div>
+        ) : (
+          <div className="">
+            <label
+              htmlFor="imageUpload"
+              className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2"
+            >
+              <>
+                {selectedFileNames.length > 0 ? (
+                  // If files are selected, display filein.svg
+                  <Image
+                    className="w-10 h-10 mr-1"
+                    width={50}
+                    height={50}
+                    src={"/svgs/filein.svg"}
+                    alt=""
+                  />
+                ) : (
+                  // If no files are selected, display folder-add.svg
+                  <Image
+                    className="w-10 h-10 mr-1"
+                    width={50}
+                    height={50}
+                    src={"/svgs/folder-add.svg"}
+                    alt=""
+                  />
+                )}
+                <div className="flex pb-5 text-nowrap text-[12px]">
+                  <p className="mt-2">Upload or Attach Files or</p>
+                  <p className="underline decoration-solid text-blue-500 ml-1 mt-2">
+                    Browse
+                  </p>
+                </div>
+                <span className="text-[10px] font-normal absolute bottom-2 text-[#667085] ml-10">
+                  {selectedFileNames.length === 0 ? (
+                    // Display "Maximum File Size: 10MB" if no files are attached
+                    <span>Maximum File Size: 15MB</span>
+                  ) : (
+                    // Display the file name if one file is attached, or the number of files if more than one are attached
+                    <span>
+                      {selectedFiles.length < 5
+                        ? // Display the file name if the number of files is less than or equal to 5
+                          selectedFiles.length === 1
+                          ? selectedFileNames[0]
+                          : `${selectedFiles.length}/${numFilesCanAdd} files attached`
+                        : // Display a message indicating that the maximum limit has been reached
+                          `Maximum of 5 files added`}
+                    </span>
+                  )}
+                </span>
+              </>
+            </label>
+            <input
+              type="file"
+              id="imageUpload"
+              multiple={true}
+              accept=".jpeg,.jpg,.png,.pdf"
+              className="hidden"
+              name="file"
+              onChange={(e) => handleFile(e)}
+            />
+            {isHovering && selectedFiles.length > 0 && (
+              <div className="absolute bg-[#4E4E4E] p-2 w-[290px] text-[13px]   text-white rounded-md shadow-md left-0">
+                <ul>
+                  {selectedFiles.map((file, index) => (
+                    <li key={index}>{file.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
   return (
     <>
       <div className="w-[676px] h-[571px]">
@@ -512,7 +607,10 @@ export const LabresultsModalContent = ({
                         />
                       </div>
                     </div>
-                    {labFiles.length === 5 && isEdit ? (
+                    <div className="filehover">
+                      <FileUploadWithHover />
+                    </div>
+                    {/* {labFiles.length === 5 && isEdit ? (
                       <div className="">
                         <label className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2">
                           <>
@@ -589,8 +687,15 @@ export const LabresultsModalContent = ({
                           name="file"
                           onChange={(e) => handleFile(e)}
                         />
+                        {isHovering && (
+                          <div className="absolute bg-[#4E4E4E] p-2 text-white rounded-md shadow-md bottom-[-90px] left-0">
+                            <p>Minimum file size of 1 MB</p>
+                            <p>Maximum file size of 100 MB</p>
+                            <p>Supported formats: PNG, JPG, JPEG</p>
+                          </div>
+                        )}
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </div>
                 <div className="pt-26">

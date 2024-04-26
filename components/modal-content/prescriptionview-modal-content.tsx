@@ -314,15 +314,16 @@ export const PrescriptionViewModalContent = ({
       toggleFullFilesToast();
       return;
     }
-    const currentFileCount = await getCurrentPrescriptionFileCountFromDatabase(
-      getUuid
-    );
-    const maxAllowedFiles = 5 - currentFileCount;
-    console.log("FILES TO ADD", maxAllowedFiles);
+    if (getUuid) {
+      const currentFileCount =
+        await getCurrentPrescriptionFileCountFromDatabase(getUuid);
+      const maxAllowedFiles = 5 - currentFileCount;
+      console.log("FILES TO ADD", maxAllowedFiles);
 
-    if (selectedFiles.length > maxAllowedFiles) {
-      toggleMaxFilesToast(maxAllowedFiles);
-      return;
+      if (selectedFiles.length > maxAllowedFiles) {
+        toggleMaxFilesToast(maxAllowedFiles);
+        return;
+      }
     }
 
     try {
@@ -367,6 +368,73 @@ export const PrescriptionViewModalContent = ({
       setIsSubmitted(false);
     }
     setIsSubmitted(false);
+  };
+  const [isHovering, setIsHovering] = useState(false);
+
+  const FileUploadWithHover = () => {
+    const handleMouseEnter = () => {
+      setIsHovering(true);
+    };
+
+    const handleMouseLeave = () => {
+      setIsHovering(false);
+    };
+
+    return (
+      <div
+        className="relative"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div className="w-[220px]">
+          <div
+            className={`w-full flex flex-row ${
+              defaultPrescriptionFiles.length === 5
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+          >
+            <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-full ">
+              {selectedFiles.length > 0
+                ? `${selectedFiles.length}/${numFilesCanAdd}selected`
+                : defaultPrescriptionFiles.length < 5
+                ? "Choose files to upload"
+                : "Max Files Uploaded"}
+            </p>
+            <label
+              htmlFor="fileupload"
+              className={` ${
+                defaultPrescriptionFiles.length === 5
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              }text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`} >
+              Browse
+            </label>
+
+            <input
+              type="file"
+              id="fileupload"
+              multiple={true}
+              accept=".jpeg,.jpg,.png,.pdf"
+              className="hidden"
+              name="file"
+              disabled={defaultPrescriptionFiles.length === 5}
+              onChange={(e) => handleFile(e)}
+              max={5}
+            />
+            {isHovering && selectedFiles.length > 0 && (
+              <div className="absolute bg-[#4E4E4E] p-2 w-[220px] text-[13px]   mt-[30px] text-white rounded-md shadow-md left-0">
+                <ul>
+                  {selectedFiles.map((file, index) => (
+                    <li key={index}>{file.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
   };
   return (
     <div>
@@ -454,45 +522,8 @@ export const PrescriptionViewModalContent = ({
                               ></Image>
                             )}
                           </div>
-                          <div className="w-[220px]">
-                            <div
-                              className={`w-full flex justify-between flex-row ${
-                                defaultPrescriptionFiles.length === 5
-                                  ? "cursor-not-allowed"
-                                  : "cursor-pointer"
-                              }`}
-                            >
-                              <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-[150px]  hover:border-[#686868]">
-                                {selectedFiles.length > 0
-                                  ? `${selectedFiles.length}/${numFilesCanAdd}selected`
-                                  : defaultPrescriptionFiles.length < 5
-                                  ? "Choose files to upload"
-                                  : "Max Files Uploaded"}
-                              </p>
-                              <label
-                                htmlFor="fileupload"
-                                className={` ${
-                                  defaultPrescriptionFiles.length === 5
-                                    ? "cursor-not-allowed"
-                                    : "cursor-pointer"
-                                }
-                              text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}
-                              >
-                                Browse
-                              </label>
-
-                              <input
-                                type="file"
-                                id="fileupload"
-                                multiple={true}
-                                accept="image/*,.pdf"
-                                className="hidden"
-                                name="file"
-                                disabled={defaultPrescriptionFiles.length === 5}
-                                onChange={(e) => handleFile(e)}
-                                max={5}
-                              />
-                            </div>
+                          <div className="filehover">
+                            <FileUploadWithHover />
                             {defaultPrescriptionFiles.map(
                               (file: PrescriptionFile, index) => (
                                 <div
