@@ -287,7 +287,7 @@ const Notes = () => {
           <table className="text-left rtl:text-right">
             <thead>
               <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                <td className="px-6 py-3">NOTES ID</td>
+                <td className="px-6 py-3">NOTES UID</td>
                 <td className="px-6 py-3">DATE</td>
                 <td className="px-6 py-3">SUBJECT</td>
                 <td className="px-6 py-3 w-[200px]">NOTES</td>

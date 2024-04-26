@@ -228,7 +228,7 @@ const Notes = () => {
             <label className=""></label>
             <div className="flex">
               <input
-                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px]"
                 type="text"
                 placeholder="Search by reference no. or name..."
                 value={term}
@@ -285,7 +285,7 @@ const Notes = () => {
           <table className="text-left rtl:text-right">
             <thead>
               <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                <td className="px-6 py-3 ">NOTES ID</td>
+                <td className="px-6 py-3 ">Notes UID</td>
                 <td className="px-6 py-3 ">DATE</td>
                 <td className="px-6 py-3 ">TIME</td>
                 <td className="px-6 py-3 ">SUBJECT</td>
