@@ -16,6 +16,7 @@ import { DemographicModalContent } from "@/components/modal-content/demographic-
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchDueMedication } from "@/app/api/medication-logs-api/due-medication-api";
+import Image from "next/image";
 
 export default function DueMedicationPage({ patient }: { patient: any }) {
   const router = useRouter();
@@ -311,8 +312,8 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
                   key={index}
                   className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
                 >
-                  <td className="px-6 py-5  flex items-center">
-                    <img
+                  <td className="px-6 py-5 gap-2 flex items-center">
+                    <Image
                       className="rounded-full"
                       src="/imgs/dennis.svg"
                       alt="Icon"

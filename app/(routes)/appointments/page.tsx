@@ -343,10 +343,12 @@ export default function AppointmentPage() {
           <table className="w-full h-full justify-center items-start text-[15px]">
             <thead className="text-left rtl:text-right">
               <tr className="uppercase font-semibold text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
-                <td className="px-6 py-5 w-[450px]">Status</td>
-                <td className="px-6 py-5 w-[450px]">Date</td>
-                <td className="px-6 py-5 w-[450px]">Time</td>
-                <td className="px-6 py-5 w-[200px]">End time</td>
+                <td className="px-6 py-5 ">Name</td>
+                <td className="px-6 py-5 ">Appointment UID</td>
+                <td className="px-6 py-5 ">Date</td>
+                <td className="px-6 py-5 ">Time</td>
+                <td className="px-6 py-5 ">End time</td>
+                <td className="px-6 py-5  flex justify-start">Status</td>
               </tr>
             </thead>
             <tbody>
@@ -362,9 +364,35 @@ export default function AppointmentPage() {
               {appointmentList.map((appointment, index) => (
                 <tr
                   key={index}
-                  className="odd:bg-white hover:bg-[#f4f4f4] group border-b"
+                  className="odd:bg-white hover:bg-[#f4f4f4] group "
                 >
-                  <td className="text-15px me-1 px-6 py-5 rounded-full  w-[450px] flex items-center">
+                  <td className="px-6 py-5">
+                    <Image
+                      className="rounded-full mr-2 "
+                      src="/imgs/dennis.svg"
+                      alt="Icon"
+                      width={45}
+                      height={45}
+                    />
+                    <span>
+                      {appointment.patient_firstName} {""}
+                      {appointment.patient_lastName}
+                    </span>
+                  </td>
+                  <td className="px-6 py-5 ">
+                    {appointment.appointments_uuid}
+                  </td>
+                  <td className="px-6 py-5">
+                    {appointment.appointments_appointmentDate}
+                  </td>
+                  <td className="px-6 py-5 ">
+                    {appointment.appointments_appointmentTime}
+                  </td>
+                  <td className=" px-6 py-5">
+                    {appointment.appointments_appointmentEndTime}
+                  </td>
+
+                  <td className="text-15px text-nowrap  px-6 py-5 rounded-full  ">
                     <div
                       className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                         appointment.appointments_appointmentStatus ===
@@ -410,16 +438,6 @@ export default function AppointmentPage() {
                       ></span>
                       {appointment.appointments_appointmentStatus} Appointment
                     </div>
-                  </td>
-
-                  <td className="px-6 py-5 w-[470px]">
-                    {appointment.appointments_appointmentDate}
-                  </td>
-                  <td className="px-6 py-5 w-[480px]">
-                    {appointment.appointments_appointmentTime}
-                  </td>
-                  <td className="px-6 py-5 w-[200px]">
-                    {appointment.appointments_appointmentEndTime}
                   </td>
                 </tr>
               ))}

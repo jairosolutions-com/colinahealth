@@ -16,6 +16,7 @@ import Modal from "@/components/reusable/modal";
 import { DemographicModalContent } from "@/components/modal-content/demographic-modal-content";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import Image from "next/image";
 
 export default function PatientPage({ patient }: { patient: any }) {
   const router = useRouter();
@@ -297,8 +298,8 @@ export default function PatientPage({ patient }: { patient: any }) {
           <table className="w-full justify-center items-start text-[15px]">
             <thead className="text-left rtl:text-right">
               <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
-                <th className="px-6 py-3">Patient ID</th>
                 <th className="px-6 py-3">Name</th>
+                <th className="px-6 py-3">Patient ID</th>
                 <th className="px-6 py-3">Age</th>
                 <th className="px-6 py-3">Gender</th>
 
@@ -320,10 +321,17 @@ export default function PatientPage({ patient }: { patient: any }) {
                   key={index}
                   className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
                 >
-                  <td className="truncate px-6 py-5">{patient.uuid}</td>
-                  <td className="truncate px-6 py-5">
+                  <td className="truncate flex items-center gap-2 px-6 py-5">
+                    <Image
+                      className="rounded-full "
+                      src="/imgs/dennis.svg"
+                      alt="Icon"
+                      width={45}
+                      height={45}
+                    />
                     {patient.firstName} {patient.lastName}
                   </td>
+                  <td className="truncate px-6 py-5">{patient.uuid}</td>
                   <td className="truncate px-6 py-5">{patient.age}</td>
                   <td className="truncate px-6 py-5">{patient.gender}</td>
                   <td className="px-[70px]">
