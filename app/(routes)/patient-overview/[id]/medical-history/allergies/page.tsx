@@ -194,10 +194,10 @@ const Allergies = () => {
             <span className="slash">{">"}</span>
             <span
               onClick={() => {
+                setIsLoading(true);
                 router.push(
                   `/patient-overview/${patientId.toLowerCase()}/medical-history/surgeries`
                 );
-                setIsLoading(true);
               }}
               className="bread"
             >

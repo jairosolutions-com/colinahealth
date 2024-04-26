@@ -191,10 +191,10 @@ const Notes = () => {
             <span className="slash">{">"}</span>
             <span
               onClick={() => {
+                setIsLoading(true);
                 router.push(
                   `/patient-overview/${patientId.toLowerCase()}/notes/nurses-notes`
                 );
-                setIsLoading(true);
               }}
               className="bread"
             >

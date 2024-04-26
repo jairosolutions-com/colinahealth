@@ -79,10 +79,12 @@ export default function PatientOverviewLayout({
   );
 
   const handleSeeMoreDetails = (url: string, tabIndex: number) => {
-    setActiveTab(-1);
-    setDetailsClicked(true);
-    localStorage.setItem("seeMoreClicked", "true"); // Set local storage
-    onNavigate(router, url);
+    if (url) {
+      setActiveTab(-1);
+      setDetailsClicked(true);
+      localStorage.setItem("seeMoreClicked", "true"); // Set local storage
+      router.push(url);
+    }
   };
 
   const handleSeeMoreHover = () => {
@@ -111,10 +113,11 @@ export default function PatientOverviewLayout({
   //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
   // };
   const handleTabClick = (url: string, tabIndex: number) => {
-    setActiveTab(tabIndex);
-    setDetailsClicked(false);
-
-    router.push(url);
+    if (url) {
+      setActiveTab(tabIndex);
+      setDetailsClicked(false);
+      router.push(url);
+    }
   };
   console.log(pathname, "pathname");
   useEffect(() => {
