@@ -5,7 +5,6 @@ import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
-import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { FormsModalContent } from "@/components/modal-content/forms-modal-content";
 import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
@@ -20,6 +19,7 @@ export default function FormsTab() {
     tag: string;
     item: string;
   }>();
+  const [formViewdData, setFormViewData] = useState<any[]>([]);
   const patientId = params.id.toUpperCase();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
@@ -39,6 +39,7 @@ export default function FormsTab() {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+  const [isView, setIsView] = useState(false);
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -63,13 +64,9 @@ export default function FormsTab() {
     { label: "Descending", onClick: handleOrderOptionClick },
   ];
   const optionsSortBy = [
-    { label: "Vital Sign ID", onClick: handleSortOptionClick },
-    { label: "Date", onClick: handleSortOptionClick },
-    { label: "Time", onClick: handleSortOptionClick },
-    { label: "Blood Pressure", onClick: handleSortOptionClick },
-    { label: "Heart Rate", onClick: handleSortOptionClick },
-    { label: "Temperature", onClick: handleSortOptionClick },
-    { label: "Respiratory", onClick: handleSortOptionClick },
+    { label: "Form ID", onClick: handleSortOptionClick },
+    { label: "Name", onClick: handleSortOptionClick },
+    { label: "Date Issued", onClick: handleSortOptionClick },
   ];
   // end of orderby & sortby function
 
@@ -296,9 +293,9 @@ export default function FormsTab() {
           {patientForms.length == 0 ? (
             <div>
               <div className="w-full flex-col justify-center items-center">
-                <table className="w-full block text-left rtl:text-right border-b">
+                <table className="w-full block text-left rtl:text-right">
                   <thead className="w-full ">
-                    <tr className=" text-[#64748B] text-[15px]">
+                    <tr className=" text-[#64748B] border-b-[1px] text-[15px]">
                       <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
                         NAME OF DOCUMENT
                       </th>
@@ -322,9 +319,9 @@ export default function FormsTab() {
               </div>
             </div>
           ) : (
-            <table className="w-full block text-left rtl:text-right border-b">
+            <table className="w-full block text-left rtl:text-right">
               <thead className="w-full">
-                <tr className=" text-[#64748B] text-[15px]">
+                <tr className=" text-[#64748B] border-b-[1px] text-[15px]">
                   <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
                     NAME OF DOCUMENT
                   </th>
@@ -364,7 +361,7 @@ export default function FormsTab() {
                         onClick={() => {
                           isModalOpen(true);
                           setIsEdit(true);
-                          setFormsToEdit(form);
+                          setFormViewData(form);
                         }}
                       >
                         <Edit />
@@ -455,7 +452,7 @@ export default function FormsTab() {
           content={
             <FormsviewModalContent
               isModalOpen={isModalOpen}
-              onSuccess={onSuccess}
+              formData={formViewdData}
             />
           }
           isModalOpen={isModalOpen}

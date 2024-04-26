@@ -1,47 +1,35 @@
-import { X } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import React, { useState } from "react";
 import Image from "next/image";
-import { createFormsOfPatient } from "@/app/api/forms-api/forms.api";
+import { X } from "lucide-react";
+
 interface Modalprops {
+  formData: any;
   isModalOpen: (isOpen: boolean) => void;
-  onSuccess: () => void;
+}
+
+interface FormData {
+  uuid: string;
+  nameOfDocument: any; // Assuming file property exists for the key
+  dateIssued: string;
+  notes: string;
 }
 
 export const FormsviewModalContent = ({
   isModalOpen,
-  onSuccess,
+  formData,
 }: Modalprops) => {
-  const router = useRouter();
-  const params = useParams<{
-    id: any;
-    tag: string;
-    item: string;
-  }>();
-  const patientId = params.id.toUpperCase();
-  const [selectedStatus, setSelectedStatus] = useState(""); // State to hold the selected status
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [formData, setFormData] = useState({
-    dateIssued: "",
-    nameOfDocument: "",
-    notes: "",
-  });
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+ 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    set((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
+
 
   const handleModalOpen = (isOpen: boolean) => {
     // Rename the function
@@ -50,6 +38,8 @@ export const FormsviewModalContent = ({
       document.body.style.overflow = "hidden";
     }
   };
+  // Test
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -71,11 +61,31 @@ export const FormsviewModalContent = ({
       setError("Failed to add forms");
     }
     setIsSubmitted(false);
+    
+  const [formViewData, setFormViewData] = useState({
+    nameOfDocument: formData.forms_nameOfDocument || "",
+    uuid: formData.forms_uuid || "",
+    dateIssued: formData.forms_dateIssued || "",
+    notes: formData.forms_uuid || "",
+  });
+  //
+  console.log(formData, "formzzzzz");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === "appointmentDate") {
+      setDate(value);
+      formViewData.dateIssued = value;
+      console.log(value, "lab date");
+    }
+    setFormViewData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
-  console.log(formData, "formData");
+
   return (
     <div className="w-[676px] h-[546px] bg-[#FFFFFF] rounded-md">
-      <form onSubmit={handleSubmit}>
+      <form>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
             <h2 className="p-title text-left text-[#071437] pl-10 mt-7">
@@ -90,10 +100,7 @@ export const FormsviewModalContent = ({
           </div>
           <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
             Download PDF once your done.
-            <button
-              className="pl-[297px] hover:underline text-[15px]"
-              onClick={() => handleModalOpen(true)}
-            >
+            <button className="pl-[297px] hover:underline text-[15px]">
               View Document
             </button>
           </p>
@@ -114,9 +121,9 @@ export const FormsviewModalContent = ({
                     className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     placeholder="input name of document"
                     name="nameOfDocument"
-                    value={formData.nameOfDocument}
-                    onChange={handleChange}
+                    disabled
                     required
+                    value={formData.forms_nameOfDocument}
                   />
                 </div>
               </div>
@@ -133,9 +140,9 @@ export const FormsviewModalContent = ({
                     className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     placeholder="12/12/2024"
                     name="dateIssued"
-                    value={formData.dateIssued}
-                    onChange={handleChange}
+                    disabled
                     required
+                    value={formData.forms_dateIssued}
                   />
                   <Image
                     className="absolute ml-[560px]  mt-4 pointer-events-none cursor-pointer"
@@ -160,9 +167,9 @@ export const FormsviewModalContent = ({
                     placeholder="Input Notes"
                     style={{ resize: "none" }}
                     name="notes"
-                    value={formData.notes}
-                    onChange={handleTextChange}
                     required
+                    disabled
+                    value={formData.forms_notes}
                   />
                 </div>
               </div>
@@ -196,3 +203,5 @@ export const FormsviewModalContent = ({
     </div>
   );
 };
+
+export default FormsviewModalContent;
