@@ -309,8 +309,10 @@ const Notes = () => {
                   className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                 >
                   <td className="truncate px-6 py-3">{note.notes_uuid}</td>
-                  <td className="truncate px-6 py-3">{note.notes_createdAt}</td>
-                  <td className="truncate px-6 py-3">{note.notes_time}</td>
+                  <td className="truncate px-6 py-3">
+                    {new Date(note.notes_createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="truncate px-6 py-3">{new Date(note.notes_createdAt).toLocaleTimeString()}</td>
                   <td className="truncate px-6 py-3">{note.notes_subject}</td>
                   <td className="truncate px-6 py-3 w-[200px]">
                     {note.notes_notes}
