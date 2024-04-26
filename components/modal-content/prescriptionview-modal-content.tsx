@@ -44,12 +44,12 @@ export const PrescriptionViewModalContent = ({
   const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState<Uint8Array>(new Uint8Array());
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
   const [isNoFileModalOpen, setIsNoFileModalOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   // update isNoFileModalOpen state
   const handleNoFileModalClose = (isModalOpen: boolean) => {
     setIsNoFileModalOpen(isModalOpen);
@@ -96,7 +96,7 @@ export const PrescriptionViewModalContent = ({
   const handleDeleteClick = async () => {
     console.log("Delete button clicked");
     console.log("Selected File UUID:", selectedFileUUID);
-
+    setIsSubmitted(true);
     try {
       // Check if there is a selected file UUID to delete
       if (selectedFileUUID) {
@@ -119,6 +119,7 @@ export const PrescriptionViewModalContent = ({
       // Optionally, set error state to display an error message to the user
       setError("Failed to delete file");
     }
+    setIsSubmitted(false);
   };
   const [selectedFileUUID, setSelectedFileUUID] = useState("");
   const [fileIndex, setFileIndex] = useState(0);
@@ -165,6 +166,7 @@ export const PrescriptionViewModalContent = ({
   }, [fileIndex, PrescriptionFiles]);
   //fetching files from database
   useEffect(() => {
+    setIsSubmitted(true);
     const fetchData = async () => {
       setPrescriptionUuid(prescriptionData.prescriptions_uuid);
       try {
@@ -194,6 +196,7 @@ export const PrescriptionViewModalContent = ({
     if (prescriptionData.prescriptions_uuid) {
       fetchData();
     }
+    setIsSubmitted(false);
   }, [
     prescriptionData.prescriptions_uuid,
     router,
@@ -210,6 +213,7 @@ export const PrescriptionViewModalContent = ({
   const [selectedFiles, setSelectedPrescriptionFiles] = useState<File[]>([]);
   const { toast } = useToast();
   const toggleMaxSizeToast = (): void => {
+    setIsSubmitted(false);
     toast({
       variant: "destructive",
       title: "File Size Too Big!",
@@ -217,6 +221,7 @@ export const PrescriptionViewModalContent = ({
     });
   };
   const toggleMaxFilesToast = (maxFiles: number): void => {
+    setIsSubmitted(false);
     toast({
       variant: "destructive",
       title: "Maximum Number of Files Exceeded!",
@@ -224,6 +229,7 @@ export const PrescriptionViewModalContent = ({
     });
   };
   const toggleNoFilesToast = (): void => {
+    setIsSubmitted(false);
     toast({
       variant: "warning",
       title: "No Files Uploaded",
@@ -231,6 +237,7 @@ export const PrescriptionViewModalContent = ({
     });
   };
   const toggleFullFilesToast = (): void => {
+    setIsSubmitted(false);
     toast({
       variant: "warning",
       title: "Maximum Files Uploaded",
@@ -297,6 +304,7 @@ export const PrescriptionViewModalContent = ({
     }
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setIsSubmitted(true);
     e.preventDefault();
     const getUuid = prescriptionUuid;
 
@@ -356,7 +364,9 @@ export const PrescriptionViewModalContent = ({
     } finally {
       // Update loading state after all files are processed
       setIsLoading(false);
+      setIsSubmitted(false);
     }
+    setIsSubmitted(false);
   };
   return (
     <div>
@@ -403,8 +413,10 @@ export const PrescriptionViewModalContent = ({
                     View Prescription
                   </h2>
                   <X
-                    onClick={() => isModalOpen(false)}
-                    className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+                    onClick={() => {isSubmitted?null:isModalOpen(false)}}
+                    className={`
+                    ${isSubmitted && " cursor-not-allowed"}
+                    w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
                   />
                 </div>
                 <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
@@ -573,15 +585,21 @@ export const PrescriptionViewModalContent = ({
                           <div className="flex border-t-4">
                             <button
                               onClick={() => setDeleteModalOpen(false)}
+                              disabled={isSubmitted}
                               type="button"
-                              className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
+                              className={`
+                              ${isSubmitted && " cursor-not-allowed"}
+                              w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md`}
                             >
                               No
                             </button>
                             <button
+                              disabled={isSubmitted}
                               type="button"
                               onClick={handleDeleteClick}
-                              className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md"
+                              className={`
+                                ${isSubmitted && " cursor-not-allowed"}
+                                w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md`}
                             >
                               Yes
                             </button>
@@ -616,14 +634,20 @@ export const PrescriptionViewModalContent = ({
                   <div className="justify-end flex mr-10">
                     <button
                       onClick={() => isModalOpen(false)}
+                      disabled={isSubmitted}
                       type="button"
-                      className="w-[170px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mr-4 rounded-sm"
+                      className={`
+                ${isSubmitted && " cursor-not-allowed"}
+                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
                     >
                       Cancel
                     </button>
                     <button
+                      disabled={isSubmitted}
                       type="submit"
-                      className="w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B] text-white font-medium  rounded-sm"
+                      className={`
+                       ${isSubmitted && " cursor-not-allowed"}
+                       w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
                     >
                       Submit
                     </button>

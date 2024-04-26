@@ -38,8 +38,10 @@ export const NofileviewPrescriptionsModalContent = ({
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [fileTypes, setFileTypes] = useState<string[]>([]);
   const router = useRouter();
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setIsSubmitted(true)
     e.preventDefault();
     const getUuid = prescriptionUuid;
 
@@ -91,10 +93,12 @@ export const NofileviewPrescriptionsModalContent = ({
     } catch (error) {
       console.error("Error adding Prescription:", error);
     }
+    setIsSubmitted(false)
   };
   const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSubmitted(true)
     const maxAllowedFiles = 5 - prescriptionFiles.length;
     setNumFilesCanAdd(maxAllowedFiles);
     const files = e.target.files;
@@ -150,8 +154,10 @@ export const NofileviewPrescriptionsModalContent = ({
     } else {
       console.warn("No files selected");
     }
+    setIsSubmitted(false)
   };
   const toggleToast = (): void => {
+    setIsSubmitted(false)
     toast({
       variant: "destructive",
       title: "No File Attached!",
@@ -160,6 +166,7 @@ export const NofileviewPrescriptionsModalContent = ({
   };
 
   const toggleMaxSizeToast = (): void => {
+    setIsSubmitted(false)
     toast({
       variant: "destructive",
       title: "File Size Too Big!",
@@ -167,6 +174,7 @@ export const NofileviewPrescriptionsModalContent = ({
     });
   };
   const toggleMaxFilesToast = (maxFiles: number): void => {
+    setIsSubmitted(false)
     toast({
       variant: "destructive",
       title: "Maximum Number of Files Exceeded!",
@@ -263,9 +271,12 @@ export const NofileviewPrescriptionsModalContent = ({
               Cancel
             </button>
             <button
-              type="submit"
-              className="w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm"
-            >
+             disabled={isSubmitted}
+             type="submit"
+             className={`
+              ${isSubmitted && " cursor-not-allowed"}
+              w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
+           >
               Submit
             </button>
           </div>

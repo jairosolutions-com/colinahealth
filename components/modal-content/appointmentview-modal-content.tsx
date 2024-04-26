@@ -12,6 +12,7 @@ export const AppointmentviewModalContent = ({ isModalOpen }: Modalprops) => {
   const [time, setTime] = useState("1:30pm");
   const [endTime, setEndTime] = useState("2:00pm");
   const [details, setDetails] = useState("Input details");
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const handleEditToggle = () => {
     setIsEditable(!isEditable);

@@ -43,10 +43,10 @@ export const AllergiesModalContent = ({
   console.log(allergy, "allergy");
   const { toast } = useToast();
   const patientId = params.id.toUpperCase();
-  // const patientId = params.id;
   const router = useRouter();
   const [charactersFull, setCharactersFull] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     patientUuid: patientId,
     type: allergy.allergies_type,
@@ -83,10 +83,12 @@ export const AllergiesModalContent = ({
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setIsSubmitted(true);
     try {
       if (isEdit) {
         await updateAllergyOfPatient(allergy.allergies_uuid, formData, router);
         setIsUpdated(true);
+        setIsSubmitted(false);
         onSuccess();
         isModalOpen(false);
         return;
@@ -107,12 +109,14 @@ export const AllergiesModalContent = ({
           reaction: "",
           notes: "",
         });
+        setIsSubmitted(false);
         onSuccess();
       }
     } catch (error: any) {
       if (error.message === "Request failed with status code 409") {
         setErrorMessage("Allergy already exist");
         onFailed();
+        setIsSubmitted(false);
         isModalOpen(false);
         console.log("conflict error");
       } else if (error.message == "Network Error") {
@@ -147,8 +151,12 @@ export const AllergiesModalContent = ({
               {isEdit ? "Update" : "Add"} Medical History Allergies Log
             </h2>
             <X
-              onClick={() => isModalOpen(false)}
-              className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+              onClick={() => {
+                isSubmitted ? null : isModalOpen(false);
+              }}
+              className={`
+             ${isSubmitted && " cursor-not-allowed"}
+             w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
             />
           </div>
           <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
@@ -266,14 +274,20 @@ export const AllergiesModalContent = ({
         <div className="justify-end flex mr-10">
           <button
             onClick={() => isModalOpen(false)}
+            disabled={isSubmitted}
             type="button"
-            className="w-[170px] h-[50px] bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm"
+            className={`
+            ${isSubmitted && " cursor-not-allowed"}
+            w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
           >
             Cancel
           </button>
           <button
+            disabled={isSubmitted}
             type="submit"
-            className="w-[170px] h-[50px] bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium rounded-sm  "
+            className={`
+            ${isSubmitted && " cursor-not-allowed"}
+            w-[170px] h-[50px] bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium rounded-sm  `}
           >
             {isEdit ? "Update" : "Submit"}
           </button>

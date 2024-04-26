@@ -8,6 +8,7 @@ import {
   updatePatient,
 } from "@/app/api/patients-api/patientDetails.api";
 import { fetchCountryList } from "@/app/api/country-api/countryList.api";
+import { set } from "date-fns";
 
 export default function PatientDetails() {
   const [patientDetails, setPatientDetails] = useState<any>([]);
@@ -17,6 +18,7 @@ export default function PatientDetails() {
   const [countryList, setCountryList] = useState<any[]>([]);
   const [error, setError] = useState("");
   const [isSuccessful, setIsSuccessFul] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const router = useRouter();
   const params = useParams<{
     id: any;
@@ -68,6 +70,20 @@ export default function PatientDetails() {
       }));
     }
   }, [patientDetails]);
+
+  const handleGenderChange = (gender: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      gender: gender,
+    }));
+  };
+
+  const handleCodeStatusChange = (codeStatus: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      codeStatus: codeStatus,
+    }));
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -123,6 +139,7 @@ export default function PatientDetails() {
   }, [patientEditMode]);
 
   const handleSubmit = async () => {
+    setIsSubmitted(true);
     try {
       await updatePatient(patientId, formData, router);
       setIsSuccessFul(true);
@@ -133,6 +150,7 @@ export default function PatientDetails() {
       console.error("Error adding allergy:", error);
       setError("Failed to add allergy");
     }
+    setIsSubmitted(false);
   };
 
   console.log(patientDetails, "patientDetails");
@@ -222,9 +240,8 @@ export default function PatientDetails() {
                     id="status"
                     name="gender"
                     className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200"
-                    placeholder="Gender"
                     value={formData.gender}
-                    onChange={handleChange}
+                    onChange={(e) => handleGenderChange(e.target.value)}
                   >
                     <option value="">select gender</option>
                     <option value="Male">Male</option>
@@ -512,7 +529,7 @@ export default function PatientDetails() {
                     name="codeStatus"
                     className="h-9 w-[400px] bg-[#FCFCFC] px-3 py-2 text-sm text-[#333333] rounded border border-gray-200 relative"
                     value={formData.codeStatus}
-                    onChange={handleChange}
+                    onChange={(e) => handleCodeStatusChange(e.target.value)}
                   >
                     <option value="">select status</option>
                     <option value="DNR" className="text-red-500">
@@ -572,8 +589,11 @@ export default function PatientDetails() {
                 </button>
               )}
               <button
+                disabled={isSubmitted}
                 type="button"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8  "
+                className={`
+                ${isSubmitted && "cursor-not-allowed"}
+                bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8  `}
                 onClick={
                   patientEditMode ? handleSubmit : handlePatientEditClick
                 }
@@ -703,8 +723,11 @@ export default function PatientDetails() {
           <div className="justify-end flex pt-5">
             {emergencyEditMode && (
               <button
+              disabled={isSubmitted}
                 type="button"
-                className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3"
+                className={`
+                ${isSubmitted && "cursor-not-allowed"}
+                bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3`}
                 onClick={handleEmergencyEditClick}
               >
                 Cancel
@@ -712,8 +735,11 @@ export default function PatientDetails() {
             )}
 
             <button
-              type="button"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8 "
+            disabled={isSubmitted}
+              type="submit"
+              className={`
+              ${isSubmitted && "cursor-not-allowed"}
+              bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8 `}
               onClick={handleEmergencyEditClick}
             >
               {emergencyEditMode ? "Save" : "Edit"}

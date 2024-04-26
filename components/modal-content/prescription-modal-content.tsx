@@ -53,13 +53,12 @@ export const PrescriptionModalContent = ({
   });
   const [prescriptionFiles, setPrescriptionFiles] = useState<any[]>([]); //
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [fileTypes, setFileTypes] = useState<string[]>([]);
   const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
-  console.log(label, "label");
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "interval" && (!/^\d*$/.test(value) || parseInt(value) > 12)) {
@@ -210,11 +209,7 @@ export const PrescriptionModalContent = ({
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(
-      "SUBMITTING FORM DATA",
-      selectedFileNames,
-      selectedFiles.length
-    );
+    setIsSubmitted(true);
 
     try {
       if (isEdit) {
@@ -250,6 +245,7 @@ export const PrescriptionModalContent = ({
           console.warn("No files selected to upload");
         }
         setIsUpdated(true);
+        setIsSubmitted(false);
         onSuccess();
         isModalOpen(false);
       } else {
@@ -303,6 +299,7 @@ export const PrescriptionModalContent = ({
       if (error.message === "Request failed with status code 409") {
         setErrorMessage("Prescription already exists");
         onFailed();
+        setIsSubmitted(false);
         isModalOpen(false);
       } else if (error.message === "Network Error") {
         toast({
@@ -336,8 +333,12 @@ export const PrescriptionModalContent = ({
               <div className="items-center flex justify-between">
                 <h2 className="p-title text-left text-[#071437] pl-10 mt-7"></h2>
                 <X
-                  onClick={() => isModalOpen(false)}
-                  className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+                  onClick={() => {
+                    isSubmitted ? null : isModalOpen(false);
+                  }}
+                  className={`
+                 ${isSubmitted && " cursor-not-allowed"}
+                 w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
                 />
               </div>
               <p className="text-sm pl-10 text-gray-600 pb-10 pt-2"></p>
@@ -581,16 +582,20 @@ export const PrescriptionModalContent = ({
                 <div className="justify-end flex mr-10">
                   <button
                     onClick={() => isModalOpen(false)}
+                    disabled={isSubmitted}
                     type="button"
-                    className="w-[170px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm"
-                  >
-                    Cancel
-                  </button>
+                    className={`
+                ${isSubmitted && " cursor-not-allowed"}
+                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+                  ></button>
                   <button
+                    disabled={isSubmitted}
                     type="submit"
-                    className="w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm"
+                    className={`
+                      ${isSubmitted && " cursor-not-allowed"}
+                      w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
                   >
-                    Submit
+                    {isEdit ? "Update" : "Submit"}
                   </button>
                 </div>
               </div>
