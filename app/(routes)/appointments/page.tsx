@@ -366,7 +366,7 @@ export default function AppointmentPage() {
                   key={index}
                   className="odd:bg-white hover:bg-[#f4f4f4] group "
                 >
-                  <td className="px-6 py-5">
+                  <td className="px-6 py-5 flex items-center">
                     <Image
                       className="rounded-full mr-2 "
                       src="/imgs/dennis.svg"
@@ -392,7 +392,7 @@ export default function AppointmentPage() {
                     {appointment.appointments_appointmentEndTime}
                   </td>
 
-                  <td className="text-15px text-nowrap  px-6 py-5 rounded-full  ">
+                  <td className="text-15px text-nowrap  px-6 py-5 rounded-full">
                     <div
                       className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                         appointment.appointments_appointmentStatus ===
