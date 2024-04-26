@@ -194,7 +194,7 @@ const Prorenata = () => {
   console.log(patientPRNMed, "prn med");
 
   return (
-    <div className="  w-full">
+    <div className="w-full">
       <div className="w-full justify-between flex mb-2">
         <div className="flex-row">
           <div className="flex gap-2">
@@ -211,11 +211,11 @@ const Prorenata = () => {
             >
               Scheduled
             </span>
-            <span className="slash">{">"}</span>
+            <span className="slash">{"/"}</span>
             <span className="active">PRN</span>
           </div>
           <div>
-            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px]">
               Total of {totalPRNMeds} PRN Medication Logs
             </p>
           </div>
@@ -293,33 +293,19 @@ const Prorenata = () => {
 
         {/* START OF TABLE */}
         <div>
-          <table className="w-full text-left rtl:text-right">
-            <thead className="">
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[300px] h-[60px] ">
-                  Medication ID
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  Date
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  Time
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  Medication
-                </th>
-                <th scope="col" className="px-5 py-3 w-[200px]">
-                  Notes
-                </th>
-                <th scope="col" className="px-6 py-3 w-[100px]">
-                  Status
-                </th>
-                <th scope="col" className=" px-20 py-4 w-[10px]">
-                  Action
-                </th>
+          <table className="text-left rtl:text-right">
+            <thead>
+              <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                <td className="px-6 py-3">Medication ID</td>
+                <td className="px-6 py-3">Date</td>
+                <td className="px-6 py-3">Time</td>
+                <td className="px-6 py-3">Medication</td>
+                <td className="px-5 py-3">Notes</td>
+                <td className="px-6 py-3">Status</td>
+                <td className="px-6 py-4">Action</td>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="h-[220px]">
               {patientPRNMed.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
@@ -333,18 +319,15 @@ const Prorenata = () => {
                 <>
                   <tr
                     key={index}
-                    className="odd:bg-white border-b hover:bg-[#f4f4f4] group"
+                    className="group hover:bg-[#f4f4f4]  border-b text-[15px]"
                   >
-                    <th
-                      scope="row"
-                      className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                    >
+                    <td className="truncate px-6 py-3">
                       {prnMed.medicationlogs_uuid}
-                    </th>
-                    <td className="truncate max-w-[552px] px-6 py-4">
+                    </td>
+                    <td className="truncate px-6 py-3">
                       {prnMed.medicationlogs_medicationLogsDate}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-3">
                       {new Date(
                         new Date().getFullYear(), // Use current year as default
                         new Date().getMonth(), // Use current month as default
@@ -361,10 +344,10 @@ const Prorenata = () => {
                         hour12: true,
                       })}
                     </td>
-                    <td className="truncate max-w-[400px] px-6 py-4">
+                    <td className="truncate px-6 py-3">
                       {prnMed.medicationlogs_medicationLogsName}
                     </td>
-                    <td className="px-5 py-4">{prnMed.medicationlogs_notes}</td>
+                    <td className="px-6 py-3">{prnMed.medicationlogs_notes}</td>
                     <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
                       <div
                         className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
@@ -383,7 +366,7 @@ const Prorenata = () => {
                       </div>
                     </td>
 
-                    <td className="px-[70px] py-4">
+                    <td className="px-6 py-4">
                       <p
                         onClick={() => {
                           isModalOpen(true);

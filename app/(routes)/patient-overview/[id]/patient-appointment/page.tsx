@@ -206,7 +206,7 @@ const Appointment = () => {
           <p className="p-title">Appointment</p>
 
           <div>
-            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] ">
               Total of {totalAppointments} Appointments
             </p>
           </div>
@@ -283,30 +283,18 @@ const Appointment = () => {
         </div>
         {/* START OF TABLE */}
         <div>
-          <table className="w-full text-left rtl:text-right">
+          <table className="text-left rtl:text-right">
             <thead>
-              <tr className="uppercase text-[#64748B] border-y text-[15px]">
-                <th scope="col" className="px-7 py-3 w-[300px] h-[70px]">
-                  STATUS
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  DATE
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  TIME
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  END TIME
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  DETAILS
-                </th>
-                <th scope="col" className=" px-[90px] py-3 w-10">
-                  ACTION
-                </th>
+              <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                <th className="px-6 py-3 ">STATUS</th>
+                <th className="px-6 py-3 ">DATE</th>
+                <th className="px-6 py-3 ">TIME</th>
+                <th className="px-4 py-3 ">END TIME</th>
+                <th className="px-4 py-3 ">DETAILS</th>
+                <th className="px-24 py-3">ACTION</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="h-[220px]">
               {patientAppointments.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
@@ -323,7 +311,7 @@ const Appointment = () => {
                       key={index}
                       className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                     >
-                      <th className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                      <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
                         <div
                           className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                             appointments.appointments_appointmentStatus ===
@@ -368,7 +356,7 @@ const Appointment = () => {
                           ></span>
                           {appointments.appointments_appointmentStatus}
                         </div>
-                      </th>
+                      </td>
 
                       <td className="px-6 py-3 text-[15px]">
                         {formatDate(appointments.appointments_appointmentDate)}
@@ -384,7 +372,7 @@ const Appointment = () => {
                       <td className="px-6 py-3 text-[15px]">
                         {appointments.appointments_details}
                       </td>
-                      <td className="px-[90px] py-3">
+                      <td className="px-[90px] py-3 items-center">
                         <p
                           onClick={() => {
                             isModalOpen(true);

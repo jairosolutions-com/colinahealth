@@ -52,12 +52,12 @@ export default function FormsTab() {
   };
 
   const handleSortOptionClick = (option: string) => {
-    if (option == "Age") {
-      setSortBy("age");
+    if (option == "Form ID") {
+      setSortBy("uuid");
     } else if (option == "Name") {
-      setSortBy("firstName");
-    } else if (option == "Gender") {
-      setSortBy("gender");
+      setSortBy("nameofDocument");
+    } else if (option == "Date") {
+      setSortBy("dateIssued");
     }
     console.log(sortBy, "option");
   };
@@ -305,63 +305,33 @@ export default function FormsTab() {
 
         {/* START OF TABLE */}
         <div>
-          {patientForms.length == 0 ? (
-            <div>
-              <div className="w-full flex-col justify-center items-center">
-                <table className="w-full block text-left rtl:text-right">
-                  <thead className="w-full ">
-                    <tr className=" text-[#64748B] border-b-[1px] text-[15px]">
-                      <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
-                        NAME OF DOCUMENT
-                      </th>
-                      <th scope="col" className="px-6 py-3 w-[400px]">
-                        DATE ISSUED
-                      </th>
-                      <th scope="col" className="px-6 py-3 w-[750px]">
-                        NOTES
-                      </th>
-                      <th scope="col" className="px-6 py-3 max-w-[300px]">
-                        ACTION
-                      </th>
-                    </tr>
-                  </thead>
-                </table>
-                <div className="py-5 flex justify-center items-center">
-                  <p className="text-xl font-semibold text-gray-700 text-center">
-                    No Form/s
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <table className="w-full block text-left rtl:text-right">
-              <thead className="w-full">
-                <tr className=" text-[#64748B] border-b-[1px] text-[15px]">
-                  <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
-                    NAME OF DOCUMENT
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[400px]">
-                    DATE ISSUED
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[750px]">
-                    NOTES
-                  </th>
-                  <th scope="col" className="px-6 py-3 max-w-[300px]">
-                    ACTION
-                  </th>
+          <table className="text-left rtl:text-right">
+            <thead>
+              <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                <td className="px-6 py-3">FORM UID</td>
+                <td className="px-6 py-3">NAME OF DOCUMENT</td>
+                <td className="px-6 py-3">DATE ISSUED</td>
+                <td className="px-6 py-3">NOTES</td>
+                <td className="px-20 py-3">ACTION</td>
+              </tr>
+            </thead>
+            <tbody className="h-[220px]">
+              {patientForms.length === 0 && (
+                <tr>
+                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                    <p className="text-[15px] font-normal text-gray-700 text-center">
+                      No forms <br />
+                    </p>
+                  </td>
                 </tr>
-              </thead>
-
-              <tbody className="overflow-y-scroll">
-                {patientForms.map((form, index) => (
-                  <tr
-                    key={index}
-                    className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
-                  >
-                    <th
-                      scope="row"
-                      className="truncate px-6 py-3 w-[400px] font-medium text-gray-900 whitespace-nowrap"
-                    >
+              )}
+              {patientForms.map((form, index) => (
+                <tr
+                  key={index}
+                  className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
+                >
+                  <td className="truncate px-6 py-3">{form.forms_uuid}</td>
+                  <td className="truncate px-6 py-3 ">
                       {form.forms_nameOfDocument}
                     </th>
                     <td className="px-6 py-3 w-[400px]">
@@ -395,6 +365,7 @@ export default function FormsTab() {
               </tbody>
             </table>
           )}
+
         </div>
         {/* END OF TABLE */}
       </div>

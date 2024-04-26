@@ -203,7 +203,7 @@ const Scheduled = () => {
             <p className="p-title">Medication Logs</p>
             <span className="slash">{">"}</span>
             <span className="active">Scheduled</span>
-            <span className="slash">{">"}</span>
+            <span className="slash">{"/"}</span>
             <span
               onClick={() => {
                 setIsLoading(true);
@@ -217,7 +217,7 @@ const Scheduled = () => {
             </span>
           </div>
           <div>
-            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px]">
               Total of {totalScheduledMeds} Scheduled Medication Logs
             </p>
           </div>
@@ -295,33 +295,19 @@ const Scheduled = () => {
 
         {/* START OF TABLE */}
         <div>
-          <table className="w-full text-left rtl:text-right">
-            <thead className="">
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-6 py-3 w-[300px] h-[60px] ">
-                  Medication ID
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  Date
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  Time
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  Medication
-                </th>
-                <th scope="col" className="px-5 py-3 w-[200px]">
-                  Notes
-                </th>
-                <th scope="col" className="px-6 py-3 w-[100px]">
-                  Status
-                </th>
-                <th scope="col" className=" px-20 py-4 w-[10px]">
-                  Action
-                </th>
+          <table className="text-left rtl:text-right">
+            <thead>
+              <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                <td className="px-6 py-3">Medication ID</td>
+                <td className="px-6 py-3">Date</td>
+                <td className="px-5 py-3">Time</td>
+                <td className="px-4 py-3">Medication</td>
+                <td className="px-4 py-3">Notes</td>
+                <td className="px-4 py-3">Status</td>
+                <td className="px-4 py-4">Action</td>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="h-[220px]">
               {patientScheduledMed.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
@@ -336,15 +322,12 @@ const Scheduled = () => {
                   {patientScheduledMed.map((schedMed, index) => (
                     <tr
                       key={index}
-                      className="odd:bg-white border-b hover:bg-[#f4f4f4] group"
+                      className="group hover:bg-[#f4f4f4]  border-b text-[15px]"
                     >
-                      <th
-                        scope="row"
-                        className="truncate max-w-[286px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                      >
+                      <td className="truncate px-6 py-3">
                         {schedMed.medicationlogs_uuid}
-                      </th>
-                      <td className="truncate max-w-[552px] px-6 py-4">
+                      </td>
+                      <td className="truncate px-6 py-3">
                         {schedMed.medicationlogs_medicationLogsDate}
                       </td>
                       <td className="px-6 py-4">
@@ -368,10 +351,10 @@ const Scheduled = () => {
                           hour12: true,
                         })}
                       </td>
-                      <td className="truncate max-w-[400px] px-6 py-4">
+                      <td className="truncate px-6 py-3">
                         {schedMed.medicationlogs_medicationLogsName}
                       </td>
-                      <td className="px-5 py-4">
+                      <td className="truncate px-6 py-3">
                         {schedMed.medicationlogs_notes}
                       </td>
                       <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
@@ -393,7 +376,7 @@ const Scheduled = () => {
                         </div>
                       </td>
 
-                      <td className="px-[70px] py-4">
+                      <td className="px-6 py-3">
                         <p
                           onClick={() => {
                             isModalOpen(true);

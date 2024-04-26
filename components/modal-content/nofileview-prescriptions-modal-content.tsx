@@ -30,7 +30,7 @@ export const NofileviewPrescriptionsModalContent = ({
   const { toast } = useToast();
 
   const [prescriptionFiles, setPrescriptionFiles] = useState<any[]>([]); //
-  const defeaultPrescriptionFiles = Array.isArray(prescriptionFiles)
+  const defaultPrescriptionFiles = Array.isArray(prescriptionFiles)
     ? prescriptionFiles
     : [];
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
@@ -203,8 +203,74 @@ export const NofileviewPrescriptionsModalContent = ({
       // Optionally, you can clear the selectedFileNames state here
       setSelectedFileNames([]);
     }
-  }, [prescriptionFiles, defeaultPrescriptionFiles]);
+  }, [prescriptionFiles, defaultPrescriptionFiles]);
+  const [isHovering, setIsHovering] = useState(false);
 
+  const FileUploadWithHover = () => {
+    const handleMouseEnter = () => {
+      setIsHovering(true);
+    };
+
+    const handleMouseLeave = () => {
+      setIsHovering(false);
+    };
+
+    return (
+      <div
+        className="relative justify-center flex"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+          <div
+            className={`w-[220px] flex justify-items-center flex-row ${
+              defaultPrescriptionFiles.length === 5
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+          >
+            <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-full ">
+              {selectedFiles.length > 0
+                ? `${selectedFiles.length}/${numFilesCanAdd}selected`
+                : defaultPrescriptionFiles.length < 5
+                ? "Choose files to upload"
+                : "Max Files Uploaded"}
+            </p>
+            <label
+              htmlFor="fileupload"
+              className={` ${
+                defaultPrescriptionFiles.length === 5
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              }
+                              text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}
+            >
+              Browse
+            </label>
+
+            <input
+              type="file"
+              id="fileupload"
+              multiple={true}
+              accept=".jpeg,.jpg,.png,.pdf"
+              className="hidden"
+              name="file"
+              disabled={defaultPrescriptionFiles.length === 5}
+              onChange={(e) => handleFile(e)}
+              max={5}
+            />
+            {isHovering && selectedFiles.length > 0 && (
+              <div className="absolute bg-[#4E4E4E] p-2 w-[220px] text-[13px] mt-[30px] text-white rounded-md shadow-md ">
+                <ul>
+                  {selectedFiles.map((file, index) => (
+                    <li key={index}>{file.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+    );
+  };
   return (
     <div className="w-[676px] h-[541px]">
       <form className="" onSubmit={handleSubmit}>
@@ -226,37 +292,7 @@ export const NofileviewPrescriptionsModalContent = ({
                 No image/document found!
               </div>
               <div className="">
-                {/* {selectedFileNames.length > 0 ? (
-                  // Display selected filenames
-                  <div className="text-[12px] w-full truncate mx-2">
-                    {selectedFileNames.join(", ")}
-                  </div>
-                ) : ( */}
-                <div className="flex flex-row justify-center">
-                  <p className="border-2   w-[156px]   rounded-l-md px-2 py-2 text-gray-400 text-[12px]">
-                    {selectedFiles.length > 0
-                      ? `${selectedFiles.length}/${numFilesCanAdd}selected`
-                      : defeaultPrescriptionFiles.length < 5
-                      ? "Upload or Attach Files or"
-                      : "Max Files Uploaded"}
-                  </p>
-                  <label
-                    htmlFor="imageUploads"
-                    className="decoration-solid text-[12px] bg-[#007C85] px-2 py-2 text-white border-r-md cursor-pointer rounded-r-lg border-2 border-[#007C85]"
-                  >
-                    Browse
-                  </label>
-                </div>
-                {/* )} */}
-                <input
-                  type="file"
-                  id="imageUploads"
-                  multiple={true}
-                  accept="image/*,.pdf"
-                  className="hidden"
-                  name="file"
-                  onChange={(e) => handleFile(e)}
-                />
+                <FileUploadWithHover />
               </div>
             </div>
           </div>

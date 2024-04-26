@@ -142,22 +142,6 @@ const Notes = () => {
     return pageNumbers;
   };
 
-  const formatTime = (timeString: string) => {
-    // Split the time string into hours and minutes
-    const [hours, minutes] = timeString.split(":").map(Number);
-
-    // Format the hours part into 12-hour format
-    let formattedHours = hours % 12 || 12; // Convert 0 to 12
-    const ampm = hours < 12 ? "am" : "pm"; // Determine if it's AM or PM
-
-    // If minutes is undefined or null, set it to 0
-    const formattedMinutes =
-      minutes !== undefined ? minutes.toString().padStart(2, "0") : "00";
-
-    // Return the formatted time string
-    return `${formattedHours}:${formattedMinutes}${ampm}`;
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -199,7 +183,7 @@ const Notes = () => {
   }
 
   return (
-    <div className="  w-full">
+    <div className=" w-full">
       <div className="w-full justify-between flex mb-2">
         <div className="flex-row">
           <div className="flex gap-2">
@@ -207,20 +191,20 @@ const Notes = () => {
             <span className="slash">{">"}</span>
             <span
               onClick={() => {
-                setIsLoading(true);
                 router.push(
                   `/patient-overview/${patientId.toLowerCase()}/notes/nurses-notes`
                 );
+                setIsLoading(true);
               }}
               className="bread"
             >
               Nurse's Notes
             </span>
-            <span className="slash">{">"}</span>
+            <span className="slash">{"/"}</span>
             <span className="active">Incident Report</span>
           </div>
           <div>
-            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] ">
               Total of {totalNotes} Notes
             </p>
           </div>
@@ -244,7 +228,7 @@ const Notes = () => {
             <label className=""></label>
             <div className="flex">
               <input
-                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px]"
                 type="text"
                 placeholder="Search by reference no. or name..."
                 value={term}
@@ -298,24 +282,15 @@ const Notes = () => {
 
         {/* START OF TABLE */}
         <div>
-          <table className="w-full text-left rtl:text-right">
+          <table className="text-left rtl:text-right">
             <thead>
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                  NOTES ID
-                </th>
-                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                  DATE
-                </th>
-                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                  TIME
-                </th>
-                <th scope="col" className="px-6 py-3 w-[250px]">
-                  SUBJECT
-                </th>
-                <th scope="col" className="px-6 py-3 w-[200px]">
-                  Details of Incident
-                </th>
+              <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                <td className="px-6 py-3 ">Notes UID</td>
+                <td className="px-6 py-3 ">DATE</td>
+                <td className="px-6 py-3 ">TIME</td>
+                <td className="px-6 py-3 ">SUBJECT</td>
+                <td className="px-6 py-3 ">DETAILS OF INCIDENT</td>
+                <td className="px-6 py-3 ">REPORTED BY</td>
               </tr>
             </thead>
             <tbody>
@@ -331,31 +306,16 @@ const Notes = () => {
                   key={index}
                   className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                 >
-                  <th
-                    scope="row"
-                    className="  font-medium text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
-                  >
-                    {notes.notes_uuid}
-                  </th>
-                  <td className="truncate max-w-[552px] px-6 py-3">
+                  <td className=" px-6 py-3">{notes.notes_uuid}</td>
+                  <td className=" px-6 py-3">
                     {new Date(notes.notes_createdAt).toLocaleDateString()}
                   </td>
-                  <td className="truncate max-w-[552px] px-6 py-3">
-                    {new Date(
-                      new Date(notes.notes_createdAt).getTime() -
-                        new Date().getTimezoneOffset() * 60000
-                    ).toLocaleTimeString(navigator.language, {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    })}
+                  <td className=" px-6 py-3">
+                    {new Date(notes.notes_createdAt).toLocaleTimeString()}
                   </td>
-                  <td className="truncate max-w-[552px] px-6 py-3">
-                    {notes.notes_subject}
-                  </td>
-                  <td className="truncate max-w-[552px] px-6 py-3">
-                    {notes.notes_notes}
-                  </td>
+                  <td className="px-6 py-3">{notes.notes_subject}</td>
+                  <td className="px-6 py-3">{notes.notes_notes}</td>
+                  <td className="px-6 py-3">Ansel MD</td>
                 </tr>
               ))}
             </tbody>
