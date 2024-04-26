@@ -226,7 +226,9 @@ export const ScheduledModalContent = ({
               <span className="text-[#007C85]">{name ? name : ""}</span>
             </h2>
             <X
-              onClick={() => {isSubmitted?null:isModalOpen(false)}}
+              onClick={() => {
+                isSubmitted ? null : isModalOpen(false);
+              }}
               className={`
               ${isSubmitted && " cursor-not-allowed"}
               w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
@@ -442,7 +444,9 @@ export const ScheduledModalContent = ({
               className={`
                 ${isSubmitted && " cursor-not-allowed"}
                 w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
-            ></button>
+            >
+              Cancel
+            </button>
             <button
               disabled={isSubmitted}
               type="submit"

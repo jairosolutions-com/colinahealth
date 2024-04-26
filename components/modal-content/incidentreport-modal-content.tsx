@@ -27,6 +27,7 @@ export const IncidentreportModalContent = ({
   const patientId = params.id.toUpperCase();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     subject: "",
     notes: "",
@@ -48,6 +49,7 @@ export const IncidentreportModalContent = ({
   };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setIsSubmitted(true);
     try {
       const notes = await createNotesOfPatient(patientId, formData, router);
       console.log("notesadded successfully:", notes);
@@ -60,6 +62,7 @@ export const IncidentreportModalContent = ({
       });
 
       onSuccess();
+      isModalOpen(false);
     } catch (error: any) {
       if (error.message == "Network Error") {
         toast({
@@ -81,6 +84,7 @@ export const IncidentreportModalContent = ({
       console.error("Error adding note:", error);
       setError("Failed to add note");
     }
+    setIsSubmitted(false);
   };
   console.log(formData, "formData");
   return (
@@ -164,14 +168,20 @@ export const IncidentreportModalContent = ({
             <div className="justify-end flex mr-10">
               <button
                 onClick={() => isModalOpen(false)}
+                disabled={isSubmitted}
                 type="button"
-                className="w-[170px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm"
+                className={`
+                ${isSubmitted && " cursor-not-allowed"}
+                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
               >
                 Cancel
               </button>
               <button
+                disabled={isSubmitted}
                 type="submit"
-                className="w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium rounded-sm"
+                className={`
+               ${isSubmitted && " cursor-not-allowed"}
+               w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
               >
                 Submit
               </button>
