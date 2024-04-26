@@ -43,11 +43,12 @@ export const LabResultsViewModalContent = ({
   const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState<Uint8Array>(new Uint8Array());
   const [modalOpen, setModalOpen] = useState(false);
-
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isNoFileModalOpen, setIsNoFileModalOpen] = useState(false);
   // update isNoFileModalOpen state
   const handleNoFileModalClose = (isModalOpen: boolean) => {
+    setIsSubmitted(false);
     setIsNoFileModalOpen(isModalOpen);
     setIsLoading(true);
     console.log("isNoFileModalOpen HANDLE", isNoFileModalOpen);
@@ -146,6 +147,7 @@ export const LabResultsViewModalContent = ({
   const [selectedFiles, setSelectedLabFiles] = useState<File[]>([]);
   const { toast } = useToast();
   const toggleMaxFilesToast = (maxFiles: number): void => {
+    setIsSubmitted(false);
     toast({
       variant: "destructive",
       title: "File Number of Files Exceeded!",
@@ -153,6 +155,7 @@ export const LabResultsViewModalContent = ({
     });
   };
   const toggleMaxSizeToast = (): void => {
+    setIsSubmitted(false);
     toast({
       variant: "destructive",
       title: "File Size Too Big!",
@@ -160,6 +163,7 @@ export const LabResultsViewModalContent = ({
     });
   };
   const toggleNoFilesToast = (): void => {
+    setIsSubmitted(false);
     toast({
       variant: "warning",
       title: "No Files Uploaded",
@@ -167,6 +171,7 @@ export const LabResultsViewModalContent = ({
     });
   };
   const toggleFullFilesToast = (): void => {
+    setIsSubmitted(false);
     toast({
       variant: "warning",
       title: "Maximum Files Uploaded",
@@ -175,6 +180,7 @@ export const LabResultsViewModalContent = ({
     });
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setIsSubmitted(true);
     e.preventDefault();
     const getUuid = labResultUuid;
 
@@ -184,15 +190,19 @@ export const LabResultsViewModalContent = ({
       toggleFullFilesToast();
       return;
     }
-    const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
-    const maxAllowedFiles = 5 - currentFileCount;
-    console.log("FILES TO ADD", maxAllowedFiles);
+    if (getUuid) {
+      const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
+      console.log("Current file count:", currentFileCount);
+      // Define the maximum allowed files based on the current count
+      const maxAllowedFiles = currentFileCount === 0 ? 5 : 5 - currentFileCount;
+      if (selectedFiles.length > maxAllowedFiles) {
+        toggleMaxFilesToast(maxAllowedFiles);
+        return;
+      }
+      console.log("FILES TO ADD", maxAllowedFiles);
 
-    if (selectedFiles.length > maxAllowedFiles) {
-      toggleMaxFilesToast(maxAllowedFiles);
-      return;
+      console.log("Lab UUID:", getUuid);
     }
-
     try {
       console.log(getUuid, "getUuid");
       // Iterate through each selected file
@@ -230,8 +240,10 @@ export const LabResultsViewModalContent = ({
       // Update loading state after all files are processed
       setIsLoading(false);
     }
+    setIsSubmitted(false);
   };
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSubmitted(true);
     const files = e.target.files;
     const MAX_FILE_SIZE_MB = 15;
 
@@ -288,8 +300,10 @@ export const LabResultsViewModalContent = ({
     } else {
       console.warn("No files selected");
     }
+    setIsSubmitted(false);
   };
   const handleDeleteClick = async () => {
+    setIsSubmitted(true);
     console.log("Delete button clicked");
     console.log("Selected File UUID:", selectedFileUUID);
 
@@ -315,6 +329,7 @@ export const LabResultsViewModalContent = ({
       // Optionally, set error state to display an error message to the user
       setError("Failed to delete file");
     }
+    setIsSubmitted(false);
   };
 
   const downloadImage = () => {
@@ -347,6 +362,72 @@ export const LabResultsViewModalContent = ({
     window.URL.revokeObjectURL(url);
   };
 
+  const [isHovering, setIsHovering] = useState(false);
+
+  const FileUploadWithHover = () => {
+    const handleMouseEnter = () => {
+      setIsHovering(true);
+    };
+
+    const handleMouseLeave = () => {
+      setIsHovering(false);
+    };
+
+    return (
+      <div
+        className="relative"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div className="w-[220px]">
+          <div
+            className={`w-full flex flex-row ${
+              defaultLabFiles.length === 5
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+          >
+            <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-full ">
+              {selectedFiles.length > 0
+                ? `${selectedFiles.length}/${numFilesCanAdd}selected`
+                : defaultLabFiles.length < 5
+                ? "Choose files to upload"
+                : "Max Files Uploaded"}
+            </p>
+            <label
+              htmlFor="fileupload"
+              className={` ${
+                defaultLabFiles.length === 5
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              }text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}>
+              Browse
+            </label>  
+            <input
+              type="file"
+              id="fileupload"
+              multiple={true}
+              accept=".jpeg,.jpg,.png,.pdf"
+              className="hidden"
+              name="file"
+              disabled={defaultLabFiles.length === 5}
+              onChange={(e) => handleFile(e)}
+              max={5}
+            />
+              {isHovering && selectedFiles.length > 0 && (
+              <div className="absolute bg-[#4E4E4E] text-[13px]  p-2 w-[220px] mt-[30px] text-white rounded-md shadow-md left-0">
+                <ul>
+                  {selectedFiles.map((file, index) => (
+                    <li key={index}>{file.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
   return (
     <div>
       {defaultLabFiles?.length === 0 && isLoading === false ? (
@@ -392,8 +473,10 @@ export const LabResultsViewModalContent = ({
                     View Laboratory Result
                   </h2>
                   <X
-                    onClick={() => isModalOpen(false)}
-                    className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+                    onClick={() => {isSubmitted?null:isModalOpen(false)}}
+                    className={`
+                    ${isSubmitted && " cursor-not-allowed"}
+                    w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
                   />
                 </div>
 
@@ -441,45 +524,8 @@ export const LabResultsViewModalContent = ({
                               ></Image>
                             )}
                           </div>
-                          <div className="w-[220px]">
-                            <div
-                              className={`w-full flex justify-between flex-row ${
-                                defaultLabFiles.length === 5
-                                  ? "cursor-not-allowed"
-                                  : "cursor-pointer"
-                              }`}
-                            >
-                              <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-[150px]  hover:border-[#686868]">
-                                {selectedFiles.length > 0
-                                  ? `${selectedFiles.length}/${numFilesCanAdd}selected`
-                                  : defaultLabFiles.length < 5
-                                  ? "Choose files to upload"
-                                  : "Max Files Uploaded"}
-                              </p>
-                              <label
-                                htmlFor="fileupload"
-                                className={` ${
-                                  defaultLabFiles.length === 5
-                                    ? "cursor-not-allowed"
-                                    : "cursor-pointer"
-                                }
-                                text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}
-                              >
-                                Browse
-                              </label>
-
-                              <input
-                                type="file"
-                                id="fileupload"
-                                multiple={true}
-                                accept="image/*,.pdf"
-                                className="hidden"
-                                name="file"
-                                disabled={defaultLabFiles.length === 5}
-                                onChange={(e) => handleFile(e)}
-                                max={5}
-                              />
-                            </div>
+                          <div className="filehover">
+                            <FileUploadWithHover />
                             {defaultLabFiles.map((file: LabFile, index) => (
                               <div
                                 className="flex justify-between px-1 bg-white rounded-md border-2 mt-4 hover:border-[#686868] text-overflow truncate cursor-pointer"
@@ -576,9 +622,12 @@ export const LabResultsViewModalContent = ({
                               No
                             </button>
                             <button
+                              disabled={isSubmitted}
                               type="button"
                               onClick={handleDeleteClick}
-                              className="w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md"
+                              className={`
+                              ${isSubmitted && "cursor-not-allowed"}
+                              w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md`}
                             >
                               Yes
                             </button>
@@ -613,14 +662,20 @@ export const LabResultsViewModalContent = ({
                   <div className="justify-end flex mr-10">
                     <button
                       onClick={() => isModalOpen(false)}
+                      disabled={isSubmitted}
                       type="button"
-                      className="w-[170px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mr-4 rounded-sm"
+                      className={`
+                ${isSubmitted && " cursor-not-allowed"}
+                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
                     >
                       Cancel
                     </button>
                     <button
+                      disabled={isSubmitted}
                       type="submit"
-                      className="w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B] text-white font-medium rounded-sm"
+                      className={`
+                       ${isSubmitted && " cursor-not-allowed"}
+                       w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
                     >
                       Submit
                     </button>

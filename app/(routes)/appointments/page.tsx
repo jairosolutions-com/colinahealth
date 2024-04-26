@@ -167,7 +167,6 @@ export default function AppointmentPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(false);
       try {
         const upcomingAppoinments = await fetchAllAppointments(
           term,
@@ -183,6 +182,7 @@ export default function AppointmentPage() {
         setTotalPages(upcomingAppoinments.totalPages);
         setAppointmentList(appointmentsArray);
         setTotalAppointments(upcomingAppoinments.totalCount);
+        setIsLoading(false);
         return upcomingAppoinments;
       } catch (error) {}
     };
@@ -339,22 +339,16 @@ export default function AppointmentPage() {
           </div>
         </div>
 
-        <div className="w-full h-full">
+        <div>
           <table className="w-full h-full justify-center items-start text-[15px]">
-            <thead className=" text-left rtl:text-right">
-              <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE]">
-                <th scope="col" className="px-6 py-3 w-[250px] h-[70px]">
-                  Status
-                </th>
-                <th scope="col" className="px-6 py-3 w-[230px]">
-                  Date
-                </th>
-                <th scope="col" className="px-6 py-3 w-[200px]">
-                  Time
-                </th>
-                <th scope="col" className="px-6 py-3 w-10">
-                  End time
-                </th>
+            <thead className="text-left rtl:text-right">
+              <tr className="uppercase font-semibold text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
+                <td className="px-6 py-5 ">Name</td>
+                <td className="px-6 py-5 ">Appointment UID</td>
+                <td className="px-6 py-5 ">Date</td>
+                <td className="px-6 py-5 ">Time</td>
+                <td className="px-6 py-5 ">End time</td>
+                <td className="px-6 py-5  flex justify-start">Status</td>
               </tr>
             </thead>
             <tbody>
@@ -370,11 +364,37 @@ export default function AppointmentPage() {
               {appointmentList.map((appointment, index) => (
                 <tr
                   key={index}
-                  className="odd:bg-white hover:bg-[#f4f4f4] group border-b"
+                  className="odd:bg-white hover:bg-[#f4f4f4] group "
                 >
-                  <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                  <td className="px-6 py-5 flex items-center">
+                    <Image
+                      className="rounded-full mr-2 "
+                      src="/imgs/dennis.svg"
+                      alt="Icon"
+                      width={45}
+                      height={45}
+                    />
+                    <span>
+                      {appointment.patient_firstName} {""}
+                      {appointment.patient_lastName}
+                    </span>
+                  </td>
+                  <td className="px-6 py-5 ">
+                    {appointment.appointments_uuid}
+                  </td>
+                  <td className="px-6 py-5">
+                    {appointment.appointments_appointmentDate}
+                  </td>
+                  <td className="px-6 py-5 ">
+                    {appointment.appointments_appointmentTime}
+                  </td>
+                  <td className=" px-6 py-5">
+                    {appointment.appointments_appointmentEndTime}
+                  </td>
+
+                  <td className="text-15px text-nowrap  px-6 py-5 rounded-full">
                     <div
-                      className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
+                      className={`px-2 font-semibold rounded-[20px] relative flex items-center w-fit ${
                         appointment.appointments_appointmentStatus ===
                         "Scheduled"
                           ? "bg-[#dfffea] text-[#17C653]" // Green color for Scheduled
@@ -419,16 +439,6 @@ export default function AppointmentPage() {
                       {appointment.appointments_appointmentStatus} Appointment
                     </div>
                   </td>
-
-                  <td className="px-6 py-4">
-                    {appointment.appointments_appointmentDate}
-                  </td>
-                  <td className="px-6 py-4">
-                    {appointment.appointments_appointmentTime}
-                  </td>
-                  <td className="px-6 py-4">
-                    {appointment.appointments_appointmentEndTime}
-                  </td>
                 </tr>
               ))}
             </tbody>
@@ -441,12 +451,12 @@ export default function AppointmentPage() {
       ) : (
         <div className="mt-5">
           <div className="flex justify-between">
-            <p className="font-medium size-[18px] w-[138px] items-center">
+            <p className="font-medium text-[15px] w-[138px] items-center">
               Page {currentPage} of {totalPages}
             </p>
             <div>
               <nav>
-                <div className="flex -space-x-px text-sm">
+                <div className="flex -space-x-px text-[15px]">
                   <div>
                     <button
                       onClick={goToPreviousPage}

@@ -208,7 +208,7 @@ body,
 /* sort by*/
 
 .btn-pagination {
-  /* border: 0.9px; */
+  border: 0.9px;
   background: #007c85;
   color: #ffffff;
   width: 48px;
@@ -353,4 +353,20 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0;
+}
+
+tbody {
+  display: block;
+  overflow: auto;
+}
+
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table {
+  width: 100%;
 }

@@ -31,6 +31,7 @@ export const FormsModalContent = ({
   const patientId = params.id.toUpperCase();
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     dateIssued: "",
     nameOfDocument: "",
@@ -210,8 +211,12 @@ export const FormsModalContent = ({
               Add Form Details
             </p>
             <X
-              onClick={() => isModalOpen(false)}
-              className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+              onClick={() => {
+                isSubmitted ? null : isModalOpen(false);
+              }}
+              className={`
+              ${isSubmitted && " cursor-not-allowed"}
+              w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
             />
           </div>
           <p className="text-[15px] pl-10 text-[#667085] pb-10 pt-2">
@@ -334,14 +339,20 @@ export const FormsModalContent = ({
           <div className="justify-end flex mr-10">
             <button
               onClick={() => isModalOpen(false)}
+              disabled={isSubmitted}
               type="button"
-              className="w-[170px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm"
+              className={`
+                ${isSubmitted && " cursor-not-allowed"}
+                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
             >
               Cancel
             </button>
             <button
+              disabled={isSubmitted}
               type="submit"
-              className="w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm"
+              className={`
+              ${isSubmitted && " cursor-not-allowed"}
+              w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
             >
               Submit
             </button>

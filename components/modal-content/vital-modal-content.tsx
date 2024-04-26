@@ -38,6 +38,7 @@ export const VitalModalContent = ({
   const patientId = params.id.toUpperCase();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     date: vitalSignData.vitalsign_date || "",
     time: vitalSignData.vitalsign_time || "",
@@ -57,6 +58,7 @@ export const VitalModalContent = ({
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setIsSubmitted(true);
     try {
       if (isEdit) {
         await updateVitalSignsOfPatient(
@@ -109,6 +111,7 @@ export const VitalModalContent = ({
       console.error("Error adding Prescription:", error);
       setError("Failed to add Prescription");
     }
+    setIsSubmitted(false);
   };
   console.log(vitalSignData, "prescriptionData");
   console.log(formData, "formData");
@@ -121,8 +124,10 @@ export const VitalModalContent = ({
               {isEdit ? "Update" : "Add"} Vital Sign
             </h2>
             <X
-              onClick={() => isModalOpen(false)}
-              className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+              onClick={() => {isSubmitted?null:isModalOpen(false)}}
+              className={`
+              ${isSubmitted && " cursor-not-allowed"}
+              w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
             />
           </div>
           <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
@@ -266,14 +271,20 @@ export const VitalModalContent = ({
             <div className="justify-end flex mr-10">
               <button
                 onClick={() => isModalOpen(false)}
+                disabled={isSubmitted}
                 type="button"
-                className="w-[170px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm"
+                className={`
+                ${isSubmitted && " cursor-not-allowed"}
+                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
               >
                 Cancel
               </button>
               <button
+                disabled={isSubmitted}
                 type="submit"
-                className="w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium rounded-sm"
+                className={`
+               ${isSubmitted && " cursor-not-allowed"}
+               w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
               >
                 {isEdit ? "Update" : "Add"}
               </button>

@@ -22,6 +22,7 @@ const Dashboard = () => {
   const [upcomingSortBy, setUpcomingSortBy] = useState("appointmentDate");
   const [sortOrder, setSortOrder] = useState("ASC");
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading2, setIsLoading2] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [dueMedicationList, setDueMedicationList] = useState<
     {
@@ -114,6 +115,7 @@ const Dashboard = () => {
         setUpcomingAppointments(upcomingAppoinments.data);
         setTotalUpcoming(upcomingAppoinments.totalCount);
         setUpcomingTotalPages(upcomingAppoinments.totalPages);
+        setIsLoading2(false)
       } catch (error: any) {
         setError(error.message);
         console.log("error");
@@ -169,7 +171,7 @@ const Dashboard = () => {
 
   console.log(dueMedicationList, "dueMedicationList");
 
-  if (isLoading) {
+  if (isLoading || isLoading2) {
     return (
       <div className="w-full h-full flex justify-center items-center">
         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />

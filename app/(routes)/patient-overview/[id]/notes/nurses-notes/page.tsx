@@ -13,6 +13,7 @@ import { fetchNotesByPatient } from "@/app/api/notes-api/notes-api";
 import { SuccessModal } from "@/components/shared/success";
 import { NursenotesModalContent } from "@/components/modal-content/nursenotes-modal-content";
 import Modal from "@/components/reusable/modal";
+import View from "@/components/shared/buttons/view";
 
 const Notes = () => {
   const router = useRouter();
@@ -191,14 +192,13 @@ const Notes = () => {
             <p className="p-title">Notes</p>
             <span className="slash">{">"}</span>
             <span className="active">Nurse's Notes</span>
-            <span className="slash">{">"}</span>
+            <span className="slash">{"/"}</span>
             <span
               onClick={() => {
+                setIsLoading(true);
                 router.push(
-                
                   `/patient-overview/${patientId.toLowerCase()}/notes/incident-report`
                 );
-                setIsLoading(true);
               }}
               className="bread"
             >
@@ -206,7 +206,7 @@ const Notes = () => {
             </span>
           </div>
           <div>
-            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] mb-4 ">
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px]">
               Total of {totalNotes} Notes
             </p>
           </div>
@@ -284,24 +284,18 @@ const Notes = () => {
 
         {/* START OF TABLE */}
         <div>
-          <table className="w-full text-left rtl:text-right">
+          <table className="text-left rtl:text-right">
             <thead>
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                  NOTES ID
-                </th>
-                <th scope="col" className="px-7 py-3 w-[200px] h-[60px]">
-                  DATE
-                </th>
-                <th scope="col" className="px-6 py-3 w-[250px]">
-                  SUBJECT
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  NOTES
-                </th>
+              <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                <td className="px-6 py-3">NOTES UID</td>
+                <td className="px-6 py-3">DATE</td>
+                <td className="px-6 py-3">TIME</td>
+                <td className="px-6 py-3">SUBJECT</td>
+                <td className="px-6 py-3 w-[200px]">NOTES</td>
+                <td className="px-6 py-3 text-center">ACTION</td>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="h-[220px]">
               {patientNotes.length === 0 && (
                 <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                   <p className="text-[15px] font-normal text-gray-700 text-center">
@@ -314,19 +308,29 @@ const Notes = () => {
                   key={index}
                   className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                 >
-                  <td className="truncate max-w-[552px] px-6 py-3">
-                    {note.notes_uuid}
-                  </td>
-                  <th
-                    scope="row"
-                    className="font-medium text-[16px] me-1 px-6 py-5 rounded-full flex justify-start "
-                  >
+                  <td className="truncate px-6 py-3">{note.notes_uuid}</td>
+                  <td className="truncate px-6 py-3">
                     {new Date(note.notes_createdAt).toLocaleDateString()}
-                  </th>
-                  <td className="truncate max-w-[552px] px-6 py-3">
-                    {note.notes_subject}
                   </td>
-                  <td className="px-6 py-3">{note.notes_notes}</td>
+                  <td className="truncate max-w-[552px] px-6 py-3">
+                    {new Date(
+                      new Date(note.notes_createdAt).getTime() -
+                        new Date().getTimezoneOffset() * 60000
+                    ).toLocaleTimeString(navigator.language, {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                  </td>
+                  <td className="truncate px-6 py-3">{note.notes_subject}</td>
+                  <td className="truncate px-6 py-3 w-[200px]">
+                    {note.notes_notes}
+                  </td>
+                  <td className="flex justify-center px-6 py-3">
+                    <p>
+                      <View></View>
+                    </p>
+                  </td>
                 </tr>
               ))}
             </tbody>
