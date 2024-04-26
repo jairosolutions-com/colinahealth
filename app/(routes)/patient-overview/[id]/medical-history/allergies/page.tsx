@@ -8,12 +8,16 @@ import Edit from "@/components/shared/buttons/edit";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { fetchAllergiesByPatient } from "@/app/api/medical-history-api/allergies.api";
+import {
+  fetchAllergiesByPatient,
+  fetchAllergiesForPDF,
+} from "@/app/api/medical-history-api/allergies.api";
 import { AllergyModal } from "@/components/modals/allergies.modal";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
 import Modal from "@/components/reusable/modal";
 import { AllergiesModalContent } from "@/components/modal-content/allergies-modal-content";
+import printJS from "print-js";
 const Allergies = () => {
   const router = useRouter();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -34,6 +38,7 @@ const Allergies = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+  const [isDownloadPDF, setIsDownloadPDF] = useState<boolean>(false);
 
   const params = useParams<{
     id: any;
@@ -182,7 +187,69 @@ const Allergies = () => {
     setIsErrorOpen(true);
     setIsEdit(false);
   };
-  console.log(error, "error");
+  const handleDownloadPDF = async () => {
+    const allergies = await fetchAllergiesForPDF(
+      patientId,
+      term,
+      currentPage,
+      sortBy,
+      sortOrder as "ASC" | "DESC",
+      0,
+      router
+    );
+
+    let jsonFile: {
+      "Allergy UID": string;
+      Date: string;
+      Type: string;
+      Allergen: string;
+      Severity: string;
+      Reaction: string;
+      Notes: string;
+    }[] = allergies.map((allergy) => ({
+      "Allergy UID": allergy.allergies_uuid,
+      Date: new Date(allergy.allergies_createdAt).toLocaleDateString(),
+      Type: allergy.allergies_type,
+      Allergen: allergy.allergies_allergen,
+      Severity: allergy.allergies_severity,
+      Reaction: allergy.allergies_reaction,
+      Notes: allergy.allergies_notes,
+    }));
+
+    const patientName = jsonFile[0] as {
+      patient_lastName: string;
+      patient_firstName: string;
+      patient_middleName: string;
+    };
+
+    const patientFullName =
+      patientName.patient_lastName +
+      ", " +
+      patientName.patient_firstName +
+      " " +
+      patientName.patient_middleName;
+
+    printJS({
+      printable: jsonFile,
+      properties: [
+        "Allergy UID",
+        "Date",
+        "Type",
+        "Allergen",
+        "Severity",
+        "Reaction",
+        "Notes",
+      ],
+      type: "json",
+      gridHeaderStyle: "color: red;  border: 2px solid #3971A5;",
+      header: generateHeader(patientFullName),
+      gridStyle: "border: 2px solid #3971A5;",
+    });
+  };
+
+  const generateHeader = (patientFullName: string) => {
+    return `<h3 class="custom-h3">${patientFullName}</h3>`;
+  };
   return (
     <div className="w-full">
       <div className="w-full justify-between flex mb-2">
@@ -215,7 +282,8 @@ const Allergies = () => {
             <img src="/imgs/add.svg" alt="" />
             <p className="text-[18px]">Add</p>
           </button>
-          <button className="btn-pdfs gap-2">
+
+          <button className="btn-pdfs gap-2" onClick={handleDownloadPDF}>
             <img src="/imgs/downloadpdf.svg" alt="" />
             <p className="text-[18px]">Download PDF</p>
           </button>
