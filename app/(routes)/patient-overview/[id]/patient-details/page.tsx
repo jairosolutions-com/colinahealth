@@ -145,6 +145,7 @@ export default function PatientDetails() {
       setIsSuccessFul(true);
       setPatientEditMode(false);
       window.history.pushState(null, "", "#saved");
+      setIsSubmitted(false);
       return;
     } catch (error) {
       console.error("Error adding allergy:", error);
@@ -723,7 +724,7 @@ export default function PatientDetails() {
           <div className="justify-end flex pt-5">
             {emergencyEditMode && (
               <button
-              disabled={isSubmitted}
+                disabled={isSubmitted}
                 type="button"
                 className={`
                 ${isSubmitted && "cursor-not-allowed"}
@@ -735,7 +736,7 @@ export default function PatientDetails() {
             )}
 
             <button
-            disabled={isSubmitted}
+              disabled={isSubmitted}
               type="submit"
               className={`
               ${isSubmitted && "cursor-not-allowed"}

@@ -81,7 +81,11 @@ export const Navbar = ({
         className="cursor-pointer"
         onClick={() => {
           setIsLoading(true);
-          router.push("/dashboard");
+          if (pathname === "/dashboard") {
+            window.location.reload();
+          } else {
+            router.push("/dashboard");
+          }
         }}
       />
       <div className="flex gap-[30px] items-center">
@@ -91,7 +95,11 @@ export const Navbar = ({
               className={`cursor-pointer text-white relative`}
               onClick={() => {
                 setIsLoading(true);
-                router.push(route.url);
+                if (pathname === route.url) {
+                  window.location.reload();
+                } else {
+                  router.push(route.url);
+                }
               }}
               key={index}
             >

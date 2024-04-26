@@ -114,6 +114,7 @@ const Dashboard = () => {
         setUpcomingAppointments(upcomingAppoinments.data);
         setTotalUpcoming(upcomingAppoinments.totalCount);
         setUpcomingTotalPages(upcomingAppoinments.totalPages);
+        setIsLoading(false)
       } catch (error: any) {
         setError(error.message);
         console.log("error");
