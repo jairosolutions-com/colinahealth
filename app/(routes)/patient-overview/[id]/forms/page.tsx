@@ -9,7 +9,10 @@ import { useParams, useRouter } from "next/navigation";
 import { FormsModalContent } from "@/components/modal-content/forms-modal-content";
 import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
 import Modal from "@/components/reusable/modal";
-import { fetchFormsByPatient } from "@/app/api/forms-api/forms.api";
+import {
+  fetchFormsByPatient,
+  updateFormsOfPatient,
+} from "@/app/api/forms-api/forms.api";
 import { SuccessModal } from "@/components/shared/success";
 
 export default function FormsTab() {
@@ -159,6 +162,7 @@ export default function FormsTab() {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
+          false,
           router
         );
         setPatientForms(response.data);
@@ -178,6 +182,18 @@ export default function FormsTab() {
   const onSuccess = () => {
     setIsSuccessOpen(true);
     setIsEdit(false);
+  };
+
+  const [formData, setFormData] = useState({
+    isArchived: true,
+  });
+
+  const handleIsArchived = async (formUuid:string,e:any ) => {
+    e.preventDefault();
+    try {
+      await updateFormsOfPatient(formUuid, formData, router);
+      return
+    } catch (error) {}
   };
 
   if (isLoading) {
@@ -366,7 +382,10 @@ export default function FormsTab() {
                         <Edit />
                       </p>
                       <p>
-                        <button className="w-[90px] h-[35px] rounded bg-[#E7EAEE]  hover:!text-white hover:!bg-[#007C85] group-hover:bg-white group-hover:text-black ">
+                        <button
+                          onClick={(e) => handleIsArchived(form.forms_uuid,e)}
+                          className="w-[90px] h-[35px] rounded bg-[#E7EAEE]  hover:!text-white hover:!bg-[#007C85] group-hover:bg-white group-hover:text-black"
+                        >
                           Archive
                         </button>
                       </p>
