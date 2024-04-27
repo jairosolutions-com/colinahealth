@@ -325,13 +325,29 @@ export default function prescription() {
                         <td className="truncate  px-6 py-3 w-[230px]">
                           {prescription.prescriptions_interval} hours
                         </td>
-                        <td className="truncate  px-6 py-3 w-[230px]">
+                        <td className="truncate  px-6 py-3 w-[230px] ">
                           {prescription.prescriptions_dosage}
                         </td>
-                        <td className="px-6 py-3 w-[170px]">
-                          {" "}
-                          {prescription.prescriptions_status}
+                        <td className="px-6 py-3">
+                          <div
+                            className={`px-2 font-semibold rounded-[20px] ${
+                              prescription.prescriptions_status === "active"
+                                ? "bg-[#dfffea] text-[#17C653] text-[15px]"
+                                : prescription.prescriptions_status ===
+                                  "inactive"
+                                ? "bg-[#FEE9E9] text-[#EF4C6A]  text-[15px]"
+                                : prescription.prescriptions_status
+                            }`}
+                            style={{
+                              width: `${
+                                prescription.prescriptions_status.length * 10
+                              }px`,
+                            }}
+                          >
+                            {prescription.prescriptions_status}
+                          </div>
                         </td>
+
                         <td className="px-6 py-3 flex gap-2 justify-center">
                           <p
                             onClick={() => {
