@@ -53,6 +53,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
       patient_middleName: string;
       medicationlogs_medicationLogsDate: string;
       medicationlogs_medicationLogsTime: string;
+      medicationlogs_uuid: string;
     }[]
   >([]);
   const isEdit = false;
@@ -323,7 +324,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
                     {dueMedication.patient_firstName}{" "}
                     {dueMedication.patient_lastName}
                   </td>
-                  <td className="px-6 py-5 ">{dueMedication.patient_uuid}</td>
+                  <td className="px-6 py-5 ">{dueMedication.medicationlogs_uuid}</td>
                   <td className="px-6 py-5 ">
                     {dueMedication.medicationlogs_medicationLogsDate}
                   </td>

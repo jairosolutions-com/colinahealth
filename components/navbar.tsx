@@ -3,7 +3,7 @@
 import { onNavigate } from "@/actions/navigation";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import NavBarDropdown from "./shared/navbardropdown";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 
@@ -44,20 +44,30 @@ export const Navbar = ({
   const [OpenProfile, setOpenProfile] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
+  const iconRef = useRef<HTMLImageElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownOpen && !menuRef.current?.contains(event.target as Node)) {
+  const handleMouseDownOutside = useCallback(
+    (event: MouseEvent) => {
+      if (
+        dropdownOpen &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        !iconRef.current?.contains(event.target as Node)
+      ) {
+        console.log("Dropdown is being closed");
         setDropdownOpen(false);
       }
-    };
+    },
+    [dropdownOpen]
+  );
 
-    document.addEventListener("mousedown", handleClickOutside);
+  useEffect(() => {
+    document.addEventListener("mousedown", handleMouseDownOutside);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleMouseDownOutside);
     };
-  }, [dropdownOpen]);
+  }, [handleMouseDownOutside]);
 
   useEffect(() => {
     if (
@@ -70,7 +80,7 @@ export const Navbar = ({
       setIsLoading(false);
     }
   }, [pathname]);
-
+  console.log(dropdownOpen, "dropdownOpen");
   return (
     <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[145px] z-10 font-medium text-[15px]">
       <Image
@@ -123,10 +133,14 @@ export const Navbar = ({
         <div className="flex gap-3 items-center mr-2">
           <Image src={"/imgs/admin.svg"} alt={""} width={30} height={30} />
           <Image
+            ref={iconRef}
             className={`cursor-pointer select-none ${
               dropdownOpen ? "rotate-180" : ""
             } duration-300 w-auto h-auto`}
-            onClick={() => setDropdownOpen(!dropdownOpen)}
+            onClick={() => {
+              console.log("Toggling dropdownOpen state");
+              setDropdownOpen((prevValue) => !prevValue);
+            }}
             src={"/svgs/arrow-down.svg"}
             alt={""}
             width={15}
