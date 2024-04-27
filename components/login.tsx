@@ -48,7 +48,7 @@ export const Login = () => {
   };
 
   function handleKeyDown(event: any) {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && password && email) {
       setIsSubmitted(true);
       handleLogin(event)
     }
