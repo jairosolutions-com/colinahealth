@@ -47,6 +47,12 @@ export const Login = () => {
     setIsPasswordFocused(false);
   };
 
+  function handleKeyDown(event: any) {
+    if (event.key === 'Enter') {
+      setIsSubmitted(true);
+      handleLogin(event)
+    }
+  }
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSubmitted(true);
     e.preventDefault();
@@ -93,7 +99,6 @@ export const Login = () => {
               src="/imgs/login-image.png"
               alt="Your Image"
               className="w-full h-full object-cover select-none pointer-events-none"
-            
             />
           </div>
 
@@ -118,6 +123,7 @@ export const Login = () => {
                   <div className="mx-auto mb-4 max-w-[800px] pb-4">
                     <form
                       onSubmit={handleLogin}
+                      onKeyDown={handleKeyDown}
                       name="wf-form-password"
                       method="get"
                     >
