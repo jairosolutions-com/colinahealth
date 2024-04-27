@@ -92,7 +92,8 @@ export const Login = () => {
             <img
               src="/imgs/login-image.png"
               alt="Your Image"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover select-none pointer-events-none"
+            
             />
           </div>
 
