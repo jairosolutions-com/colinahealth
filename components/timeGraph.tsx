@@ -27,7 +27,7 @@ const TimeGraph = ({
   const [currentTime, setCurrentTime] = useState(moment().format("HHmm"));
   const [tableHeight, setTableHeight] = useState<number>(0);
   const lineRef = useRef<HTMLDivElement>(null);
- 
+
   console.log("Updating currentTime:", currentTime);
   const colData: { name: string; time: string }[] = [];
   for (let i = 0; i < 24; i++) {
@@ -117,9 +117,7 @@ const TimeGraph = ({
         // Here we directly set the height of the line position element
         lineRef.current.style.height = table.clientHeight + "px";
       }
-      
     }
-   
   }, [patientWithMedicationLogsToday]); // Re-calculate height when table content changes
 
   useEffect(() => {
@@ -131,7 +129,6 @@ const TimeGraph = ({
         lineRef.current.style.height = table.clientHeight + "px";
       }
     }
-    
   }, []); // Run once after component is mounted
 
   useEffect(() => {
@@ -204,7 +201,15 @@ const TimeGraph = ({
                     return (
                       <td
                         key={`${dataIndex}_${col.time}`}
-                        className={`text-center border-x border-dashed h-[204px] border-black overflow text-nowrap text-ellipsis overflow-hidden  ${
+                        className={`
+                        ${
+                          patientWithMedicationLogsToday.length === 1
+                            ? "h-[610px]"
+                            : patientWithMedicationLogsToday.length === 2
+                            ? "h-[305px]"
+                            : "h-[204px]"
+                        }
+                        text-center border-x border-dashed  border-black overflow text-nowrap text-ellipsis overflow-hidden  ${
                           parseInt(col.time) <= parseInt(currentTime) - 100
                             ? "bg-[#E4E4E4] "
                             : "bg-white"
@@ -212,10 +217,10 @@ const TimeGraph = ({
                         // style={{ maxHeight: "20px" }} // Set fixed height for table cells
                       >
                         <div
-                          className={` h-full ${
+                          className={`h-full  ${
                             isLastColumn &&
                             patientWithMedicationLogsToday.length != 1
-                              ? "border-b-[10px]"
+                              ? "border-b-[10px] "
                               : patientWithMedicationLogsToday.length === 1
                               ? "border-b-0"
                               : "border-b-[10px]"

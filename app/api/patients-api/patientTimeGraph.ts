@@ -6,12 +6,12 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 // Function to get the access token from local storage
 
 export async function fetchPatientPrescriptions(
-  term:string,
+  term: string,
   currentPage: number,
   router: any // Pass router instance as a parameter
 ): Promise<any> {
   const requestData = {
-    term:term,
+    term: term,
     page: currentPage,
   };
   try {
@@ -19,7 +19,7 @@ export async function fetchPatientPrescriptions(
     if (!accessToken) {
       setAccessToken("");
       onNavigate(router, "/login");
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -34,13 +34,15 @@ export async function fetchPatientPrescriptions(
 
     const patientList = response.data;
     return patientList;
-  } catch (error:any) {
+  } catch (error: any) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
       if (axiosError.message === "Network Error") {
         // Handle network error
         console.error("Connection refused or network error occurred.");
-        return Promise.reject(new Error("Connection refused or network error occurred."));
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
       }
       if (axiosError.response?.status === 401) {
         setAccessToken("");

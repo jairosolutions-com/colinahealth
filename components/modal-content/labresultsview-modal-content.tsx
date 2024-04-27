@@ -400,9 +400,10 @@ export const LabResultsViewModalContent = ({
                 defaultLabFiles.length === 5
                   ? "cursor-not-allowed"
                   : "cursor-pointer"
-              }text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}>
+              }text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}
+            >
               Browse
-            </label>  
+            </label>
             <input
               type="file"
               id="fileupload"
@@ -414,7 +415,7 @@ export const LabResultsViewModalContent = ({
               onChange={(e) => handleFile(e)}
               max={5}
             />
-              {isHovering && selectedFiles.length > 0 && (
+            {isHovering && selectedFiles.length > 0 && (
               <div className="absolute bg-[#4E4E4E] text-[13px]  p-2 w-[220px] mt-[30px] text-white rounded-md shadow-md left-0">
                 <ul>
                   {selectedFiles.map((file, index) => (
@@ -473,7 +474,9 @@ export const LabResultsViewModalContent = ({
                     View Laboratory Result
                   </h2>
                   <X
-                    onClick={() => {isSubmitted?null:isModalOpen(false)}}
+                    onClick={() => {
+                      isSubmitted ? null : isModalOpen(false);
+                    }}
                     className={`
                     ${isSubmitted && " cursor-not-allowed"}
                     w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}

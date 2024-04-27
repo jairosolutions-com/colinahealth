@@ -407,7 +407,8 @@ export const PrescriptionViewModalContent = ({
                 defaultPrescriptionFiles.length === 5
                   ? "cursor-not-allowed"
                   : "cursor-pointer"
-              }text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`} >
+              }text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}
+            >
               Browse
             </label>
 
@@ -481,7 +482,9 @@ export const PrescriptionViewModalContent = ({
                     View Prescription
                   </h2>
                   <X
-                    onClick={() => {isSubmitted?null:isModalOpen(false)}}
+                    onClick={() => {
+                      isSubmitted ? null : isModalOpen(false);
+                    }}
                     className={`
                     ${isSubmitted && " cursor-not-allowed"}
                     w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}

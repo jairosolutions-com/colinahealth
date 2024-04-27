@@ -21,7 +21,7 @@ import Image from "next/image";
 export default function PatientPage({ patient }: { patient: any }) {
   const router = useRouter();
   if (!getAccessToken()) {
-    router.push("/login");
+    router.replace("/login");
   }
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -186,7 +186,7 @@ export default function PatientPage({ patient }: { patient: any }) {
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
     setIsLoading(true);
-    router.push(
+    router.replace(
       `/patient-overview/${lowercasePatientId}/medical-history/allergies`
     );
   };
@@ -213,7 +213,7 @@ export default function PatientPage({ patient }: { patient: any }) {
         <p
           onClick={() => {
             setIsLoading(true);
-            router.push("/dashboard");
+            router.replace("/dashboard");
           }}
           className="text-[#64748B] underline cursor-pointer text-[15px]"
         >
@@ -319,7 +319,7 @@ export default function PatientPage({ patient }: { patient: any }) {
               {patientList.map((patient, index) => (
                 <tr
                   key={index}
-                  className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
+                  className=" group  bg-white hover:bg-gray-100  border-b"
                 >
                   <td className="truncate flex items-center gap-2 px-6 py-5">
                     <Image

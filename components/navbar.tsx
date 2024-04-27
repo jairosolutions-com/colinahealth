@@ -19,7 +19,7 @@ export const Navbar = ({
 
   const handleTabClick = (url: string, isActive: boolean) => {
     setIsActive(isActive);
-    router.push(url);
+    router.replace(url);
   };
 
   const routes = [
@@ -84,7 +84,7 @@ export const Navbar = ({
           if (pathname === "/dashboard") {
             window.location.reload();
           } else {
-            router.push("/dashboard");
+            router.replace("/dashboard");
           }
         }}
       />
@@ -98,7 +98,7 @@ export const Navbar = ({
                 if (pathname === route.url) {
                   window.location.reload();
                 } else {
-                  router.push(route.url);
+                  router.replace(route.url);
                 }
               }}
               key={index}
@@ -126,7 +126,7 @@ export const Navbar = ({
             className={`cursor-pointer select-none ${
               dropdownOpen ? "rotate-180" : ""
             } duration-300 w-auto h-auto`}
-            onClick={() => setDropdownOpen((prev) => !prev)}
+            onClick={() => setDropdownOpen(!dropdownOpen)}
             src={"/svgs/arrow-down.svg"}
             alt={""}
             width={15}

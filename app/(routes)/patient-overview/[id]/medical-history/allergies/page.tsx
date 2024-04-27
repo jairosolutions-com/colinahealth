@@ -1,5 +1,5 @@
 "use client";
-
+import printJS from "print-js";
 import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
@@ -17,9 +17,12 @@ import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
 import Modal from "@/components/reusable/modal";
 import { AllergiesModalContent } from "@/components/modal-content/allergies-modal-content";
-import printJS from "print-js";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+
 const Allergies = () => {
   const router = useRouter();
+  const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState<string>("DESC");
@@ -188,68 +191,78 @@ const Allergies = () => {
     setIsEdit(false);
   };
   const handleDownloadPDF = async () => {
-    const allergies = await fetchAllergiesForPDF(
-      patientId,
-      term,
-      currentPage,
-      sortBy,
-      sortOrder as "ASC" | "DESC",
-      0,
-      router
-    );
+    if (patientAllergies.length === 0) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Allergy list is empty",
+        action: (
+          <ToastAction
+            altText="Try again"
+            onClick={() => {
+              window.location.reload();
+            }}
+          >
+            Try again
+          </ToastAction>
+        ),
+      });
+    } else {
+      const allergies = await fetchAllergiesForPDF(
+        patientId,
+        term,
+        currentPage,
+        sortBy,
+        sortOrder as "ASC" | "DESC",
+        0,
+        router
+      );
+      let patientName =
+        allergies[0]?.patient_lastName +
+        ", " +
+        allergies[0]?.patient_firstName +
+        " " +
+        allergies[0]?.patient_middleName;
+      let jsonFile: {
+        "Allergy UID": string;
+        Date: string;
+        Type: string;
+        Allergen: string;
+        Severity: string;
+        Reaction: string;
+        Notes: string;
+      }[] = allergies.map((allergy) => ({
+        "Allergy UID": allergy.allergies_uuid,
+        Date: new Date(allergy.allergies_createdAt).toLocaleDateString(),
+        Type: allergy.allergies_type,
+        Allergen: allergy.allergies_allergen,
+        Severity: allergy.allergies_severity,
+        Reaction: allergy.allergies_reaction,
+        Notes: allergy.allergies_notes,
+      }));
 
-    let jsonFile: {
-      "Allergy UID": string;
-      Date: string;
-      Type: string;
-      Allergen: string;
-      Severity: string;
-      Reaction: string;
-      Notes: string;
-    }[] = allergies.map((allergy) => ({
-      "Allergy UID": allergy.allergies_uuid,
-      Date: new Date(allergy.allergies_createdAt).toLocaleDateString(),
-      Type: allergy.allergies_type,
-      Allergen: allergy.allergies_allergen,
-      Severity: allergy.allergies_severity,
-      Reaction: allergy.allergies_reaction,
-      Notes: allergy.allergies_notes,
-    }));
+      const patientFullName = patientName;
 
-    const patientName = jsonFile[0] as {
-      patient_lastName: string;
-      patient_firstName: string;
-      patient_middleName: string;
-    };
-
-    const patientFullName =
-      patientName.patient_lastName +
-      ", " +
-      patientName.patient_firstName +
-      " " +
-      patientName.patient_middleName;
-
-    printJS({
-      printable: jsonFile,
-      properties: [
-        "Allergy UID",
-        "Date",
-        "Type",
-        "Allergen",
-        "Severity",
-        "Reaction",
-        "Notes",
-      ],
-      type: "json",
-      gridHeaderStyle: "color: red;  border: 2px solid #3971A5;",
-      header: generateHeader(patientFullName),
-      gridStyle: "border: 2px solid #3971A5;",
-    });
+      printJS({
+        printable: jsonFile,
+        properties: [
+          "Allergy UID",
+          "Date",
+          "Type",
+          "Allergen",
+          "Severity",
+          "Reaction",
+          "Notes",
+        ],
+        type: "json",
+        gridHeaderStyle: "color: red;  border: 2px solid #3971A5;",
+        header: patientFullName,
+        gridStyle: "border: 2px solid #3971A5;",
+        documentTitle: `${patientFullName}'s Allergies`,
+      });
+    }
   };
 
-  const generateHeader = (patientFullName: string) => {
-    return `<h3 class="custom-h3">${patientFullName}</h3>`;
-  };
   return (
     <div className="w-full">
       <div className="w-full justify-between flex mb-2">
@@ -262,7 +275,7 @@ const Allergies = () => {
             <span
               onClick={() => {
                 setIsLoading(true);
-                router.push(
+                router.replace(
                   `/patient-overview/${patientId.toLowerCase()}/medical-history/surgeries`
                 );
               }}

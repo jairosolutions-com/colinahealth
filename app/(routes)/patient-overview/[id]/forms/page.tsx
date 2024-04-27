@@ -214,7 +214,7 @@ export default function FormsTab() {
             <span
               onClick={() => {
                 setIsLoading(true);
-                router.push(
+                router.replace(
                   `/patient-overview/${patientId.toLowerCase()}/forms/archived`
                 );
               }}

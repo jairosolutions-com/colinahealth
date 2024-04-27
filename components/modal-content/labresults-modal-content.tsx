@@ -426,7 +426,9 @@ export const LabresultsModalContent = ({
               <div className="items-center flex justify-between">
                 <h2 className="p-title text-left text-[#071437] pl-10 mt-7"></h2>
                 <X
-                  onClick={() => {isSubmitted?null:isModalOpen(false)}}
+                  onClick={() => {
+                    isSubmitted ? null : isModalOpen(false);
+                  }}
                   className={`
                   ${isSubmitted && " cursor-not-allowed"}
                   w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}

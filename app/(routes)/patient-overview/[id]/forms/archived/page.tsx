@@ -187,7 +187,7 @@ export default function ArchiveTab() {
             <p
               onClick={() => {
                 setIsLoading(true);
-                router.push(
+                router.replace(
                   `/patient-overview/${patientId.toLowerCase()}/forms`
                 );
               }}
@@ -312,7 +312,6 @@ export default function ArchiveTab() {
                   <th scope="col" className="px-6 py-3 w-[750px]">
                     NOTES
                   </th>
-           
                 </tr>
               </thead>
 
@@ -334,8 +333,6 @@ export default function ArchiveTab() {
                     <td className="px-6 py-3 w-[750px] max-w-[750px] truncate">
                       {form.forms_notes}
                     </td>
-
-                    
                   </tr>
                 ))}
               </tbody>
