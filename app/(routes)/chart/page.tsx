@@ -1,9 +1,10 @@
 "use client";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { fetchPatientPrescriptions } from "@/app/api/patients-api/patientTimeGraph";
-import { PRNMedModal } from "@/components/modals/prn-medication.modal";
-import { ScheduledMedModal } from "@/components/modals/sched-medication.modal";
+import { PrnModalContent } from "@/components/modal-content/prn-modal-content";
+import { ScheduledModalContent } from "@/components/modal-content/scheduled-modal-content";
 import PatientCard from "@/components/patientCard";
+import Modal from "@/components/reusable/modal";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
 import TimeGraph from "@/components/timeGraph";
@@ -237,9 +238,13 @@ export default function ChartPage() {
                 />
               </div>
               <div className="flex flex-col w-[250px] justify-between">
-                <h1 className=" -mb-8 font-semibold"> Time Chart  {' - '}<span className="text-gray-500">Total of {totalPatients} Patients</span></h1>
-              
-
+                <h1 className=" -mb-8 font-semibold">
+                  {" "}
+                  Time Chart {" - "}
+                  <span className="text-gray-500">
+                    Total of {totalPatients} Patients
+                  </span>
+                </h1>
               </div>
             </div>
             {patientWithMedicationLogsToday.length == 0 && term ? (
@@ -288,7 +293,7 @@ export default function ChartPage() {
 
         <div className="bg-white  w-full">
           {/* pagination */}
-          {totalPages == 0  ? (
+          {totalPages == 0 ? (
             <div></div>
           ) : (
             <div className="mt-5 w-full">
@@ -355,34 +360,44 @@ export default function ChartPage() {
         </div>
 
         {isOpen && (
-          <PRNMedModal
+          <Modal
+            content={
+              <PrnModalContent
+                isModalOpen={isModalOpen}
+                uuid={patientUuid}
+                name={patientName}
+                setIsUpdated={""}
+                isOpen={isOpen}
+                isEdit={isEdit}
+                PRNData={PRNData}
+                label="charting"
+                onSuccess={onSuccess}
+                onFailed={onFailed}
+                setErrorMessage={setError}
+              />
+            }
             isModalOpen={isModalOpen}
-            uuid={patientUuid}
-            name={patientName}
-            setIsUpdated={""}
-            isOpen={isOpen}
-            isEdit={isEdit}
-            PRNData={PRNData}
-            label="sample label"
-            onSuccess={onSuccess}
-            onFailed={onFailed}
-            setErrorMessage={setError}
           />
         )}
         {isAschOpen && (
-          <ScheduledMedModal
-            aschData={aschData}
-            isModalOpen={isAschModalOpen}
-            uuid={medicationLogUuid}
-            name={patientName}
-            isOpen={isAschOpen}
-            isEdit={isEdit}
-            scheduledMedData={""}
-            setIsUpdated={""}
-            label="sample label"
-            onSuccess={onSuccess}
-            onFailed={onFailed}
-            setErrorMessage={setError}
+          <Modal
+            content={
+              <ScheduledModalContent
+                aschData={aschData}
+                isModalOpen={isAschModalOpen}
+                uuid={medicationLogUuid}
+                name={patientName}
+                isOpen={isAschOpen}
+                isEdit={isEdit}
+                scheduledMedData={""}
+                setIsUpdated={""}
+                label="charting"
+                onSuccess={onSuccess}
+                onFailed={onFailed}
+                setErrorMessage={setError}
+              />
+            }
+            isModalOpen={isModalOpen}
           />
         )}
         {isSuccessOpen && (

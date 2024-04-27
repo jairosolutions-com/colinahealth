@@ -1,3 +1,4 @@
+"use client";
 import {
   updatePRNMedOfPatient,
   createPRNMedOfPatient,
@@ -5,7 +6,7 @@ import {
 import { X } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastAction } from "../ui/toast";
 import { useToast } from "../ui/use-toast";
 
@@ -58,6 +59,20 @@ export const PrnModalContent = ({
     medicationLogStatus: PRNData.medicationlogs_medicationLogStatus || "",
   });
   console.log(label, "label");
+
+  useEffect(() => {
+    if (label === "charting") {
+      const now = new Date();
+      const formattedDate = now.toISOString().split("T")[0];
+      const formattedTime = now.toTimeString().split(" ")[0];
+
+      setFormData({
+        ...formData,
+        medicationLogsDate: formattedDate,
+        medicationLogsTime: formattedTime,
+      });
+    }
+  }, [label]);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({

@@ -74,6 +74,20 @@ export const ScheduledModalContent = ({
     }));
   };
 
+  useEffect(() => {
+    if (label === "charting") {
+      const now = new Date();
+      const formattedDate = now.toISOString().split("T")[0];
+      const formattedTime = now.toTimeString().split(" ")[0];
+
+      setFormData({
+        ...formData,
+        medicationLogsDate: formattedDate,
+        medicationLogsTime: formattedTime,
+      });
+    }
+  }, [label]);
+
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -270,7 +284,7 @@ export const ScheduledModalContent = ({
                           data-uuid={aschData.uuid}
                         >
                           {aschData.medicationLogsName} @{" "}
-                          {aschData.medicationLogsTime}
+                          {formatTime(aschData.medicationLogsTime)}
                         </option>
                       </>
                     )}
