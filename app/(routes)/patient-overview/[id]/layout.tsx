@@ -207,8 +207,7 @@ export default function PatientOverviewLayout({
                       href={`/patient-overview/${params.id}/patient-details`}
                     >
                       <p
-                        className={`underline text-[15px] font-semibold text-right mr-10 ${
-                          (seeMoreHovered || seeMoreClicked) &&
+                        className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85] ${
                           currentRoute === "patient-details"
                             ? "text-[#007C85]"
                             : ""
