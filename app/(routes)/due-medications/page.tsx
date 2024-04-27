@@ -21,7 +21,7 @@ import Image from "next/image";
 export default function DueMedicationPage({ patient }: { patient: any }) {
   const router = useRouter();
   if (!getAccessToken()) {
-    router.push("/login");
+    router.replace("/login");
   }
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -298,7 +298,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
               </tr>
             </thead>
             <tbody>
-              {dueMedicationList.length === 0 &&  (
+              {dueMedicationList.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="text-[15px] font-normal text-gray-700  text-center">
@@ -310,7 +310,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
               {dueMedicationList.map((dueMedication, index) => (
                 <tr
                   key={index}
-                  className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
+                  className=" group  bg-white hover:bg-gray-100  border-b"
                 >
                   <td className="px-6 py-5 gap-2 flex items-center">
                     <Image

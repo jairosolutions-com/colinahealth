@@ -22,7 +22,7 @@ export default function PatientOverviewLayout({
     item: string;
   }>();
   if (!getAccessToken()) {
-    router.push("/login");
+    router.replace("/login");
   }
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
@@ -83,7 +83,7 @@ export default function PatientOverviewLayout({
       setActiveTab(-1);
       setDetailsClicked(true);
       localStorage.setItem("seeMoreClicked", "true"); // Set local storage
-      router.push(url);
+      router.replace(url);
     }
   };
 
@@ -116,7 +116,7 @@ export default function PatientOverviewLayout({
     if (url) {
       setActiveTab(tabIndex);
       setDetailsClicked(false);
-      router.push(url);
+      router.replace(url);
     }
   };
   console.log(pathname, "pathname");

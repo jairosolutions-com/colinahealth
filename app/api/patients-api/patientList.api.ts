@@ -5,7 +5,6 @@ import { getAccessToken, setAccessToken } from "../login-api/accessToken";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 // Function to get the access token from local storage
 
-
 export async function searchPatientList(
   term: string,
   currentPage: number,
@@ -24,8 +23,7 @@ export async function searchPatientList(
     if (!accessToken) {
       setAccessToken("");
       onNavigate(router, "/login");
-      throw new Error("Access token not found in local storage");
-      
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -40,13 +38,15 @@ export async function searchPatientList(
 
     const patientList = response.data;
     return patientList;
-  } catch (error:any) {
+  } catch (error: any) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
       if (axiosError.message === "Network Error") {
         // Handle network error
         console.error("Connection refused or network error occurred.");
-        return Promise.reject(new Error("Connection refused or network error occurred."));
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
       }
       if (axiosError.response?.status === 401) {
         setAccessToken("");
@@ -70,7 +70,7 @@ export async function addPatient(
   try {
     const accessToken = getAccessToken(); // Retrieve access token from local storage
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     // Set the Authorization header with the JWT token

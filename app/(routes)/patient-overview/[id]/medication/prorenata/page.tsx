@@ -203,7 +203,7 @@ const Prorenata = () => {
             <span
               onClick={() => {
                 setIsLoading(true);
-                router.push(
+                router.replace(
                   `/patient-overview/${patientId.toLowerCase()}/medication/scheduled`
                 );
               }}

@@ -23,7 +23,7 @@ export const Login = () => {
   const router = useRouter();
   useEffect(() => {
     if (getAccessToken()) {
-      router.push("/dashboard");
+      router.replace("/dashboard");
       console.log("true");
     } else {
       setIsAccessed(false);
@@ -55,7 +55,7 @@ export const Login = () => {
       if (accessToken) {
         // Redirect to patient-list if login successful
         setAccessToken(accessToken);
-        router.push("/dashboard");
+        router.replace("/dashboard");
       } else {
         // Handle invalid login
         setPassword("");
@@ -86,10 +86,10 @@ export const Login = () => {
     );
   }
   return (
-    <div>
-      <section>
-        <div className=" gap-0 md:h-screen flex">
-          <div className="flex items-center max-h-screen justify-center overflow-hidden">
+    <div className="w-full h-full">
+      <section className="w-full h-full">
+        <div className="w-full  md:h-screen flex">
+          <div className="flex w-full items-center max-h-screen justify-center overflow-hidden">
             <img
               src="/imgs/login-image.png"
               alt="Your Image"
@@ -98,7 +98,7 @@ export const Login = () => {
           </div>
 
           <div className="w-[1091px] h-full flex flex-col">
-            <div className=" w-[1091px] h-full ">
+            <div className=" w-full h-full ">
               <div className="flex flex-col justify-center items-center w-[1091px]  h-full ">
                 <div className="w-[542.27px] text-left">
                   <h2 className=" text-[20px] font-semibold  md:text-2xl lg:mb-10">

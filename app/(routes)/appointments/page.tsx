@@ -32,7 +32,7 @@ export default function AppointmentPage() {
   const router = useRouter();
 
   if (!getAccessToken()) {
-    router.push("/login");
+    router.replace("/login");
   }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
 
@@ -364,7 +364,7 @@ export default function AppointmentPage() {
               {appointmentList.map((appointment, index) => (
                 <tr
                   key={index}
-                  className="odd:bg-white hover:bg-[#f4f4f4] group "
+                  className="bg-white hover:bg-[#f4f4f4] group border-b "
                 >
                   <td className="px-6 py-5 flex items-center">
                     <Image

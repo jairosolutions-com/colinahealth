@@ -196,7 +196,7 @@ const Notes = () => {
             <span
               onClick={() => {
                 setIsLoading(true);
-                router.push(
+                router.replace(
                   `/patient-overview/${patientId.toLowerCase()}/notes/incident-report`
                 );
               }}

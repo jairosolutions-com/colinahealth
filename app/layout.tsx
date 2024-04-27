@@ -29,7 +29,7 @@ export default function RootLayout({
         <Toaster />
         <Sonner />
       </body>
-      <script src="print.js"></script>
+      
     </html>
   );
 }
