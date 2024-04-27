@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import NavBarDropdown from "./shared/navbardropdown";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
+import Link from "next/link";
 
 export const Navbar = ({
   setIsLoading,
@@ -83,35 +84,35 @@ export const Navbar = ({
   console.log(dropdownOpen, "dropdownOpen");
   return (
     <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[145px] z-10 font-medium text-[15px]">
-      <Image
-        src={"/imgs/colina-logo.png"}
-        alt={""}
-        width={200}
-        height={37}
-        className="cursor-pointer"
-        onClick={() => {
-          setIsLoading(true);
-          if (pathname === "/dashboard") {
-            window.location.reload();
-          } else {
-            router.replace("/dashboard");
-          }
-        }}
-      />
+      <Link href="/dashboard" shallow>
+        <Image
+          src={"/imgs/colina-logo.png"}
+          alt={""}
+          width={200}
+          height={37}
+          className="cursor-pointer"
+          onClick={(event) => {
+            if (pathname === "/dashboard") {
+              event.preventDefault();
+              setIsLoading(true);
+              window.location.reload();
+            }
+          }}
+        />
+      </Link>
       <div className="flex gap-[30px] items-center">
         <div className="flex gap-[40px] items-end">
           {routes.map((route, index) => (
-            <div
-              className={`cursor-pointer text-white relative`}
+            <Link
+              key={index}
+              href={route.url}
+              className={`cursor-pointer text-white relative `}
               onClick={() => {
                 setIsLoading(true);
                 if (pathname === route.url) {
                   window.location.reload();
-                } else {
-                  router.replace(route.url);
                 }
               }}
-              key={index}
             >
               <p className="hover:text-gray-200">{route.label}</p>
               {pathname === route.url && (
@@ -119,15 +120,7 @@ export const Navbar = ({
                   className={`${"border-b-[3px] border-[#ffffff] w-full absolute bottom-[-20px]"}`}
                 ></p>
               )}
-
-              {/* <span
-                className={`${
-                  pathname === route.url
-                    ? "border-b-[3px] border-[#ffffff] "
-                    : ""
-                }`}
-              ></span> */}
-            </div>
+            </Link>
           ))}
         </div>
         <div className="flex gap-3 items-center mr-2">

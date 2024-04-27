@@ -54,7 +54,6 @@ export const Login = () => {
       const accessToken = await validateUser(email, password, rememberMe);
       if (accessToken) {
         // Redirect to patient-list if login successful
-        setAccessToken(accessToken);
         router.replace("/dashboard");
       } else {
         // Handle invalid login
