@@ -43,6 +43,9 @@ export default function FormsTab() {
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
   const [isView, setIsView] = useState(false);
+  const [confirmArchived, setConfirmArchived] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formsUuid, setFormsUuid] = useState("");
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -190,10 +193,17 @@ export default function FormsTab() {
 
   const handleIsArchived = async (formUuid: string, e: any) => {
     e.preventDefault();
+    setIsSubmitted(true);
     try {
       await updateFormsOfPatient(formUuid, formData, router);
+      onSuccess();
+      setConfirmArchived(false);
+      isModalOpen(false);
+
       return;
     } catch (error) {}
+
+    setIsSubmitted(false);
   };
 
   if (isLoading) {
@@ -351,7 +361,10 @@ export default function FormsTab() {
                     </p>
                     <p>
                       <button
-                        onClick={(e) => handleIsArchived(form.forms_uuid, e)}
+                        onClick={(e) => {
+                          setFormsUuid(form.forms_uuid);
+                          setConfirmArchived(true);
+                        }}
                         className="w-[90px] h-[35px] rounded bg-[#E7EAEE]  hover:!text-white hover:!bg-[#007C85] group-hover:bg-white group-hover:text-black"
                       >
                         Archive
@@ -428,6 +441,41 @@ export default function FormsTab() {
                   </form>
                 </div>
               </nav>
+            </div>
+          </div>
+        </div>
+      )}
+      {confirmArchived && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#76898A99]">
+          <div className="bg-white max-w-lg rounded-lg w-[700px] h-[146px]">
+            <div className="flex justify-center items-center pt-6 pb-6">
+              <h2 className="font-semibold text-[20px] text-[#667085]">
+                Are you sure to archive this?
+              </h2>
+            </div>
+            <div className="flex border-t-4">
+              <button
+                onClick={() => setConfirmArchived(false)}
+                disabled={isSubmitted}
+                type="button"
+                className={`
+                              ${isSubmitted && " cursor-not-allowed"}
+                              w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md`}
+              >
+                No
+              </button>
+              <button
+                disabled={isSubmitted}
+                type="button"
+                onClick={(e) => {
+                  handleIsArchived(formsUuid, e);
+                }}
+                className={`
+                                ${isSubmitted && " cursor-not-allowed"}
+                                w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md`}
+              >
+                Yes
+              </button>
             </div>
           </div>
         </div>
