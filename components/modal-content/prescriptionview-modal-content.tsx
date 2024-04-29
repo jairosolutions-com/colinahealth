@@ -11,6 +11,8 @@ import Image from "next/image";
 import { NofileviewPrescriptionsModalContent } from "./nofileview-prescriptions-modal-content";
 import { SuccessModal } from "../shared/success";
 import { useToast } from "@/components/ui/use-toast";
+import Modal from "../reusable/modal";
+import { ConfirmationModal } from "./confirmation-modal-content";
 
 interface ModalProps {
   prescriptionData: any;
@@ -50,11 +52,21 @@ export const PrescriptionViewModalContent = ({
   const [editMode, setEditMode] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   // update isNoFileModalOpen state
   const handleNoFileModalClose = (isModalOpen: boolean) => {
     setIsNoFileModalOpen(isModalOpen);
     setIsLoading(true);
     console.log("isNoFileModalOpen HANDLE", isNoFileModalOpen);
+  };
+
+  const isConfirmModalOpen = (confirmDelete: boolean) => {
+    setConfirmDelete(confirmDelete);
+    if (confirmDelete) {
+      document.body.style.overflow = "hidden";
+    } else if (!confirmDelete) {
+      document.body.style.overflow = "visible";
+    }
   };
   const downloadImage = () => {
     // Create a Blob from the base64 string
@@ -110,6 +122,7 @@ export const PrescriptionViewModalContent = ({
 
         // Close the delete modal
         setDeleteModalOpen(false);
+        onSuccess();
       } else {
         console.warn("No files selected for deletion");
       }
@@ -344,7 +357,6 @@ export const PrescriptionViewModalContent = ({
             getUuid,
             prescriptionFileFormData
           );
-
           console.log(
             `Prescription FILE ${fileNames[i]} added successfully:`,
             addPrescriptionFiles
@@ -421,6 +433,7 @@ export const PrescriptionViewModalContent = ({
               name="file"
               disabled={defaultPrescriptionFiles.length === 5}
               onChange={(e) => handleFile(e)}
+              
               max={5}
             />
             {isHovering && selectedFiles.length > 0 && (
@@ -446,6 +459,7 @@ export const PrescriptionViewModalContent = ({
           isModalOpen={(isOpen: boolean): void => {
             isModalOpen(isOpen);
           }}
+          onSuccess={onSuccess}
         />
       ) : (
         <div className="w-[676px] h-[590px]">
@@ -609,37 +623,20 @@ export const PrescriptionViewModalContent = ({
                       </div>
                     )}
                     {deleteModalOpen && (
-                      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#76898A99]">
-                        <div className="bg-white max-w-lg rounded-lg w-[700px] h-[146px]">
-                          <div className="flex justify-center items-center pt-6 pb-6">
-                            <h2 className="font-semibold text-[20px] text-[#667085]">
-                              Are you sure to delete this?
-                            </h2>
-                          </div>
-                          <div className="flex border-t-4">
-                            <button
-                              onClick={() => setDeleteModalOpen(false)}
-                              disabled={isSubmitted}
-                              type="button"
-                              className={`
-                              ${isSubmitted && " cursor-not-allowed"}
-                              w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md`}
-                            >
-                              No
-                            </button>
-                            <button
-                              disabled={isSubmitted}
-                              type="button"
-                              onClick={handleDeleteClick}
-                              className={`
-                                ${isSubmitted && " cursor-not-allowed"}
-                                w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md`}
-                            >
-                              Yes
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+                      <Modal
+                        content={
+                          <ConfirmationModal
+                            uuid={selectedFileUUID}
+                            setConfirm={setConfirmDelete}
+                            label="Delete"
+                            handleFunction={(e) => {
+                              handleDeleteClick();
+                            }}
+                            isSubmitted={isSubmitted}
+                          />
+                        }
+                        isModalOpen={isConfirmModalOpen}
+                      />
                     )}
 
                     <div className="flex space-x-4 mt-4 ml-[115px] text-[15px]">
@@ -671,8 +668,8 @@ export const PrescriptionViewModalContent = ({
                       disabled={isSubmitted}
                       type="button"
                       className={`
-                ${isSubmitted && " cursor-not-allowed"}
-                w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+                      ${isSubmitted && " cursor-not-allowed"}
+                      w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
                     >
                       Cancel
                     </button>
@@ -695,7 +692,7 @@ export const PrescriptionViewModalContent = ({
       )}
       {isSuccessOpen && (
         <SuccessModal
-          label="Success"
+          label={selectedFileUUID!==""?"deleted":"submitted"}
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
           isUpdated={isUpdated}

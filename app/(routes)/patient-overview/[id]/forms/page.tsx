@@ -14,6 +14,7 @@ import {
   updateFormsOfPatient,
 } from "@/app/api/forms-api/forms.api";
 import { SuccessModal } from "@/components/shared/success";
+import { ConfirmationModal } from "@/components/modal-content/confirmation-modal-content";
 
 export default function FormsTab() {
   const router = useRouter();
@@ -83,6 +84,15 @@ export default function FormsTab() {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
+      document.body.style.overflow = "visible";
+    }
+  };
+
+  const isConfirmModalOpen = (confirmArchived: boolean) => {
+    setConfirmArchived(confirmArchived);
+    if (confirmArchived) {
+      document.body.style.overflow = "hidden";
+    } else if (!confirmArchived) {
       document.body.style.overflow = "visible";
     }
   };
@@ -191,8 +201,7 @@ export default function FormsTab() {
     isArchived: true,
   });
 
-  const handleIsArchived = async (formUuid: string, e: any) => {
-    e.preventDefault();
+  const handleIsArchived = async (formUuid: string) => {
     setIsSubmitted(true);
     try {
       await updateFormsOfPatient(formUuid, formData, router);
@@ -446,39 +455,53 @@ export default function FormsTab() {
         </div>
       )}
       {confirmArchived && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#76898A99]">
-          <div className="bg-white max-w-lg rounded-lg w-[600px] h-[146px]">
-            <div className="flex justify-center items-center pt-6 pb-6">
-              <h2 className="font-semibold text-[20px] text-[#667085]">
-                Are you sure to archive this?
-              </h2>
-            </div>
-            <div className="flex justify-center items-center gap-2">
-              <button
-                onClick={() => setConfirmArchived(false)}
-                disabled={isSubmitted}
-                type="button"
-                className={`
-                              ${isSubmitted && " cursor-not-allowed"}
-                              w-[160px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black rounded-sm`}
-              >
-                No
-              </button>
-              <button
-                disabled={isSubmitted}
-                type="button"
-                onClick={(e) => {
-                  handleIsArchived(formsUuid, e);
-                }}
-                className={`
-                                ${isSubmitted && " cursor-not-allowed"}
-                                w-[160px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium rounded-sm`}
-              >
-                Yes
-              </button>
-            </div>
-          </div>
-        </div>
+        <Modal
+          content={
+            <ConfirmationModal
+              uuid={formsUuid}
+              setConfirm={setConfirmArchived}
+              label="Archived"
+              handleFunction={(e) => {
+                handleIsArchived(formsUuid);
+              }}
+              isSubmitted={isSubmitted}
+            />
+          }
+          isModalOpen={isConfirmModalOpen}
+        />
+        // <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#76898A99]">
+        //   <div className="bg-white max-w-lg rounded-lg w-[600px] h-[146px]">
+        //     <div className="flex justify-center items-center pt-6 pb-6">
+        //       <h2 className="font-semibold text-[20px] text-[#667085]">
+        //         Are you sure to archive this?
+        //       </h2>
+        //     </div>
+        //     <div className="flex justify-center items-center gap-2">
+        //       <button
+        //         onClick={() => setConfirmArchived(false)}
+        //         disabled={isSubmitted}
+        //         type="button"
+        //         className={`
+        //                       ${isSubmitted && " cursor-not-allowed"}
+        //                       w-[160px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black rounded-sm`}
+        //       >
+        //         No
+        //       </button>
+        //       <button
+        //         disabled={isSubmitted}
+        //         type="button"
+        //         onClick={(e) => {
+        //           handleIsArchived(formsUuid, e);
+        //         }}
+        //         className={`
+        //                         ${isSubmitted && " cursor-not-allowed"}
+        //                         w-[160px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium rounded-sm`}
+        //       >
+        //         Yes
+        //       </button>
+        //     </div>
+        //   </div>
+        // </div>
       )}
       {isOpen && (
         <Modal
