@@ -224,13 +224,13 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
               <div className="grid-cols-1 grid">
                 <label className="relative h-[70px] w-[596px] bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-1.5">
                   <Image
-                    className="w-8 h-8 mr-1"
+                    className="w-10 h-10 mr-1"
                     width={50}
                     height={50}
                     src={"/svgs/folder-add.svg"}
                     alt={""}
                   />
-                  <div className="flex pb-5 text-nowraptext-[15px] font-medium">
+                  <div className="flex pb-5 text-nowraptext-[15px] font-bold">
                     <p className="">Upload or Attach Files or</p>
                     <p className="underline text-blue-500 ml-1">Browse</p>
                   </div>
