@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchLabResultsByPatient } from "@/app/api/lab-results-api/lab-results.api";
-import { LabResultModal } from "@/components/modals/labresults.modal";
 import Modal from "@/components/reusable/modal";
 import { SuccessModal } from "@/components/shared/success";
 import { LabresultsModalContent } from "@/components/modal-content/labresults-modal-content";
