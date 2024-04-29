@@ -333,7 +333,7 @@ export const PrescriptionModalContent = ({
             <label className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2">
               <>
                 <Image
-                  className="w-10 h-10 mr-1"
+                  className="w-7 h-7 mr-1"
                   width={50}
                   height={50}
                   src={"/svgs/filein.svg"}
@@ -355,7 +355,7 @@ export const PrescriptionModalContent = ({
                 {selectedFileNames.length > 0 ? (
                   // If files are selected, display filein.svg
                   <Image
-                    className="w-10 h-10 mr-1"
+                    className="w-7 h-7 mr-1"
                     width={50}
                     height={50}
                     src={"/svgs/filein.svg"}
@@ -364,7 +364,7 @@ export const PrescriptionModalContent = ({
                 ) : (
                   // If no files are selected, display folder-add.svg
                   <Image
-                    className="w-10 h-10 mr-1"
+                    className="w-7 h-7 mr-1"
                     width={50}
                     height={50}
                     src={"/svgs/folder-add.svg"}
