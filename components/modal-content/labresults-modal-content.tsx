@@ -418,7 +418,7 @@ export const LabresultsModalContent = ({
   };
   return (
     <>
-      <div className="w-[676px] h-[571px]">
+      <div className="w-[676px] h-[584px]">
         {isLoading && isEdit ? (
           // Loading state
           <>
@@ -466,7 +466,7 @@ export const LabresultsModalContent = ({
                 </p>
               </div>
               <div className=" mb-9 pt-4">
-                <div className="h-[600px] max-h-[400px] md:px-10 mt-5">
+                <div className="h-[600px] max-h-[412px] md:px-10 mt-5">
                   <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
                     <div>
                       <label

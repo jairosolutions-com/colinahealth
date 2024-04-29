@@ -125,7 +125,7 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
         nameOfDocument: "",
         notes: "",
       });
-      isModalOpen(false); 
+      isModalOpen(false);
       onSuccess();
     } catch (error) {
       console.error("Error adding forms:", error);
@@ -136,7 +136,7 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
   console.log(formData, "formData");
 
   return (
-    <div className="w-[676px] h-[621px] bg-[#FFFFFF] rounded-md">
+    <div className="w-[676px] h-[643px] bg-[#FFFFFF] rounded-md">
       <form onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
@@ -157,7 +157,7 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
           </p>
         </div>
         <div className=" mb-9 pt-4">
-          <div className="h-[600px] max-h-[375px] md:px-10 mt-5">
+          <div className="h-[600px] max-h-[394px] md:px-10 mt-5">
             <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <label className="font-medium text-[15px] required-field">
