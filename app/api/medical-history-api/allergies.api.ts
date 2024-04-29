@@ -118,9 +118,6 @@ export async function fetchAllergiesByPatient(
         onNavigate(router, "/login");
         return Promise.reject(new Error("Unauthorized access"));
       }
-      if (axiosError.response?.status === 404) {
-        return Promise.reject(new Error("Patient does not exist"));
-      }
     }
     console.error("Error searching patient list:", error.message);
     return Promise.reject(error);

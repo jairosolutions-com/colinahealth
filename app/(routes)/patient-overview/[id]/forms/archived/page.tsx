@@ -7,6 +7,7 @@ import Edit from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
+import { FormsModalContent } from "@/components/modals/forms.modal";
 import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
 import Modal from "@/components/reusable/modal";
 import { fetchFormsByPatient } from "@/app/api/forms-api/forms.api";
@@ -34,7 +35,7 @@ export default function ArchiveTab() {
   const [error, setError] = useState("");
   const [term, setTerm] = useState<string>("");
   const [isEdit, setIsEdit] = useState(false);
-  const [formsToView, setFormsToView] = useState<any[]>([]);
+  const [notesToEdit, setNotesToEdit] = useState<any[]>([]);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
@@ -412,7 +413,7 @@ export default function ArchiveTab() {
           content={
             <FormsviewModalContent
               isModalOpen={isModalOpen}
-              formData={formsToView}
+              onSuccess={onSuccess}
             />
           }
           isModalOpen={isModalOpen}

@@ -125,7 +125,7 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
         nameOfDocument: "",
         notes: "",
       });
-      isModalOpen(false);
+
       onSuccess();
     } catch (error) {
       console.error("Error adding forms:", error);
