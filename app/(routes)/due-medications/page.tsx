@@ -18,7 +18,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { fetchDueMedication } from "@/app/api/medication-logs-api/due-medication-api";
 import Image from "next/image";
 
-export default function DueMedicationPage({ patient }: { patient: any }) {
+export default function DueMedicationPage() {
   const router = useRouter();
   if (!getAccessToken()) {
     router.push("/login");

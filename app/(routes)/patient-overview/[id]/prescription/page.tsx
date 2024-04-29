@@ -14,7 +14,7 @@ import { ErrorModal } from "@/components/shared/error";
 import Modal from "@/components/reusable/modal";
 import { PrescriptionModalContent } from "@/components/modal-content/prescription-modal-content";
 import View from "@/components/shared/buttons/view";
-import { PrescriptionviewModalContent } from "@/components/modal-content/prescriptionview-modal-content";
+import { PrescriptionViewModalContent } from "@/components/modal-content/prescriptionview-modal-content";
 
 export default function prescription() {
   const router = useRouter();
@@ -449,7 +449,7 @@ export default function prescription() {
       {isView && (
         <Modal
           content={
-            <PrescriptionviewModalContent
+            <PrescriptionViewModalContent
               isModalOpen={isModalOpen}
               isView={isView}
               prescriptionData={prescriptionData}

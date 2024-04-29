@@ -18,7 +18,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 
-export default function PatientPage({ patient }: { patient: any }) {
+export default function PatientPage() {
   const router = useRouter();
   if (!getAccessToken()) {
     router.push("/login");
