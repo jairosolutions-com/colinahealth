@@ -20,6 +20,9 @@ import Image from "next/image";
 
 export default function DueMedicationPage() {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   if (!getAccessToken()) {
     router.replace("/login");
   }

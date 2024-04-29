@@ -18,6 +18,9 @@ import { ScheduledModalContent } from "@/components/modal-content/scheduled-moda
 
 const Scheduled = () => {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState("DESC");

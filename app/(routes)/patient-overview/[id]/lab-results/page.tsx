@@ -16,6 +16,9 @@ import { LabresultsModalContent } from "@/components/modal-content/labresults-mo
 import { LabResultsViewModalContent } from "@/components/modal-content/labresultsview-modal-content";
 export default function Laboratoryresults() {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [totalPages, setTotalPages] = useState<number>(0);

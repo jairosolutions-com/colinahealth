@@ -16,9 +16,13 @@ import { useEffect, useState } from "react";
 
 export default function ChartPage() {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   if (!getAccessToken()) {
     router.replace("/login");
   }
+  
   const { toast } = useToast();
   const [patientList, setPatientList] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);

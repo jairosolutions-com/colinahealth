@@ -15,6 +15,9 @@ import Modal from "@/components/reusable/modal";
 import { AppointmentModalContent } from "@/components/modal-content/appointment-modal-content";
 const Appointment = () => {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
