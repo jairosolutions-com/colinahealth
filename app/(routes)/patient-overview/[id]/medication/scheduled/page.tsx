@@ -8,7 +8,6 @@ import Edit from "@/components/shared/buttons/edit";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { ScheduledMedModal } from "@/components/modals/sched-medication.modal";
 import { fetchScheduledMedByPatient } from "@/app/api/medication-logs-api/scheduled-med-api";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";

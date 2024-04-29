@@ -12,7 +12,6 @@ import {
   fetchAllergiesByPatient,
   fetchAllergiesForPDF,
 } from "@/app/api/medical-history-api/allergies.api";
-import { AllergyModal } from "@/components/modals/allergies.modal";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
 import Modal from "@/components/reusable/modal";
