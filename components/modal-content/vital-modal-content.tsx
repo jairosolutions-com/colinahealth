@@ -137,7 +137,7 @@ export const VitalModalContent = ({
           </p>
         </div>
         <div className=" mb-9 pt-4">
-          <div className="h-[237px] md:px-10 mt-5">
+          <div className="h-[235px] md:px-10 mt-5">
             <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
               <div>
                 <label

@@ -183,7 +183,7 @@ export const AppointmentModalContent = ({
   return (
     <div
       className={`${
-        isView ? "h-[640px]" : charactersFull ? "h-[551px]" : "h-[537px]"
+        isView ? "h-[640px]" : charactersFull ? "h-[551px]" : "h-[552px]"
       } w-[676px]  bg-[#FFFFFF] rounded-md`}
     >
       <form className="" onSubmit={handleSubmit}>
@@ -281,7 +281,7 @@ export const AppointmentModalContent = ({
           </div>
         </div>
         <div className=" mb-9 pt-4">
-          <div className="  md:px-10 ">
+          <div className="md:px-10 mb-9 ">
             <div className="flex flex-col mt-6 pb-3 relative">
               <div className="flex flex-col w-full">
                 <label
