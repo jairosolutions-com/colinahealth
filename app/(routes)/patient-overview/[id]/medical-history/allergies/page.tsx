@@ -164,8 +164,9 @@ const Allergies = () => {
         setTotalAllergies(response.totalCount);
         setIsLoading(false);
       } catch (error: any) {
-        setError(error.message);
-        setIsLoading(false);
+        if (error.message === "Patient does not exist"){
+          router.push("/patient-list");
+        }
       }
     };
 
@@ -193,8 +194,8 @@ const Allergies = () => {
   const handleDownloadPDF = async () => {
     if (patientAllergies.length === 0) {
       toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
+        variant: "warning",
+        title: "No list to download",
         description: "Allergy list is empty",
         action: (
           <ToastAction

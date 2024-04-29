@@ -41,6 +41,7 @@ export async function fetchPatientOverview(
           new Error("Connection refused or network error occurred.")
         );
       }
+     
       if (axiosError.response?.status === 401) {
         setAccessToken("");
         onNavigate(router, "/login");
@@ -80,9 +81,13 @@ export async function searchPatientOverview(
       setAccessToken("");
       return Promise.reject(new Error("Unauthorized access"));
     }
+    if ((error as AxiosError).message === "Request failed with status code 404") {
+      return Promise.reject(new Error("Patient not found"));
+    }
     console.error(
       "Error searching patient overview:",
       (error as AxiosError).message
+      
     );
   }
 }

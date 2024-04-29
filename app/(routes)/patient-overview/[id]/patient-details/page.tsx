@@ -166,7 +166,7 @@ export default function PatientDetails() {
   console.log(patientDetails, "patientDetails");
   console.log(formData, "formData");
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full pb-5">
       <div className="text-xl font-semibold px-16 w-full h-[50px] pt-3 ring-1 ring-gray-300 pl-[110px]">
         Patient Details
       </div>
