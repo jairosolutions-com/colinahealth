@@ -7,16 +7,18 @@ import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/edit";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
-import { useParams, useRouter } from "next/navigation";
-import { NotesModal } from "@/components/modals/notes.modal";
 import { fetchNotesByPatient } from "@/app/api/notes-api/notes-api";
 import { SuccessModal } from "@/components/shared/success";
 import { NursenotesModalContent } from "@/components/modal-content/nursenotes-modal-content";
 import Modal from "@/components/reusable/modal";
 import View from "@/components/shared/buttons/view";
+import { useParams, useRouter } from "next/navigation";
 
 const Notes = () => {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState<string>("ASC");
@@ -191,7 +193,7 @@ const Notes = () => {
           <div className="flex gap-2">
             <p className="p-title">Notes</p>
             <span className="slash">{">"}</span>
-            <span className="active">Nurse's Notes</span>
+            <span className="active">Nurse&apos;s Notes</span>
             <span className="slash">{"/"}</span>
             <span
               onClick={() => {

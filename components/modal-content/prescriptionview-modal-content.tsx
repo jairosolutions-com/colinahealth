@@ -123,7 +123,7 @@ export const PrescriptionViewModalContent = ({
   };
   const [selectedFileUUID, setSelectedFileUUID] = useState("");
   const [fileIndex, setFileIndex] = useState(0);
-  const [currentFile, setCurrentFile] = useState<PrescriptionFile>(``
+  const [currentFile, setCurrentFile] = useState<PrescriptionFile>(
     {} as PrescriptionFile
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);

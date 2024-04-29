@@ -22,6 +22,9 @@ import { useToast } from "@/components/ui/use-toast";
 
 const Allergies = () => {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);

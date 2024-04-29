@@ -16,6 +16,9 @@ import Modal from "@/components/reusable/modal";
 
 const Notes = () => {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState<string>("ASC");
@@ -198,7 +201,7 @@ const Notes = () => {
               }}
               className="bread"
             >
-              Nurse's Notes
+              Nurse&apos;s Notes
             </span>
             <span className="slash">{"/"}</span>
             <span className="active">Incident Report</span>

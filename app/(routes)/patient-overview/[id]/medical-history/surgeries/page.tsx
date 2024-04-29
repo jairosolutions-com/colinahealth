@@ -14,6 +14,9 @@ import { SurgeriesModalContent } from "@/components/modal-content/surgeries-moda
 import Modal from "@/components/reusable/modal";
 
 export default function Surgeries() {
+  if (typeof window === "undefined") {
+    return null;
+  }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [patientSurgeries, setPatientSurgeries] = useState<any[]>([]);

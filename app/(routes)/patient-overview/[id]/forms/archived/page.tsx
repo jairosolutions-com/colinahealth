@@ -35,7 +35,7 @@ export default function ArchiveTab() {
   const [error, setError] = useState("");
   const [term, setTerm] = useState<string>("");
   const [isEdit, setIsEdit] = useState(false);
-  const [notesToEdit, setNotesToEdit] = useState<any[]>([]);
+  const [formsToView, setFormsToView] = useState<any[]>([]);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
@@ -413,7 +413,7 @@ export default function ArchiveTab() {
           content={
             <FormsviewModalContent
               isModalOpen={isModalOpen}
-              onSuccess={onSuccess}
+              formData={setFormsToView}
             />
           }
           isModalOpen={isModalOpen}

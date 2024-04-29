@@ -6,7 +6,6 @@ import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { DemographicModal } from "@/components/modals/demographic.modal";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
@@ -18,8 +17,11 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 
-export default function PatientPage({ patient }: { patient: any }) {
+export default function PatientPage() {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   if (!getAccessToken()) {
     router.replace("/login");
   }

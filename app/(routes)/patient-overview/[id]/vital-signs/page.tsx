@@ -14,6 +14,9 @@ import Modal from "@/components/reusable/modal";
 import { VitalModalContent } from "@/components/modal-content/vital-modal-content";
 export default function vitalsigns() {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState("ASC");
