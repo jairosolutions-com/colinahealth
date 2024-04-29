@@ -317,7 +317,7 @@ export default function Surgeries() {
             </thead>
             <tbody className="h-[220px]">
               {patientSurgeries.length == 0 && (
-                <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                <div className="border-1 w-[180vh] py-5  absolute flex justify-center items-center">
                   <p className="text-[15px] font-normal text-gray-700 text-center">
                     No Surgeries Found <br />
                   </p>
