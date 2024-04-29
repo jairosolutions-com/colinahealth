@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect, useState } from "react";
 
-import { PRNMedModal } from "./modals/prn-medication.modal";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 import { onNavigate } from "@/actions/navigation";

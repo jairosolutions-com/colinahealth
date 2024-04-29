@@ -8,7 +8,6 @@ import View from "@/components/shared/buttons/view";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { AppointmentsModal } from "@/components/modals/appointments.modal";
 import { fetchAppointmentsByPatient as fetchAppointmentsByPatient } from "@/app/api/appointments-api/appointments.api";
 import { AppointmentviewModalContent } from "@/components/modal-content/appointmentview-modal-content";
 import Modal from "@/components/reusable/modal";

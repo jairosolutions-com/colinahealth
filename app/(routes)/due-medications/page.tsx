@@ -5,7 +5,6 @@ import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { DemographicModal } from "@/components/modals/demographic.modal";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";

@@ -6,7 +6,6 @@ import Edit from "@/components/shared/buttons/edit";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { SurgeriesModal } from "@/components/modals/surgeries.modal";
 import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries.api";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
