@@ -24,7 +24,7 @@ export async function fetchPRNMedByPatient(
     console.log("searchPatient", requestData);
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -41,13 +41,15 @@ export async function fetchPRNMedByPatient(
     const { patientId, id, ...patientPRNMedNoId } = response.data;
     console.log(patientPRNMedNoId, "patient PRNMed after search");
     return patientPRNMedNoId;
-  } catch (error:any) {
+  } catch (error: any) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
       if (axiosError.message === "Network Error") {
         // Handle network error
         console.error("Connection refused or network error occurred.");
-        return Promise.reject(new Error("Connection refused or network error occurred."));
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
       }
       if (axiosError.response?.status === 401) {
         setAccessToken("");
@@ -68,7 +70,7 @@ export async function createPRNMedOfPatient(
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -105,7 +107,7 @@ export async function updatePRNMedOfPatient(
     console.log(formData, "formdata");
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {

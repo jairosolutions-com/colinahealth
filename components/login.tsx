@@ -23,7 +23,7 @@ export const Login = () => {
   const router = useRouter();
   useEffect(() => {
     if (getAccessToken()) {
-      router.push("/dashboard");
+      router.replace("/dashboard");
       console.log("true");
     } else {
       setIsAccessed(false);
@@ -47,6 +47,12 @@ export const Login = () => {
     setIsPasswordFocused(false);
   };
 
+  function handleKeyDown(event: any) {
+    if (event.key === 'Enter' && password && email) {
+      setIsSubmitted(true);
+      handleLogin(event)
+    }
+  }
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSubmitted(true);
     e.preventDefault();
@@ -54,8 +60,7 @@ export const Login = () => {
       const accessToken = await validateUser(email, password, rememberMe);
       if (accessToken) {
         // Redirect to patient-list if login successful
-        setAccessToken(accessToken);
-        router.push("/dashboard");
+        router.replace("/dashboard");
       } else {
         // Handle invalid login
         setPassword("");
@@ -86,19 +91,19 @@ export const Login = () => {
     );
   }
   return (
-    <div>
-      <section>
-        <div className=" gap-0 md:h-screen flex">
-          <div className="flex items-center max-h-screen justify-center overflow-hidden">
+    <div className="w-full h-full">
+      <section className="w-full h-full">
+        <div className="w-full  md:h-screen flex">
+          <div className="flex w-full items-center max-h-screen justify-center overflow-hidden">
             <img
               src="/imgs/login-image.png"
               alt="Your Image"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover select-none pointer-events-none"
             />
           </div>
 
           <div className="w-[1091px] h-full flex flex-col">
-            <div className=" w-[1091px] h-full ">
+            <div className=" w-full h-full ">
               <div className="flex flex-col justify-center items-center w-[1091px]  h-full ">
                 <div className="w-[542.27px] text-left">
                   <h2 className=" text-[20px] font-semibold  md:text-2xl lg:mb-10">
@@ -118,6 +123,7 @@ export const Login = () => {
                   <div className="mx-auto mb-4 max-w-[800px] pb-4">
                     <form
                       onSubmit={handleLogin}
+                      onKeyDown={handleKeyDown}
                       name="wf-form-password"
                       method="get"
                     >

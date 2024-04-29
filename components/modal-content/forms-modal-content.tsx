@@ -144,10 +144,12 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
               Add Form Details
             </p>
             <X
-              onClick={() => {isSubmitted?null:isModalOpen(false)}}
+              onClick={() => {
+                isSubmitted ? null : isModalOpen(false);
+              }}
               className={`
               ${isSubmitted && " cursor-not-allowed"}
-              w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
+              w-7 h-7 text-black flex items-center mt-2 mr-4 cursor-pointer`}
             />
           </div>
           <p className="text-[15px] pl-10 text-[#667085] pb-10 pt-2">

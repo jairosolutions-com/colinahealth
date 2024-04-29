@@ -74,6 +74,20 @@ export const ScheduledModalContent = ({
     }));
   };
 
+  useEffect(() => {
+    if (label === "charting") {
+      const now = new Date();
+      const formattedDate = now.toISOString().split("T")[0];
+      const formattedTime = now.toTimeString().split(" ")[0];
+
+      setFormData({
+        ...formData,
+        medicationLogsDate: formattedDate,
+        medicationLogsTime: formattedTime,
+      });
+    }
+  }, [label]);
+
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -231,7 +245,7 @@ export const ScheduledModalContent = ({
               }}
               className={`
               ${isSubmitted && " cursor-not-allowed"}
-              w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
+              w-7 h-7 text-black flex items-center mt-2 mr-4 cursor-pointer`}
             />
           </div>
           <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
@@ -270,7 +284,7 @@ export const ScheduledModalContent = ({
                           data-uuid={aschData.uuid}
                         >
                           {aschData.medicationLogsName} @{" "}
-                          {aschData.medicationLogsTime}
+                          {formatTime(aschData.medicationLogsTime)}
                         </option>
                       </>
                     )}

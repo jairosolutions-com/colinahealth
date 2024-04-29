@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { X } from "lucide-react";
 interface Modalprops {
   isModalOpen: (isOpen: boolean) => void;
 }
@@ -24,6 +25,10 @@ export const AppointmentviewModalContent = ({ isModalOpen }: Modalprops) => {
         <h2 className="p-title text-left text-[#071437] pl-10 mt-7">
           Appointment Details
         </h2>
+        <X
+          onClick={() => isModalOpen(false)}
+          className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+        />
         <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
           List of Upcoming Schedules.
           <button
