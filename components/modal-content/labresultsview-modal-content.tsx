@@ -479,7 +479,7 @@ export const LabResultsViewModalContent = ({
                     }}
                     className={`
                     ${isSubmitted && " cursor-not-allowed"}
-                    w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
+                    w-6 h-6 text-black flex items-center mt-6 mr-9 cursor-pointer`}
                   />
                 </div>
 
