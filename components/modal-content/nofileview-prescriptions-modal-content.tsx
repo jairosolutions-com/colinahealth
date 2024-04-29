@@ -302,7 +302,7 @@ export const NofileviewPrescriptionsModalContent = ({
             <button
               onClick={() => isModalOpen(false)}
               type="button"
-              className="w-[170px] h-[50px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm"
+              className="w-[150px] h-[45px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm"
             >
               Cancel
             </button>
@@ -311,7 +311,7 @@ export const NofileviewPrescriptionsModalContent = ({
               type="submit"
               className={`
               ${isSubmitted && " cursor-not-allowed"}
-              w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
+              w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
             >
               Submit
             </button>

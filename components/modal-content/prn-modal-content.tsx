@@ -183,7 +183,7 @@ export const PrnModalContent = ({
               }}
               className={`
               ${isSubmitted && " cursor-not-allowed"}
-              w-7 h-7 text-black flex items-center mt-2 mr-4 cursor-pointer`}
+              w-6 h-6 text-black flex items-center mt-6 mr-9 cursor-pointer`}
             />
           </div>
           <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
@@ -337,7 +337,7 @@ export const PrnModalContent = ({
               type="button"
               className={`
               ${isSubmitted && " cursor-not-allowed"}
-              w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+              w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
             >
               Cancel
             </button>
@@ -346,7 +346,7 @@ export const PrnModalContent = ({
               type="submit"
               className={`
               ${isSubmitted && " cursor-not-allowed"}
-              w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
+              w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
             >
               {isEdit ? "Update" : "Submit"}
             </button>

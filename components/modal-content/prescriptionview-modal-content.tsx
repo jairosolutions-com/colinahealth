@@ -457,7 +457,7 @@ export const PrescriptionViewModalContent = ({
                   <h2 className="p-title text-left text-[#071437] pl-10 mt-7"></h2>
                   <X
                     onClick={() => isModalOpen(false)}
-                    className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+                    className="w-6 h-6 text-black flex items-center mt-6 mr-9"
                   />
                 </div>
                 <p className="text-sm pl-10 text-gray-600 pb-10 pt-2"></p>
@@ -672,7 +672,7 @@ export const PrescriptionViewModalContent = ({
                       type="button"
                       className={`
                 ${isSubmitted && " cursor-not-allowed"}
-                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+                w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
                     >
                       Cancel
                     </button>
@@ -681,7 +681,7 @@ export const PrescriptionViewModalContent = ({
                       type="submit"
                       className={`
                        ${isSubmitted && " cursor-not-allowed"}
-                       w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
+                       w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
                     >
                       Submit
                     </button>
