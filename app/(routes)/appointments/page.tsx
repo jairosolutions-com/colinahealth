@@ -6,12 +6,12 @@ import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { DemographicModal } from "@/components/modals/demographic.modal";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-
+import { AppointmentsModal } from "@/components/modals/appointments.modal";
 import { fetchUpcomingAppointments } from "@/app/api/appointments-api/upcoming-appointments-api";
 import Image from "next/image";
 import * as React from "react";
@@ -510,15 +510,15 @@ export default function AppointmentPage() {
           </div>
         </div>
       )}
-      {/* {isOpen && (
-        <AppointmentsModalContent
+      {isOpen && (
+        <AppointmentsModal
           isModalOpen={isModalOpen}
           isOpen={isOpen}
           label="sample label"
           isView={false}
           appointmentData={appointmentList}
         />
-      )} */}
+      )}
       {isSuccessOpen && (
         <SuccessModal
           label="Success"

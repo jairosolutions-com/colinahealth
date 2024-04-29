@@ -131,10 +131,7 @@ export default function PatientOverviewLayout({
         setPatientData(response);
         setIsLoading(false);
       } catch (error: any) {
-        
-        if (error.message ==="Request failed with status code 404"){
-          console.error("Patient not found2");
-        }
+        setError(error.message);
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
