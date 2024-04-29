@@ -79,7 +79,7 @@ const PatientCard = ({
         {patientWithMedicationLogsToday.map((patient: any, index: number) => (
           <div
             className={`
-          ${patientWithMedicationLogsToday.length === 2 ? "mb-[103px]" : ""}
+
           w-full `}
             key={index}
           >
