@@ -28,11 +28,21 @@ export const SuccessModal = ({
                 <img src="/svgs/successful.svg" alt="" />
               </div>
               <h1 className="text-[20px] font-bold text-md text-[#101828] mb-2">
-                {isUpdated ? "Updated" : "Submitted"} Successfully!
+                {isUpdated
+                  ? "Updated"
+                  : label === "deleted"
+                  ? "Deleted"
+                  : "Submitted"}{" "}
+                Successfully!
               </h1>
               <p className="text-[15px] text-sm text-[#667085] mb-[40px]">
                 Your data has been successfully{" "}
-                {isUpdated ? "updated" : "added"}.
+                {isUpdated
+                  ? "updated"
+                  : label === "deleted"
+                  ? "Deleted"
+                  : "added"}
+                .
               </p>
               <button
                 onClick={() => {
