@@ -150,7 +150,6 @@ export default function ArchiveTab() {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
-          true,
           router
         );
         setPatientForms(response.data);

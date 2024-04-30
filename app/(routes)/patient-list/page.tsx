@@ -21,7 +21,6 @@ import Pagination from "@/components/shared/pagination";
 export default function PatientPage() {
   const router = useRouter();
   if (typeof window === "undefined") {
-    return null;
   }
   if (!getAccessToken()) {
     router.replace("/login");

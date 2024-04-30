@@ -15,7 +15,6 @@ import Pagination from "@/components/shared/pagination";
 
 export default function Surgeries() {
   if (typeof window === "undefined") {
-    return null;
   }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
