@@ -539,12 +539,12 @@ export const PrescriptionViewModalContent = ({
                               ></Image>
                             )}
                           </div>
-                          <div className="filehover">
+                          <div className="filehover ">
                             <FileUploadWithHover />
                             {defaultPrescriptionFiles.map(
                               (file: PrescriptionFile, index) => (
                                 <div
-                                  className="flex justify-between px-1 max-w-[220px] w-full bg-white rounded-md border-2 mt-4 hover:border-[#686868] text-overflow truncate cursor-pointer"
+                                  className="flex justify-center ml-1 px-1 max-w-[220px] w-full bg-white rounded-md border-2 mt-4 hover:border-[#686868] text-overflow truncate cursor-pointer"
                                   key={index}
                                   onClick={() => {
                                     setFileIndex(index);
