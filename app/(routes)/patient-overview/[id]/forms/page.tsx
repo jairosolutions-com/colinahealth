@@ -1,6 +1,8 @@
 "use client";
 
 import DropdownMenu from "@/components/dropdown-menu";
+import Add from "@/components/shared/buttons/add";
+import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
