@@ -24,12 +24,12 @@ export const Login = () => {
   const router = useRouter();
   useEffect(() => {
     if (getAccessToken()) {
+      setIsAccessed(false);
       router.replace("/dashboard");
-      console.log("true");
     } else {
       setIsAccessed(false);
-      console.log("false");
     }
+    setIsAccessed(false);
   }, []);
 
   const handleEmailFocus = () => {
@@ -86,7 +86,7 @@ export const Login = () => {
 
   if (isAccessed) {
     return (
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="container w-full h-full flex justify-center items-center">
         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
       </div>
     );
