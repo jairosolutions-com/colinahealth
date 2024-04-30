@@ -10,12 +10,37 @@ import { FormsModalContent } from "@/components/modal-content/forms-modal-conten
 import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
 import Modal from "@/components/reusable/modal";
 import {
+  createFormsOfPatient,
   fetchFormsByPatient,
+  addFormFile,
+  deleteFormFiles,
+  getCurrentFileCountFromDatabase,
   updateFormsOfPatient,
 } from "@/app/api/forms-api/forms.api";
+import { toast } from "@/components/ui/use-toast";
 import { SuccessModal } from "@/components/shared/success";
 import { ConfirmationModal } from "@/components/modal-content/confirmation-modal-content";
+ 
+interface Modalprops {
+  isEdit: any;
+  formAddData: any;
+  isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
+}
+
+interface FormFile {
+  file: any; // Assuming file property exists for the key
+  filename: string;
+  data: Uint8Array;
+  file_uuid: string;
+}
+
+function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>): void {
+  throw new Error("Function not implemented.");
+}
+ 
 import Pagination from "@/components/shared/pagination";
+ 
 
 export default function FormsTab() {
   const router = useRouter();
@@ -24,6 +49,13 @@ export default function FormsTab() {
     tag: string;
     item: string;
   }>();
+
+  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [fileTypes, setFileTypes] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFormFiles] = useState<File[]>([]);
+  const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
+  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
+  const [formFiles, setFormFiles] = useState<any[]>([]); //
   const [formViewdData, setFormViewData] = useState<any[]>([]);
   const patientId = params.id.toUpperCase();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -470,6 +502,8 @@ export default function FormsTab() {
             <FormsModalContent
               isModalOpen={setIsAddOpen}
               onSuccess={onSuccess}
+              isEdit={undefined}
+              formAddData={undefined}
             />
           }
           isModalOpen={isAddModalOpen}
