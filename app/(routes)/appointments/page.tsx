@@ -24,11 +24,11 @@ import {
 } from "@/components/ui/popover";
 import { fetchAllAppointments } from "@/app/api/appointments-api/fetch-all-appointments.api";
 import { ErrorModal } from "@/components/shared/error";
+import Pagination from "@/components/shared/pagination";
 
 export default function AppointmentPage() {
   const router = useRouter();
   if (typeof window === "undefined") {
-    return null;
   }
 
   if (!getAccessToken()) {
@@ -202,7 +202,7 @@ export default function AppointmentPage() {
   console.log(appointmentList, "appointmentList");
   if (isLoading) {
     return (
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="container w-full h-full flex justify-center items-center">
         <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
@@ -452,70 +452,13 @@ export default function AppointmentPage() {
         </div>
       </div>
 
-      {totalPages <= 1 ? (
-        <div></div>
-      ) : (
-        <div className="mt-5">
-          <div className="flex justify-between">
-            <p className="font-medium text-[15px] w-[138px] items-center">
-              Page {currentPage} of {totalPages}
-            </p>
-            <div>
-              <nav>
-                <div className="flex -space-x-px text-[15px]">
-                  <div>
-                    <button
-                      onClick={goToPreviousPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
-                    >
-                      Prev
-                    </button>
-                  </div>
-                  {renderPageNumbers()}
-
-                  <div className="ml-5">
-                    <button
-                      onClick={goToNextPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
-                    >
-                      Next
-                    </button>
-                  </div>
-                  <form onSubmit={handleGoToPage}>
-                    <div className="flex px-5 ">
-                      <input
-                        className={`ipt-pagination appearance-none  text-center border ring-1 ${
-                          gotoError ? "ring-red-500" : "ring-gray-300"
-                        } border-gray-100`}
-                        type="text"
-                        placeholder="-"
-                        pattern="\d*"
-                        value={pageNumber}
-                        onChange={handlePageNumberChange}
-                        onKeyPress={(e) => {
-                          // Allow only numeric characters (0-9), backspace, and arrow keys
-                          if (
-                            !/[0-9\b]/.test(e.key) &&
-                            e.key !== "ArrowLeft" &&
-                            e.key !== "ArrowRight"
-                          ) {
-                            e.preventDefault();
-                          }
-                        }}
-                      />
-                      <div className="px-5">
-                        <button type="submit" className="btn-pagination ">
-                          Go{" "}
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </nav>
-            </div>
-          </div>
-        </div>
-      )}
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        setCurrentPage={setCurrentPage}
+      />
       {/* {isOpen && (
         <AppointmentsModal
           isModalOpen={isModalOpen}

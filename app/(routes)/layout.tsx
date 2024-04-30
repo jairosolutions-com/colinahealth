@@ -9,7 +9,6 @@ import { useState } from "react";
 import Footer from "@/components/footer";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -26,7 +25,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             />
           </div>
         ) : (
-          <div className="flex-grow">{children}</div>
+          <div className="h-full w-full flex-grow">{children}</div>
         )}
         <Footer />
       </div>

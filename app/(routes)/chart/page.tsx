@@ -7,6 +7,7 @@ import { ScheduledModalContent } from "@/components/modal-content/scheduled-moda
 import PatientCard from "@/components/patientCard";
 import Modal from "@/components/reusable/modal";
 import { ErrorModal } from "@/components/shared/error";
+import Pagination from "@/components/shared/pagination";
 import { SuccessModal } from "@/components/shared/success";
 import TimeGraph from "@/components/timeGraph";
 import { ToastAction } from "@/components/ui/toast";
@@ -18,7 +19,6 @@ import { useEffect, useState } from "react";
 export default function ChartPage() {
   const router = useRouter();
   if (typeof window === "undefined") {
-    return null;
   }
   if (!getAccessToken()) {
     router.replace("/login");
@@ -208,7 +208,7 @@ export default function ChartPage() {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex justify-center items-center ">
+      <div className="container w-full h-full flex justify-center items-center ">
         <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
@@ -302,71 +302,13 @@ export default function ChartPage() {
         )}
 
         <div className="bg-white  w-full">
-          {/* pagination */}
-          {totalPages == 0 ? (
-            <div></div>
-          ) : (
-            <div className="mt-5 w-full">
-              <div className="flex items-start justify-between text-start">
-                <p className="font-medium size-[18px] w-[138px] ">
-                  Page {currentPage} of {totalPages}
-                </p>
-                <div className="flex items-end justify-end">
-                  <nav>
-                    <div className="flex -space-x-px text-sm">
-                      <div>
-                        <button
-                          onClick={goToPreviousPage}
-                          className="flex border border-px items-center justify-center  w-[77px] h-full"
-                        >
-                          Prev
-                        </button>
-                      </div>
-                      {renderPageNumbers()}
-
-                      <div className="ml-5">
-                        <button
-                          onClick={goToNextPage}
-                          className="flex border border-px items-center justify-center  w-[77px] h-full"
-                        >
-                          Next
-                        </button>
-                      </div>
-                      <form onSubmit={handleGoToPage}>
-                        <div className="flex pl-5 ">
-                          <input
-                            className={`ipt-pagination appearance-none  text-center border ring-1 ${
-                              gotoError ? "ring-red-500" : "ring-gray-300"
-                            } border-gray-100`}
-                            type="text"
-                            placeholder="-"
-                            pattern="\d*"
-                            value={pageNumber}
-                            onChange={handlePageNumberChange}
-                            onKeyPress={(e) => {
-                              // Allow only numeric characters (0-9), backspace, and arrow keys
-                              if (
-                                !/[0-9\b]/.test(e.key) &&
-                                e.key !== "ArrowLeft" &&
-                                e.key !== "ArrowRight"
-                              ) {
-                                e.preventDefault();
-                              }
-                            }}
-                          />
-                          <div className="pl-5">
-                            <button type="submit" className="btn-pagination ">
-                              Go{" "}
-                            </button>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                  </nav>
-                </div>
-              </div>
-            </div>
-          )}
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
 
         {isOpen && (

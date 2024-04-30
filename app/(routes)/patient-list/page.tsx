@@ -16,11 +16,11 @@ import { DemographicModalContent } from "@/components/modal-content/demographic-
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
+import Pagination from "@/components/shared/pagination";
 
 export default function PatientPage() {
   const router = useRouter();
   if (typeof window === "undefined") {
-    return null;
   }
   if (!getAccessToken()) {
     router.replace("/login");
@@ -195,6 +195,7 @@ export default function PatientPage() {
 
   if (isLoading) {
     return (
+<<<<<<< HEAD
       <div className="w-full h-full flex justify-center items-center">
         <Image
           src="/imgs/colina-logo-animation.gif"
@@ -202,6 +203,10 @@ export default function PatientPage() {
           width={100}
           height={100}
         />
+=======
+      <div className="container w-full h-full flex justify-center items-center">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+>>>>>>> ce8034b96c33f0a36e09bcbb8a28969ac3ea8ce6
       </div>
     );
   }
@@ -354,72 +359,13 @@ export default function PatientPage() {
         {/* END OF TABLE */}
       </div>
       {/* pagination */}
-      {totalPages <= 1 ? (
-        <div></div>
-      ) : (
-        <div className="mt-5 pb-5">
-          <div className="flex justify-between">
-            <p className="font-medium size-[18px] text-[15px] w-[138px] items-center">
-              Page {currentPage} of {totalPages}
-            </p>
-            <div>
-              <nav>
-                <div className="flex text-[15px] ">
-                  <div className="flex">
-                    <button
-                      onClick={goToPreviousPage}
-                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
-                    >
-                      Prev
-                    </button>
-
-                    {renderPageNumbers()}
-
-                    <button
-                      onClick={goToNextPage}
-                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
-                    >
-                      Next
-                    </button>
-                  </div>
-                  <form onSubmit={handleGoToPage}>
-                    <div className="flex pl-4 ">
-                      <input
-                        className={`ipt-pagination appearance-none  text-center ring-1 ${
-                          gotoError ? "ring-red-500" : "ring-gray-300"
-                        } border-gray-100`}
-                        type="text"
-                        placeholder="-"
-                        pattern="\d*"
-                        value={pageNumber}
-                        onChange={handlePageNumberChange}
-                        onKeyPress={(e) => {
-                          // Allow only numeric characters (0-9), backspace, and arrow keys
-                          if (
-                            !/[0-9\b]/.test(e.key) &&
-                            e.key !== "ArrowLeft" &&
-                            e.key !== "ArrowRight"
-                          ) {
-                            e.preventDefault();
-                          }
-                        }}
-                      />
-                      <div className="">
-                        <button
-                          type="submit"
-                          className="btn-pagination ring-1 ring-[#007C85]"
-                        >
-                          Go{" "}
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </nav>
-            </div>
-          </div>
-        </div>
-      )}
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        setCurrentPage={setCurrentPage}
+      />
       {isOpen && (
         <Modal
           content={

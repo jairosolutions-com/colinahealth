@@ -155,7 +155,7 @@ export default function PatientOverviewLayout({
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex justify-center items-center ">
+      <div className="container w-full h-full flex justify-center items-center ">
         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
       </div>
     );
@@ -303,7 +303,7 @@ export default function PatientOverviewLayout({
               </div>
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
-                  <Link href={tab.url}>
+                  <Link key={index} href={tab.url}>
                     <p
                       className={`cursor-pointer font-bold ${
                         pathname === tab.url ||

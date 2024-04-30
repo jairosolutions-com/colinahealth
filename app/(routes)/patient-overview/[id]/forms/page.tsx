@@ -11,11 +11,37 @@ import { FormsModalContent } from "@/components/modal-content/forms-modal-conten
 import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
 import Modal from "@/components/reusable/modal";
 import {
+  createFormsOfPatient,
   fetchFormsByPatient,
+  addFormFile,
+  deleteFormFiles,
+  getCurrentFileCountFromDatabase,
   updateFormsOfPatient,
 } from "@/app/api/forms-api/forms.api";
+import { toast } from "@/components/ui/use-toast";
 import { SuccessModal } from "@/components/shared/success";
 import { ConfirmationModal } from "@/components/modal-content/confirmation-modal-content";
+ 
+interface Modalprops {
+  isEdit: any;
+  formAddData: any;
+  isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
+}
+
+interface FormFile {
+  file: any; // Assuming file property exists for the key
+  filename: string;
+  data: Uint8Array;
+  file_uuid: string;
+}
+
+function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>): void {
+  throw new Error("Function not implemented.");
+}
+ 
+import Pagination from "@/components/shared/pagination";
+ 
 
 export default function FormsTab() {
   const router = useRouter();
@@ -24,6 +50,13 @@ export default function FormsTab() {
     tag: string;
     item: string;
   }>();
+
+  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [fileTypes, setFileTypes] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFormFiles] = useState<File[]>([]);
+  const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
+  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
+  const [formFiles, setFormFiles] = useState<any[]>([]); //
   const [formViewdData, setFormViewData] = useState<any[]>([]);
   const patientId = params.id.toUpperCase();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -176,7 +209,6 @@ export default function FormsTab() {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
-          false,
           router
         );
         setPatientForms(response.data);
@@ -218,7 +250,7 @@ export default function FormsTab() {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex justify-center items-center ">
+      <div className="container w-full h-full flex justify-center items-center ">
         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
       </div>
     );
@@ -364,7 +396,7 @@ export default function FormsTab() {
                       onClick={() => {
                         isModalOpen(true);
                         setIsEdit(true);
-                        setFormsToEdit(form);
+                        setFormViewData(form);
                       }}
                     >
                       <Edit />
@@ -389,72 +421,13 @@ export default function FormsTab() {
         {/* END OF TABLE */}
       </div>
       {/* pagination */}
-      {totalPages <= 1 ? (
-        <div></div>
-      ) : (
-        <div className="mt-5 pb-5">
-          <div className="flex justify-between">
-            <p className="font-medium size-[18px] text-[15px] w-[138px] items-center">
-              Page {currentPage} of {totalPages}
-            </p>
-            <div>
-              <nav>
-                <div className="flex text-[15px] ">
-                  <div className="flex">
-                    <button
-                      onClick={goToPreviousPage}
-                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
-                    >
-                      Prev
-                    </button>
-
-                    {renderPageNumbers()}
-
-                    <button
-                      onClick={goToNextPage}
-                      className="flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full"
-                    >
-                      Next
-                    </button>
-                  </div>
-                  <form onSubmit={handleGoToPage}>
-                    <div className="flex pl-4 ">
-                      <input
-                        className={`ipt-pagination appearance-none  text-center ring-1 ${
-                          gotoError ? "ring-red-500" : "ring-gray-300"
-                        } border-gray-100`}
-                        type="text"
-                        placeholder="-"
-                        pattern="\d*"
-                        value={pageNumber}
-                        onChange={handlePageNumberChange}
-                        onKeyPress={(e) => {
-                          // Allow only numeric characters (0-9), backspace, and arrow keys
-                          if (
-                            !/[0-9\b]/.test(e.key) &&
-                            e.key !== "ArrowLeft" &&
-                            e.key !== "ArrowRight"
-                          ) {
-                            e.preventDefault();
-                          }
-                        }}
-                      />
-                      <div className="">
-                        <button
-                          type="submit"
-                          className="btn-pagination ring-1 ring-[#007C85]"
-                        >
-                          Go{" "}
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </nav>
-            </div>
-          </div>
-        </div>
-      )}
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        setCurrentPage={setCurrentPage}
+      />
       {confirmArchived && (
         <Modal
           content={
@@ -530,6 +503,8 @@ export default function FormsTab() {
             <FormsModalContent
               isModalOpen={setIsAddOpen}
               onSuccess={onSuccess}
+              isEdit={undefined}
+              formAddData={undefined}
             />
           }
           isModalOpen={isAddModalOpen}

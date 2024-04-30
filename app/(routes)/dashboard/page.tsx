@@ -14,7 +14,7 @@ import { useToast } from "@/components/ui/use-toast";
 const Dashboard = () => {
   const router = useRouter();
   if (typeof window === "undefined") {
-    return null;
+  
   }
   if (!getAccessToken()) {
     router.replace("/login");
@@ -317,7 +317,7 @@ const Dashboard = () => {
                 ))}
               </div>
             ) : (
-              <div className="flex items-center text-center justify-center font-semibold text-3xl w-full h-full -mt-10">
+              <div className="flex items-center text-center justify-center font-normal text-[15px] w-full h-full -mt-10">
                 No Due Medication/s
                 <br />
               </div>
