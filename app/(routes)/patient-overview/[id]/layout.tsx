@@ -186,13 +186,23 @@ export default function PatientOverviewLayout({
         </div>
         <div className="form ring-1 w-full h-[220px] ring-[#D0D5DD] px-5 pt-5 rounded-md">
           <div className="flex">
-            <div className="flex flex-col">
-              <img
-                src="/imgs/drake.png"
-                alt="profile"
-                width="200"
-                height="200"
-              />
+            <div className="flex">
+              <div className="relative">
+                <img
+                  src="/imgs/drake.png"
+                  alt="profile"
+                  width="200"
+                  height="200"
+                />
+                {/* <button className="absolute bottom-2 right-[-20px]  ">
+                  <img
+                    src="/svgs/editprof.svg"
+                    alt="edit button"
+                    width="35"
+                    height="35"
+                  />
+                </button> */}
+              </div>
             </div>
             <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
               <div>
@@ -303,7 +313,7 @@ export default function PatientOverviewLayout({
               </div>
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
-                  <Link href={tab.url}>
+                  <Link key={index} href={tab.url}>
                     <p
                       className={`cursor-pointer font-bold ${
                         pathname === tab.url ||

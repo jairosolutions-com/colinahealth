@@ -1,4 +1,6 @@
 "use client";
+import Image from "next/image";
+
 import { Navbar } from "@/components/navbar";
 import { getAccessToken } from "../api/login-api/accessToken";
 import { useRouter } from "next/navigation";
@@ -7,7 +9,6 @@ import { useState } from "react";
 import Footer from "@/components/footer";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -16,10 +17,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Navbar setIsLoading={setIsLoading} />
         {isLoading ? (
           <div className="w-full h-full flex justify-center items-center ">
-            <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+            <Image
+              src="/imgs/colina-logo-animation.gif"
+              alt="logo"
+              width={100}
+              height={100}
+            />
           </div>
         ) : (
-          <div className="flex-grow">{children}</div>
+          <div className="h-full w-full flex-grow">{children}</div>
         )}
         <Footer />
       </div>

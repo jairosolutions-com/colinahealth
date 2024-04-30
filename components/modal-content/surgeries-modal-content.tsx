@@ -172,7 +172,7 @@ export const SurgeriesModalContent = ({
                 >
                   TYPE
                 </label>
-                <div className="mt-2.5">
+                <div className="mt-2.5 relative">
                   <input
                     type="text"
                     required
@@ -181,6 +181,13 @@ export const SurgeriesModalContent = ({
                     onChange={handleChange}
                     name="typeOfSurgery"
                     value={formData.typeOfSurgery}
+                  />
+                  <Image
+                    className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
+                    width={20}
+                    height={20}
+                    src={"/svgs/chevron-up.svg"}
+                    alt={""}
                   />
                 </div>
               </div>

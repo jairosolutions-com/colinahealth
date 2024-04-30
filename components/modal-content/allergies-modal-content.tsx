@@ -6,7 +6,7 @@ import {
 } from "@/app/api/medical-history-api/allergies.api";
 import { X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { ToastAction } from "../ui/toast";
 import { useToast } from "../ui/use-toast";
@@ -173,7 +173,7 @@ export const AllergiesModalContent = ({
                 >
                   TYPE
                 </label>
-                <div className="mt-2.5">
+                <div className="mt-2.5 relative">
                   <input
                     type="text"
                     required
@@ -182,6 +182,13 @@ export const AllergiesModalContent = ({
                     name="type"
                     value={formData.type}
                     onChange={handleChange}
+                  />
+                  <Image
+                    className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
+                    width={20}
+                    height={20}
+                    src={"/svgs/chevron-up.svg"}
+                    alt={""}
                   />
                 </div>
               </div>
@@ -211,7 +218,7 @@ export const AllergiesModalContent = ({
                 >
                   SEVERITY
                 </label>
-                <div className="mt-2.5">
+                <div className="mt-2.5 relative">
                   <input
                     type="text"
                     required
@@ -220,6 +227,13 @@ export const AllergiesModalContent = ({
                     name="severity"
                     value={formData.severity}
                     onChange={handleChange}
+                  />
+                  <Image
+                    className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
+                    width={20}
+                    height={20}
+                    src={"/svgs/chevron-up.svg"}
+                    alt={""}
                   />
                 </div>
               </div>
