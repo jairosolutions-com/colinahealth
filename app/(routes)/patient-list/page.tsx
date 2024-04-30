@@ -6,7 +6,6 @@ import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { DemographicModal } from "@/components/modals/demographic.modal";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
@@ -18,10 +17,13 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 
-export default function PatientPage({ patient }: { patient: any }) {
+export default function PatientPage() {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   if (!getAccessToken()) {
-    router.push("/login");
+    router.replace("/login");
   }
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -186,7 +188,7 @@ export default function PatientPage({ patient }: { patient: any }) {
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
     setIsLoading(true);
-    router.push(
+    router.replace(
       `/patient-overview/${lowercasePatientId}/medical-history/allergies`
     );
   };
@@ -213,7 +215,7 @@ export default function PatientPage({ patient }: { patient: any }) {
         <p
           onClick={() => {
             setIsLoading(true);
-            router.push("/dashboard");
+            router.replace("/dashboard");
           }}
           className="text-[#64748B] underline cursor-pointer text-[15px]"
         >
@@ -319,7 +321,7 @@ export default function PatientPage({ patient }: { patient: any }) {
               {patientList.map((patient, index) => (
                 <tr
                   key={index}
-                  className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
+                  className=" group  bg-white hover:bg-gray-100  border-b"
                 >
                   <td className="truncate flex items-center gap-2 px-6 py-5">
                     <Image

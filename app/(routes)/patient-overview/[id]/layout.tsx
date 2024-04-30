@@ -10,6 +10,7 @@ import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import Link from "next/link";
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
@@ -22,7 +23,7 @@ export default function PatientOverviewLayout({
     item: string;
   }>();
   if (!getAccessToken()) {
-    router.push("/login");
+    router.replace("/login");
   }
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
@@ -83,7 +84,7 @@ export default function PatientOverviewLayout({
       setActiveTab(-1);
       setDetailsClicked(true);
       localStorage.setItem("seeMoreClicked", "true"); // Set local storage
-      router.push(url);
+      router.replace(url);
     }
   };
 
@@ -116,7 +117,7 @@ export default function PatientOverviewLayout({
     if (url) {
       setActiveTab(tabIndex);
       setDetailsClicked(false);
-      router.push(url);
+      router.replace(url);
     }
   };
   console.log(pathname, "pathname");
@@ -202,25 +203,28 @@ export default function PatientOverviewLayout({
                     {patientData[0]?.lastName}
                   </h1>
                   <div className=" cursor-pointer items-center ml-10 flex ">
-                    <p
-                      className={`underline text-[15px] font-semibold text-right mr-10 ${
-                        (seeMoreHovered || seeMoreClicked) &&
-                        currentRoute === "patient-details"
-                          ? "text-[#007C85]"
-                          : ""
-                      }`}
-                      onMouseEnter={handleSeeMoreHover}
-                      onMouseLeave={handleSeeMoreLeave}
-                      onClick={() => {
-                        setIsLoading(true);
-                        handleSeeMoreDetails(
-                          `/patient-overview/${params.id}/patient-details`,
-                          -1
-                        );
-                      }}
+                    <Link
+                      href={`/patient-overview/${params.id}/patient-details`}
                     >
-                      See more details
-                    </p>
+                      <p
+                        className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85] ${
+                          currentRoute === "patient-details"
+                            ? "text-[#007C85]"
+                            : ""
+                        }`}
+                        onMouseEnter={handleSeeMoreHover}
+                        onMouseLeave={handleSeeMoreLeave}
+                        onClick={() => {
+                          setIsLoading(true);
+                          // handleSeeMoreDetails(
+                          //   `/patient-overview/${params.id}/patient-details`,
+                          //   -1
+                          // );
+                        }}
+                      >
+                        See more details
+                      </p>
+                    </Link>
                   </div>
                 </div>
                 <div>
@@ -299,26 +303,29 @@ export default function PatientOverviewLayout({
               </div>
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
-                  <p
-                    className={`cursor-pointer font-bold ${
-                      pathname === tab.url ||
-                      (tabUrl === "surgeries" &&
-                        tab.label === "Medical History") ||
-                      (tabUrl === "prorenata" &&
-                        tab.label === "Medication Log") ||
-                      (tabUrl === "incident-report" && tab.label === "Notes") ||
-                      (tabUrl === "archived" && tab.label === "Forms")
-                        ? "text-[#007C85] border-b-2 border-[#007C85] text-[15px] pb-1"
-                        : "hover:text-[#007C85] hover:border-b-2 pb-1 h-[31px] border-[#007C85] text-[15px]"
-                    }`}
-                    key={index}
-                    onClick={() => {
-                      setIsLoading(true);
-                      handleTabClick(tab.url, index);
-                    }}
-                  >
-                    {tab.label}
-                  </p>
+                  <Link href={tab.url}>
+                    <p
+                      className={`cursor-pointer font-bold ${
+                        pathname === tab.url ||
+                        (tabUrl === "surgeries" &&
+                          tab.label === "Medical History") ||
+                        (tabUrl === "prorenata" &&
+                          tab.label === "Medication Log") ||
+                        (tabUrl === "incident-report" &&
+                          tab.label === "Notes") ||
+                        (tabUrl === "archived" && tab.label === "Forms")
+                          ? "text-[#007C85] border-b-2 border-[#007C85] text-[15px] pb-1"
+                          : "hover:text-[#007C85] hover:border-b-2 pb-1 h-[31px] border-[#007C85] text-[15px]"
+                      }`}
+                      key={index}
+                      onClick={() => {
+                        setIsLoading(true);
+                        // handleTabClick(tab.url, index);
+                      }}
+                    >
+                      {tab.label}
+                    </p>
+                  </Link>
                 ))}
               </div>
             </div>

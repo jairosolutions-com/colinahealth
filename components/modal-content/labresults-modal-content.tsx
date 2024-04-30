@@ -330,7 +330,7 @@ export const LabresultsModalContent = ({
             <label className="relative w-full bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold">
               <>
                 <Image
-                  className="w-10 h-10 mr-1"
+                  className="w-7 h-7 mr-1"
                   width={50}
                   height={50}
                   src={"/svgs/filein.svg"}
@@ -352,7 +352,7 @@ export const LabresultsModalContent = ({
                 {selectedFileNames.length > 0 ? (
                   // If files are selected, display filein.svg
                   <Image
-                    className="w-10 h-10 mr-1"
+                    className="w-7 h-7 mr-1"
                     width={50}
                     height={50}
                     src={"/svgs/filein.svg"}
@@ -361,7 +361,7 @@ export const LabresultsModalContent = ({
                 ) : (
                   // If no files are selected, display folder-add.svg
                   <Image
-                    className="w-10 h-10 mr-1"
+                    className="w-7 h-7 mr-1"
                     width={50}
                     height={50}
                     src={"/svgs/folder-add.svg"}
@@ -418,7 +418,7 @@ export const LabresultsModalContent = ({
   };
   return (
     <>
-      <div className="w-[676px] h-[571px]">
+      <div className="w-[676px] h-[584px]">
         {isLoading && isEdit ? (
           // Loading state
           <>
@@ -426,10 +426,12 @@ export const LabresultsModalContent = ({
               <div className="items-center flex justify-between">
                 <h2 className="p-title text-left text-[#071437] pl-10 mt-7"></h2>
                 <X
-                  onClick={() => {isSubmitted?null:isModalOpen(false)}}
+                  onClick={() => {
+                    isSubmitted ? null : isModalOpen(false);
+                  }}
                   className={`
                   ${isSubmitted && " cursor-not-allowed"}
-                  w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
+                  w-6 h-6 text-black flex items-center mt-6 mr-9 cursor-pointer`}
                 />
               </div>
               <p className="text-sm pl-10 text-gray-600 pb-10 pt-2"></p>
@@ -456,7 +458,7 @@ export const LabresultsModalContent = ({
                   </h2>
                   <X
                     onClick={() => isModalOpen(false)}
-                    className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+                    className="w-6 h-6 text-black flex items-center mt-6 mr-9"
                   />
                 </div>
                 <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
@@ -464,7 +466,7 @@ export const LabresultsModalContent = ({
                 </p>
               </div>
               <div className=" mb-9 pt-4">
-                <div className="h-[600px] max-h-[400px] md:px-10 mt-5">
+                <div className="h-[600px] max-h-[412px] md:px-10 mt-5">
                   <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
                     <div>
                       <label
@@ -706,7 +708,7 @@ export const LabresultsModalContent = ({
                       type="button"
                       className={`
                 ${isSubmitted && " cursor-not-allowed"}
-                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+                w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
                     >
                       Cancel
                     </button>
@@ -715,7 +717,7 @@ export const LabresultsModalContent = ({
                       type="submit"
                       className={`
                        ${isSubmitted && " cursor-not-allowed"}
-                       w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
+                       w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
                     >
                       Submit
                     </button>

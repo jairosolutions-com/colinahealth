@@ -23,7 +23,7 @@ export async function fetchPrescriptionByPatient(
     console.log("searchPatient", requestData);
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -46,7 +46,9 @@ export async function fetchPrescriptionByPatient(
       if (axiosError.message === "Network Error") {
         // Handle network error
         console.error("Connection refused or network error occurred.");
-        return Promise.reject(new Error("Connection refused or network error occurred."));
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
       }
       if (axiosError.response?.status === 401) {
         setAccessToken("");
@@ -59,12 +61,15 @@ export async function fetchPrescriptionByPatient(
   }
 }
 
-
-export async function createPrescriptionOfPatient(patientId: string, formData: any, router: any): Promise<any> {
+export async function createPrescriptionOfPatient(
+  patientId: string,
+  formData: any,
+  router: any
+): Promise<any> {
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -72,7 +77,11 @@ export async function createPrescriptionOfPatient(patientId: string, formData: a
     };
 
     // Make the API request to create the allergy
-    const response = await axios.post(`${apiUrl}/prescriptions/${patientId}`, formData, { headers });
+    const response = await axios.post(
+      `${apiUrl}/prescriptions/${patientId}`,
+      formData,
+      { headers }
+    );
     const createdPrescription = response.data;
 
     return createdPrescription;
@@ -88,7 +97,6 @@ export async function createPrescriptionOfPatient(patientId: string, formData: a
   }
 }
 
-
 export async function addPrescriptionFile(
   prescriptionUuid: string,
   formData: FormData
@@ -96,12 +104,12 @@ export async function addPrescriptionFile(
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'multipart/form-data',
+      "Content-Type": "multipart/form-data",
     };
 
     const response = await axios.post(
@@ -111,7 +119,10 @@ export async function addPrescriptionFile(
     );
 
     const prescriptionFileInserted = response.data;
-    console.log("Prescription files uploaded successfully:", prescriptionFileInserted);
+    console.log(
+      "Prescription files uploaded successfully:",
+      prescriptionFileInserted
+    );
 
     return prescriptionFileInserted;
   } catch (error: any) {
@@ -133,7 +144,7 @@ export async function deletePrescriptionFile(
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -162,7 +173,7 @@ export async function updatePrescriptionOfPatient(
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -197,7 +208,7 @@ export async function fetchPrescriptionFiles(
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -216,7 +227,10 @@ export async function fetchPrescriptionFiles(
       onNavigate(router, "/login");
       return Promise.reject(new Error("Unauthorized access"));
     }
-    console.error("Error fetching prescription files:", (error as AxiosError).message);
+    console.error(
+      "Error fetching prescription files:",
+      (error as AxiosError).message
+    );
   }
 }
 
@@ -226,7 +240,7 @@ export async function getCurrentPrescriptionFileCountFromDatabase(
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -244,7 +258,9 @@ export async function getCurrentPrescriptionFileCountFromDatabase(
       setAccessToken("");
       return Promise.reject(new Error("Unauthorized access"));
     }
-    console.error("Error fetching prescription files count:", (error as AxiosError).message);
+    console.error(
+      "Error fetching prescription files count:",
+      (error as AxiosError).message
+    );
   }
 }
-

@@ -10,9 +10,8 @@ export default function Home() {
   useEffect(() => {
     if (getAccessToken()) {
       onNavigate(router, "/dashboard");
-    }
-    else {
-      router.push("login");
+    } else {
+      router.replace("login");
     }
   }, []);
 

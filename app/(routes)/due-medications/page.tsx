@@ -5,7 +5,6 @@ import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { DemographicModal } from "@/components/modals/demographic.modal";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
@@ -18,10 +17,13 @@ import { useToast } from "@/components/ui/use-toast";
 import { fetchDueMedication } from "@/app/api/medication-logs-api/due-medication-api";
 import Image from "next/image";
 
-export default function DueMedicationPage({ patient }: { patient: any }) {
+export default function DueMedicationPage() {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   if (!getAccessToken()) {
-    router.push("/login");
+    router.replace("/login");
   }
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -53,6 +55,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
       patient_middleName: string;
       medicationlogs_medicationLogsDate: string;
       medicationlogs_medicationLogsTime: string;
+      medicationlogs_uuid: string;
     }[]
   >([]);
   const isEdit = false;
@@ -242,7 +245,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
                   setCurrentPage(1);
                 }}
               />
-              <img
+              <Image
                 src="/svgs/search.svg"
                 alt="Search"
                 width="20"
@@ -298,7 +301,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
               </tr>
             </thead>
             <tbody>
-              {dueMedicationList.length === 0 &&  (
+              {dueMedicationList.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="text-[15px] font-normal text-gray-700  text-center">
@@ -310,7 +313,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
               {dueMedicationList.map((dueMedication, index) => (
                 <tr
                   key={index}
-                  className=" group  odd:bg-white hover:bg-gray-100 even:bg-gray-50 border-b"
+                  className=" group  bg-white hover:bg-gray-100  border-b"
                 >
                   <td className="px-6 py-5 gap-2 flex items-center">
                     <Image
@@ -323,7 +326,7 @@ export default function DueMedicationPage({ patient }: { patient: any }) {
                     {dueMedication.patient_firstName}{" "}
                     {dueMedication.patient_lastName}
                   </td>
-                  <td className="px-6 py-5 ">{dueMedication.patient_uuid}</td>
+                  <td className="px-6 py-5 ">{dueMedication.medicationlogs_uuid}</td>
                   <td className="px-6 py-5 ">
                     {dueMedication.medicationlogs_medicationLogsDate}
                   </td>

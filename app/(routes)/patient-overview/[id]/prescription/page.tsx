@@ -8,16 +8,18 @@ import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useRouter, useParams } from "next/navigation";
 import { fetchPrescriptionByPatient as fetchPrescriptionsByPatient } from "@/app/api/prescription-api/prescription.api";
-import { PrescriptionModal } from "@/components/modals/prescription.modal";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
 import Modal from "@/components/reusable/modal";
 import { PrescriptionModalContent } from "@/components/modal-content/prescription-modal-content";
 import View from "@/components/shared/buttons/view";
-import { PrescriptionviewModalContent } from "@/components/modal-content/prescriptionview-modal-content";
+import { PrescriptionViewModalContent } from "@/components/modal-content/prescriptionview-modal-content";
 
 export default function prescription() {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState("ASC");
@@ -325,13 +327,29 @@ export default function prescription() {
                         <td className="truncate  px-6 py-3 w-[230px]">
                           {prescription.prescriptions_interval} hours
                         </td>
-                        <td className="truncate  px-6 py-3 w-[230px]">
+                        <td className="truncate  px-6 py-3 w-[230px] ">
                           {prescription.prescriptions_dosage}
                         </td>
-                        <td className="px-6 py-3 w-[170px]">
-                          {" "}
-                          {prescription.prescriptions_status}
+                        <td className="px-6 py-3">
+                          <div
+                            className={`px-2 font-semibold rounded-[20px] ${
+                              prescription.prescriptions_status === "active"
+                                ? "bg-[#dfffea] text-[#17C653] text-[15px]"
+                                : prescription.prescriptions_status ===
+                                  "inactive"
+                                ? "bg-[#FEE9E9] text-[#EF4C6A]  text-[15px]"
+                                : prescription.prescriptions_status
+                            }`}
+                            style={{
+                              width: `${
+                                prescription.prescriptions_status.length * 10
+                              }px`,
+                            }}
+                          >
+                            {prescription.prescriptions_status}
+                          </div>
                         </td>
+
                         <td className="px-6 py-3 flex gap-2 justify-center">
                           <p
                             onClick={() => {
@@ -449,7 +467,7 @@ export default function prescription() {
       {isView && (
         <Modal
           content={
-            <PrescriptionviewModalContent
+            <PrescriptionViewModalContent
               isModalOpen={isModalOpen}
               isView={isView}
               prescriptionData={prescriptionData}

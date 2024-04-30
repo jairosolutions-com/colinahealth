@@ -10,12 +10,14 @@ import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchNotesByPatient } from "@/app/api/notes-api/notes-api";
 import { SuccessModal } from "@/components/shared/success";
-import { IncidentReportModal } from "@/components/modals/incident-report.modal";
 import { IncidentreportModalContent } from "@/components/modal-content/incidentreport-modal-content";
 import Modal from "@/components/reusable/modal";
 
 const Notes = () => {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState<string>("ASC");
@@ -191,14 +193,14 @@ const Notes = () => {
             <span className="slash">{">"}</span>
             <span
               onClick={() => {
-                router.push(
+                router.replace(
                   `/patient-overview/${patientId.toLowerCase()}/notes/nurses-notes`
                 );
                 setIsLoading(true);
               }}
               className="bread"
             >
-              Nurse's Notes
+              Nurse&apos;s Notes
             </span>
             <span className="slash">{"/"}</span>
             <span className="active">Incident Report</span>

@@ -10,6 +10,7 @@ export async function fetchFormsByPatient(
   currentPage: number,
   sortBy: string,
   sortOrder: "ASC" | "DESC",
+  isArchived: boolean,
   router: any // Pass router instance as a parameter
 ): Promise<any> {
   const requestData = {
@@ -18,12 +19,13 @@ export async function fetchFormsByPatient(
     page: currentPage,
     sortBy: sortBy,
     sortOrder: sortOrder,
+    isArchived: isArchived,
   };
   try {
     console.log("forms", requestData);
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -40,13 +42,15 @@ export async function fetchFormsByPatient(
     const patientForms = response.data;
     console.log(patientForms, "patient forms after search");
     return patientForms;
-  } catch (error:any) {
+  } catch (error: any) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
       if (axiosError.message === "Network Error") {
         // Handle network error
         console.error("Connection refused or network error occurred.");
-        return Promise.reject(new Error("Connection refused or network error occurred."));
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
       }
       if (axiosError.response?.status === 401) {
         setAccessToken("");
@@ -59,12 +63,15 @@ export async function fetchFormsByPatient(
   }
 }
 
-
-export async function createFormsOfPatient(patientId: string, formData: any, router: any): Promise<any> {
+export async function createFormsOfPatient(
+  patientId: string,
+  formData: any,
+  router: any
+): Promise<any> {
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -72,40 +79,45 @@ export async function createFormsOfPatient(patientId: string, formData: any, rou
     };
 
     // Make the API request to create the Notes
-    const response = await axios.post(`${apiUrl}/forms/${patientId}`, formData, { headers });
+    const response = await axios.post(
+      `${apiUrl}/forms/${patientId}`,
+      formData,
+      { headers }
+    );
     const createdForms = response.data;
 
     return createdForms;
-  } catch (error:any) {
+  } catch (error: any) {
     if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        if (axiosError.message === "Network Error") {
-          // Handle network error
-          console.error("Connection refused or network error occurred.");
-          return Promise.reject(new Error("Connection refused or network error occurred."));
-        }
-        if (axiosError.response?.status === 401) {
-          setAccessToken("");
-          onNavigate(router, "/login");
-          return Promise.reject(new Error("Unauthorized access"));
-        }
+      const axiosError = error as AxiosError;
+      if (axiosError.message === "Network Error") {
+        // Handle network error
+        console.error("Connection refused or network error occurred.");
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
       }
-      console.error("Error searching patient forms:", error.message);
-      return Promise.reject(error);
+      if (axiosError.response?.status === 401) {
+        setAccessToken("");
+        onNavigate(router, "/login");
+        return Promise.reject(new Error("Unauthorized access"));
+      }
+    }
+    console.error("Error searching patient forms:", error.message);
+    return Promise.reject(error);
   }
 }
 
-
 export async function updateFormsOfPatient(
- formsUuid: string, 
-  formData: any, 
-  router: any): 
-  Promise<any> {
+  formsUuid: string,
+  formData: any,
+  router: any
+): Promise<any> {
   try {
-    console.log(formData, "formdata")
+    console.log(formData, "formdata");
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -114,28 +126,30 @@ export async function updateFormsOfPatient(
 
     // Make the API request to create the Notes
     const response = await axios.patch(
-      `${apiUrl}/forms/update/${formsUuid}`, 
-    formData, 
-    { headers });
-    const updatedSurgery= response.data;
+      `${apiUrl}/forms/update/${formsUuid}`,
+      formData,
+      { headers }
+    );
+    const updatedSurgery = response.data;
 
     return updatedSurgery;
-  } catch (error:any) {
+  } catch (error: any) {
     if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        if (axiosError.message === "Network Error") {
-          // Handle network error
-          console.error("Connection refused or network error occurred.");
-          return Promise.reject(new Error("Connection refused or network error occurred."));
-        }
-        if (axiosError.response?.status === 401) {
-          setAccessToken("");
-          onNavigate(router, "/login");
-          return Promise.reject(new Error("Unauthorized access"));
-        }
+      const axiosError = error as AxiosError;
+      if (axiosError.message === "Network Error") {
+        // Handle network error
+        console.error("Connection refused or network error occurred.");
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
       }
-      console.error("Error searching patient forms:", error.message);
-      return Promise.reject(error);
+      if (axiosError.response?.status === 401) {
+        setAccessToken("");
+        onNavigate(router, "/login");
+        return Promise.reject(new Error("Unauthorized access"));
+      }
+    }
+    console.error("Error searching patient forms:", error.message);
+    return Promise.reject(error);
   }
 }
-

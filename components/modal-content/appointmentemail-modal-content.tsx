@@ -24,7 +24,7 @@ export const AppointmentemailModalContent = ({ isModalOpen }: Modalprops) => {
             </h2>
             <X
               onClick={() => isModalOpen(false)}
-              className="w-7 h-7 text-black flex items-center mt-2"
+              className="w-6 h-6 text-black flex items-center mt-2"
             />
           </div>
           <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
@@ -91,13 +91,13 @@ export const AppointmentemailModalContent = ({ isModalOpen }: Modalprops) => {
             <button
               onClick={() => isModalOpen(false)}
               type="button"
-              className="w-[170px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm"
+              className="w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm"
             >
               Cancel
             </button>
             <button
               type="button"
-              className="w-[170px] h-[50px] bg-[#007C85] hover:bg-[#03595B]  text-[#ffff]  font-medium rounded-sm"
+              className="w-[150px] h-[45px] bg-[#007C85] hover:bg-[#03595B]  text-[#ffff]  font-medium rounded-sm"
             >
               Submit
             </button>

@@ -1,9 +1,10 @@
 "use client";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { fetchPatientPrescriptions } from "@/app/api/patients-api/patientTimeGraph";
-import { PRNMedModal } from "@/components/modals/prn-medication.modal";
-import { ScheduledMedModal } from "@/components/modals/sched-medication.modal";
+import { PrnModalContent } from "@/components/modal-content/prn-modal-content";
+import { ScheduledModalContent } from "@/components/modal-content/scheduled-modal-content";
 import PatientCard from "@/components/patientCard";
+import Modal from "@/components/reusable/modal";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
 import TimeGraph from "@/components/timeGraph";
@@ -15,16 +16,20 @@ import { useEffect, useState } from "react";
 
 export default function ChartPage() {
   const router = useRouter();
-  if (!getAccessToken()) {
-    router.push("/login");
+  if (typeof window === "undefined") {
+    return null;
   }
+  if (!getAccessToken()) {
+    router.replace("/login");
+  }
+  
   const { toast } = useToast();
   const [patientList, setPatientList] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [gotoError, setGotoError] = useState(false);
   const [pageNumber, setPageNumber] = useState("");
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const [totalPrescriptions, setTotalPrescriptions] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalPatients, setTotalPatients] = useState<number>(1);
   const [patientUuid, setPatientUuid] = useState<string>("");
   const [PRNData, setPRNData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -140,7 +145,7 @@ export default function ChartPage() {
         );
         setPatientList(patientListWithPrescription.data);
         setTotalPages(patientListWithPrescription.totalPages);
-        setTotalPrescriptions(patientListWithPrescription.totalCount);
+        setTotalPatients(patientListWithPrescription.totalCount);
         setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
@@ -181,7 +186,7 @@ export default function ChartPage() {
       key: "id",
       value: patientId,
     });
-    router.push(newUrl, { scroll: true }); // Update URL immediately
+    router.replace(newUrl, { scroll: true }); // Update URL immediately
   };
 
   const onSuccess = () => {
@@ -217,7 +222,7 @@ export default function ChartPage() {
             <span> Create a prescription for patient </span>
           </div>
         ) : (
-          <div className="bg-[#F4F4F4] h-full w-full">
+          <div className="bg-[#F4F4F4] h-[827px] max-h-[827px] w-full">
             <div className="top-section w-full pt-24 pl-5">
               <div>
                 <img
@@ -237,7 +242,13 @@ export default function ChartPage() {
                 />
               </div>
               <div className="flex flex-col w-[250px] justify-between">
-                <h1 className=" -mb-8 font-semibold"> Time Chart</h1>
+                <h1 className=" -mb-8 font-semibold">
+                  {" "}
+                  Time Chart {" - "}
+                  <span className="text-gray-500">
+                    Total of {totalPatients} Patients
+                  </span>
+                </h1>
               </div>
             </div>
             {patientWithMedicationLogsToday.length == 0 && term ? (
@@ -245,7 +256,7 @@ export default function ChartPage() {
                 No Patient Found
               </div>
             ) : (
-              <div className="w-full h-full overflow-hidden flex">
+              <div className="w-full relative overflow-hidden flex">
                 <div className="md:w-2/6  sticky top-0">
                   <div className="w-full">
                     <PatientCard
@@ -286,7 +297,7 @@ export default function ChartPage() {
 
         <div className="bg-white  w-full">
           {/* pagination */}
-          {totalPages <= 1 ? (
+          {totalPages == 0 ? (
             <div></div>
           ) : (
             <div className="mt-5 w-full">
@@ -353,34 +364,44 @@ export default function ChartPage() {
         </div>
 
         {isOpen && (
-          <PRNMedModal
+          <Modal
+            content={
+              <PrnModalContent
+                isModalOpen={isModalOpen}
+                uuid={patientUuid}
+                name={patientName}
+                setIsUpdated={""}
+                isOpen={isOpen}
+                isEdit={isEdit}
+                PRNData={PRNData}
+                label="charting"
+                onSuccess={onSuccess}
+                onFailed={onFailed}
+                setErrorMessage={setError}
+              />
+            }
             isModalOpen={isModalOpen}
-            uuid={patientUuid}
-            name={patientName}
-            setIsUpdated={""}
-            isOpen={isOpen}
-            isEdit={isEdit}
-            PRNData={PRNData}
-            label="sample label"
-            onSuccess={onSuccess}
-            onFailed={onFailed}
-            setErrorMessage={setError}
           />
         )}
         {isAschOpen && (
-          <ScheduledMedModal
-            aschData={aschData}
-            isModalOpen={isAschModalOpen}
-            uuid={medicationLogUuid}
-            name={patientName}
-            isOpen={isAschOpen}
-            isEdit={isEdit}
-            scheduledMedData={""}
-            setIsUpdated={""}
-            label="sample label"
-            onSuccess={onSuccess}
-            onFailed={onFailed}
-            setErrorMessage={setError}
+          <Modal
+            content={
+              <ScheduledModalContent
+                aschData={aschData}
+                isModalOpen={isAschModalOpen}
+                uuid={medicationLogUuid}
+                name={patientName}
+                isOpen={isAschOpen}
+                isEdit={isEdit}
+                scheduledMedData={""}
+                setIsUpdated={""}
+                label="charting"
+                onSuccess={onSuccess}
+                onFailed={onFailed}
+                setErrorMessage={setError}
+              />
+            }
+            isModalOpen={isModalOpen}
           />
         )}
         {isSuccessOpen && (

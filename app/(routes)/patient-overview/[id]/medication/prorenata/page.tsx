@@ -15,6 +15,9 @@ import Modal from "@/components/reusable/modal";
 import { PrnModalContent } from "@/components/modal-content/prn-modal-content";
 const Prorenata = () => {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState("DESC");
@@ -203,7 +206,7 @@ const Prorenata = () => {
             <span
               onClick={() => {
                 setIsLoading(true);
-                router.push(
+                router.replace(
                   `/patient-overview/${patientId.toLowerCase()}/medication/scheduled`
                 );
               }}

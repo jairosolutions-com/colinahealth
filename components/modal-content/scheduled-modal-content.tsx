@@ -74,6 +74,20 @@ export const ScheduledModalContent = ({
     }));
   };
 
+  useEffect(() => {
+    if (label === "charting") {
+      const now = new Date();
+      const formattedDate = now.toISOString().split("T")[0];
+      const formattedTime = now.toTimeString().split(" ")[0];
+
+      setFormData({
+        ...formData,
+        medicationLogsDate: formattedDate,
+        medicationLogsTime: formattedTime,
+      });
+    }
+  }, [label]);
+
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -216,7 +230,7 @@ export const ScheduledModalContent = ({
   console.log(scheduledMedData.length, "scheduledMedData length");
   console.log(formData, "formData");
   return (
-    <div className={`w-[676px] ${charactersFull ? "h-[646px]" : "h-[628px]"} `}>
+    <div className={`w-[676px] ${charactersFull ? "h-[649px]" : "h-[636px]"} `}>
       <form onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
@@ -231,7 +245,7 @@ export const ScheduledModalContent = ({
               }}
               className={`
               ${isSubmitted && " cursor-not-allowed"}
-              w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
+              w-6 h-6 text-black flex items-center mt-6 mr-9 cursor-pointer`}
             />
           </div>
           <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
@@ -241,7 +255,7 @@ export const ScheduledModalContent = ({
         <div
           className={` ${charactersFull ? "mb-[175px]" : "mb-[156px]"} pt-4`}
         >
-          <div className="w-full max-h-[300px] md:px-10 mt-5">
+          <div className="w-full h-[308px] md:px-10 mt-5">
             <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <label
@@ -270,7 +284,7 @@ export const ScheduledModalContent = ({
                           data-uuid={aschData.uuid}
                         >
                           {aschData.medicationLogsName} @{" "}
-                          {aschData.medicationLogsTime}
+                          {formatTime(aschData.medicationLogsTime)}
                         </option>
                       </>
                     )}
@@ -436,14 +450,14 @@ export const ScheduledModalContent = ({
           </div>
         </div>
         <div className="">
-          <div className="justify-end flex mr-10">
+          <div className="justify-end flex mr-10 ">
             <button
               onClick={() => isModalOpen(false)}
               disabled={isSubmitted}
               type="button"
               className={`
                 ${isSubmitted && " cursor-not-allowed"}
-                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+                w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
             >
               Cancel
             </button>
@@ -452,7 +466,7 @@ export const ScheduledModalContent = ({
               type="submit"
               className={`
                ${isSubmitted && " cursor-not-allowed"}
-               w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
+               w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
             >
               {isEdit ? "Update" : "Submit"}
             </button>

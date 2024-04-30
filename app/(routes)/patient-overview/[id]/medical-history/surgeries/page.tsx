@@ -6,7 +6,6 @@ import Edit from "@/components/shared/buttons/edit";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { SurgeriesModal } from "@/components/modals/surgeries.modal";
 import { fetchSurgeriesByPatient } from "@/app/api/medical-history-api/surgeries.api";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
@@ -14,6 +13,9 @@ import { SurgeriesModalContent } from "@/components/modal-content/surgeries-moda
 import Modal from "@/components/reusable/modal";
 
 export default function Surgeries() {
+  if (typeof window === "undefined") {
+    return null;
+  }
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [patientSurgeries, setPatientSurgeries] = useState<any[]>([]);
@@ -211,7 +213,7 @@ export default function Surgeries() {
             <span
               onClick={() => {
                 setIsLoading(true);
-                router.push(
+                router.replace(
                   `/patient-overview/${patientId.toLowerCase()}/medical-history/allergies`
                 );
               }}
@@ -314,7 +316,7 @@ export default function Surgeries() {
             </thead>
             <tbody className="h-[220px]">
               {patientSurgeries.length == 0 && (
-                <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                <div className="border-1 w-[180vh] py-5  absolute flex justify-center items-center">
                   <p className="text-[15px] font-normal text-gray-700 text-center">
                     No Surgeries Found <br />
                   </p>

@@ -7,7 +7,6 @@ import Edit from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { FormsModalContent } from "@/components/modals/forms.modal";
 import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
 import Modal from "@/components/reusable/modal";
 import { fetchFormsByPatient } from "@/app/api/forms-api/forms.api";
@@ -35,7 +34,7 @@ export default function ArchiveTab() {
   const [error, setError] = useState("");
   const [term, setTerm] = useState<string>("");
   const [isEdit, setIsEdit] = useState(false);
-  const [notesToEdit, setNotesToEdit] = useState<any[]>([]);
+  const [formsToView, setFormsToView] = useState<any[]>([]);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
@@ -150,6 +149,7 @@ export default function ArchiveTab() {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
+          true,
           router
         );
         setPatientForms(response.data);
@@ -186,7 +186,7 @@ export default function ArchiveTab() {
             <p
               onClick={() => {
                 setIsLoading(true);
-                router.push(
+                router.replace(
                   `/patient-overview/${patientId.toLowerCase()}/forms`
                 );
               }}
@@ -270,31 +270,73 @@ export default function ArchiveTab() {
 
         {/* START OF TABLE */}
         <div>
-          <table className="w-full text-left rtl:text-right">
-            <thead>
-              <tr className="uppercase text-[#64748B] border-y  ">
-                <th scope="col" className="px-7 py-3 h-[60px] w-[250px]">
-                  NAME OF DOCUMENT
-                </th>
-                <th scope="col" className="px-7 py-3 h-[60px] w-[200px]">
-                  DATE ISSUED
-                </th>
-                <th scope="col" className="px-7 py-3 h-[60px] w-[900px]">
-                  NOTES
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group">
-                <th className="px-7 py-3 h-[60px] ">Patient Details</th>
-                <td className="px-7 py-3 h-[60px]">10/12/2024</td>
-                <td className="px-7 py-3 h-[60px]">
-                  Patient reports occasional headaches. Advised to monitor and
-                  follow up.
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          {patientForms.length == 0 ? (
+            <div>
+              <div className="w-full flex-col justify-center items-center">
+                <table className="w-full block text-left rtl:text-right">
+                  <thead className="w-full ">
+                    <tr className=" text-[#64748B] border-b-[1px] text-[15px]">
+                      <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
+                        NAME OF DOCUMENT
+                      </th>
+                      <th scope="col" className="px-6 py-3 w-[400px]">
+                        DATE ISSUED
+                      </th>
+                      <th scope="col" className="px-6 py-3 w-[750px]">
+                        NOTES
+                      </th>
+                      <th scope="col" className="px-6 py-3 max-w-[300px]">
+                        ACTION
+                      </th>
+                    </tr>
+                  </thead>
+                </table>
+                <div className="py-5 flex justify-center items-center">
+                  <p className="text-xl font-semibold text-gray-700 text-center">
+                    No Form/s
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <table className="w-full block text-left rtl:text-right">
+              <thead className="w-full">
+                <tr className=" text-[#64748B] border-b-[1px] text-[15px]">
+                  <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
+                    NAME OF DOCUMENT
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[400px]">
+                    DATE ISSUED
+                  </th>
+                  <th scope="col" className="px-6 py-3 w-[750px]">
+                    NOTES
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody className="overflow-y-scroll">
+                {patientForms.map((form, index) => (
+                  <tr
+                    key={index}
+                    className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
+                  >
+                    <th
+                      scope="row"
+                      className="truncate px-6 py-3 w-[400px] font-medium text-gray-900 whitespace-nowrap"
+                    >
+                      {form.forms_nameOfDocument}
+                    </th>
+                    <td className="px-6 py-3 w-[400px]">
+                      {form.forms_dateIssued}
+                    </td>
+                    <td className="px-6 py-3 w-[750px] max-w-[750px] truncate">
+                      {form.forms_notes}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
         {/* END OF TABLE */}
       </div>
@@ -370,7 +412,7 @@ export default function ArchiveTab() {
           content={
             <FormsviewModalContent
               isModalOpen={isModalOpen}
-              onSuccess={onSuccess}
+              formData={setFormsToView}
             />
           }
           isModalOpen={isModalOpen}

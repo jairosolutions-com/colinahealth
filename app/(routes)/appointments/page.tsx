@@ -1,17 +1,13 @@
 "use client";
 
-import { onNavigate } from "@/actions/navigation";
 import { searchPatientList } from "@/app/api/patients-api/patientList.api";
 import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { DemographicModal } from "@/components/modals/demographic.modal";
-import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import { AppointmentsModal } from "@/components/modals/appointments.modal";
 import { fetchUpcomingAppointments } from "@/app/api/appointments-api/upcoming-appointments-api";
 import Image from "next/image";
 import * as React from "react";
@@ -27,13 +23,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { fetchAllAppointments } from "@/app/api/appointments-api/fetch-all-appointments.api";
+import { ErrorModal } from "@/components/shared/error";
 
 export default function AppointmentPage() {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
 
   if (!getAccessToken()) {
-    router.push("/login");
+    router.replace("/login");
   }
+
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
 
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
@@ -189,14 +190,14 @@ export default function AppointmentPage() {
     fetchData();
   }, [currentPage, startDate, endDate, sortBy, sortOrder, term]);
 
-  const handlePatientClick = (patientId: any) => {
-    const lowercasePatientId = patientId.toLowerCase();
-    setIsLoading(true);
-    onNavigate(
-      router,
-      `/patient-overview/${lowercasePatientId}/medical-history/allergies`
-    );
-  };
+  // const handlePatientClick = (patientId: any) => {
+  //   const lowercasePatientId = patientId.toLowerCase();
+  //   setIsLoading(true);
+  //   onNavigate(
+  //     router,
+  //     `/patient-overview/${lowercasePatientId}/medical-history/allergies`
+  //   );
+  // };
   console.log(startD, "startDate");
   console.log(appointmentList, "appointmentList");
   if (isLoading) {
@@ -218,7 +219,7 @@ export default function AppointmentPage() {
     <div className="w-full px-[150px] pt-[90px]">
       <div className="flex justify-end">
         <p
-          onClick={() => onNavigate(router, "/dashboard")}
+          onClick={() => router.push("/dashboard")}
           className="text-[#64748B] underline cursor-pointer text-[15px]"
         >
           Back to Dashboard
@@ -364,7 +365,7 @@ export default function AppointmentPage() {
               {appointmentList.map((appointment, index) => (
                 <tr
                   key={index}
-                  className="odd:bg-white hover:bg-[#f4f4f4] group "
+                  className="bg-white hover:bg-[#f4f4f4] group border-b "
                 >
                   <td className="px-6 py-5 flex items-center">
                     <Image
@@ -510,7 +511,7 @@ export default function AppointmentPage() {
           </div>
         </div>
       )}
-      {isOpen && (
+      {/* {isOpen && (
         <AppointmentsModal
           isModalOpen={isModalOpen}
           isOpen={isOpen}
@@ -518,7 +519,7 @@ export default function AppointmentPage() {
           isView={false}
           appointmentData={appointmentList}
         />
-      )}
+      )} */}
       {isSuccessOpen && (
         <SuccessModal
           label="Success"

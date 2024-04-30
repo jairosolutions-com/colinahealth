@@ -13,7 +13,7 @@ export async function fetchPatientDetails(
   try {
     const accessToken = getAccessToken(); // Retrieve access token from local storage
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     // Set the Authorization header with the JWT token
@@ -32,13 +32,15 @@ export async function fetchPatientDetails(
 
     console.log("api patientDetails", patientDetails);
     return patientDetails;
-  } catch (error:any) {
+  } catch (error: any) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
       if (axiosError.message === "Network Error") {
         // Handle network error
         console.error("Connection refused or network error occurred.");
-        return Promise.reject(new Error("Connection refused or network error occurred."));
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
       }
       if (axiosError.response?.status === 401) {
         setAccessToken("");
@@ -60,7 +62,7 @@ export async function updatePatient(
     console.log(formData, "formdata");
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {

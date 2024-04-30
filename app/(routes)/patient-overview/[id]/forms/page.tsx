@@ -7,8 +7,12 @@ import { useParams, useRouter } from "next/navigation";
 import { FormsModalContent } from "@/components/modal-content/forms-modal-content";
 import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
 import Modal from "@/components/reusable/modal";
-import { fetchFormsByPatient } from "@/app/api/forms-api/forms.api";
+import {
+  fetchFormsByPatient,
+  updateFormsOfPatient,
+} from "@/app/api/forms-api/forms.api";
 import { SuccessModal } from "@/components/shared/success";
+import { ConfirmationModal } from "@/components/modal-content/confirmation-modal-content";
 
 export default function FormsTab() {
   const router = useRouter();
@@ -38,6 +42,9 @@ export default function FormsTab() {
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
   const [isView, setIsView] = useState(false);
+  const [confirmArchived, setConfirmArchived] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formsUuid, setFormsUuid] = useState("");
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -75,6 +82,15 @@ export default function FormsTab() {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
+      document.body.style.overflow = "visible";
+    }
+  };
+
+  const isConfirmModalOpen = (confirmArchived: boolean) => {
+    setConfirmArchived(confirmArchived);
+    if (confirmArchived) {
+      document.body.style.overflow = "hidden";
+    } else if (!confirmArchived) {
       document.body.style.overflow = "visible";
     }
   };
@@ -157,6 +173,7 @@ export default function FormsTab() {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
+          false,
           router
         );
         setPatientForms(response.data);
@@ -178,6 +195,24 @@ export default function FormsTab() {
     setIsEdit(false);
   };
 
+  const [formData, setFormData] = useState({
+    isArchived: true,
+  });
+
+  const handleIsArchived = async (formUuid: string) => {
+    setIsSubmitted(true);
+    try {
+      await updateFormsOfPatient(formUuid, formData, router);
+      onSuccess();
+      setConfirmArchived(false);
+      isModalOpen(false);
+
+      return;
+    } catch (error) {}
+
+    setIsSubmitted(false);
+  };
+
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center ">
@@ -196,7 +231,7 @@ export default function FormsTab() {
             <span
               onClick={() => {
                 setIsLoading(true);
-                router.push(
+                router.replace(
                   `/patient-overview/${patientId.toLowerCase()}/forms/archived`
                 );
               }}
@@ -332,7 +367,13 @@ export default function FormsTab() {
                       <Edit />
                     </p>
                     <p>
-                      <button className="w-[90px] h-[35px] rounded bg-[#E7EAEE]  hover:!text-white hover:!bg-[#007C85] group-hover:bg-white group-hover:text-black ">
+                      <button
+                        onClick={(e) => {
+                          setFormsUuid(form.forms_uuid);
+                          setConfirmArchived(true);
+                        }}
+                        className="w-[90px] h-[35px] rounded bg-[#E7EAEE]  hover:!text-white hover:!bg-[#007C85] group-hover:bg-white group-hover:text-black"
+                      >
                         Archive
                       </button>
                     </p>
@@ -410,6 +451,55 @@ export default function FormsTab() {
             </div>
           </div>
         </div>
+      )}
+      {confirmArchived && (
+        <Modal
+          content={
+            <ConfirmationModal
+              uuid={formsUuid}
+              setConfirm={setConfirmArchived}
+              label="Archived"
+              handleFunction={(e) => {
+                handleIsArchived(formsUuid);
+              }}
+              isSubmitted={isSubmitted}
+            />
+          }
+          isModalOpen={isConfirmModalOpen}
+        />
+        // <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#76898A99]">
+        //   <div className="bg-white max-w-lg rounded-lg w-[600px] h-[146px]">
+        //     <div className="flex justify-center items-center pt-6 pb-6">
+        //       <h2 className="font-semibold text-[20px] text-[#667085]">
+        //         Are you sure to archive this?
+        //       </h2>
+        //     </div>
+        //     <div className="flex justify-center items-center gap-2">
+        //       <button
+        //         onClick={() => setConfirmArchived(false)}
+        //         disabled={isSubmitted}
+        //         type="button"
+        //         className={`
+        //                       ${isSubmitted && " cursor-not-allowed"}
+        //                       w-[160px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black rounded-sm`}
+        //       >
+        //         No
+        //       </button>
+        //       <button
+        //         disabled={isSubmitted}
+        //         type="button"
+        //         onClick={(e) => {
+        //           handleIsArchived(formsUuid, e);
+        //         }}
+        //         className={`
+        //                         ${isSubmitted && " cursor-not-allowed"}
+        //                         w-[160px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium rounded-sm`}
+        //       >
+        //         Yes
+        //       </button>
+        //     </div>
+        //   </div>
+        // </div>
       )}
       {isOpen && (
         <Modal

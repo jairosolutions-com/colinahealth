@@ -7,13 +7,15 @@ import Edit from "@/components/shared/buttons/edit";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { VitalSignModal } from "@/components/modals/vitalsign.modal";
 import { fetchVitalSignsByPatient } from "@/app/api/vital-sign-api/vital-sign-api";
 import { SuccessModal } from "@/components/shared/success";
 import Modal from "@/components/reusable/modal";
 import { VitalModalContent } from "@/components/modal-content/vital-modal-content";
 export default function vitalsigns() {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState("ASC");

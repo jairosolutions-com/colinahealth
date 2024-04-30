@@ -9,13 +9,15 @@ import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchLabResultsByPatient } from "@/app/api/lab-results-api/lab-results.api";
-import { LabResultModal } from "@/components/modals/labresults.modal";
 import Modal from "@/components/reusable/modal";
 import { SuccessModal } from "@/components/shared/success";
 import { LabresultsModalContent } from "@/components/modal-content/labresults-modal-content";
 import { LabResultsViewModalContent } from "@/components/modal-content/labresultsview-modal-content";
 export default function Laboratoryresults() {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [totalPages, setTotalPages] = useState<number>(0);

@@ -12,8 +12,11 @@ import { useToast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return null;
+  }
   if (!getAccessToken()) {
-    router.push("/login");
+    router.replace("/login");
   }
   const { toast } = useToast();
   const [term, setTerm] = useState("");
@@ -115,7 +118,7 @@ const Dashboard = () => {
         setUpcomingAppointments(upcomingAppoinments.data);
         setTotalUpcoming(upcomingAppoinments.totalCount);
         setUpcomingTotalPages(upcomingAppoinments.totalPages);
-        setIsLoading2(false)
+        setIsLoading2(false);
       } catch (error: any) {
         setError(error.message);
         console.log("error");

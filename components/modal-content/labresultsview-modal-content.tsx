@@ -400,9 +400,10 @@ export const LabResultsViewModalContent = ({
                 defaultLabFiles.length === 5
                   ? "cursor-not-allowed"
                   : "cursor-pointer"
-              }text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}>
+              }text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}
+            >
               Browse
-            </label>  
+            </label>
             <input
               type="file"
               id="fileupload"
@@ -414,7 +415,7 @@ export const LabResultsViewModalContent = ({
               onChange={(e) => handleFile(e)}
               max={5}
             />
-              {isHovering && selectedFiles.length > 0 && (
+            {isHovering && selectedFiles.length > 0 && (
               <div className="absolute bg-[#4E4E4E] text-[13px]  p-2 w-[220px] mt-[30px] text-white rounded-md shadow-md left-0">
                 <ul>
                   {selectedFiles.map((file, index) => (
@@ -448,7 +449,7 @@ export const LabResultsViewModalContent = ({
                   <h2 className="p-title text-left text-[#071437] pl-10 mt-7"></h2>
                   <X
                     onClick={() => isModalOpen(false)}
-                    className="w-7 h-7 text-black flex items-center mt-2 mr-4"
+                    className="w-6 h-6 text-black flex items-center mt-6 mr-9"
                   />
                 </div>
                 <p className="text-sm pl-10 text-gray-600 pb-10 pt-2"></p>
@@ -473,10 +474,12 @@ export const LabResultsViewModalContent = ({
                     View Laboratory Result
                   </h2>
                   <X
-                    onClick={() => {isSubmitted?null:isModalOpen(false)}}
+                    onClick={() => {
+                      isSubmitted ? null : isModalOpen(false);
+                    }}
                     className={`
                     ${isSubmitted && " cursor-not-allowed"}
-                    w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
+                    w-6 h-6 text-black flex items-center mt-6 mr-9 cursor-pointer`}
                   />
                 </div>
 
@@ -666,7 +669,7 @@ export const LabResultsViewModalContent = ({
                       type="button"
                       className={`
                 ${isSubmitted && " cursor-not-allowed"}
-                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+                w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
                     >
                       Cancel
                     </button>
@@ -675,7 +678,7 @@ export const LabResultsViewModalContent = ({
                       type="submit"
                       className={`
                        ${isSubmitted && " cursor-not-allowed"}
-                       w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
+                       w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
                     >
                       Submit
                     </button>

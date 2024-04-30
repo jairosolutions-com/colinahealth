@@ -1,6 +1,5 @@
 "use client";
 
-import { Patients } from "@/type";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 

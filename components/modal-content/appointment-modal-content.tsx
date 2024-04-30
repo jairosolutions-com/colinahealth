@@ -183,7 +183,7 @@ export const AppointmentModalContent = ({
   return (
     <div
       className={`${
-        isView ? "h-[640px]" : charactersFull ? "h-[551px]" : "h-[537px]"
+        isView ? "h-[640px]" : charactersFull ? "h-[551px]" : "h-[552px]"
       } w-[676px]  bg-[#FFFFFF] rounded-md`}
     >
       <form className="" onSubmit={handleSubmit}>
@@ -197,10 +197,12 @@ export const AppointmentModalContent = ({
                 : "Make an Appointment"}
             </h2>
             <X
-              onClick={() => {isSubmitted?null:isModalOpen(false)}}
+              onClick={() => {
+                isSubmitted ? null : isModalOpen(false);
+              }}
               className={`
               ${isSubmitted && " cursor-not-allowed"}
-              w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
+              w-6  h-6 text-black flex items-center mt-6 mr-9 cursor-pointer`}
             />
           </div>
           <div className="text-sm text-start px-9 pr-10 text-gray-600 pb-10 pt-2">
@@ -279,7 +281,7 @@ export const AppointmentModalContent = ({
           </div>
         </div>
         <div className=" mb-9 pt-4">
-          <div className="  md:px-10 ">
+          <div className="md:px-10 mb-9 ">
             <div className="flex flex-col mt-6 pb-3 relative">
               <div className="flex flex-col w-full">
                 <label
@@ -436,7 +438,7 @@ export const AppointmentModalContent = ({
                 type="button"
                 className={`
                 ${isSubmitted && " cursor-not-allowed"}
-                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+                w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
               >
                 Cancel
               </button>
@@ -453,7 +455,7 @@ export const AppointmentModalContent = ({
                   isSubmitted
                     ? "cursor-not-allowed"
                     : "cursor-pointer"
-                } w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
+                } w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
               >
                 {isEditable ? "Update" : "Submit"}
               </button>

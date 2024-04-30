@@ -139,6 +139,11 @@ export const FormsModalContent = ({
       setFileTypes(newFileTypes);
     } else {
       console.warn("No files selected");
+      isModalOpen(false);
+      onSuccess();
+    } catch (error) {
+      console.error("Error adding forms:", error);
+      setError("Failed to add forms");
     }
   };
 
@@ -203,7 +208,7 @@ export const FormsModalContent = ({
   // Ed
 
   return (
-    <div className="w-[676px] h-[621px] bg-[#FFFFFF] rounded-md">
+    <div className="w-[676px] h-[643px] bg-[#FFFFFF] rounded-md">
       <form onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
@@ -216,7 +221,7 @@ export const FormsModalContent = ({
               }}
               className={`
               ${isSubmitted && " cursor-not-allowed"}
-              w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
+              w-6 h-6 text-black flex items-center mt-6 mr-9 cursor-pointer`}
             />
           </div>
           <p className="text-[15px] pl-10 text-[#667085] pb-10 pt-2">
@@ -224,7 +229,7 @@ export const FormsModalContent = ({
           </p>
         </div>
         <div className=" mb-9 pt-4">
-          <div className="h-[600px] max-h-[375px] md:px-10 mt-5">
+          <div className="h-[600px] max-h-[394px] md:px-10 mt-5">
             <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <label className="font-medium text-[15px] required-field">
@@ -332,6 +337,22 @@ export const FormsModalContent = ({
                   />
                 </div>
               )}
+                  <div className="flex pb-5 text-nowraptext-[15px] font-bold">
+                    <p className="">Upload or Attach Files or</p>
+                    <p className="underline text-blue-500 ml-1">Browse</p>
+                  </div>
+                  <span className="text-[15px] font-medium absolute bottom-2 text-[#667085] ml-10 pb-1">
+                    Minimum file size 100 MB.
+                  </span>
+                </label>
+                <input
+                  type="file"
+                  id="imageUpload"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => handleImageUpload(e)}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -343,7 +364,7 @@ export const FormsModalContent = ({
               type="button"
               className={`
                 ${isSubmitted && " cursor-not-allowed"}
-                w-[200px] h-[50px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+                w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
             >
               Cancel
             </button>
@@ -352,7 +373,7 @@ export const FormsModalContent = ({
               type="submit"
               className={`
               ${isSubmitted && " cursor-not-allowed"}
-              w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
+              w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
             >
               Submit
             </button>
