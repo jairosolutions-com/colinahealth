@@ -329,7 +329,6 @@ export const LabResultsViewModalContent = ({
 
         // Reset the selected file UUID
         setSelectedFileUUID("");
-
         // Close the delete modal
         setDeleteModalOpen(false);
         onSuccess();
