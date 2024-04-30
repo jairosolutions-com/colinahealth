@@ -22,7 +22,7 @@ export const SuccessModal = ({
       {isAlertOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          <div className="fixed z-50 bg-white rounded-[10px] shadow-xl w-[670px] h-[326px] mx-auto ">
+          <div className="fixed z-50 bg-white rounded-[10px] shadow-xl w-[600px] h-[326px] mx-auto ">
             <div className="text-center pt-[30px]">
               <div className="mx-auto mb-5 text-gray-400 w-[110px] h-[110px]">
                 <img src="/svgs/successful.svg" alt="" />
@@ -51,8 +51,7 @@ export const SuccessModal = ({
                     setIsUpdated(false);
                   }
                 }}
-                className="text-white bg-[#1B84FF] hover:bg-blue-800 font-medium 
-                rounded-b-[10px] text-[15px] w-[670px] py-[20px] mt-5 dark:bg-blue-600 dark:hover:bg-blue-700"
+                className="w-[150px] h-[45px]px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm"
               >
                 Okay, Thanks!
               </button>
