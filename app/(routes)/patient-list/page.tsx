@@ -16,6 +16,10 @@ import { DemographicModalContent } from "@/components/modal-content/demographic-
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
+import {
+  fetchPatientProfileImage,
+  fetchProfileImages,
+} from "@/app/api/patients-api/patientProfileImage.api";
 
 export default function PatientPage() {
   const router = useRouter();
@@ -44,6 +48,8 @@ export default function PatientPage() {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const isEdit = false;
+  const [patientImages, setPatientImages] = useState<any[]>([]);
+
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -150,17 +156,47 @@ export default function PatientPage() {
           sortOrder as "ASC" | "DESC",
           router
         );
-        if (response.data.length === 0) {
-          setPatientList([]);
 
-          setIsLoading(false);
-          return;
+        // Get UUIDs of all patients
+        const patientUuids = response.data.map(
+          (patient: { uuid: any }) => patient.uuid
+        );
+
+        // Fetch profile images for all patients
+        const profileImagesResponse = await fetchProfileImages(patientUuids);
+        // Buffer the images and store them in an array
+
+        if (profileImagesResponse) {
+          const patientImagesData = profileImagesResponse.map((image: any) => {
+            // Convert the image data buffer to a data URL
+            const buffer = Buffer.from(image.data);
+            const dataUrl = `data:image/jpeg;base64,${buffer.toString('base64')}`;
+        
+            return {
+              patientUuid: image.patientUuid,
+              data: dataUrl
+            };
+          });
+        
+          setPatientImages(patientImagesData);
+          console.log("patientImagesData", patientImagesData);
         }
-
+        
         setPatientList(response.data);
+
+        // Store profile images in state
+
+        // setPatientImages(profileImagesResponse);
+
         setTotalPages(response.totalPages);
         setTotalPatient(response.totalCount);
         setIsLoading(false);
+
+        if (response.data.length === 0) {
+          setPatientList([]);
+          setIsLoading(false);
+          return;
+        }
       } catch (error: any) {
         setError(error.message);
         console.log("error", error.message);
@@ -318,20 +354,51 @@ export default function PatientPage() {
                   </td>
                 </tr>
               )}
+
               {patientList.map((patient, index) => (
                 <tr
                   key={index}
-                  className=" group  bg-white hover:bg-gray-100  border-b"
+                  className="group bg-white hover:bg-gray-100 border-b"
                 >
                   <td className="truncate flex items-center gap-2 px-6 py-5">
-                    <Image
-                      className="rounded-full "
-                      src="/imgs/dennis.svg"
-                      alt="Icon"
-                      width={45}
-                      height={45}
-                    />
-                    {patient.firstName} {patient.lastName}
+                    {/* Check if any matching image found for the patient */}
+                    {patientImages.some(
+                      (image) => image.patientUuid === patient.uuid
+                    ) ? (
+                      // Render the matched image
+                      <div>
+                        {patientImages.map((image, imgIndex) => {
+                          if (image.patientUuid === patient.uuid) {
+                            return (
+                              <div key={imgIndex}>
+                                <img
+                                  className="rounded-full"
+                                  src={image.data} // Use the base64-encoded image data directly
+                                  alt="Icon"
+                                  width={45}
+                                  height={45}
+                                />
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    ) : (
+                      // Render a placeholder image if no matching image found
+                      <div>
+                        <img
+                          className="rounded-full"
+                          src="/imgs/dennis.svg"
+                          alt="Icon"
+                          width={45}
+                          height={45}
+                        />
+                      </div>
+                    )}
+                    <p className="truncate ">
+                      {patient.firstName} {patient.lastName}
+                      </p>
                   </td>
                   <td className="truncate px-6 py-5">{patient.uuid}</td>
                   <td className="truncate px-6 py-5">{patient.age}</td>
