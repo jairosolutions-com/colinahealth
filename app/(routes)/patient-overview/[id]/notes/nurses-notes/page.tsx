@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
@@ -181,7 +182,12 @@ const Notes = () => {
   if (isLoading) {
     return (
       <div className="container w-full h-full flex justify-center items-center ">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          alt="logo"
+          width={100}
+          height={100}
+        />
       </div>
     );
   }
@@ -225,6 +231,17 @@ const Notes = () => {
             </button>
           </div>
         </div>
+        <div className="flex gap-2">
+          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+            <Image src="/imgs/add.svg" alt="" width={22} height={22} />
+            <p className="text-[18px]">Add</p>
+          </button>
+          <button className="btn-pdfs gap-2">
+            <Image src="/imgs/downloadpdf.svg" alt="" width={22} height={22} />
+            <p className="text-[18px]">Download PDF</p>
+          </button>
+        </div>
+      </div>
 
         <div className="w-full m:rounded-lg items-center">
           <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
@@ -281,6 +298,12 @@ const Notes = () => {
                 open={isOpenSortedBy}
                 width={"165px"}
                 label={"Select"}
+              <Image
+                src="/svgs/search.svg"
+                alt="Search"
+                width="20"
+                height="20"
+                className="absolute left-8 top-9 pointer-events-none"
               />
             </div>
           </div>
