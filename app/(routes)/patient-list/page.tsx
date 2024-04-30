@@ -195,18 +195,13 @@ export default function PatientPage() {
 
   if (isLoading) {
     return (
-<<<<<<< HEAD
-      <div className="w-full h-full flex justify-center items-center">
+      <div className=" w-full h-full flex justify-center items-center">
         <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
           width={100}
           height={100}
         />
-=======
-      <div className="container w-full h-full flex justify-center items-center">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
->>>>>>> ce8034b96c33f0a36e09bcbb8a28969ac3ea8ce6
       </div>
     );
   }
