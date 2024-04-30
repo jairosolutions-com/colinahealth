@@ -83,7 +83,7 @@ const Pagination = ({
   const isNextDisabled = currentPage === totalPages;
 
   return (
-    <div className="mt-5 absolute w-[1618px] bottom-14">
+    <div className="mt-5 absolute w-full max-w-[1618px] bottom-14">
       <div className="flex justify-between">
         <p className="font-medium size-[18px] text-[15px] w-[138px] items-center">
           Page {currentPage} of {totalPages}
