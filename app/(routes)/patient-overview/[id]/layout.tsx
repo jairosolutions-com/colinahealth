@@ -194,14 +194,14 @@ export default function PatientOverviewLayout({
                   width="200"
                   height="200"
                 />
-                <button className="absolute bottom-2 right-[-20px]  ">
+                {/* <button className="absolute bottom-2 right-[-20px]  ">
                   <img
                     src="/svgs/editprof.svg"
                     alt="edit button"
                     width="35"
                     height="35"
                   />
-                </button>
+                </button> */}
               </div>
             </div>
             <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
