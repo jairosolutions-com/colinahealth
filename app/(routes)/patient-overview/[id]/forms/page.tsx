@@ -175,7 +175,6 @@ export default function FormsTab() {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
-          false,
           router
         );
         setPatientForms(response.data);
@@ -363,7 +362,7 @@ export default function FormsTab() {
                       onClick={() => {
                         isModalOpen(true);
                         setIsEdit(true);
-                        setFormsToEdit(form);
+                        setFormViewData(form);
                       }}
                     >
                       <Edit />

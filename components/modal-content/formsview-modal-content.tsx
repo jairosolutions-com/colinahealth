@@ -155,7 +155,9 @@ export const FormsviewModalContent = ({
               type="button"
               className={`
                 ${isSubmitted && " cursor-not-allowed"}
-                w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm `}
+ 
+                w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+
             >
               Cancel
             </button>
