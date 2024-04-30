@@ -11,6 +11,8 @@ import Image from "next/image";
 import { NofileviewLabResultsModalContent } from "./nofileview-labresults-modal-content";
 import { SuccessModal } from "../shared/success";
 import { useToast } from "@/components/ui/use-toast";
+import Modal from "../reusable/modal";
+import { ConfirmationModal } from "./confirmation-modal-content";
 
 interface ModalProps {
   labResultsData: any;
@@ -46,12 +48,22 @@ export const LabResultsViewModalContent = ({
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isNoFileModalOpen, setIsNoFileModalOpen] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   // update isNoFileModalOpen state
   const handleNoFileModalClose = (isModalOpen: boolean) => {
     setIsSubmitted(false);
     setIsNoFileModalOpen(isModalOpen);
     setIsLoading(true);
     console.log("isNoFileModalOpen HANDLE", isNoFileModalOpen);
+  };
+
+  const isConfirmModalOpen = (confirmDelete: boolean) => {
+    setConfirmDelete(confirmDelete);
+    if (confirmDelete) {
+      document.body.style.overflow = "hidden";
+    } else if (!confirmDelete) {
+      document.body.style.overflow = "visible";
+    }
   };
 
   const toggleModal = () => {
@@ -320,6 +332,7 @@ export const LabResultsViewModalContent = ({
 
         // Close the delete modal
         setDeleteModalOpen(false);
+        onSuccess();
       } else {
         console.warn("No files selected for deletion");
       }
@@ -609,34 +622,20 @@ export const LabResultsViewModalContent = ({
                       </div>
                     )}
                     {deleteModalOpen && (
-                      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#76898A99]">
-                        <div className="bg-white max-w-lg rounded-lg w-[700px] h-[146px]">
-                          <div className="flex justify-center items-center pt-6 pb-6">
-                            <h2 className="font-semibold text-[20px] text-[#667085]">
-                              Are you sure to delete this?
-                            </h2>
-                          </div>
-                          <div className="flex border-t-4">
-                            <button
-                              onClick={() => setDeleteModalOpen(false)}
-                              type="button"
-                              className="w-[600px] h-[50px] px-3 py-2 bg-[#BCBCBC] hover:bg-[#D9D9D9] font-medium text-white mt-4 mr-[3px] rounded-bl-md"
-                            >
-                              No
-                            </button>
-                            <button
-                              disabled={isSubmitted}
-                              type="button"
-                              onClick={handleDeleteClick}
-                              className={`
-                              ${isSubmitted && "cursor-not-allowed"}
-                              w-[600px] px-3 py-2 bg-[#1B84FF] hover:bg-[#2765AE] text-white font-medium mt-4 rounded-br-md`}
-                            >
-                              Yes
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+                      <Modal
+                        content={
+                          <ConfirmationModal
+                            uuid={selectedFileUUID}
+                            setConfirm={setConfirmDelete}
+                            label="Delete"
+                            handleFunction={(e) => {
+                              handleDeleteClick();
+                            }}
+                            isSubmitted={isSubmitted}
+                          />
+                        }
+                        isModalOpen={isConfirmModalOpen}
+                      />
                     )}
 
                     <div className="flex space-x-4 mt-4 ml-[115px] text-[15px]">
@@ -692,7 +691,7 @@ export const LabResultsViewModalContent = ({
       )}
       {isSuccessOpen && (
         <SuccessModal
-          label="Success"
+          label={selectedFileUUID !== "" ? "deleted" : "submitted"}
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
           isUpdated={isUpdated}

@@ -207,7 +207,7 @@ export default function vitalsigns() {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex justify-center items-center ">
+      <div className="container w-full h-full flex justify-center items-center ">
         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
       </div>
     );

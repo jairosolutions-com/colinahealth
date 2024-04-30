@@ -69,9 +69,9 @@ export const FormsviewModalContent = ({
              w-6 h-6 text-black flex items-center mt-6 mr-9 cursor-pointer`}
             />
           </div>
-          <p className="text-sm pl-10 text-gray-600 pb-10 pt-2">
+          <p className="text-sm pl-10 text-gray-600 pb-10 pt-2 flex justify-between">
             Download PDF once your done.
-            <button className="pl-[297px] hover:underline text-[15px]">
+            <button className="hover:underline text-[15px] mr-10">
               View Document
             </button>
           </p>
@@ -155,7 +155,9 @@ export const FormsviewModalContent = ({
               type="button"
               className={`
                 ${isSubmitted && " cursor-not-allowed"}
+ 
                 w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+
             >
               Cancel
             </button>
