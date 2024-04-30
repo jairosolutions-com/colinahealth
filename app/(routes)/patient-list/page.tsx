@@ -16,10 +16,7 @@ import { DemographicModalContent } from "@/components/modal-content/demographic-
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
-import {
-  fetchPatientProfileImage,
-  fetchProfileImages,
-} from "@/app/api/patients-api/patientProfileImage.api";
+import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 
 export default function PatientPage() {
   const router = useRouter();
@@ -145,6 +142,7 @@ export default function PatientPage() {
     }
     return pageNumbers;
   };
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -157,45 +155,49 @@ export default function PatientPage() {
           router
         );
 
+        // Update patient list
+        setPatientList(response.data);
+        setTotalPages(response.totalPages);
+        setTotalPatient(response.totalCount);
+
         // Get UUIDs of all patients
         const patientUuids = response.data.map(
           (patient: { uuid: any }) => patient.uuid
         );
-
         // Fetch profile images for all patients
         const profileImagesResponse = await fetchProfileImages(patientUuids);
-        // Buffer the images and store them in an array
 
+        // Buffer the images and store them in an array
         if (profileImagesResponse) {
           const patientImagesData = profileImagesResponse.map((image: any) => {
-            // Convert the image data buffer to a data URL
-            const buffer = Buffer.from(image.data);
-            const dataUrl = `data:image/jpeg;base64,${buffer.toString('base64')}`;
-        
-            return {
-              patientUuid: image.patientUuid,
-              data: dataUrl
-            };
+            // Convert the image data buffer to a data URL if available
+            if (image.data) {
+              const buffer = Buffer.from(image.data);
+              const dataUrl = `data:image/jpeg;base64,${buffer.toString(
+                "base64"
+              )}`;
+              return {
+                patientUuid: image.patientUuid,
+                data: dataUrl,
+              };
+            } else {
+              // If no data URL is available, return an empty object
+              return {
+                patientUuid: image.patientUuid,
+                data: "",
+              };
+            }
           });
-        
           setPatientImages(patientImagesData);
-          console.log("patientImagesData", patientImagesData);
         }
-        
-        setPatientList(response.data);
+        setImagesLoaded(true); // Set to true when images are loaded
 
-        // Store profile images in state
-
-        // setPatientImages(profileImagesResponse);
-
-        setTotalPages(response.totalPages);
-        setTotalPatient(response.totalCount);
         setIsLoading(false);
 
         if (response.data.length === 0) {
           setPatientList([]);
+          setImagesLoaded(true); // Set to true when images are loaded
           setIsLoading(false);
-          return;
         }
       } catch (error: any) {
         setError(error.message);
@@ -371,35 +373,60 @@ export default function PatientPage() {
                           if (image.patientUuid === patient.uuid) {
                             return (
                               <div key={imgIndex}>
-                                <img
-                                  className="rounded-full"
-                                  src={image.data} // Use the base64-encoded image data directly
-                                  alt="Icon"
-                                  width={45}
-                                  height={45}
-                                />
+                                {image.data ? (
+                                  // Render the image if data is not empty
+                                  <img
+                                    className="rounded-full"
+                                    src={image.data} // Use the base64-encoded image data directly
+                                    alt=""
+                                    width={45}
+                                    height={45}
+                                  />
+                                ) : (
+                                  // Render the stock image (dennis.svg) if data is empty
+                                  <img
+                                    className="rounded-full"
+                                    src="/imgs/dennis.svg"
+                                    alt=""
+                                    width={45}
+                                    height={45}
+                                  />
+                                )}
                               </div>
                             );
                           }
                           return null;
                         })}
                       </div>
-                    ) : (
-                      // Render a placeholder image if no matching image found
+                    ) : // Render a placeholder image if no matching image found
+                    imagesLoaded ? ( // Only render stock image when images are loaded
                       <div>
                         <img
                           className="rounded-full"
-                          src="/imgs/dennis.svg"
-                          alt="Icon"
+                          src="/imgs/dennis.svg" // Show stock image if no images found
+                          alt=""
+                          width={45}
+                          height={45}
+                        />
+                      </div>
+                    ) : (
+                      // Render loading gif while fetching images
+                      <div>
+                        <img
+                          className="rounded-full"
+                          src="/imgs/loading.gif" // Show loading gif while fetching images
+                          alt="Loading"
                           width={45}
                           height={45}
                         />
                       </div>
                     )}
+
                     <p className="truncate ">
                       {patient.firstName} {patient.lastName}
-                      </p>
+                    </p>
                   </td>
+
                   <td className="truncate px-6 py-5">{patient.uuid}</td>
                   <td className="truncate px-6 py-5">{patient.age}</td>
                   <td className="truncate px-6 py-5">{patient.gender}</td>
