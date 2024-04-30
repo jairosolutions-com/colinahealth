@@ -351,12 +351,6 @@ export default function FormsTab() {
                 open={isOpenSortedBy}
                 width={"165px"}
                 label={"Select"}
-              <Image
-                src="/svgs/search.svg"
-                alt="Search"
-                width="20"
-                height="20"
-                className="absolute left-8 top-9 pointer-events-none"
               />
             </div>
           </div>

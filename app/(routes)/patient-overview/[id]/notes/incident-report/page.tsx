@@ -242,62 +242,23 @@ const Notes = () => {
         </div>
       </div>
 
-        <div className="w-full m:rounded-lg items-center">
-          <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
-            <form className="mr-5 relative">
-              {/* search bar */}
-              <label className=""></label>
-              <div className="flex">
-                <input
-                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px]"
-                  type="text"
-                  placeholder="Search by reference no. or name..."
-                  value={term}
-                  onChange={(e) => {
-                    setTerm(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                />
-                <img
-                  src="/svgs/search.svg"
-                  alt="Search"
-                  width="20"
-                  height="20"
-                  className="absolute left-8 top-9 pointer-events-none"
-                />
-              </div>
-            </form>
-
-            <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-                Order by
-              </p>
-              <DropdownMenu
-                options={optionsOrderedBy.map(({ label, onClick }) => ({
-                  label,
-                  onClick: () => {
-                    onClick(label);
-                  },
-                }))}
-                open={isOpenOrderedBy}
-                width={"165px"}
-                label={"Select"}
+      <div className="w-full m:rounded-lg items-center">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+          <form className="mr-5 relative">
+            {/* search bar */}
+            <label className=""></label>
+            <div className="flex">
+              <input
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px]"
+                type="text"
+                placeholder="Search by reference no. or name..."
+                value={term}
+                onChange={(e) => {
+                  setTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
               />
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-                Sort by
-              </p>
-              <DropdownMenu
-                options={optionsSortBy.map(({ label, onClick }) => ({
-                  label,
-                  onClick: () => {
-                    onClick(label);
-                    console.log("label", label);
-                  },
-                }))}
-                open={isOpenSortedBy}
-                width={"165px"}
-                label={"Select"}
-              <Image
+              <img
                 src="/svgs/search.svg"
                 alt="Search"
                 width="20"
@@ -305,52 +266,85 @@ const Notes = () => {
                 className="absolute left-8 top-9 pointer-events-none"
               />
             </div>
-          </div>
+          </form>
 
-          {/* START OF TABLE */}
-          <div>
-            <table className="text-left rtl:text-right">
-              <thead>
-                <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                  <td className="px-6 py-3 ">Notes UID</td>
-                  <td className="px-6 py-3 ">DATE</td>
-                  <td className="px-6 py-3 ">TIME</td>
-                  <td className="px-6 py-3 ">SUBJECT</td>
-                  <td className="px-6 py-3 ">DETAILS OF INCIDENT</td>
-                  <td className="px-6 py-3 ">REPORTED BY</td>
-                </tr>
-              </thead>
-              <tbody>
-                {patientNotes.length === 0 && (
-                  <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-[15px] font-normal text-gray-700 text-center">
-                      No Incident Report/s <br />
-                    </p>
-                  </h1>
-                )}
-                {patientNotes.map((notes, index) => (
-                  <tr
-                    key={index}
-                    className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
-                  >
-                    <td className=" px-6 py-3">{notes.notes_uuid}</td>
-                    <td className=" px-6 py-3">
-                      {new Date(notes.notes_createdAt).toLocaleDateString()}
-                    </td>
-                    <td className=" px-6 py-3">
-                      {new Date(notes.notes_createdAt).toLocaleTimeString()}
-                    </td>
-                    <td className="px-6 py-3">{notes.notes_subject}</td>
-                    <td className="px-6 py-3">{notes.notes_notes}</td>
-                    <td className="px-6 py-3">Ansel MD</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+              Order by
+            </p>
+            <DropdownMenu
+              options={optionsOrderedBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                },
+              }))}
+              open={isOpenOrderedBy}
+              width={"165px"}
+              label={"Select"}
+            />
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+              Sort by
+            </p>
+            <DropdownMenu
+              options={optionsSortBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                  console.log("label", label);
+                },
+              }))}
+              open={isOpenSortedBy}
+              width={"165px"}
+              label={"Select"}
+            />
           </div>
-          {/* END OF TABLE */}
         </div>
+
+        {/* START OF TABLE */}
+        <div>
+          <table className="text-left rtl:text-right">
+            <thead>
+              <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                <td className="px-6 py-3 ">Notes UID</td>
+                <td className="px-6 py-3 ">DATE</td>
+                <td className="px-6 py-3 ">TIME</td>
+                <td className="px-6 py-3 ">SUBJECT</td>
+                <td className="px-6 py-3 ">DETAILS OF INCIDENT</td>
+                <td className="px-6 py-3 ">REPORTED BY</td>
+              </tr>
+            </thead>
+            <tbody>
+              {patientNotes.length === 0 && (
+                <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                  <p className="text-[15px] font-normal text-gray-700 text-center">
+                    No Incident Report/s <br />
+                  </p>
+                </h1>
+              )}
+              {patientNotes.map((notes, index) => (
+                <tr
+                  key={index}
+                  className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
+                >
+                  <td className=" px-6 py-3">{notes.notes_uuid}</td>
+                  <td className=" px-6 py-3">
+                    {new Date(notes.notes_createdAt).toLocaleDateString()}
+                  </td>
+                  <td className=" px-6 py-3">
+                    {new Date(notes.notes_createdAt).toLocaleTimeString()}
+                  </td>
+                  <td className="px-6 py-3">{notes.notes_subject}</td>
+                  <td className="px-6 py-3">{notes.notes_notes}</td>
+                  <td className="px-6 py-3">Ansel MD</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {/* END OF TABLE */}
       </div>
+
       {/* pagination */}
       <Pagination
         totalPages={totalPages}

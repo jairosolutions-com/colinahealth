@@ -271,62 +271,23 @@ const Appointment = () => {
         </div>
       </div>
 
-        <div className="w-full m:rounded-lg items-center">
-          <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
-            <form className="mr-5 relative">
-              {/* search bar */}
-              <label className=""></label>
-              <div className="flex">
-                <input
-                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat"
-                  type="text"
-                  placeholder="Search by reference no. or name..."
-                  value={term}
-                  onChange={(e) => {
-                    setTerm(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                />
-                <img
-                  src="/svgs/search.svg"
-                  alt="Search"
-                  width="20"
-                  height="20"
-                  className="absolute left-8 top-9 pointer-events-none"
-                />
-              </div>
-            </form>
-
-            <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-                Order by
-              </p>
-              <DropdownMenu
-                options={optionsOrderedBy.map(({ label, onClick }) => ({
-                  label,
-                  onClick: () => {
-                    onClick(label);
-                  },
-                }))}
-                open={isOpenOrderedBy}
-                width={"165px"}
-                label={"Select"}
+      <div className="w-full m:rounded-lg items-center">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+          <form className="mr-5 relative">
+            {/* search bar */}
+            <label className=""></label>
+            <div className="flex">
+              <input
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat"
+                type="text"
+                placeholder="Search by reference no. or name..."
+                value={term}
+                onChange={(e) => {
+                  setTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
               />
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-                Sort by
-              </p>
-              <DropdownMenu
-                options={optionsSortBy.map(({ label, onClick }) => ({
-                  label,
-                  onClick: () => {
-                    onClick(label);
-                    console.log("label", label);
-                  },
-                }))}
-                open={isOpenSortedBy}
-                width={"165px"}
-                label={"Select"}
-              <Image
+              <img
                 src="/svgs/search.svg"
                 alt="Search"
                 width="20"
@@ -334,122 +295,150 @@ const Appointment = () => {
                 className="absolute left-8 top-9 pointer-events-none"
               />
             </div>
+          </form>
+
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+              Order by
+            </p>
+            <DropdownMenu
+              options={optionsOrderedBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                },
+              }))}
+              open={isOpenOrderedBy}
+              width={"165px"}
+              label={"Select"}
+            />
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+              Sort by
+            </p>
+            <DropdownMenu
+              options={optionsSortBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                  console.log("label", label);
+                },
+              }))}
+              open={isOpenSortedBy}
+              width={"165px"}
+              label={"Select"}
+            />
           </div>
-          {/* START OF TABLE */}
-          <div>
-            <table className="text-left rtl:text-right">
-              <thead>
-                <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                  <th className="px-6 py-3 ">STATUS</th>
-                  <th className="px-6 py-3 ">DATE</th>
-                  <th className="px-6 py-3 ">TIME</th>
-                  <th className="px-4 py-3 ">END TIME</th>
-                  <th className="px-4 py-3 ">DETAILS</th>
-                  <th className="px-24 py-3">ACTION</th>
+        </div>
+        {/* START OF TABLE */}
+        <div>
+          <table className="text-left rtl:text-right">
+            <thead>
+              <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                <th className="px-6 py-3 ">STATUS</th>
+                <th className="px-6 py-3 ">DATE</th>
+                <th className="px-6 py-3 ">TIME</th>
+                <th className="px-4 py-3 ">END TIME</th>
+                <th className="px-4 py-3 ">DETAILS</th>
+                <th className="px-24 py-3">ACTION</th>
+              </tr>
+            </thead>
+            <tbody className="h-[220px]">
+              {patientAppointments.length === 0 && (
+                <tr>
+                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                    <p className="font-semibold text-gray-700 text-center text-[15px]">
+                      No Appointment/s <br />
+                    </p>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="h-[220px]">
-                {patientAppointments.length === 0 && (
-                  <tr>
-                    <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                      <p className="font-semibold text-gray-700 text-center text-[15px]">
-                        No Appointment/s <br />
-                      </p>
-                    </td>
-                  </tr>
-                )}
-                {patientAppointments.length > 0 && (
-                  <>
-                    {patientAppointments.map((appointments, index) => (
-                      <tr
-                        key={index}
-                        className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
-                      >
-                        <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
-                          <div
-                            className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
+              )}
+              {patientAppointments.length > 0 && (
+                <>
+                  {patientAppointments.map((appointments, index) => (
+                    <tr
+                      key={index}
+                      className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
+                    >
+                      <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                        <div
+                          className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
+                            appointments.appointments_appointmentStatus ===
+                            "Scheduled"
+                              ? "bg-[#dfffea] text-[#17C653] text-[15px]" // Green color for Scheduled
+                              : appointments.appointments_appointmentStatus ===
+                                "Done"
+                              ? "bg-[#E7EAEE] text-[#3C3C3C] text-[15px]" // Dark color for Done
+                              : appointments.appointments_appointmentStatus ===
+                                  "Patient-IN" ||
+                                appointments.appointments_appointmentStatus ===
+                                  "On-going"
+                              ? "bg-[#FFFCDB] text-[#E0BD03] text-[15px]" // Yellow for On Going
+                              : appointments.appointments_appointmentStatus ===
+                                  "Missed" ||
+                                appointments.appointments_appointmentStatus ===
+                                  "Cancelled"
+                              ? "bg-[#FEE9E9] text-[#EF4C6A] text-[15px]" // Red color for Missed and Cancelled
+                              : ""
+                          }`}
+                        >
+                          <span
+                            className={`inline-block h-2 w-2 rounded-full mr-1 ${
                               appointments.appointments_appointmentStatus ===
                               "Scheduled"
-                                ? "bg-[#dfffea] text-[#17C653] text-[15px]" // Green color for Scheduled
+                                ? "bg-green-500" // Green color for Scheduled
                                 : appointments.appointments_appointmentStatus ===
                                   "Done"
-                                ? "bg-[#E7EAEE] text-[#3C3C3C] text-[15px]" // Dark color for Done
+                                ? "bg-[#E7EAEE]" // Dark color for Done
                                 : appointments.appointments_appointmentStatus ===
                                     "Patient-IN" ||
                                   appointments.appointments_appointmentStatus ===
                                     "On-going"
-                                ? "bg-[#FFFCDB] text-[#E0BD03] text-[15px]" // Yellow for On Going
+                                ? "bg-[#E0BD03]" // Yellow for On Going
                                 : appointments.appointments_appointmentStatus ===
                                     "Missed" ||
                                   appointments.appointments_appointmentStatus ===
                                     "Cancelled"
-                                ? "bg-[#FEE9E9] text-[#EF4C6A] text-[15px]" // Red color for Missed and Cancelled
+                                ? "bg-[#EF4C6A]" // Red color for Missed and Cancelled
                                 : ""
                             }`}
-                          >
-                            <span
-                              className={`inline-block h-2 w-2 rounded-full mr-1 ${
-                                appointments.appointments_appointmentStatus ===
-                                "Scheduled"
-                                  ? "bg-green-500" // Green color for Scheduled
-                                  : appointments.appointments_appointmentStatus ===
-                                    "Done"
-                                  ? "bg-[#E7EAEE]" // Dark color for Done
-                                  : appointments.appointments_appointmentStatus ===
-                                      "Patient-IN" ||
-                                    appointments.appointments_appointmentStatus ===
-                                      "On-going"
-                                  ? "bg-[#E0BD03]" // Yellow for On Going
-                                  : appointments.appointments_appointmentStatus ===
-                                      "Missed" ||
-                                    appointments.appointments_appointmentStatus ===
-                                      "Cancelled"
-                                  ? "bg-[#EF4C6A]" // Red color for Missed and Cancelled
-                                  : ""
-                              }`}
-                            ></span>
-                            {appointments.appointments_appointmentStatus}
-                          </div>
-                        </td>
+                          ></span>
+                          {appointments.appointments_appointmentStatus}
+                        </div>
+                      </td>
 
-                        <td className="px-6 py-3 text-[15px]">
-                          {formatDate(
-                            appointments.appointments_appointmentDate
-                          )}
-                        </td>
-                        <td className="px-6 py-3 text-[15px]">
-                          {formatTime(
-                            appointments.appointments_appointmentTime
-                          )}
-                        </td>
-                        <td className="px-6 py-3 text-[15px]">
-                          {formatTime(
-                            appointments.appointments_appointmentEndTime
-                          )}
-                        </td>
-                        <td className="px-6 py-3 text-[15px]">
-                          {appointments.appointments_details}
-                        </td>
-                        <td className="px-[90px] py-3 items-center">
-                          <p
-                            onClick={() => {
-                              isModalOpen(true);
-                              setIsView(true);
-                              setAppointmentData(appointments);
-                            }}
-                          >
-                            <View></View>
-                          </p>
-                        </td>
-                      </tr>
-                    ))}
-                  </>
-                )}
-              </tbody>
-            </table>
-          </div>
-          {/* END OF TABLE */}
+                      <td className="px-6 py-3 text-[15px]">
+                        {formatDate(appointments.appointments_appointmentDate)}
+                      </td>
+                      <td className="px-6 py-3 text-[15px]">
+                        {formatTime(appointments.appointments_appointmentTime)}
+                      </td>
+                      <td className="px-6 py-3 text-[15px]">
+                        {formatTime(
+                          appointments.appointments_appointmentEndTime
+                        )}
+                      </td>
+                      <td className="px-6 py-3 text-[15px]">
+                        {appointments.appointments_details}
+                      </td>
+                      <td className="px-[90px] py-3 items-center">
+                        <p
+                          onClick={() => {
+                            isModalOpen(true);
+                            setIsView(true);
+                            setAppointmentData(appointments);
+                          }}
+                        >
+                          <View></View>
+                        </p>
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              )}
+            </tbody>
+          </table>
         </div>
+        {/* END OF TABLE */}
       </div>
       {/* pagination */}
       <Pagination

@@ -336,126 +336,130 @@ const Allergies = () => {
                 />
               </div>
             </form>
-        <div className="flex gap-2">
-          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-            <Image src="/imgs/add.svg" alt="" width={22} height={22} />
-            <p className="text-[18px]">Add</p>
-          </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => isModalOpen(true)}
+                className="btn-add gap-2"
+              >
+                <Image src="/imgs/add.svg" alt="" width={22} height={22} />
+                <p className="text-[18px]">Add</p>
+              </button>
 
-          <button className="btn-pdfs gap-2" onClick={handleDownloadPDF}>
-            <Image src="/imgs/downloadpdf.svg" alt="" width={22} height={22} />
-            <p className="text-[18px]">Download PDF</p>
-          </button>
-        </div>
-      </div>
-
-            <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-                Order by
-              </p>
-              <DropdownMenu
-                options={optionsOrderedBy.map(({ label, onClick }) => ({
-                  label,
-                  onClick: () => {
-                    onClick(label);
-                  },
-                }))}
-                open={isOpenOrderedBy}
-                width={"165px"}
-                label={"Select"}
-              />
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-                Sort by
-              </p>
-              <DropdownMenu
-                options={optionsSortBy.map(({ label, onClick }) => ({
-                  label,
-                  onClick: () => {
-                    onClick(label);
-                    console.log("label", label);
-                  },
-                }))}
-                open={isOpenSortedBy}
-                width={"165px"}
-                label={"Select"}
-              />
+              <button className="btn-pdfs gap-2" onClick={handleDownloadPDF}>
+                <Image
+                  src="/imgs/downloadpdf.svg"
+                  alt=""
+                  width={22}
+                  height={22}
+                />
+                <p className="text-[18px]">Download PDF</p>
+              </button>
             </div>
           </div>
-          {/* START OF TABLE */}
-          <div>
-            <table className="text-left rtl:text-right">
-              <thead>
-                <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                  <td className="px-6 py-3">Allergy ID</td>
-                  <td className="px-6 py-3">Date</td>
-                  <td className="px-5 py-3">Type</td>
-                  <td className="px-5 py-3">Allergen</td>
-                  <td className="px-4 py-3">Severity</td>
-                  <td className="px-4 py-3">Reaction</td>
-                  <td className="px-4 py-3 ">Notes</td>
-                  <td className="py-3 px-14">Action </td>
-                </tr>
-              </thead>
-              <tbody className="h-[220px]">
-                {patientAllergies.length === 0 && (
-                  <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-[15px] font-normal text-gray-700 text-center">
-                      No Allergies Found <br />
-                    </p>
-                  </h1>
-                )}
-                {patientAllergies.map((allergy, index) => (
-                  <tr
-                    key={index}
-                    className=" group hover:bg-[#f4f4f4]  border-b text-[15px] "
-                  >
-                    <td className="truncate px-5 py-3">
-                      {allergy.allergies_uuid}
-                    </td>
-                    <td className="truncate px-5 py-3">
-                      {" "}
-                      {new Date(
-                        allergy.allergies_createdAt
-                      ).toLocaleDateString()}
-                    </td>
-                    <td className="truncate px-6  py-3">
-                      {allergy.allergies_type}
-                    </td>
-                    <td className="truncate px-6  py-3">
-                      {allergy.allergies_allergen}
-                    </td>
 
-                    <td className="truncate px-6  py-3">
-                      {allergy.allergies_severity}
-                    </td>
-                    <td className="truncate px-6  py-3">
-                      {allergy.allergies_reaction}
-                    </td>
-                    <td className="truncate px-6  py-3">
-                      {allergy.allergies_notes
-                        ? allergy.allergies_notes
-                        : "None"}
-                    </td>
-
-                    <td className="py-3 flex justify-center">
-                      <p
-                        onClick={() => {
-                          isModalOpen(true);
-                          setIsEdit(true);
-                          setAllergyToEdit(allergy);
-                        }}
-                      >
-                        <Edit></Edit>
-                      </p>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+              Order by
+            </p>
+            <DropdownMenu
+              options={optionsOrderedBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                },
+              }))}
+              open={isOpenOrderedBy}
+              width={"165px"}
+              label={"Select"}
+            />
+            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+              Sort by
+            </p>
+            <DropdownMenu
+              options={optionsSortBy.map(({ label, onClick }) => ({
+                label,
+                onClick: () => {
+                  onClick(label);
+                  console.log("label", label);
+                },
+              }))}
+              open={isOpenSortedBy}
+              width={"165px"}
+              label={"Select"}
+            />
           </div>
-          {/* END OF TABLE */}
         </div>
+        {/* START OF TABLE */}
+        <div>
+          <table className="text-left rtl:text-right">
+            <thead>
+              <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                <td className="px-6 py-3">Allergy ID</td>
+                <td className="px-6 py-3">Date</td>
+                <td className="px-5 py-3">Type</td>
+                <td className="px-5 py-3">Allergen</td>
+                <td className="px-4 py-3">Severity</td>
+                <td className="px-4 py-3">Reaction</td>
+                <td className="px-4 py-3 ">Notes</td>
+                <td className="py-3 px-14">Action </td>
+              </tr>
+            </thead>
+            <tbody className="h-[220px]">
+              {patientAllergies.length === 0 && (
+                <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                  <p className="text-[15px] font-normal text-gray-700 text-center">
+                    No Allergies Found <br />
+                  </p>
+                </h1>
+              )}
+              {patientAllergies.map((allergy, index) => (
+                <tr
+                  key={index}
+                  className=" group hover:bg-[#f4f4f4]  border-b text-[15px] "
+                >
+                  <td className="truncate px-5 py-3">
+                    {allergy.allergies_uuid}
+                  </td>
+                  <td className="truncate px-5 py-3">
+                    {" "}
+                    {new Date(allergy.allergies_createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="truncate px-6  py-3">
+                    {allergy.allergies_type}
+                  </td>
+                  <td className="truncate px-6  py-3">
+                    {allergy.allergies_allergen}
+                  </td>
+
+                  <td className="truncate px-6  py-3">
+                    {allergy.allergies_severity}
+                  </td>
+                  <td className="truncate px-6  py-3">
+                    {allergy.allergies_reaction}
+                  </td>
+                  <td className="truncate px-6  py-3">
+                    {allergy.allergies_notes ? allergy.allergies_notes : "None"}
+                  </td>
+
+                  <td className="py-3 flex justify-center">
+                    <p
+                      onClick={() => {
+                        isModalOpen(true);
+                        setIsEdit(true);
+                        setAllergyToEdit(allergy);
+                      }}
+                    >
+                      <Edit></Edit>
+                    </p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {/* END OF TABLE */}
       </div>
+
       {/* pagination */}
       <div className="bottom-0">
         <Pagination
