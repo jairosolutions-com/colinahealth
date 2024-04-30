@@ -9,6 +9,7 @@ import { validateUser } from "@/app/api/login-api/loginHandler";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Footer from "./footer";
+import Image from "next/image";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -48,9 +49,9 @@ export const Login = () => {
   };
 
   function handleKeyDown(event: any) {
-    if (event.key === 'Enter' && password && email) {
+    if (event.key === "Enter" && password && email) {
       setIsSubmitted(true);
-      handleLogin(event)
+      handleLogin(event);
     }
   }
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -95,10 +96,13 @@ export const Login = () => {
       <section className="w-full h-full">
         <div className="w-full  md:h-screen flex">
           <div className="flex w-full items-center max-h-screen justify-center overflow-hidden">
-            <img
+            <Image
               src="/imgs/login-image.png"
               alt="Your Image"
               className="w-full h-full object-cover select-none pointer-events-none"
+              width={1090}
+              height={1090}
+              priority={true}
             />
           </div>
 
