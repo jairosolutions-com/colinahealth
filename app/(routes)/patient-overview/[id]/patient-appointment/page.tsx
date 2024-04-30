@@ -12,6 +12,10 @@ import { fetchAppointmentsByPatient as fetchAppointmentsByPatient } from "@/app/
 import { AppointmentviewModalContent } from "@/components/modal-content/appointmentview-modal-content";
 import Modal from "@/components/reusable/modal";
 import { AppointmentModalContent } from "@/components/modal-content/appointment-modal-content";
+import { ClipboardList } from "lucide-react";
+import { AppointmentemailModalContent } from "@/components/modal-content/appointmentemail-modal-content";
+import { SuccessModal } from "@/components/shared/success";
+import { ErrorModal } from "@/components/shared/error";
 const Appointment = () => {
   const router = useRouter();
   if (typeof window === "undefined") {
@@ -84,6 +88,8 @@ const Appointment = () => {
   const [totalAppointments, setTotalAppointments] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -138,6 +144,7 @@ const Appointment = () => {
   const [gotoError, setGotoError] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenReminder, setIsOpenReminder] = useState(false);
   const renderPageNumbers = () => {
     const pageNumbers = [];
     for (let i = 1; i <= totalPages; i++) {
@@ -164,6 +171,24 @@ const Appointment = () => {
       setIsView(false);
       setAppointmentData([]);
     }
+  };
+
+  const isModalReminderOpen = (isOpen: boolean) => {
+    setIsOpenReminder(isOpen);
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else if (!isOpen) {
+      document.body.style.overflow = "visible";
+      setIsView(false);
+      setAppointmentData([]);
+    }
+  };
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+  };
+  const onFailed = () => {
+    setIsErrorOpen(true);
   };
 
   useEffect(() => {
@@ -218,9 +243,12 @@ const Appointment = () => {
             <img src="/imgs/add.svg" alt="" />
             <p className="text-[18px]">Add</p>
           </button>
-          <button className="btn-pdfs gap-2">
-            <img src="/imgs/downloadpdf.svg" alt="" />
-            <p className="text-[18px]">Download PDF</p>
+          <button
+            onClick={() => isModalReminderOpen(true)}
+            className="btn-pdfs gap-2"
+          >
+            <ClipboardList width={20} height={20} />
+            <p className="text-[18px]">Reminder</p>
           </button>
         </div>
       </div>
@@ -473,6 +501,37 @@ const Appointment = () => {
             />
           }
           isModalOpen={isModalOpen}
+        />
+      )}
+      {isOpenReminder && (
+        <Modal
+          content={
+            <AppointmentemailModalContent
+              onSuccess={onSuccess}
+              onFailed={onFailed}
+              isModalOpen={isModalReminderOpen}
+            />
+          }
+          isModalOpen={isModalOpen}
+        />
+      )}
+
+      {isSuccessOpen && (
+        <SuccessModal
+          label="Email Sent Succesfully"
+          isAlertOpen={isSuccessOpen}
+          toggleModal={setIsSuccessOpen}
+          isUpdated={isUpdated}
+          setIsUpdated={setIsUpdated}
+        />
+      )}
+      {isErrorOpen && (
+        <ErrorModal
+          label="Sending Email Failed"
+          isAlertOpen={isErrorOpen}
+          toggleModal={setIsErrorOpen}
+          isEdit={isEdit}
+          errorMessage={error}
         />
       )}
     </div>
