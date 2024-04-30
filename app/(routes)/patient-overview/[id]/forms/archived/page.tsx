@@ -179,166 +179,171 @@ export default function ArchiveTab() {
   }
   console.log(patientForms, "patientForms");
   return (
-    <div className="  w-full">
-      <div className="w-full justify-between flex mb-2">
-        <div className="flex-row">
-          <div className="flex gap-2">
-            <p
-              onClick={() => {
-                setIsLoading(true);
-                router.replace(
-                  `/patient-overview/${patientId.toLowerCase()}/forms`
-                );
-              }}
-              className="p-title hover:underline cursor-pointer"
-            >
-              Form
-            </p>
-            <span className="slash">{">"}</span>
-            <span className="active">Archived</span>
-          </div>
-          <div>
-            <p>Total of 6 logs</p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <button className="btn-pdfs gap-2">
-            <img src="/imgs/downloadpdf.svg" alt="" />
-            <p className="text-[18px]">Download PDF</p>
-          </button>
-        </div>
-      </div>
-
-      <div className="w-full sm:rounded-lg items-center pt-2">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
-          <form className="mr-5 relative">
-            {/* search bar */}
-            <label className=""></label>
-            <div className="flex">
-              <input
-                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
-                type="text"
-                placeholder="Search by reference no. or name..."
-                value={term}
-                onChange={(e) => {
-                  setTerm(e.target.value);
-                  setCurrentPage(1);
+    <div className="  w-full h-full flex flex-col justify-between">
+      <div className="w-full h-full">
+        <div className="w-full justify-between flex mb-2">
+          <div className="flex-row">
+            <div className="flex gap-2">
+              <p
+                onClick={() => {
+                  setIsLoading(true);
+                  router.replace(
+                    `/patient-overview/${patientId.toLowerCase()}/forms`
+                  );
                 }}
+                className="p-title hover:underline cursor-pointer"
+              >
+                Form
+              </p>
+              <span className="slash">{">"}</span>
+              <span className="active">Archived</span>
+            </div>
+            <div>
+              <p>Total of 6 logs</p>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <button className="btn-pdfs gap-2">
+              <img src="/imgs/downloadpdf.svg" alt="" />
+              <p className="text-[18px]">Download PDF</p>
+            </button>
+          </div>
+        </div>
+
+        <div className="w-full sm:rounded-lg items-center pt-2">
+          <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+            <form className="mr-5 relative">
+              {/* search bar */}
+              <label className=""></label>
+              <div className="flex">
+                <input
+                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
+                  type="text"
+                  placeholder="Search by reference no. or name..."
+                  value={term}
+                  onChange={(e) => {
+                    setTerm(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                />
+                <img
+                  src="/svgs/search.svg"
+                  alt="Search"
+                  width="20"
+                  height="20"
+                  className="absolute left-8 top-9 pointer-events-none"
+                />
+              </div>
+            </form>
+
+            <div className="flex w-full justify-end items-center gap-[12px] mr-3">
+              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+                Order by
+              </p>
+              <DropdownMenu
+                options={optionsOrderedBy.map(({ label, onClick }) => ({
+                  label,
+                  onClick: () => {
+                    onClick(label);
+                  },
+                }))}
+                open={isOpenOrderedBy}
+                width={"165px"}
+                label={"Select"}
               />
-              <img
-                src="/svgs/search.svg"
-                alt="Search"
-                width="20"
-                height="20"
-                className="absolute left-8 top-9 pointer-events-none"
+              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+                Sort by
+              </p>
+              <DropdownMenu
+                options={optionsSortBy.map(({ label, onClick }) => ({
+                  label,
+                  onClick: () => {
+                    onClick(label);
+                    console.log("label", label);
+                  },
+                }))}
+                open={isOpenSortedBy}
+                width={"165px"}
+                label={"Select"}
               />
             </div>
-          </form>
-
-          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-              Order by
-            </p>
-            <DropdownMenu
-              options={optionsOrderedBy.map(({ label, onClick }) => ({
-                label,
-                onClick: () => {
-                  onClick(label);
-                },
-              }))}
-              open={isOpenOrderedBy}
-              width={"165px"}
-              label={"Select"}
-            />
-            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-              Sort by
-            </p>
-            <DropdownMenu
-              options={optionsSortBy.map(({ label, onClick }) => ({
-                label,
-                onClick: () => {
-                  onClick(label);
-                  console.log("label", label);
-                },
-              }))}
-              open={isOpenSortedBy}
-              width={"165px"}
-              label={"Select"}
-            />
           </div>
-        </div>
 
-        {/* START OF TABLE */}
-        <div>
-          {patientForms.length == 0 ? (
-            <div>
-              <div className="w-full flex-col justify-center items-center">
-                <table className="w-full block text-left rtl:text-right">
-                  <thead className="w-full ">
-                    <tr className=" text-[#64748B] border-b-[1px] text-[15px]">
-                      <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
-                        NAME OF DOCUMENT
-                      </th>
-                      <th scope="col" className="px-6 py-3 w-[400px]">
-                        DATE ISSUED
-                      </th>
-                      <th scope="col" className="px-6 py-3 w-[750px]">
-                        NOTES
-                      </th>
-                      <th scope="col" className="px-6 py-3 max-w-[300px]">
-                        ACTION
-                      </th>
-                    </tr>
-                  </thead>
-                </table>
-                <div className="py-5 flex justify-center items-center">
-                  <p className="text-xl font-semibold text-gray-700 text-center">
-                    No Form/s
-                  </p>
+          {/* START OF TABLE */}
+          <div>
+            {patientForms.length == 0 ? (
+              <div>
+                <div className="w-full flex-col justify-center items-center">
+                  <table className="w-full block text-left rtl:text-right">
+                    <thead className="w-full ">
+                      <tr className=" text-[#64748B] border-b-[1px] text-[15px]">
+                        <th
+                          scope="col"
+                          className="px-6 py-3 w-[400px] h-[70px]"
+                        >
+                          NAME OF DOCUMENT
+                        </th>
+                        <th scope="col" className="px-6 py-3 w-[400px]">
+                          DATE ISSUED
+                        </th>
+                        <th scope="col" className="px-6 py-3 w-[750px]">
+                          NOTES
+                        </th>
+                        <th scope="col" className="px-6 py-3 max-w-[300px]">
+                          ACTION
+                        </th>
+                      </tr>
+                    </thead>
+                  </table>
+                  <div className="py-5 flex justify-center items-center">
+                    <p className="text-xl font-semibold text-gray-700 text-center">
+                      No Form/s
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            <table className="w-full block text-left rtl:text-right">
-              <thead className="w-full">
-                <tr className=" text-[#64748B] border-b-[1px] text-[15px]">
-                  <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
-                    NAME OF DOCUMENT
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[400px]">
-                    DATE ISSUED
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[750px]">
-                    NOTES
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody className="overflow-y-scroll">
-                {patientForms.map((form, index) => (
-                  <tr
-                    key={index}
-                    className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
-                  >
-                    <th
-                      scope="row"
-                      className="truncate px-6 py-3 w-[400px] font-medium text-gray-900 whitespace-nowrap"
-                    >
-                      {form.forms_nameOfDocument}
+            ) : (
+              <table className="w-full block text-left rtl:text-right">
+                <thead className="w-full">
+                  <tr className=" text-[#64748B] border-b-[1px] text-[15px]">
+                    <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
+                      NAME OF DOCUMENT
                     </th>
-                    <td className="px-6 py-3 w-[400px]">
-                      {form.forms_dateIssued}
-                    </td>
-                    <td className="px-6 py-3 w-[750px] max-w-[750px] truncate">
-                      {form.forms_notes}
-                    </td>
+                    <th scope="col" className="px-6 py-3 w-[400px]">
+                      DATE ISSUED
+                    </th>
+                    <th scope="col" className="px-6 py-3 w-[750px]">
+                      NOTES
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                </thead>
+
+                <tbody className="overflow-y-scroll">
+                  {patientForms.map((form, index) => (
+                    <tr
+                      key={index}
+                      className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
+                    >
+                      <th
+                        scope="row"
+                        className="truncate px-6 py-3 w-[400px] font-medium text-gray-900 whitespace-nowrap"
+                      >
+                        {form.forms_nameOfDocument}
+                      </th>
+                      <td className="px-6 py-3 w-[400px]">
+                        {form.forms_dateIssued}
+                      </td>
+                      <td className="px-6 py-3 w-[750px] max-w-[750px] truncate">
+                        {form.forms_notes}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+          {/* END OF TABLE */}
         </div>
-        {/* END OF TABLE */}
       </div>
       {/* pagination */}
       <Pagination

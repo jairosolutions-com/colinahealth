@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
           </div>
         ) : (
-          <div className="h-full w-full flex-grow">{children}</div>
+          <div className="flex-grow">{children}</div>
         )}
         <Footer />
       </div>

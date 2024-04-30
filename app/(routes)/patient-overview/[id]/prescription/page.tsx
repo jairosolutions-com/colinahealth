@@ -204,182 +204,184 @@ export default function prescription() {
     );
   }
   return (
-    <div className=" w-full">
-      <div className="w-full justify-between flex mb-2">
-        <div className="flex-row">
-          <p className="p-title">Prescription</p>
+    <div className=" w-full h-full flex flex-col justify-between">
+      <div className="w-full h-full">
+        <div className="w-full justify-between flex mb-2">
+          <div className="flex-row">
+            <p className="p-title">Prescription</p>
 
-          <div>
-            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px]">
-              Total of {totalPrescription} Prescriptions
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-            <img src="/imgs/add.svg" alt="" />
-            <p className="text-[18px]">Add</p>
-          </button>
-          <button className="btn-pdfs gap-2">
-            <img src="/imgs/downloadpdf.svg" alt="" />
-            <p className="text-[18px]">Download PDF</p>
-          </button>
-        </div>
-      </div>
-
-      <div className="w-full sm:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
-          <form className="mr-5 relative">
-            {/* search bar */}
-            <label className=""></label>
-            <div className="flex">
-              <input
-                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
-                type="text"
-                placeholder="Search by reference no. or name..."
-                value={term}
-                onChange={(e) => {
-                  setTerm(e.target.value);
-                  setCurrentPage(1);
-                }}
-              />
-              <img
-                src="/svgs/search.svg"
-                alt="Search"
-                width="20"
-                height="20"
-                className="absolute left-8 top-9 pointer-events-none"
-              />
-            </div>
-          </form>
-
-          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-              Order by
-            </p>
-            <DropdownMenu
-              options={optionsOrderedBy.map(({ label, onClick }) => ({
-                label,
-                onClick: () => {
-                  onClick(label);
-                },
-              }))}
-              open={isOpenOrderedBy}
-              width={"165px"}
-              label={"Select"}
-            />
-            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-              Sort by
-            </p>
-            <DropdownMenu
-              options={optionsSortBy.map(({ label, onClick }) => ({
-                label,
-                onClick: () => {
-                  onClick(label);
-                  console.log("label", label);
-                },
-              }))}
-              open={isOpenSortedBy}
-              width={"165px"}
-              label={"Select"}
-            />
-          </div>
-        </div>
-
-        {/* START OF TABLE */}
-        <div>
-          {patientPrescriptions.length == 0 ? (
-            <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-              <p className="text-xl font-semibold text-gray-700 text-center text-[15px]">
-                No Prescription/s <br />
+            <div>
+              <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px]">
+                Total of {totalPrescription} Prescriptions
               </p>
             </div>
-          ) : (
-            <table className="text-left rtl:text-right">
-              <thead>
-                <tr className=" text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                  <td className="px-6 py-3 w-[230px]">PRESCRIPTION ID</td>
-                  <td className="px-6 py-3 w-[230px]">MEDICINE NAME</td>
-                  <td className="px-6 py-3 w-[230px]">FREQUENCY</td>
-                  <td className="px-6 py-3 w-[230px]">INTERVAL (hr/s)</td>
-                  <td className="px-6 py-3 w-[230px]">DOSAGE</td>
-                  <td className="px-6 py-3 w-[170px] ">STATUS</td>
-                  <td className="px-6 py-3 text-center">ACTION</td>
-                </tr>
-              </thead>
-              <tbody className="h-[220px]">
-                {patientPrescriptions.length > 0 && (
-                  <>
-                    {patientPrescriptions.map((prescription, index) => (
-                      <tr
-                        key={index}
-                        className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4] text-[15px]"
-                      >
-                        <td className="truncate px-6 py-3 w-[230px]">
-                          {prescription.prescriptions_uuid}
-                        </td>
-                        <td className="truncate  px-6 py-3 w-[230px] ">
-                          {prescription.prescriptions_name}
-                        </td>
-                        <td className="truncate  px-6 py-3 w-[230px]">
-                          {prescription.prescriptions_frequency}
-                        </td>
-                        <td className="truncate  px-6 py-3 w-[230px]">
-                          {prescription.prescriptions_interval} hours
-                        </td>
-                        <td className="truncate  px-6 py-3 w-[230px] ">
-                          {prescription.prescriptions_dosage}
-                        </td>
-                        <td className="px-6 py-3">
-                          <div
-                            className={`px-2 font-semibold rounded-[20px] ${
-                              prescription.prescriptions_status === "active"
-                                ? "bg-[#dfffea] text-[#17C653] text-[15px]"
-                                : prescription.prescriptions_status ===
-                                  "inactive"
-                                ? "bg-[#FEE9E9] text-[#EF4C6A]  text-[15px]"
-                                : prescription.prescriptions_status
-                            }`}
-                            style={{
-                              width: `${
-                                prescription.prescriptions_status.length * 10
-                              }px`,
-                            }}
-                          >
-                            {prescription.prescriptions_status}
-                          </div>
-                        </td>
-
-                        <td className="px-6 py-3 flex gap-2 justify-center">
-                          <p
-                            onClick={() => {
-                              isModalOpen(true);
-                              setIsEdit(true);
-                              setPrescriptionData(prescription);
-                            }}
-                          >
-                            <Edit></Edit>
-                          </p>
-                          <p
-                            onClick={() => {
-                              isModalOpen(true);
-                              setIsView(true);
-
-                              setPrescriptionData(prescription);
-                            }}
-                          >
-                            <View></View>
-                          </p>
-                        </td>
-                      </tr>
-                    ))}
-                  </>
-                )}
-              </tbody>
-            </table>
-          )}
+          </div>
+          <div className="flex gap-2">
+            <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+              <img src="/imgs/add.svg" alt="" />
+              <p className="text-[18px]">Add</p>
+            </button>
+            <button className="btn-pdfs gap-2">
+              <img src="/imgs/downloadpdf.svg" alt="" />
+              <p className="text-[18px]">Download PDF</p>
+            </button>
+          </div>
         </div>
-        {/* END OF TABLE */}
+
+        <div className="w-full sm:rounded-lg items-center">
+          <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+            <form className="mr-5 relative">
+              {/* search bar */}
+              <label className=""></label>
+              <div className="flex">
+                <input
+                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
+                  type="text"
+                  placeholder="Search by reference no. or name..."
+                  value={term}
+                  onChange={(e) => {
+                    setTerm(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                />
+                <img
+                  src="/svgs/search.svg"
+                  alt="Search"
+                  width="20"
+                  height="20"
+                  className="absolute left-8 top-9 pointer-events-none"
+                />
+              </div>
+            </form>
+
+            <div className="flex w-full justify-end items-center gap-[12px] mr-3">
+              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+                Order by
+              </p>
+              <DropdownMenu
+                options={optionsOrderedBy.map(({ label, onClick }) => ({
+                  label,
+                  onClick: () => {
+                    onClick(label);
+                  },
+                }))}
+                open={isOpenOrderedBy}
+                width={"165px"}
+                label={"Select"}
+              />
+              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+                Sort by
+              </p>
+              <DropdownMenu
+                options={optionsSortBy.map(({ label, onClick }) => ({
+                  label,
+                  onClick: () => {
+                    onClick(label);
+                    console.log("label", label);
+                  },
+                }))}
+                open={isOpenSortedBy}
+                width={"165px"}
+                label={"Select"}
+              />
+            </div>
+          </div>
+
+          {/* START OF TABLE */}
+          <div>
+            {patientPrescriptions.length == 0 ? (
+              <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                <p className="text-xl font-semibold text-gray-700 text-center text-[15px]">
+                  No Prescription/s <br />
+                </p>
+              </div>
+            ) : (
+              <table className="text-left rtl:text-right">
+                <thead>
+                  <tr className=" text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                    <td className="px-6 py-3 w-[230px]">PRESCRIPTION ID</td>
+                    <td className="px-6 py-3 w-[230px]">MEDICINE NAME</td>
+                    <td className="px-6 py-3 w-[230px]">FREQUENCY</td>
+                    <td className="px-6 py-3 w-[230px]">INTERVAL (hr/s)</td>
+                    <td className="px-6 py-3 w-[230px]">DOSAGE</td>
+                    <td className="px-6 py-3 w-[170px] ">STATUS</td>
+                    <td className="px-6 py-3 text-center">ACTION</td>
+                  </tr>
+                </thead>
+                <tbody className="h-[220px]">
+                  {patientPrescriptions.length > 0 && (
+                    <>
+                      {patientPrescriptions.map((prescription, index) => (
+                        <tr
+                          key={index}
+                          className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4] text-[15px]"
+                        >
+                          <td className="truncate px-6 py-3 w-[230px]">
+                            {prescription.prescriptions_uuid}
+                          </td>
+                          <td className="truncate  px-6 py-3 w-[230px] ">
+                            {prescription.prescriptions_name}
+                          </td>
+                          <td className="truncate  px-6 py-3 w-[230px]">
+                            {prescription.prescriptions_frequency}
+                          </td>
+                          <td className="truncate  px-6 py-3 w-[230px]">
+                            {prescription.prescriptions_interval} hours
+                          </td>
+                          <td className="truncate  px-6 py-3 w-[230px] ">
+                            {prescription.prescriptions_dosage}
+                          </td>
+                          <td className="px-6 py-3">
+                            <div
+                              className={`px-2 font-semibold rounded-[20px] ${
+                                prescription.prescriptions_status === "active"
+                                  ? "bg-[#dfffea] text-[#17C653] text-[15px]"
+                                  : prescription.prescriptions_status ===
+                                    "inactive"
+                                  ? "bg-[#FEE9E9] text-[#EF4C6A]  text-[15px]"
+                                  : prescription.prescriptions_status
+                              }`}
+                              style={{
+                                width: `${
+                                  prescription.prescriptions_status.length * 10
+                                }px`,
+                              }}
+                            >
+                              {prescription.prescriptions_status}
+                            </div>
+                          </td>
+
+                          <td className="px-6 py-3 flex gap-2 justify-center">
+                            <p
+                              onClick={() => {
+                                isModalOpen(true);
+                                setIsEdit(true);
+                                setPrescriptionData(prescription);
+                              }}
+                            >
+                              <Edit></Edit>
+                            </p>
+                            <p
+                              onClick={() => {
+                                isModalOpen(true);
+                                setIsView(true);
+
+                                setPrescriptionData(prescription);
+                              }}
+                            >
+                              <View></View>
+                            </p>
+                          </td>
+                        </tr>
+                      ))}
+                    </>
+                  )}
+                </tbody>
+              </table>
+            )}
+          </div>
+          {/* END OF TABLE */}
+        </div>
       </div>
       {/* pagination */}
       <Pagination

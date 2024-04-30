@@ -195,173 +195,175 @@ export default function Laboratoryresults() {
   };
 
   return (
-    <div className="  w-full">
-      <div className="flex justify-between items-center">
-        <div className="flex flex-col">
-          <h1 className="p-title">Laboratory Results </h1>
-          {/* number of patients */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
-            Total of {totalLabResults} Lab Results
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-            <img src="/imgs/add.svg" alt="" />
-            <p className="text-[18px]">Add</p>
-          </button>
-          <button className="btn-pdfs gap-2">
-            <img src="/imgs/downloadpdf.svg" alt="" />
-            <p className="text-[18px]">Download PDF</p>
-          </button>
-        </div>
-      </div>
-
-      <div className="w-full sm:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
-          <form className="mr-5 relative">
-            {/* search bar */}
-            <label className=""></label>
-            <div className="flex">
-              <input
-                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
-                type="text"
-                placeholder="Search by reference no. or name..."
-                value={term}
-                onChange={(e) => {
-                  setTerm(e.target.value);
-                  setCurrentPage(1);
-                }}
-              />
-              <img
-                src="/svgs/search.svg"
-                alt="Search"
-                width="20"
-                height="20"
-                className="absolute left-8 top-9 pointer-events-none"
-              />
-            </div>
-          </form>
-
-          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-              Order by
+    <div className="  w-full h-full flex flex-col justify-between">
+      <div className="w-full h-full">
+        <div className="flex justify-between items-center">
+          <div className="flex flex-col">
+            <h1 className="p-title">Laboratory Results </h1>
+            {/* number of patients */}
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
+              Total of {totalLabResults} Lab Results
             </p>
-            <DropdownMenu
-              options={optionsOrderedBy.map(({ label, onClick }) => ({
-                label,
-                onClick: () => {
-                  onClick(label);
-                },
-              }))}
-              open={isOpenOrderedBy}
-              width={"165px"}
-              label={"Select"}
-            />
-            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-              Sort by
-            </p>
-            <DropdownMenu
-              options={optionsSortBy.map(({ label, onClick }) => ({
-                label,
-                onClick: () => {
-                  onClick(label);
-                  console.log("label", label);
-                },
-              }))}
-              open={isOpenSortedBy}
-              width={"165px"}
-              label={"Select"}
-            />
+          </div>
+          <div className="flex gap-2">
+            <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+              <img src="/imgs/add.svg" alt="" />
+              <p className="text-[18px]">Add</p>
+            </button>
+            <button className="btn-pdfs gap-2">
+              <img src="/imgs/downloadpdf.svg" alt="" />
+              <p className="text-[18px]">Download PDF</p>
+            </button>
           </div>
         </div>
 
-        {/* START OF TABLE */}
-        <div>
-          <table className="text-left rtl:text-right">
-            <thead>
-              <tr className="text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                <td className="px-6 py-3 w-[160px]">LAB RESULT ID</td>
-                <td className="px-6 py-3 w-[150px]">DATE</td>
-                <td className="px-6 py-3 w-[210px]">HEMOGLOBIN A1c (%)</td>
-                <td className="px-6 py-3 w-[190px]">
-                  FASTING BLOOD GLUCOSE (mg/dL)
-                </td>
-                <td className="px-6 py-3 w-[200px]">
-                  TOTAL CHOLESTEROL (mg/dL)
-                </td>
-                <td className="px-6 py-3 w-[150px]">LDL-C (mg/dL)</td>
-                <td className="px-6 py-3 w-[150px]">HDL-C (mg/dL)</td>
-                <td className="px-6 py-3 w-[160px]">TRIGLYCERIDES (mg/dL)</td>
-                <td className="px-6 py-3 text-center">ACTION</td>
-              </tr>
-            </thead>
+        <div className="w-full sm:rounded-lg items-center">
+          <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+            <form className="mr-5 relative">
+              {/* search bar */}
+              <label className=""></label>
+              <div className="flex">
+                <input
+                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
+                  type="text"
+                  placeholder="Search by reference no. or name..."
+                  value={term}
+                  onChange={(e) => {
+                    setTerm(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                />
+                <img
+                  src="/svgs/search.svg"
+                  alt="Search"
+                  width="20"
+                  height="20"
+                  className="absolute left-8 top-9 pointer-events-none"
+                />
+              </div>
+            </form>
 
-            <tbody className="h-[220px]">
-              {patientLabResults.length === 0 && (
-                <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                  <p className="text-[15px] font-normal text-gray-700 text-center">
-                    No Lab Results found <br />
-                  </p>
-                </div>
-              )}
-              <>
-                {patientLabResults.map((labResult, index) => (
-                  <tr
-                    key={index}
-                    className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
-                  >
-                    <td className="px-6 py-3 w-[160px]">
-                      {labResult.labResults_uuid}
-                    </td>
-                    <td className=" px-6 py-3 w-[150px]">
-                      {labResult.labResults_date}
-                    </td>
-                    <td className="px-6 py-3 w-[210px]">
-                      {labResult.labResults_hemoglobinA1c}%
-                    </td>
-                    <td className="px-6 py-3 w-[190px]">
-                      {labResult.labResults_fastingBloodGlucose}mg/dL
-                    </td>
-                    <td className="px-6 py-3 w-[200px]">
-                      {labResult.labResults_totalCholesterol}mg/dL
-                    </td>
-                    <td className="px-6 py-3 w-[150px]">
-                      {labResult.labResults_ldlCholesterol}mg/dL
-                    </td>
-                    <td className="px-6 py-3 w-[150px]">
-                      {labResult.labResults_hdlCholesterol}mg/dL
-                    </td>
-                    <td className="px-6 py-3 w-[160px]">
-                      {labResult.labResults_triglycerides}mg/dL
-                    </td>
-                    <td className="px-6 py-3 flex gap-2 justify-center">
-                      <p
-                        onClick={() => {
-                          isModalOpen(true);
-                          setIsEdit(true);
-                          setLabResultData(labResult);
-                        }}
-                      >
-                        <Edit></Edit>
-                      </p>
-                      <p
-                        onClick={() => {
-                          isModalOpen(true);
-                          setIsView(true);
+            <div className="flex w-full justify-end items-center gap-[12px] mr-3">
+              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+                Order by
+              </p>
+              <DropdownMenu
+                options={optionsOrderedBy.map(({ label, onClick }) => ({
+                  label,
+                  onClick: () => {
+                    onClick(label);
+                  },
+                }))}
+                open={isOpenOrderedBy}
+                width={"165px"}
+                label={"Select"}
+              />
+              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+                Sort by
+              </p>
+              <DropdownMenu
+                options={optionsSortBy.map(({ label, onClick }) => ({
+                  label,
+                  onClick: () => {
+                    onClick(label);
+                    console.log("label", label);
+                  },
+                }))}
+                open={isOpenSortedBy}
+                width={"165px"}
+                label={"Select"}
+              />
+            </div>
+          </div>
 
-                          setLabResultData(labResult);
-                        }}
-                      >
-                        <View></View>
-                      </p>
-                    </td>
-                  </tr>
-                ))}
-              </>
-            </tbody>
-          </table>
+          {/* START OF TABLE */}
+          <div>
+            <table className="text-left rtl:text-right">
+              <thead>
+                <tr className="text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                  <td className="px-6 py-3 w-[160px]">LAB RESULT ID</td>
+                  <td className="px-6 py-3 w-[150px]">DATE</td>
+                  <td className="px-6 py-3 w-[210px]">HEMOGLOBIN A1c (%)</td>
+                  <td className="px-6 py-3 w-[190px]">
+                    FASTING BLOOD GLUCOSE (mg/dL)
+                  </td>
+                  <td className="px-6 py-3 w-[200px]">
+                    TOTAL CHOLESTEROL (mg/dL)
+                  </td>
+                  <td className="px-6 py-3 w-[150px]">LDL-C (mg/dL)</td>
+                  <td className="px-6 py-3 w-[150px]">HDL-C (mg/dL)</td>
+                  <td className="px-6 py-3 w-[160px]">TRIGLYCERIDES (mg/dL)</td>
+                  <td className="px-6 py-3 text-center">ACTION</td>
+                </tr>
+              </thead>
+
+              <tbody className="h-[220px]">
+                {patientLabResults.length === 0 && (
+                  <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                    <p className="text-[15px] font-normal text-gray-700 text-center">
+                      No Lab Results found <br />
+                    </p>
+                  </div>
+                )}
+                <>
+                  {patientLabResults.map((labResult, index) => (
+                    <tr
+                      key={index}
+                      className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
+                    >
+                      <td className="px-6 py-3 w-[160px]">
+                        {labResult.labResults_uuid}
+                      </td>
+                      <td className=" px-6 py-3 w-[150px]">
+                        {labResult.labResults_date}
+                      </td>
+                      <td className="px-6 py-3 w-[210px]">
+                        {labResult.labResults_hemoglobinA1c}%
+                      </td>
+                      <td className="px-6 py-3 w-[190px]">
+                        {labResult.labResults_fastingBloodGlucose}mg/dL
+                      </td>
+                      <td className="px-6 py-3 w-[200px]">
+                        {labResult.labResults_totalCholesterol}mg/dL
+                      </td>
+                      <td className="px-6 py-3 w-[150px]">
+                        {labResult.labResults_ldlCholesterol}mg/dL
+                      </td>
+                      <td className="px-6 py-3 w-[150px]">
+                        {labResult.labResults_hdlCholesterol}mg/dL
+                      </td>
+                      <td className="px-6 py-3 w-[160px]">
+                        {labResult.labResults_triglycerides}mg/dL
+                      </td>
+                      <td className="px-6 py-3 flex gap-2 justify-center">
+                        <p
+                          onClick={() => {
+                            isModalOpen(true);
+                            setIsEdit(true);
+                            setLabResultData(labResult);
+                          }}
+                        >
+                          <Edit></Edit>
+                        </p>
+                        <p
+                          onClick={() => {
+                            isModalOpen(true);
+                            setIsView(true);
+
+                            setLabResultData(labResult);
+                          }}
+                        >
+                          <View></View>
+                        </p>
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              </tbody>
+            </table>
+          </div>
+          {/* END OF TABLE */}
         </div>
-        {/* END OF TABLE */}
       </div>
       {/* pagination */}
       <Pagination

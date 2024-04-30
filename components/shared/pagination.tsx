@@ -28,7 +28,7 @@ const Pagination = ({
         <button
           key={i}
           className={`flex border border-px items-center justify-center h-full w-[49px] ring-1 ring-gray-300  ${
-            currentPage === i ? "btn-pagination" : ""
+            currentPage === i ? "btn-pagination " : ""
           }`}
           onClick={() => setCurrentPage(i)}
         >
@@ -83,7 +83,7 @@ const Pagination = ({
   const isNextDisabled = currentPage === totalPages;
 
   return (
-    <div className="mt-5 absolute w-full max-w-[1618px] bottom-14">
+    <div className=" w-full max-w-[1618px] mb-5">
       <div className="flex justify-between">
         <p className="font-medium size-[18px] text-[15px] w-[138px] items-center">
           Page {currentPage} of {totalPages}
