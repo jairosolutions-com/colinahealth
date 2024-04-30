@@ -301,7 +301,7 @@ export default function ChartPage() {
           </div>
         )}
 
-        <div className="bg-white  w-full">
+        <div className="bg-white  w-full mt-5">
           <Pagination
             totalPages={totalPages}
             currentPage={currentPage}

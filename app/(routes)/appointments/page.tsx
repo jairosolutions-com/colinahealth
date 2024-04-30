@@ -221,244 +221,248 @@ export default function AppointmentPage() {
   };
 
   return (
-    <div className="w-full px-[150px] pt-[90px]">
-      <div className="flex justify-end">
-        <p
-          onClick={() => router.push("/dashboard")}
-          className="text-[#64748B] underline cursor-pointer text-[15px]"
-        >
-          Back to Dashboard
-        </p>
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="flex flex-col mb-3">
-          <p className="p-title">Appointments List Records</p>
-
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
-            Total of {totalAppointments} Appointments
+    <div className="w-full px-[150px] pt-[90px] flex flex-col justify-between h-full">
+      <div className="h-full w-full">
+        <div className="flex justify-end">
+          <p
+            onClick={() => router.push("/dashboard")}
+            className="text-[#64748B] underline cursor-pointer text-[15px]"
+          >
+            Back to Dashboard
           </p>
         </div>
-        <div className="flex flex-row justify-end">
-          <DownloadPDF></DownloadPDF>
-        </div>
-      </div>
+        <div className="flex justify-between items-center">
+          <div className="flex flex-col mb-3">
+            <p className="p-title">Appointments List Records</p>
 
-      <div className="w-full">
-        <div className="w-full bg-[#F4F4F4] justify-between items-center flex px-5 h-[75px] rounded-sm gap-5">
-          <div className="flex items-center bg-white rounded-sm border border-gray-300 shadow-sm px-4 py-2 h-[47px] w-[460px]">
-            <Search className="h-4 w-4 text-gray-500 mr-2" />
-            <input
-              type="text"
-              placeholder="Search by reference no. or name..."
-              className="flex-grow focus:outline-none text-gray-700"
-              value={term}
-              onChange={(e) => {
-                setTerm(e.target.value);
-                setCurrentPage(1);
-              }}
-            />
+            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
+              Total of {totalAppointments} Appointments
+            </p>
           </div>
-
-          <div className="w-[500px]">
-            <div className="flex w-full justify-end items-center gap-3">
-              <p>Filter Date</p>
-
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-[166px] justify-start text-left font-normal h-[47px] rounded-[5px]",
-                      !startDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {startDate ? format(startDate, "PPP") : <span>From</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={startDate}
-                    onSelect={setStartDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-[166px] justify-start text-left font-normal h-[47px] rounded-[5px] *:",
-                      !endDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {endDate ? format(endDate, "PPP") : <span>To</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={endDate}
-                    onSelect={setEndDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-          </div>
-          <div className="w-[500px]">
-            <div className="w-full justify-end items-center flex gap-3">
-              <p className="flex text-[#191D23] opacity-[60%] font-semibold">
-                Order by
-              </p>
-              <DropdownMenu
-                options={optionsOrderedBy.map(({ label, onClick }) => ({
-                  label,
-                  onClick: () => {
-                    onClick(label);
-                  },
-                }))}
-                open={isOpenOrderedBy}
-                width={"165px"}
-                label={"Select"}
-              />
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-                Sort by
-              </p>
-              <DropdownMenu
-                options={optionsSortBy.map(({ label, onClick }) => ({
-                  label,
-                  onClick: () => {
-                    onClick(label);
-                    console.log("label", label);
-                  },
-                }))}
-                open={isOpenSortedBy}
-                width={"165px"}
-                label={"Select"}
-              />
-            </div>
+          <div className="flex flex-row justify-end">
+            <DownloadPDF></DownloadPDF>
           </div>
         </div>
 
-        <div>
-          <table className="w-full h-full justify-center items-start text-[15px]">
-            <thead className="text-left rtl:text-right">
-              <tr className="uppercase font-semibold text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
-                <td className="px-6 py-5 ">Name</td>
-                <td className="px-6 py-5 ">Appointment UID</td>
-                <td className="px-6 py-5 ">Date</td>
-                <td className="px-6 py-5 ">Time</td>
-                <td className="px-6 py-5 ">End time</td>
-                <td className="px-6 py-5  flex justify-start">Status</td>
-              </tr>
-            </thead>
-            <tbody>
-              {appointmentList.length === 0 && (
-                <tr>
-                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-[15px] font-normal text-gray-700 flex text-center">
-                      No Appointments Found! <br />
-                    </p>
-                  </td>
-                </tr>
-              )}
-              {appointmentList.map((appointment, index) => (
-                <tr
-                  key={index}
-                  className="bg-white hover:bg-[#f4f4f4] group border-b "
-                >
-                  <td className="px-6 py-5 flex items-center">
-                    <Image
-                      className="rounded-full mr-2 "
-                      src="/imgs/dennis.svg"
-                      alt="Icon"
-                      width={45}
-                      height={45}
-                    />
-                    <span>
-                      {appointment.patient_firstName} {""}
-                      {appointment.patient_lastName}
-                    </span>
-                  </td>
-                  <td className="px-6 py-5 ">
-                    {appointment.appointments_uuid}
-                  </td>
-                  <td className="px-6 py-5">
-                    {appointment.appointments_appointmentDate}
-                  </td>
-                  <td className="px-6 py-5 ">
-                    {appointment.appointments_appointmentTime}
-                  </td>
-                  <td className=" px-6 py-5">
-                    {appointment.appointments_appointmentEndTime}
-                  </td>
+        <div className="w-full">
+          <div className="w-full bg-[#F4F4F4] justify-between items-center flex px-5 h-[75px] rounded-sm gap-5">
+            <div className="flex items-center bg-white rounded-sm border border-gray-300 shadow-sm px-4 py-2 h-[47px] w-[460px]">
+              <Search className="h-4 w-4 text-gray-500 mr-2" />
+              <input
+                type="text"
+                placeholder="Search by reference no. or name..."
+                className="flex-grow focus:outline-none text-gray-700"
+                value={term}
+                onChange={(e) => {
+                  setTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
+              />
+            </div>
 
-                  <td className="text-15px text-nowrap  px-6 py-5 rounded-full">
-                    <div
-                      className={`px-2 font-semibold rounded-[20px] relative flex items-center w-fit ${
-                        appointment.appointments_appointmentStatus ===
-                        "Scheduled"
-                          ? "bg-[#dfffea] text-[#17C653]" // Green color for Scheduled
-                          : appointment.appointments_appointmentStatus ===
-                            "Done"
-                          ? "bg-[#E7EAEE] text-[#71717A]" // Dark color for Done
-                          : appointment.appointments_appointmentStatus ===
-                              "Patient-IN" ||
-                            appointment.appointments_appointmentStatus ===
-                              "On-going"
-                          ? "bg-[#FFFCDB] text-[#E0BD03]" // Yellow for On Going
-                          : appointment.appointments_appointmentStatus ===
-                            "Missed"
-                          ? "bg-[#FEE9E9] text-[#EF4C6A]" // Red color for Missed
-                          : appointment.appointments_appointmentStatus ===
-                            "Cancelled"
-                          ? "bg-[#FEE9E9] text-[#EF4C6A]" // Red color for Cancelled
-                          : ""
-                      }`}
+            <div className="w-[500px]">
+              <div className="flex w-full justify-end items-center gap-3">
+                <p>Filter Date</p>
+
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[166px] justify-start text-left font-normal h-[47px] rounded-[5px]",
+                        !startDate && "text-muted-foreground"
+                      )}
                     >
-                      <span
-                        className={`inline-block h-2 w-2 rounded-full mr-1 ${
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {startDate ? format(startDate, "PPP") : <span>From</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={startDate}
+                      onSelect={setStartDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[166px] justify-start text-left font-normal h-[47px] rounded-[5px] *:",
+                        !endDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {endDate ? format(endDate, "PPP") : <span>To</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={endDate}
+                      onSelect={setEndDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>
+            <div className="w-[500px]">
+              <div className="w-full justify-end items-center flex gap-3">
+                <p className="flex text-[#191D23] opacity-[60%] font-semibold">
+                  Order by
+                </p>
+                <DropdownMenu
+                  options={optionsOrderedBy.map(({ label, onClick }) => ({
+                    label,
+                    onClick: () => {
+                      onClick(label);
+                    },
+                  }))}
+                  open={isOpenOrderedBy}
+                  width={"165px"}
+                  label={"Select"}
+                />
+                <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+                  Sort by
+                </p>
+                <DropdownMenu
+                  options={optionsSortBy.map(({ label, onClick }) => ({
+                    label,
+                    onClick: () => {
+                      onClick(label);
+                      console.log("label", label);
+                    },
+                  }))}
+                  open={isOpenSortedBy}
+                  width={"165px"}
+                  label={"Select"}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <table className="w-full h-full justify-center items-start text-[15px]">
+              <thead className="text-left rtl:text-right">
+                <tr className="uppercase font-semibold text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
+                  <td className="px-6 py-5 ">Name</td>
+                  <td className="px-6 py-5 ">Appointment UID</td>
+                  <td className="px-6 py-5 ">Date</td>
+                  <td className="px-6 py-5 ">Time</td>
+                  <td className="px-6 py-5 ">End time</td>
+                  <td className="px-6 py-5  flex justify-start">Status</td>
+                </tr>
+              </thead>
+              <tbody>
+                {appointmentList.length === 0 && (
+                  <tr>
+                    <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                      <p className="text-[15px] font-normal text-gray-700 flex text-center">
+                        No Appointments Found! <br />
+                      </p>
+                    </td>
+                  </tr>
+                )}
+                {appointmentList.map((appointment, index) => (
+                  <tr
+                    key={index}
+                    className="bg-white hover:bg-[#f4f4f4] group border-b "
+                  >
+                    <td className="px-6 py-5 flex items-center">
+                      <Image
+                        className="rounded-full mr-2 "
+                        src="/imgs/dennis.svg"
+                        alt="Icon"
+                        width={45}
+                        height={45}
+                      />
+                      <span>
+                        {appointment.patient_firstName} {""}
+                        {appointment.patient_lastName}
+                      </span>
+                    </td>
+                    <td className="px-6 py-5 ">
+                      {appointment.appointments_uuid}
+                    </td>
+                    <td className="px-6 py-5">
+                      {appointment.appointments_appointmentDate}
+                    </td>
+                    <td className="px-6 py-5 ">
+                      {appointment.appointments_appointmentTime}
+                    </td>
+                    <td className=" px-6 py-5">
+                      {appointment.appointments_appointmentEndTime}
+                    </td>
+
+                    <td className="text-15px text-nowrap  px-6 py-5 rounded-full">
+                      <div
+                        className={`px-2 font-semibold rounded-[20px] relative flex items-center w-fit ${
                           appointment.appointments_appointmentStatus ===
                           "Scheduled"
-                            ? "bg-green-500" // Green color for Scheduled
+                            ? "bg-[#dfffea] text-[#17C653]" // Green color for Scheduled
                             : appointment.appointments_appointmentStatus ===
                               "Done"
-                            ? "bg-[#7E7E7E]" // Dark color for Done
+                            ? "bg-[#E7EAEE] text-[#71717A]" // Dark color for Done
                             : appointment.appointments_appointmentStatus ===
                                 "Patient-IN" ||
                               appointment.appointments_appointmentStatus ===
                                 "On-going"
-                            ? "bg-[#E0BD03]" // Yellow for On Going
+                            ? "bg-[#FFFCDB] text-[#E0BD03]" // Yellow for On Going
                             : appointment.appointments_appointmentStatus ===
-                                "Missed" ||
-                              appointment.appointments_appointmentStatus ===
-                                "Cancelled"
-                            ? "bg-[#EF4C6A]" // Red color for Missed and Cancelled
+                              "Missed"
+                            ? "bg-[#FEE9E9] text-[#EF4C6A]" // Red color for Missed
+                            : appointment.appointments_appointmentStatus ===
+                              "Cancelled"
+                            ? "bg-[#FEE9E9] text-[#EF4C6A]" // Red color for Cancelled
                             : ""
                         }`}
-                      ></span>
-                      {appointment.appointments_appointmentStatus} Appointment
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                      >
+                        <span
+                          className={`inline-block h-2 w-2 rounded-full mr-1 ${
+                            appointment.appointments_appointmentStatus ===
+                            "Scheduled"
+                              ? "bg-green-500" // Green color for Scheduled
+                              : appointment.appointments_appointmentStatus ===
+                                "Done"
+                              ? "bg-[#7E7E7E]" // Dark color for Done
+                              : appointment.appointments_appointmentStatus ===
+                                  "Patient-IN" ||
+                                appointment.appointments_appointmentStatus ===
+                                  "On-going"
+                              ? "bg-[#E0BD03]" // Yellow for On Going
+                              : appointment.appointments_appointmentStatus ===
+                                  "Missed" ||
+                                appointment.appointments_appointmentStatus ===
+                                  "Cancelled"
+                              ? "bg-[#EF4C6A]" // Red color for Missed and Cancelled
+                              : ""
+                          }`}
+                        ></span>
+                        {appointment.appointments_appointmentStatus} Appointment
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
-        setCurrentPage={setCurrentPage}
-      />
+      <div className="">
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+          setCurrentPage={setCurrentPage}
+        />
+      </div>
       {/* {isOpen && (
         <AppointmentsModal
           isModalOpen={isModalOpen}

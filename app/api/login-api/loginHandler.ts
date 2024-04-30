@@ -6,7 +6,7 @@ export async function validateUser(
   email: string,
   password: string,
   rememberMe: boolean
-): Promise<{ accessToken: string; userDetail: any } | false> {
+): Promise<{ accessToken: string; userDetail: any } | any> {
   try {
     const expiresIn = rememberMe ? "30d" : "1d";
     const requestData = {
@@ -34,9 +34,11 @@ export async function validateUser(
         return accessToken;
       } else {
         console.log(false);
+        console.log("mali")
         return false; // Access token not available
       }
     } else {
+      console.log("mali2")
       return false; // User is not valid
     }
   } catch (error:any) {
