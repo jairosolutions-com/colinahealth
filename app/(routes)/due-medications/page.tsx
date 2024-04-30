@@ -21,7 +21,6 @@ import Pagination from "@/components/shared/pagination";
 export default function DueMedicationPage() {
   const router = useRouter();
   if (typeof window === "undefined") {
-    return null;
   }
   if (!getAccessToken()) {
     router.replace("/login");
@@ -96,7 +95,6 @@ export default function DueMedicationPage() {
       document.body.style.overflow = "visible";
     }
   };
-
 
   useEffect(() => {
     const fetchData = async () => {

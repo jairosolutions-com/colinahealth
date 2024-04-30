@@ -12,7 +12,6 @@ import { set } from "date-fns";
 
 export default function PatientDetails() {
   if (typeof window === "undefined") {
-    return null;
   }
   const [patientDetails, setPatientDetails] = useState<any>([]);
   const [patientEditMode, setPatientEditMode] = useState(false);
@@ -164,7 +163,6 @@ export default function PatientDetails() {
       </div>
     );
   }
-
 
   console.log(patientDetails, "patientDetails");
   console.log(formData, "formData");

@@ -19,7 +19,6 @@ import Pagination from "@/components/shared/pagination";
 export default function prescription() {
   const router = useRouter();
   if (typeof window === "undefined") {
-    return null;
   }
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);

@@ -13,7 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 const Dashboard = () => {
   const router = useRouter();
   if (typeof window === "undefined") {
-    return null;
+  
   }
   if (!getAccessToken()) {
     router.replace("/login");
