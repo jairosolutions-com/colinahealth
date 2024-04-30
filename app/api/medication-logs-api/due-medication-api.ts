@@ -22,7 +22,7 @@ export async function fetchDueMedication(
     console.log("searchPatient", requestData);
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -39,15 +39,23 @@ export async function fetchDueMedication(
     const dueMedications = response.data;
     console.log(dueMedications, "patient dueMedications after search");
     return dueMedications;
-  } catch (error) {
-    if ((error as AxiosError).response?.status === 401) {
-      setAccessToken("");
-      onNavigate(router, "/login");
-      return Promise.reject(new Error("Unauthorized access"));
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.message === "Network Error") {
+        // Handle network error
+        console.error("Connection refused or network error occurred.");
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
+      }
+      if (axiosError.response?.status === 401) {
+        setAccessToken("");
+        onNavigate(router, "/login");
+        return Promise.reject(new Error("Unauthorized access"));
+      }
     }
-    console.error(
-      "Error searching patient dueMedications:",
-      (error as AxiosError).message
-    );
+    console.error("Error searching patient list:", error.message);
+    return Promise.reject(error);
   }
 }

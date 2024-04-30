@@ -8,13 +8,12 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export async function fetchCountryList(
   router: any // Pass router instance as a parameter
 ): Promise<any> {
-  const requestData = {
-  };
+  const requestData = {};
 
   try {
     const accessToken = getAccessToken(); // Retrieve access token from local storage
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     // Set the Authorization header with the JWT token
@@ -23,27 +22,30 @@ export async function fetchCountryList(
     };
 
     // Make the API request to fetch the patient list
-    const response = await axios.get(
-      `${apiUrl}/countries`,
-      { headers }
-    );
+    const response = await axios.get(`${apiUrl}/countries`, { headers });
 
     // Handle the response data
     const countryList = response.data;
 
     console.log("api coutnry list", countryList);
     return countryList;
-  } catch (error) {
-    if ((error as AxiosError).response?.status === 401) {
-      // Unauthorized access, navigate to login page and clear headers
-      setAccessToken("");
-      onNavigate(router, "/login");
-
-      return Promise.reject(new Error("Unauthorized access"));
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.message === "Network Error") {
+        // Handle network error
+        console.error("Connection refused or network error occurred.");
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
+      }
+      if (axiosError.response?.status === 401) {
+        setAccessToken("");
+        onNavigate(router, "/login");
+        return Promise.reject(new Error("Unauthorized access"));
+      }
     }
-    console.error(
-      "Error fetching patient list:",
-      (error as AxiosError).message
-    );
+    console.error("Error searching patient list:", error.message);
+    return Promise.reject(error);
   }
 }

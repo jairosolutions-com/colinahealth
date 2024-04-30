@@ -23,7 +23,7 @@ export async function fetchVitalSignsByPatient(
     console.log("searchPatient", requestData);
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -40,25 +40,36 @@ export async function fetchVitalSignsByPatient(
     const patientVitalSigns = response.data;
     console.log(patientVitalSigns, "patient vital-signs after search");
     return patientVitalSigns;
-  } catch (error) {
-    if ((error as AxiosError).response?.status === 401) {
-      setAccessToken("");
-      onNavigate(router, "/login");
-      return Promise.reject(new Error("Unauthorized access"));
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.message === "Network Error") {
+        // Handle network error
+        console.error("Connection refused or network error occurred.");
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
+      }
+      if (axiosError.response?.status === 401) {
+        setAccessToken("");
+        onNavigate(router, "/login");
+        return Promise.reject(new Error("Unauthorized access"));
+      }
     }
-    console.error(
-      "Error searching patient vital-signs:",
-      (error as AxiosError).message
-    );
+    console.error("Error searching patient list:", error.message);
+    return Promise.reject(error);
   }
 }
 
-
-export async function createVitalSignsOfPatient(patientId: string, formData: any, router: any): Promise<any> {
+export async function createVitalSignsOfPatient(
+  patientId: string,
+  formData: any,
+  router: any
+): Promise<any> {
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -66,7 +77,11 @@ export async function createVitalSignsOfPatient(patientId: string, formData: any
     };
 
     // Make the API request to create the VitalSign
-    const response = await axios.post(`${apiUrl}/vital-signs/${patientId}`, formData, { headers });
+    const response = await axios.post(
+      `${apiUrl}/vital-signs/${patientId}`,
+      formData,
+      { headers }
+    );
     const createdVitalSign = response.data;
 
     return createdVitalSign;
@@ -76,17 +91,16 @@ export async function createVitalSignsOfPatient(patientId: string, formData: any
   }
 }
 
-
 export async function updateVitalSignsOfPatient(
-  prescriptionUuid: string, 
-  formData: any, 
-  router: any): 
-  Promise<any> {
+  prescriptionUuid: string,
+  formData: any,
+  router: any
+): Promise<any> {
   try {
-    console.log(formData, "formdata")
+    console.log(formData, "formdata");
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -95,10 +109,11 @@ export async function updateVitalSignsOfPatient(
 
     // Make the API request to create the VitalSign
     const response = await axios.patch(
-      `${apiUrl}/vital-signs/update/${prescriptionUuid}`, 
-    formData, 
-    { headers });
-    const updatedVitalSign= response.data;
+      `${apiUrl}/vital-signs/update/${prescriptionUuid}`,
+      formData,
+      { headers }
+    );
+    const updatedVitalSign = response.data;
 
     return updatedVitalSign;
   } catch (error) {
@@ -107,9 +122,6 @@ export async function updateVitalSignsOfPatient(
       onNavigate(router, "/login");
       return Promise.reject(new Error("Unauthorized access"));
     }
-    console.error(
-      (error as AxiosError).message
-    );
+    console.error((error as AxiosError).message);
   }
 }
-

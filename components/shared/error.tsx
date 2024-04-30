@@ -21,7 +21,7 @@ export const ErrorModal = ({
       {isAlertOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          <div className="fixed z-50 bg-white rounded-[10px] shadow-xl w-[670px] h-[326px] mx-auto top-[80px]">
+          <div className="fixed z-50 bg-white rounded-[10px] shadow-xl w-[600px] h-[326px] mx-auto">
             <div className="text-center pt-[30px]">
               <div className="mx-auto mb-5 text-gray-400 w-[110px] h-[110px]">
                 <img src="/svgs/error-icon.svg" alt="" />
@@ -40,7 +40,6 @@ export const ErrorModal = ({
                   : label === "prescriptionFailed"
                   ? "Prescription already exists!"
                   : "There was a problem with your request."}
-                  
               </h1>
               <p className="text-[24px] text-sm text-gray-400 mb-10">
                 {label === "Allergy already exist"
@@ -59,8 +58,7 @@ export const ErrorModal = ({
               </p>
               <button
                 onClick={() => toggleModal(false)} // Close modal
-                className="text-white bg-[#1B84FF] hover:bg-blue-800 font-medium 
-                rounded-b-[10px] text-[15px] mt-2 w-[670px] py-[15px] dark:bg-blue-600 dark:hover:bg-blue-700"
+                className="w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm"
               >
                 Try again
               </button>

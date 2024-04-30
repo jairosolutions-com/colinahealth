@@ -22,7 +22,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 //   try {
 //     const accessToken = getAccessToken(); // Retrieve access token from local storage
 //     if (!accessToken) {
-//       throw new Error("Access token not found in local storage");
+//       throw new Error("Unauthorized Access");
 //     }
 
 //     // Set the Authorization header with the JWT token
@@ -86,7 +86,7 @@ export async function fetchAllergiesByPatient(
     console.log("searchPatient", requestData);
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -103,25 +103,95 @@ export async function fetchAllergiesByPatient(
     const { patientId, id, ...patientAllergiesNoId } = response.data;
     console.log(patientAllergiesNoId, "patient allergies after search");
     return patientAllergiesNoId;
-  } catch (error) {
-    if ((error as AxiosError).response?.status === 401) {
-      setAccessToken("");
-      onNavigate(router, "/login");
-      return Promise.reject(new Error("Unauthorized access"));
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.message === "Network Error") {
+        // Handle network error
+        console.error("Connection refused or network error occurred.");
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
+      }
+      if (axiosError.response?.status === 401) {
+        setAccessToken("");
+        onNavigate(router, "/login");
+        return Promise.reject(new Error("Unauthorized access"));
+      }
     }
-    console.error(
-      "Error searching patient allergies:",
-      (error as AxiosError).message
-    );
+    console.error("Error searching patient list:", error.message);
+    return Promise.reject(error);
   }
 }
 
+export async function fetchAllergiesForPDF(
+  patientUuid: string,
+  term: string,
+  currentPage: number,
+  sortBy: string,
+  sortOrder: "ASC" | "DESC",
+  perPage: 0,
+  router: any // Pass router instance as a parameter
+): Promise<any[]> {
+  const requestData = {
+    patientUuid: patientUuid.toUpperCase(),
+    term: term,
+    page: currentPage,
+    sortBy: sortBy,
+    sortOrder: sortOrder,
+    perPage: perPage,
+  };
+  try {
+    console.log("searchPatient", requestData);
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("Unauthorized Access");
+    }
 
-export async function createAllergiesOfPatient(patientId: string, formData: any, router: any): Promise<any> {
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    const response = await axios.post(
+      `${apiUrl}/allergies/list/${patientUuid}`,
+      requestData,
+      { headers }
+    );
+
+    console.log(response.data);
+    const patientAllergiesToPDF = response.data.data;
+    console.log(patientAllergiesToPDF, "patient allergies after search");
+    return patientAllergiesToPDF;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.message === "Network Error") {
+        // Handle network error
+        console.error("Connection refused or network error occurred.");
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
+      }
+      if (axiosError.response?.status === 401) {
+        setAccessToken("");
+        onNavigate(router, "/login");
+        return Promise.reject(new Error("Unauthorized access"));
+      }
+    }
+    console.error("Error searching patient list:", error.message);
+    return Promise.reject(error);
+  }
+}
+
+export async function createAllergiesOfPatient(
+  patientId: string,
+  formData: any,
+  router: any
+): Promise<any> {
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -129,7 +199,11 @@ export async function createAllergiesOfPatient(patientId: string, formData: any,
     };
 
     // Make the API request to create the allergy
-    const response = await axios.post(`${apiUrl}/allergies/${patientId}`, formData, { headers });
+    const response = await axios.post(
+      `${apiUrl}/allergies/${patientId}`,
+      formData,
+      { headers }
+    );
     const createdAllergy = response.data;
 
     return createdAllergy;
@@ -145,17 +219,16 @@ export async function createAllergiesOfPatient(patientId: string, formData: any,
   }
 }
 
-
 export async function updateAllergyOfPatient(
-  allergyUuid: string, 
-  formData: any, 
-  router: any): 
-  Promise<any> {
+  allergyUuid: string,
+  formData: any,
+  router: any
+): Promise<any> {
   try {
-    console.log(formData, "formdata")
+    console.log(formData, "formdata");
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error("Access token not found in local storage");
+      throw new Error("Unauthorized Access");
     }
 
     const headers = {
@@ -164,10 +237,11 @@ export async function updateAllergyOfPatient(
 
     // Make the API request to create the allergy
     const response = await axios.patch(
-      `${apiUrl}/allergies/update/${allergyUuid}`, 
-    formData, 
-    { headers });
-    const updatedSurgery= response.data;
+      `${apiUrl}/allergies/update/${allergyUuid}`,
+      formData,
+      { headers }
+    );
+    const updatedSurgery = response.data;
 
     return updatedSurgery;
   } catch (error) {
@@ -176,9 +250,6 @@ export async function updateAllergyOfPatient(
       onNavigate(router, "/login");
       return Promise.reject(new Error("Unauthorized access"));
     }
-    console.error(
-      (error as AxiosError).message
-    );
+    console.error((error as AxiosError).message);
   }
 }
-

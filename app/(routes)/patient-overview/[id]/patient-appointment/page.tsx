@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
@@ -8,11 +9,19 @@ import View from "@/components/shared/buttons/view";
 import { useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { AppointmentsModal } from "@/components/modals/appointments.modal";
 import { fetchAppointmentsByPatient as fetchAppointmentsByPatient } from "@/app/api/appointments-api/appointments.api";
-
+import { AppointmentviewModalContent } from "@/components/modal-content/appointmentview-modal-content";
+import Modal from "@/components/reusable/modal";
+import { AppointmentModalContent } from "@/components/modal-content/appointment-modal-content";
+import { ClipboardList } from "lucide-react";
+import { AppointmentemailModalContent } from "@/components/modal-content/appointmentemail-modal-content";
+import { SuccessModal } from "@/components/shared/success";
+import { ErrorModal } from "@/components/shared/error";
+import Pagination from "@/components/shared/pagination";
 const Appointment = () => {
   const router = useRouter();
+  if (typeof window === "undefined") {
+  }
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -73,13 +82,15 @@ const Appointment = () => {
 
   const [patientAppointments, setPatientAppointments] = useState<any[]>([]);
   const [term, setTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("DESC");
-  const [sortBy, setSortBy] = useState("appointmentTime");
+  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortBy, setSortBy] = useState("appointmentDate");
   const [pageNumber, setPageNumber] = useState("");
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalAppointments, setTotalAppointments] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -134,13 +145,14 @@ const Appointment = () => {
   const [gotoError, setGotoError] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenReminder, setIsOpenReminder] = useState(false);
   const renderPageNumbers = () => {
     const pageNumbers = [];
     for (let i = 1; i <= totalPages; i++) {
       pageNumbers.push(
         <button
           key={i}
-          className={`flex border border-px items-center justify-center  w-[49px]  ${
+          className={`flex ring-1 ring-gray-300 items-center justify-center  w-[49px]  ${
             currentPage === i ? "btn-pagination" : ""
           }`}
           onClick={() => setCurrentPage(i)}
@@ -156,11 +168,30 @@ const Appointment = () => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else if (!isOpen) {
-      document.body.style.overflow = "scroll";
+      document.body.style.overflow = "visible";
       setIsView(false);
       setAppointmentData([]);
     }
   };
+
+  const isModalReminderOpen = (isOpen: boolean) => {
+    setIsOpenReminder(isOpen);
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else if (!isOpen) {
+      document.body.style.overflow = "visible";
+      setIsView(false);
+      setAppointmentData([]);
+    }
+  };
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+  };
+  const onFailed = () => {
+    setIsErrorOpen(true);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -188,60 +219,85 @@ const Appointment = () => {
 
     fetchData();
   }, [currentPage, sortOrder, sortBy, term, isOpen]);
+  if (isLoading) {
+    return (
+      <div className="container w-full h-full flex justify-center items-center ">
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          alt="logo"
+          width={100}
+          height={100}
+        />
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full">
-      <div className="flex justify-between ">
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center">
-            <h1 className="p-title">Appointment</h1>
+    <div className="w-full h-full flex flex-col justify-between">
+      <div className="w-full h-full">
+        <div className="w-full justify-between flex mb-2">
+          <div className="flex-row">
+            <p className="p-title">Appointment</p>
+
+            <div>
+              <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px] ">
+                Total of {totalAppointments} Appointments
+              </p>
+            </div>
           </div>
-          {/* number of patiens */}
-          <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] mb-4 ">
-            Total of {totalAppointments} Appointments
-          </p>
+          <div className="flex gap-2">
+            <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+              <img src="/imgs/add.svg" alt="" />
+              <p className="text-[18px]">Add</p>
+            </button>
+            <button className="btn-pdfs gap-2">
+              <img src="/imgs/downloadpdf.svg" alt="" />
+              <p className="text-[18px]">Download PDF</p>
+            </button>
+          </div>
         </div>
-        <div className="flex flex-row justify-end mt-[15px]">
-          <button
-            onClick={() => isModalOpen(true)}
-            className=" mr-2 btn-add text-[#000000] w-[109px] h-[42px] radiu"
-          >
-            <img
-              src="/imgs/add.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Add
+        <div className="flex gap-2">
+          <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+            <img src="/imgs/add.svg" alt="" />
+            <p className="text-[18px]">Add</p>
           </button>
-          <button className="btn-pdfs hover:bg-[#007C85] h-[42px] hover:border-[#007C85] hover:text-white flex items-center justify-center rounded-lg font-manrope text-black text-lg px-8 py-4 border-2 border-gray-300 text-center w-64 relative ">
-            <img
-              src="/imgs/downloadpdf.svg"
-              alt="Custom Icon"
-              className="w-5 h-5 mr-2"
-            />
-            Download PDF
+          <button
+            onClick={() => isModalReminderOpen(true)}
+            className="btn-pdfs gap-2"
+          >
+            <ClipboardList width={20} height={20} />
+            <p className="text-[18px]">Reminder</p>
           </button>
         </div>
       </div>
 
       <div className="w-full m:rounded-lg items-center">
-        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px] px-5">
-          <form className="">
+        <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
+          <form className="mr-5 relative">
             {/* search bar */}
             <label className=""></label>
             <div className="flex">
               <input
-                className=" py-3 px-5  w-[573px] h-[47px] pt-[14px]  ring-[1px] ring-[#E7EAEE] text-[15px]"
+                className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat"
                 type="text"
                 placeholder="Search by reference no. or name..."
-                onChange={(event) => {
-                  setTerm(event.target.value);
+                value={term}
+                onChange={(e) => {
+                  setTerm(e.target.value);
                   setCurrentPage(1);
                 }}
               />
+              <img
+                src="/svgs/search.svg"
+                alt="Search"
+                width="20"
+                height="20"
+                className="absolute left-8 top-9 pointer-events-none"
+              />
             </div>
           </form>
-          <div className="flex w-full justify-end items-center gap-[12px]">
+
+          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
             <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Order by
             </p>
@@ -254,9 +310,8 @@ const Appointment = () => {
               }))}
               open={isOpenOrderedBy}
               width={"165px"}
-              label={"Ascending"}
+              label={"Select"}
             />
-
             <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
               Sort by
             </p>
@@ -274,38 +329,25 @@ const Appointment = () => {
             />
           </div>
         </div>
-
         {/* START OF TABLE */}
         <div>
-          <table className="w-full text-left rtl:text-right">
+          <table className="text-left rtl:text-right">
             <thead>
-              <tr className="uppercase text-[#64748B] border-y text-[15px]">
-                <th scope="col" className="px-7 py-3 w-[300px] h-[70px]">
-                  STATUS
-                </th>
-                <th scope="col" className="px-6 py-3 w-[400px]">
-                  DATE
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  TIME
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  END TIME
-                </th>
-                <th scope="col" className="px-6 py-3 w-[300px]">
-                  DETAILS
-                </th>
-                <th scope="col" className=" px-[90px] py-3 w-10">
-                  ACTION
-                </th>
+              <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                <th className="px-6 py-3 ">STATUS</th>
+                <th className="px-6 py-3 ">DATE</th>
+                <th className="px-6 py-3 ">TIME</th>
+                <th className="px-4 py-3 ">END TIME</th>
+                <th className="px-4 py-3 ">DETAILS</th>
+                <th className="px-24 py-3">ACTION</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="h-[220px]">
               {patientAppointments.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                     <p className="font-semibold text-gray-700 text-center text-[15px]">
-                      No Appointment/s <br/>•ω•
+                      No Appointment/s <br />
                     </p>
                   </td>
                 </tr>
@@ -317,43 +359,68 @@ const Appointment = () => {
                       key={index}
                       className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                     >
-                      <th
-                        className={`text-15px me-1 px-6 py-5 rounded-full flex justify-start ${
-                          appointments.appointments_appointmentStatus ===
-                          "Scheduled"
-                            ? "text-[#2A7D15]" // Green color for Scheduled
-                            : appointments.appointments_appointmentStatus ===
-                              "Done"
-                            ? "text-[#3C3C3C]" // Dark color for Done
-                            : appointments.appointments_appointmentStatus ===
-                                "Patient-IN" ||
+                      <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                        <div
+                          className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
+                            appointments.appointments_appointmentStatus ===
+                            "Scheduled"
+                              ? "bg-[#dfffea] text-[#17C653] text-[15px]" // Green color for Scheduled
+                              : appointments.appointments_appointmentStatus ===
+                                "Done"
+                              ? "bg-[#E7EAEE] text-[#3C3C3C] text-[15px]" // Dark color for Done
+                              : appointments.appointments_appointmentStatus ===
+                                  "Patient-IN" ||
+                                appointments.appointments_appointmentStatus ===
+                                  "On-going"
+                              ? "bg-[#FFFCDB] text-[#E0BD03] text-[15px]" // Yellow for On Going
+                              : appointments.appointments_appointmentStatus ===
+                                  "Missed" ||
+                                appointments.appointments_appointmentStatus ===
+                                  "Cancelled"
+                              ? "bg-[#FEE9E9] text-[#EF4C6A] text-[15px]" // Red color for Missed and Cancelled
+                              : ""
+                          }`}
+                        >
+                          <span
+                            className={`inline-block h-2 w-2 rounded-full mr-1 ${
                               appointments.appointments_appointmentStatus ===
-                                "On-going"
-                            ? "text-[#E0BD03]" // Yellow for On Going
-                            : appointments.appointments_appointmentStatus ===
-                              "Missed"
-                            ? "text-[#B81C1C]" // Red color for Missed
-                            : ""
-                        }`}
-                      >
-                        <span className="pr-1">●</span>
-                        {appointments.appointments_appointmentStatus}
-                      </th>
-                      <td className="px-6 py-3">
+                              "Scheduled"
+                                ? "bg-green-500" // Green color for Scheduled
+                                : appointments.appointments_appointmentStatus ===
+                                  "Done"
+                                ? "bg-[#E7EAEE]" // Dark color for Done
+                                : appointments.appointments_appointmentStatus ===
+                                    "Patient-IN" ||
+                                  appointments.appointments_appointmentStatus ===
+                                    "On-going"
+                                ? "bg-[#E0BD03]" // Yellow for On Going
+                                : appointments.appointments_appointmentStatus ===
+                                    "Missed" ||
+                                  appointments.appointments_appointmentStatus ===
+                                    "Cancelled"
+                                ? "bg-[#EF4C6A]" // Red color for Missed and Cancelled
+                                : ""
+                            }`}
+                          ></span>
+                          {appointments.appointments_appointmentStatus}
+                        </div>
+                      </td>
+
+                      <td className="px-6 py-3 text-[15px]">
                         {formatDate(appointments.appointments_appointmentDate)}
                       </td>
-                      <td className="px-6 py-3">
+                      <td className="px-6 py-3 text-[15px]">
                         {formatTime(appointments.appointments_appointmentTime)}
                       </td>
-                      <td className="px-6 py-3">
+                      <td className="px-6 py-3 text-[15px]">
                         {formatTime(
                           appointments.appointments_appointmentEndTime
                         )}
                       </td>
-                      <td className="px-6 py-3">
+                      <td className="px-6 py-3 text-[15px]">
                         {appointments.appointments_details}
                       </td>
-                      <td className="px-[90px] py-3">
+                      <td className="px-[90px] py-3 items-center">
                         <p
                           onClick={() => {
                             isModalOpen(true);
@@ -374,77 +441,56 @@ const Appointment = () => {
         {/* END OF TABLE */}
       </div>
       {/* pagination */}
-      {totalPages <= 1 ? (
-        <div></div>
-      ) : (
-        <div className="mt-5 pb-5">
-          <div className="flex justify-between">
-            <p className="font-medium size-[18px] w-[138px] items-center">
-              Page {currentPage} of {totalPages}
-            </p>
-            <div>
-              <nav>
-                <div className="flex -space-x-px text-sm">
-                  <div>
-                    <button
-                      onClick={goToPreviousPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
-                    >
-                      Prev
-                    </button>
-                  </div>
-                  {renderPageNumbers()}
-
-                  <div className="ml-5">
-                    <button
-                      onClick={goToNextPage}
-                      className="flex border border-px items-center justify-center  w-[77px] h-full"
-                    >
-                      Next
-                    </button>
-                  </div>
-                  <form onSubmit={handleGoToPage}>
-                    <div className="flex px-5 ">
-                      <input
-                        className={`ipt-pagination appearance-none  text-center border ring-1 ${
-                          gotoError ? "ring-red-500" : "ring-gray-300"
-                        } border-gray-100`}
-                        type="text"
-                        placeholder="-"
-                        pattern="\d*"
-                        value={pageNumber}
-                        onChange={handlePageNumberChange}
-                        onKeyPress={(e) => {
-                          // Allow only numeric characters (0-9), backspace, and arrow keys
-                          if (
-                            !/[0-9\b]/.test(e.key) &&
-                            e.key !== "ArrowLeft" &&
-                            e.key !== "ArrowRight"
-                          ) {
-                            e.preventDefault();
-                          }
-                        }}
-                      />
-                      <div className="px-5">
-                        <button type="submit" className="btn-pagination ">
-                          Go{" "}
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </nav>
-            </div>
-          </div>
-        </div>
-      )}
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        setCurrentPage={setCurrentPage}
+      />
       {isOpen && (
-        <AppointmentsModal
+        <Modal
+          content={
+            <AppointmentModalContent
+              isModalOpen={isModalOpen}
+              isOpen={isOpen}
+              isView={isEdit}
+              appointmentData={appointmentData}
+              label="sample label"
+            />
+          }
           isModalOpen={isModalOpen}
-          isOpen={isOpen}
-          isView={isEdit}
-          appointmentData={appointmentData}
-          label="sample label"
+        />
+      )}
+      {isOpenReminder && (
+        <Modal
+          content={
+            <AppointmentemailModalContent
+              onSuccess={onSuccess}
+              onFailed={onFailed}
+              isModalOpen={isModalReminderOpen}
+            />
+          }
+          isModalOpen={isModalOpen}
+        />
+      )}
+
+      {isSuccessOpen && (
+        <SuccessModal
+          label="Email Sent Succesfully"
+          isAlertOpen={isSuccessOpen}
+          toggleModal={setIsSuccessOpen}
+          isUpdated={isUpdated}
+          setIsUpdated={setIsUpdated}
+        />
+      )}
+      {isErrorOpen && (
+        <ErrorModal
+          label="Sending Email Failed"
+          isAlertOpen={isErrorOpen}
+          toggleModal={setIsErrorOpen}
+          isEdit={isEdit}
+          errorMessage={error}
         />
       )}
     </div>

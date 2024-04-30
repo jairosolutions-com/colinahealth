@@ -1,24 +1,33 @@
 "use client";
 
+import Image from "next/image";
 import { onNavigate } from "@/actions/navigation";
 import { fetchUpcomingAppointments } from "@/app/api/appointments-api/upcoming-appointments-api";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { fetchDueMedication } from "@/app/api/medication-logs-api/due-medication-api";
+import { ToastAction } from "@/components/ui/toast";
 import { Edit, View } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
   const router = useRouter();
-  if (!getAccessToken()) {
-    onNavigate(router, "/login");
+  if (typeof window === "undefined") {
+  
   }
-
+  if (!getAccessToken()) {
+    router.replace("/login");
+  }
+  const { toast } = useToast();
   const [term, setTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [dueMedSortBy, setDueMedSortBy] = useState("medicationLogsTime");
   const [upcomingSortBy, setUpcomingSortBy] = useState("appointmentDate");
   const [sortOrder, setSortOrder] = useState("ASC");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading2, setIsLoading2] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
   const [dueMedicationList, setDueMedicationList] = useState<
     {
       patient_uuid: string;
@@ -41,12 +50,10 @@ const Dashboard = () => {
       appointments_appointmentDate: string;
       appointments_appointmentEndTime: string;
       appointments_appointmentTime: string;
-
     }[]
   >([]);
   const [upcomingTotalPages, setUpcomingTotalPages] = useState(0);
   const [totalUpcoming, setTotalUpcoming] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,7 +119,26 @@ const Dashboard = () => {
         setUpcomingAppointments(upcomingAppoinments.data);
         setTotalUpcoming(upcomingAppoinments.totalCount);
         setUpcomingTotalPages(upcomingAppoinments.totalPages);
-      } catch (error) {}
+        setIsLoading2(false);
+      } catch (error: any) {
+        setError(error.message);
+        console.log("error");
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: (
+            <ToastAction
+              altText="Try again"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Try again
+            </ToastAction>
+          ),
+        });
+      }
     };
     fetchData();
   }, [currentPage]);
@@ -149,6 +175,19 @@ const Dashboard = () => {
 
   console.log(dueMedicationList, "dueMedicationList");
 
+  if (isLoading || isLoading2) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          width={100}
+          height={100}
+          alt="logo"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full">
       <div className="justify-center items-center mx-[154px] mt-[90px] overflow-hidden">
@@ -166,9 +205,13 @@ const Dashboard = () => {
 
           <div className="w-[930px] min-w-max-[930px] max-h-[670px] h-[670px] min-h-max-[670px]">
             <div className="border-[1px] h-[95px] px-18 pt-3">
-              <p className="p-title mx-[30px] pt-2">Upcoming Appointment<span>{upcomingAppointments.length > 1? "s":""}</span></p>
+              <p className="p-title mx-[30px] pt-2">
+                Upcoming Appointment
+                <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
+              </p>
               <p className="font-normal text-[15px] text-[#71717A] mx-[30px] pt-3">
-                Total of {totalUpcoming} Appointment <span>{upcomingAppointments.length > 1? "s":""}</span>
+                Total of {totalUpcoming} Appointment{" "}
+                <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
               </p>
             </div>
             {/* {/ content /} */}
@@ -181,9 +224,9 @@ const Dashboard = () => {
                         key={index}
                         className="h-[95px] flex justify-evenly items-center hover:bg-slate-50 px-4 min-w-max"
                       >
-                        <div className="flex bg-[#FEF9C3] px-2 me-2 py-0.5 items-center">
+                        <div className="flex bg-[#FEF9C3] px-2 me-2 py-0.5 items-center rounded-[30px]">
                           <p className="text-[#FACC15] text-[15px] mr-2">●</p>
-                          <span className="pr-1 text-[#713F12] font-medium text-[15px]">
+                          <span className="pr-1 text-[#713F12] font-semibold text-[15px]">
                             Pending
                           </span>
                         </div>
@@ -194,14 +237,17 @@ const Dashboard = () => {
                         </p>
                         <div className=" items-center flex flex-col w-1/4">
                           <p className="font-bold text-[15px]">
-                           {upcomingAppointment.appointments_appointmentDate}
+                            {upcomingAppointment.appointments_appointmentDate}
                           </p>
-                         
                         </div>
                         <p className="text-[#71717A] font-medium text-[15px] w-1/4 text-center">
-                          {formatTime(upcomingAppointment.appointments_appointmentTime)}
+                          {formatTime(
+                            upcomingAppointment.appointments_appointmentTime
+                          )}
                           -
-                          {formatTime(upcomingAppointment.appointments_appointmentEndTime)}
+                          {formatTime(
+                            upcomingAppointment.appointments_appointmentEndTime
+                          )}
                         </p>
                       </div>
                     ))}
@@ -210,7 +256,6 @@ const Dashboard = () => {
                   <div className="flex mt-10 items-center text-center justify-center font-semibold text-3xl w-full h-full ">
                     No Upcoming Appointments/s
                     <br />
-                    •ω•
                   </div>
                 )}
               </div>
@@ -221,9 +266,13 @@ const Dashboard = () => {
       {/ Start of Due Medications /} */}
           <div className="w-[621px] h-[666px] border-[1px] border-[#E4E4E7] py-3 select-none px-[40px]">
             <div className="">
-              <p className="p-title pt-2">Due Medication<span>{dueMedicationList.length > 1? "s":""}</span></p>
+              <p className="p-title pt-2">
+                Due Medication
+                <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
+              </p>
               <p className="font-normal text-[15px] text-[#71717A] pt-3 mb-3">
-                Total of {totalDueMedication} Due Medication<span>{dueMedicationList.length > 1? "s":""}</span>
+                Total of {totalDueMedication} Due Medication
+                <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
               </p>
             </div>
             {dueMedicationList.length > 0 ? (
@@ -234,10 +283,16 @@ const Dashboard = () => {
                     className="w-full flex flex-row h-[75px] mb-1 hover:bg-slate-100 cursor-pointer"
                   >
                     <div className="flex w-1/6 items-center ">
-                      <img src="/imgs/tao1.svg" alt="" width={58} height={58} />
+                      <Image
+                        className="rounded-full"
+                        src="/imgs/drake.png"
+                        width={58}
+                        height={58}
+                        alt="picture"
+                      />
                     </div>
                     <div className="flex w-4/6">
-                      <div className="flex flex-col justify-center">
+                      <div className="flex flex-col justify-center gap-1">
                         <p className="font-bold text-[15px] truncate hover:text-wrap">
                           {dueMedication.patient_firstName}{" "}
                           {dueMedication.patient_middleName}{" "}
@@ -248,11 +303,11 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="w-1/6  flex flex-col justify-center items-start ">
-                      <p className="font-bold text-[15px] flex">
+                    <div className="w-1/6  flex flex-col justify-center items-start gap-1">
+                      <p className="font-semibold text-[15px] flex">
                         {dueMedication.medicationlogs_medicationLogsDate}
                       </p>
-                      <p className="text-[#71717A] font-medium text-[15px]">
+                      <p className="text-[#71717A] font-medium text-[15px] ml-4">
                         {formatTime(
                           dueMedication.medicationlogs_medicationLogsTime
                         )}
@@ -262,14 +317,19 @@ const Dashboard = () => {
                 ))}
               </div>
             ) : (
-              <div className="flex items-center text-center justify-center font-semibold text-3xl w-full h-full -mt-10">
+              <div className="flex items-center text-center justify-center font-normal text-[15px] w-full h-full -mt-10">
                 No Due Medication/s
                 <br />
-                •ω•
               </div>
             )}
 
-            <div className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] py-[40px]">
+            <div
+              onClick={() => {
+                setIsLoading(true);
+                onNavigate(router, "/due-medications");
+              }}
+              className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] py-[40px]"
+            >
               SEE ALL DUE
               <svg
                 className="text-[#71717A] ml-2 group-hover:text-[#007C85]"
@@ -282,9 +342,9 @@ const Dashboard = () => {
                 <path
                   d="M2.14795 2.15826L8.7739 8.78421L2.14795 15.4102"
                   stroke="currentColor"
-                  stroke-width="2.43402"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2.43402"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </div>
