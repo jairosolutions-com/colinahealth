@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
@@ -311,7 +312,7 @@ export default function FormsTab() {
                   setCurrentPage(1);
                 }}
               />
-              <img
+              <Image
                 src="/svgs/search.svg"
                 alt="Search"
                 width="20"
