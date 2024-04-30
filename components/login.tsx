@@ -139,7 +139,7 @@ export const Login = () => {
                           className={`${
                             isInvalid ? "ring-1 ring-red-400" : ""
                           }  
-                      h-[60px] w-full bg-opacity-10 bg-[#FFFFFF] px-3 py-6 pl-5 pb-2 text-md text-[#333333]`}
+                      h-[60px] w-full bg-opacity-10 bg-[#D9D9D91A] px-3 py-6 pl-5 pb-2 text-md text-[#333333]`}
                           value={email}
                           onFocus={handleEmailFocus}
                           onBlur={handleEmailBlur}
@@ -172,7 +172,7 @@ export const Login = () => {
                           className={`${
                             isInvalid ? "ring-1 ring-red-400" : ""
                           }  
-                      h-[60px] w-full bg-opacity-10 bg-[#FFFFFF] px-3 py-6 pl-5 pb-2 text-md text-[#333333]`}
+                      h-[60px] w-full bg-opacity-10 bg-[#D9D9D91A] px-3 py-6 pl-5 pb-2 text-md text-[#333333]`}
                           value={password}
                           onFocus={handlePasswordFocus}
                           onBlur={handlePasswordBlur}
