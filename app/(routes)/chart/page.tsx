@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { fetchPatientPrescriptions } from "@/app/api/patients-api/patientTimeGraph";
 import { PrnModalContent } from "@/components/modal-content/prn-modal-content";
@@ -22,7 +23,7 @@ export default function ChartPage() {
   if (!getAccessToken()) {
     router.replace("/login");
   }
-  
+
   const { toast } = useToast();
   const [patientList, setPatientList] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -208,7 +209,12 @@ export default function ChartPage() {
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center ">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          alt="logo"
+          width={100}
+          height={100}
+        />
       </div>
     );
   }
@@ -225,7 +231,7 @@ export default function ChartPage() {
           <div className="bg-[#F4F4F4] h-[827px] max-h-[827px] w-full">
             <div className="top-section w-full pt-24 pl-5">
               <div>
-                <img
+                <Image
                   src="/icons/search-icon.svg"
                   alt="search-icon"
                   className="absolute ml-2 mt-4"

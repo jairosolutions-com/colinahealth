@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
@@ -158,7 +158,12 @@ export default function Laboratoryresults() {
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          alt="logo"
+          width={100}
+          height={100}
+        />
       </div>
     );
   }
@@ -232,7 +237,7 @@ export default function Laboratoryresults() {
                   setCurrentPage(1);
                 }}
               />
-              <img
+              <Image
                 src="/svgs/search.svg"
                 alt="Search"
                 width="20"

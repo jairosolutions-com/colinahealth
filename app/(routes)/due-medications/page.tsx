@@ -189,7 +189,12 @@ export default function DueMedicationPage() {
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          alt="logo"
+          height={100}
+          width={100}
+        />
       </div>
     );
   }
@@ -326,7 +331,9 @@ export default function DueMedicationPage() {
                     {dueMedication.patient_firstName}{" "}
                     {dueMedication.patient_lastName}
                   </td>
-                  <td className="px-6 py-5 ">{dueMedication.medicationlogs_uuid}</td>
+                  <td className="px-6 py-5 ">
+                    {dueMedication.medicationlogs_uuid}
+                  </td>
                   <td className="px-6 py-5 ">
                     {dueMedication.medicationlogs_medicationLogsDate}
                   </td>

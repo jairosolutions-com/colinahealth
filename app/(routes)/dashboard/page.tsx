@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { onNavigate } from "@/actions/navigation";
 import { fetchUpcomingAppointments } from "@/app/api/appointments-api/upcoming-appointments-api";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
@@ -177,7 +178,12 @@ const Dashboard = () => {
   if (isLoading || isLoading2) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          width={100}
+          height={100}
+          alt="logo"
+        />
       </div>
     );
   }
@@ -277,7 +283,13 @@ const Dashboard = () => {
                     className="w-full flex flex-row h-[75px] mb-1 hover:bg-slate-100 cursor-pointer"
                   >
                     <div className="flex w-1/6 items-center ">
-                      <img src="/imgs/tao1.svg" alt="" width={58} height={58} />
+                      <Image
+                        className="rounded-full"
+                        src="/imgs/drake.png"
+                        width={58}
+                        height={58}
+                        alt="picture"
+                      />
                     </div>
                     <div className="flex w-4/6">
                       <div className="flex flex-col justify-center gap-1">
