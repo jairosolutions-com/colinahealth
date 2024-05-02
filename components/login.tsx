@@ -1,6 +1,5 @@
 "use client";
 
-import { onNavigate } from "@/actions/navigation";
 import {
   getAccessToken,
   setAccessToken,
@@ -92,24 +91,38 @@ export const Login = () => {
     );
   }
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full flex ">
       <section className="w-full h-full">
-        <div className="w-full  md:h-screen flex">
-          <div className="flex w-full items-center max-h-screen justify-center overflow-hidden">
+        <div className="w-full h-full flex ">
+          <div className="flex w-full items-center h-full justify-center ">
             <Image
               src="/imgs/login-image.png"
               alt="Your Image"
-              className="w-full h-full object-cover select-none pointer-events-none"
-              width={1090}
-              height={1090}
+              className=" w-full h-full object-cover select-none pointer-events-none"
+              width={827}
+              height={1081}
               priority={true}
             />
+            <div className=" hidden md:flex  absolute lg:px-32 px-10 flex-col gap-5 ">
+              <Image
+                src="/imgs/colina-logo.png"
+                alt="logo"
+                className=" object-cover select-none pointer-events-none -ml-2"
+                width={297}
+                height={37.05}
+                priority={true}
+              />
+              <p className="text-white lg:text-[30px]">
+                The art of medicine lies in listening to what the patient’s body
+                and spirit are trying to say.
+              </p>
+            </div>
           </div>
 
-          <div className="w-[1091px] h-full flex flex-col">
+          <div className="lg:w-[1091px] md:w-[825.24px] w-full h-full px-10 md:px-0 absolute md:relative flex flex-col justify-center items-center">
             <div className=" w-full h-full ">
-              <div className="flex flex-col justify-center items-center w-[1091px]  h-full ">
-                <div className="w-[542.27px] text-left">
+              <div className="flex flex-col justify-center items-center lg:w-[1091px] w-full  h-full ">
+                <div className="md:w-[542.27px] w-full text-left">
                   <h2 className=" text-[20px] font-semibold  md:text-2xl lg:mb-10">
                     Sign in to your Account
                   </h2>
@@ -255,7 +268,9 @@ export const Login = () => {
                 </div>
               </div>
             </div>
-            <Footer />
+            <div className="hidden md:block w-full">
+              <Footer />
+            </div>
           </div>
         </div>
       </section>
