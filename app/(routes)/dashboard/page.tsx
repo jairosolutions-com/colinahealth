@@ -14,7 +14,7 @@ import { useToast } from "@/components/ui/use-toast";
 const Dashboard = () => {
   const router = useRouter();
   if (typeof window === "undefined") {
-  
+    return <div>No page found</div>;
   }
   if (!getAccessToken()) {
     router.replace("/login");
