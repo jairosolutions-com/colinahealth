@@ -536,7 +536,7 @@ export const LabResultsViewModalContent = ({
                                 height="550"
                                 onClick={toggleModal}
                                 src={`data:image/${fileType};base64,${base64String}`}
-                              ></Image>
+                              />
                             )}
                           </div>
                           <div className="filehover">
