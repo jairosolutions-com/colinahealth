@@ -25,13 +25,13 @@ const ForgotPass = ({
 }: ForgotPassProps) => {
   return (
     <div
-      className={`flex flex-col fixed justify-center items-center lg:w-[1091px] w-full  duration-500 transition h-full z-50
+      className={`flex flex-col fixed justify-center items-center lg:w-[1091px] w-full  duration-500 transition h-full 
                 ${
                   isForgotPassword
                     ? " opacity-100 z-50"
                     : isOTP
                     ? "-translate-x-[1000px] opacity-0 -z-10"
-                    : "translate-x-[1000px] opacity-0 "
+                    : "translate-x-[1000px] opacity-0 -z-10"
                 }`}
     >
       <h1 className="md:text-[20px] font-semibold  md:text-2xl lg:mb-3 text-white md:text-black md:mb-0 mb-3">
