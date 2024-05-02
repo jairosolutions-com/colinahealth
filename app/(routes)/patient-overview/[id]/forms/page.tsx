@@ -258,7 +258,7 @@ export default function FormsTab() {
   return (
     <div className="  w-full h-full flex flex-col justify-between">
       <div className="w-full h-full">
-        <div className="w-full justify-between flex mb-2">
+        <div className="w-full justify-between flex ">
           <div className="flex-row">
             <div className="flex gap-2">
               <p className="p-title">Form</p>

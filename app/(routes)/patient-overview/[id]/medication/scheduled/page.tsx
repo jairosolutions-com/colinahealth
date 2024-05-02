@@ -220,7 +220,7 @@ const Scheduled = () => {
               </span>
             </div>
             <div>
-              <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px]">
+              <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
                 Total of {totalScheduledMeds} Scheduled Medication Logs
               </p>
             </div>
