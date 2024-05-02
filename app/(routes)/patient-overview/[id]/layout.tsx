@@ -133,11 +133,11 @@ export default function PatientOverviewLayout({
         const imgResponse = await fetchPatientProfileImage(patientId, router);
         if (!imgResponse.data || imgResponse.data.length === 0) {
           // If no image data is available, set patientImage to null
-          setPatientImage('');
+          setPatientImage("");
         } else {
           // Convert the image data buffer to a data URL
           const buffer = Buffer.from(imgResponse.data);
-          const dataUrl = `data:image/jpeg;base64,${buffer.toString('base64')}`;
+          const dataUrl = `data:image/jpeg;base64,${buffer.toString("base64")}`;
           setPatientImage(dataUrl);
         }
         setPatientData(response);
@@ -208,7 +208,7 @@ export default function PatientOverviewLayout({
                 />
               ) : (
                 <img
-                  src="/imgs/drake.png"
+                  src="/imgs/user-no-icon.jpg"
                   alt="profile"
                   width="200"
                   height="200"

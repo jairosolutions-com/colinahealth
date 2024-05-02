@@ -393,7 +393,7 @@ export default function PatientPage() {
                                     // Render the stock image (.svg) if data is empty
                                     <img
                                       className="rounded-full"
-                                      src="/imgs/no-icon-user.svg"
+                                      src="/imgs/user-no-icon.jpg"
                                       alt=""
                                       width={45}
                                       height={45}
