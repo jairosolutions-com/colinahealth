@@ -159,7 +159,7 @@ export default function PatientDetails() {
   if (isLoading) {
     return (
       <div className="container w-full h-full flex justify-center items-center ">
-        <Image
+        <img
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
           width={100}
@@ -264,7 +264,7 @@ export default function PatientDetails() {
                     <option value="Female">Female</option>
                   </select>
                   <div className="absolute top-0 right-0 mt-2 mr-2 pointer-events-none">
-                    <Image
+                    <img
                       width={20}
                       height={20}
                       src={"/svgs/chevron-up.svg"}
@@ -315,7 +315,7 @@ export default function PatientDetails() {
                     onChange={handleChange}
                   />
                   <div className="absolute top-0 right-0 mt-2 mr-2 pointer-events-none">
-                    <Image
+                    <img
                       width={20}
                       height={20}
                       src={"/svgs/calendark.svg"}
@@ -466,7 +466,7 @@ export default function PatientDetails() {
                     ))}
                   </select>
                   <div className="absolute top-0 right-0 mt-2 mr-2 pointer-events-none">
-                    <Image
+                    <img
                       width={20}
                       height={20}
                       src={"/svgs/chevron-up.svg"}
@@ -518,7 +518,7 @@ export default function PatientDetails() {
                     onChange={handleChange}
                   />
                   <div className="absolute top-0 right-0 mt-2 mr-2 pointer-events-none">
-                    <Image
+                    <img
                       width={20}
                       height={20}
                       src={"/svgs/calendark.svg"}
@@ -556,7 +556,7 @@ export default function PatientDetails() {
                     </option>
                   </select>
                   <div className="absolute top-0 right-0 mt-2 mr-2 pointer-events-none">
-                    <Image
+                    <img
                       width={20}
                       height={20}
                       src={"/svgs/chevron-up.svg"}

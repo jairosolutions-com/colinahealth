@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Navbar setIsLoading={setIsLoading} />
         {isLoading ? (
           <div className="w-full h-full flex justify-center items-center ">
-            <Image
+            <img
               src="/imgs/colina-logo-animation.gif"
               alt="logo"
               width={100}

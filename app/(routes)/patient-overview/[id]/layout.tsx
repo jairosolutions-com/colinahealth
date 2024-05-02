@@ -11,6 +11,7 @@ import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import Link from "next/link";
+import Image from "next/image";
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
@@ -133,11 +134,11 @@ export default function PatientOverviewLayout({
         const imgResponse = await fetchPatientProfileImage(patientId, router);
         if (!imgResponse.data || imgResponse.data.length === 0) {
           // If no image data is available, set patientImage to null
-          setPatientImage('');
+          setPatientImage("");
         } else {
           // Convert the image data buffer to a data URL
           const buffer = Buffer.from(imgResponse.data);
-          const dataUrl = `data:image/jpeg;base64,${buffer.toString('base64')}`;
+          const dataUrl = `data:image/jpeg;base64,${buffer.toString("base64")}`;
           setPatientImage(dataUrl);
         }
         setPatientData(response);

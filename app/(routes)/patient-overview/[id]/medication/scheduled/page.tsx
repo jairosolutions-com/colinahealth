@@ -11,7 +11,7 @@ import { useParams, useRouter } from "next/navigation";
 import { fetchScheduledMedByPatient } from "@/app/api/medication-logs-api/scheduled-med-api";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
-
+import Image from "next/image";
 import Modal from "@/components/reusable/modal";
 import { ScheduledModalContent } from "@/components/modal-content/scheduled-modal-content";
 import Pagination from "@/components/shared/pagination";
@@ -39,6 +39,7 @@ const Scheduled = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+
   interface Modalprops {
     label: string;
     isOpen: boolean;

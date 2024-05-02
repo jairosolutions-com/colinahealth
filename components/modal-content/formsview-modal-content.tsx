@@ -115,7 +115,7 @@ export const FormsviewModalContent = ({
                     required
                     value={formData.forms_dateIssued}
                   />
-                  <Image
+                  <img
                     className="absolute ml-[560px]  mt-4 pointer-events-none cursor-pointer"
                     width={20}
                     height={20}
@@ -157,7 +157,6 @@ export const FormsviewModalContent = ({
                 ${isSubmitted && " cursor-not-allowed"}
  
                 w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
-
             >
               Cancel
             </button>

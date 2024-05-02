@@ -282,7 +282,7 @@ export const DemographicModalContent = ({
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
                         </select>
-                        <Image
+                        <img
                           className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                           width={20}
                           height={20}
@@ -310,7 +310,7 @@ export const DemographicModalContent = ({
                       value={formData.dateOfBirth}
                       onChange={handleChange}
                     />
-                    <Image
+                    <img
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                       width={20}
                       height={20}
@@ -421,7 +421,7 @@ export const DemographicModalContent = ({
                         </option>
                       ))}
                     </select>
-                    <Image
+                    <img
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                       width={20}
                       height={20}
@@ -473,7 +473,7 @@ export const DemographicModalContent = ({
                         FULL CODE
                       </option>
                     </select>
-                    <Image
+                    <img
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                       width={20}
                       height={20}
@@ -499,7 +499,7 @@ export const DemographicModalContent = ({
                       value={formData.admissionDate}
                       onChange={handleChange}
                     />
-                    <Image
+                    <img
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                       width={20}
                       height={20}
@@ -552,7 +552,7 @@ export const DemographicModalContent = ({
                     htmlFor="imageUpload"
                     className="relative h-[70px] w-full bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-1.5"
                   >
-                    <Image
+                    <img
                       className="w-10 h-10 mr-1"
                       width={50}
                       height={50}
