@@ -433,7 +433,6 @@ export const PrescriptionViewModalContent = ({
               name="file"
               disabled={defaultPrescriptionFiles.length === 5}
               onChange={(e) => handleFile(e)}
-              
               max={5}
             />
             {isHovering && selectedFiles.length > 0 && (
@@ -530,7 +529,7 @@ export const PrescriptionViewModalContent = ({
                                 onClick={toggleModal}
                               ></iframe>
                             ) : (
-                              <Image
+                              <img
                                 alt="file image"
                                 width="600"
                                 height="550"
@@ -584,7 +583,7 @@ export const PrescriptionViewModalContent = ({
                             type="button"
                             className="absolute top-0 left-0 m-4 ml-10 text-white hover:underline flex text-[20px]"
                           >
-                            <Image
+                            <img
                               className="mr-2"
                               src="/svgs/print.svg"
                               alt="Icon"
@@ -598,7 +597,7 @@ export const PrescriptionViewModalContent = ({
                             className="absolute top-0 left-0 m-4 ml-36 text-white hover:underline flex text-[20px]"
                             onClick={downloadImage}
                           >
-                            <Image
+                            <img
                               className="mr-2"
                               src="/svgs/download.svg"
                               alt="Icon"
@@ -613,7 +612,7 @@ export const PrescriptionViewModalContent = ({
                           >
                             Close
                           </button>
-                          <Image
+                          <img
                             alt="Document Full Preview"
                             width={1500}
                             height={1200}
@@ -692,7 +691,7 @@ export const PrescriptionViewModalContent = ({
       )}
       {isSuccessOpen && (
         <SuccessModal
-          label={selectedFileUUID!==""?"deleted":"submitted"}
+          label={selectedFileUUID !== "" ? "deleted" : "submitted"}
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
           isUpdated={isUpdated}

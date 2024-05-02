@@ -95,7 +95,7 @@ export const Login = () => {
       <section className="w-full h-full">
         <div className="w-full h-full flex ">
           <div className="flex w-full items-center h-full justify-center ">
-            <Image
+            <img
               src="/imgs/login-image.png"
               alt="Your Image"
               className=" w-full h-full object-cover select-none pointer-events-none"
@@ -104,7 +104,7 @@ export const Login = () => {
               priority={true}
             />
             <div className=" hidden md:flex  absolute lg:px-32 px-10 flex-col gap-5 ">
-              <Image
+              <img
                 src="/imgs/colina-logo.png"
                 alt="logo"
                 className=" object-cover select-none pointer-events-none -ml-2"

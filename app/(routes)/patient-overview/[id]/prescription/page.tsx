@@ -15,7 +15,7 @@ import { PrescriptionModalContent } from "@/components/modal-content/prescriptio
 import View from "@/components/shared/buttons/view";
 import { PrescriptionViewModalContent } from "@/components/modal-content/prescriptionview-modal-content";
 import Pagination from "@/components/shared/pagination";
-
+import Image from "next/image";
 export default function prescription() {
   const router = useRouter();
   if (typeof window === "undefined") {
