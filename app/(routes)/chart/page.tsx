@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 export default function ChartPage() {
   const router = useRouter();
   if (typeof window === "undefined") {
+    return <div>No page found</div>;
   }
   if (!getAccessToken()) {
     router.replace("/login");
