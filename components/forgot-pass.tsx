@@ -31,7 +31,7 @@ const ForgotPass = ({
                     ? " opacity-100 z-50"
                     : isOTP
                     ? "-translate-x-[1000px] opacity-0 -z-10"
-                    : "translate-x-[1000px] opacity-0"
+                    : "translate-x-[1000px] opacity-0 "
                 }`}
     >
       <h1 className="md:text-[20px] font-semibold  md:text-2xl lg:mb-3 text-white md:text-black md:mb-0 mb-3">

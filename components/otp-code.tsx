@@ -6,6 +6,7 @@ interface OTPCodeProps {
   setIsOTP: (value: boolean) => void;
   forgotPassEmail: string;
 }
+
 const OTPCode = ({ isOTP, setIsOTP, forgotPassEmail }: OTPCodeProps) => {
   const [otp, setOTP] = useState(new Array(6).fill(""));
   const inputs = useRef<HTMLInputElement[]>([]);
@@ -13,7 +14,6 @@ const OTPCode = ({ isOTP, setIsOTP, forgotPassEmail }: OTPCodeProps) => {
   const handleOTPSubmit = (otp: any) => {
     console.log("OTP submitted:", otp);
   };
-  
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -38,17 +38,24 @@ const OTPCode = ({ isOTP, setIsOTP, forgotPassEmail }: OTPCodeProps) => {
     index: number
   ) => {
     if (e.key === "Backspace") {
-      // Always delete the current input
       const newOTP = [...otp];
       newOTP[index] = "";
       setOTP(newOTP);
-
-      // Focus on the previous input only if the current input is not empty
       if (index > 0 && otp[index - 1] !== "") {
         inputs.current[index - 1].focus();
       }
     }
   };
+
+  const handleClick = (e: React.MouseEvent<HTMLInputElement>, index: number) => {
+    if (otp[index] !== "") {
+      e.stopPropagation();
+    } else {
+      inputs.current[index].focus();
+    }
+  };
+  
+
   return (
     <div
       className={`flex flex-col fixed justify-center items-center lg:w-[1091px] w-full  duration-500 transition h-full z-50
@@ -65,13 +72,13 @@ const OTPCode = ({ isOTP, setIsOTP, forgotPassEmail }: OTPCodeProps) => {
       <div className="flex gap-3">
         {otp.map((digit, index) => (
           <input
-            className={`w-[83px] h-[90px] rounded-md focus:outline-none text-center text-[50px] text-white 
-    ${index !== 0 || otp[0] !== "" ? "pointer-events-none" : ""}
-    ${
-      otp[index] !== ""
-        ? "bg-[#007C85]"
-        : "bg-[#D9D9D91A]  border border-slate-500"
-    }`}
+            className={`w-[83px] h-[90px] rounded-md focus:outline-none text-center text-[50px] 
+            
+              ${
+                otp[index] !== ""
+                  ? "bg-[#007C85] text-white"
+                  : "bg-[#D9D9D91A]  border border-slate-500"
+              }`}
             key={index}
             type="text"
             id={`otpInput${index + 1}`}
@@ -80,6 +87,7 @@ const OTPCode = ({ isOTP, setIsOTP, forgotPassEmail }: OTPCodeProps) => {
             ref={(ref: HTMLInputElement) => (inputs.current[index] = ref)}
             onChange={(e) => handleChange(e, index)}
             onKeyDown={(e) => handleKeyDown(e, index)}
+            onClick={(e) => handleClick(e,index)}
             tabIndex={-1}
           />
         ))}
