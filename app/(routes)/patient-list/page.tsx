@@ -383,10 +383,10 @@ export default function PatientPage() {
                                     height={45}
                                   />
                                 ) : (
-                                  // Render the stock image (dennis.svg) if data is empty
+                                  // Render the stock image (.svg) if data is empty
                                   <img
                                     className="rounded-full"
-                                    src="/imgs/dennis.svg"
+                                    src="/imgs/no-icon-user.svg"
                                     alt=""
                                     width={45}
                                     height={45}
@@ -403,8 +403,8 @@ export default function PatientPage() {
                       <div>
                         <img
                           className="rounded-full"
-                          src="/imgs/dennis.svg" // Show stock image if no images found
-                          alt=""
+                          src="/imgs/loading.gif" // Show loading gif while fetching images
+                          alt="Loading"
                           width={45}
                           height={45}
                         />
