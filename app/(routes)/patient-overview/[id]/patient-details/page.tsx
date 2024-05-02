@@ -12,7 +12,6 @@ import { set } from "date-fns";
 
 export default function PatientDetails() {
   if (typeof window === "undefined") {
-    return null;
   }
   const [patientDetails, setPatientDetails] = useState<any>([]);
   const [patientEditMode, setPatientEditMode] = useState(false);
@@ -159,12 +158,16 @@ export default function PatientDetails() {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex justify-center items-center ">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+      <div className="container w-full h-full flex justify-center items-center ">
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          alt="logo"
+          width={100}
+          height={100}
+        />
       </div>
     );
   }
-
 
   console.log(patientDetails, "patientDetails");
   console.log(formData, "formData");

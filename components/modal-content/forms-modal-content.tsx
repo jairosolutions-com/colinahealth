@@ -2,84 +2,51 @@ import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { createFormsOfPatient } from "@/app/api/forms-api/forms.api";
+import {
+  createFormsOfPatient,
+  fetchFormsByPatient,
+  addFormFile,
+  deleteFormFiles,
+  getCurrentFileCountFromDatabase,
+  updateFormsOfPatient,
+} from "@/app/api/forms-api/forms.api";
+import { toast, useToast } from "@/components/ui/use-toast";
 interface Modalprops {
+  isEdit: any;
+  formAddData: any;
   isModalOpen: (isOpen: boolean) => void;
   onSuccess: () => void;
 }
-
-// export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
-//   const [selectedStatus, setSelectedStatus] = useState(""); // State to hold the selected status
+interface FormFile {
+  file: any; // Assuming file property exists for the key
+  filename: string;
+  data: Uint8Array;
+  file_uuid: string;
+}
 
 function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>): void {
   throw new Error("Function not implemented.");
 }
 
-//   const router = useRouter();
-//   const params = useParams<{
-//     id: any;
-//     tag: string;
-//     item: string;
-//   }>();
-//   const patientId = params.id.toUpperCase();
-//   const [isOpen, setIsOpen] = useState(false);
-//   const [error, setError] = useState<string | null>(null);
-//   const [formData, setFormData] = useState({
-//     dateIssued: "",
-//     nameOfDocument: "",
-//     notes: "",
-//   });
-//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = e.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       [name]: value,
-//     }));
-//   };
-//   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-//     const { name, value } = e.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       [name]: value,
-//     }));
-//   };
-
-//   const handleModalOpen = (isOpen: boolean) => {
-//     // Rename the function
-//     setIsOpen(isOpen);
-//     if (isOpen) {
-//       document.body.style.overflow = "hidden";
-//     }
-//   };
-
-//   const handleSubmit = async (e: any) => {
-//     e.preventDefault();
-//     try {
-//       const forms = await createFormsOfPatient(patientId, formData, router);
-//       console.log("forms added successfully:", forms);
-
-//       // Reset the form data after successful submission
-//       setFormData({
-//         dateIssued: "",
-//         nameOfDocument: "",
-//         notes: "",
-//       });
-
-//       onSuccess();
-//     } catch (error) {
-//       console.error("Error adding forms:", error);
-//       setError("Failed to add forms");
-//     }
-//   };
-//   console.log(formData, "formData");
-
-export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
+export const FormsModalContent = ({
+  isModalOpen,
+  onSuccess,
+  formAddData,
+  isEdit,
+}: Modalprops) => {
   const router = useRouter();
   const params = useParams<{
     id: any;
     tag: string;
     item: string;
   }>();
+
+  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [fileTypes, setFileTypes] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFormFiles] = useState<File[]>([]);
+  const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
+  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
+  const [formFiles, setFormFiles] = useState<any[]>([]); //
   const patientId = params.id.toUpperCase();
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -89,6 +56,75 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
     nameOfDocument: "",
     notes: "",
   });
+
+  const toggleMaxSizeToast = (): void => {
+    setIsSubmitted(false);
+    toast({
+      variant: "destructive",
+      title: "File Size Too Big!",
+      description: `Total size of selected files exceeds the limit of 15MB!`,
+    });
+  };
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSubmitted(true);
+    const files = e.target.files;
+    const MAX_FILE_SIZE_MB = 15;
+    if (files) {
+      const totalSize = Array.from(files).reduce(
+        (acc, file) => acc + file.size,
+        0
+      );
+      const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
+
+      if (totalSizeMB > MAX_FILE_SIZE_MB) {
+        toggleMaxSizeToast();
+        e.target.value = ""; // Clear the input field
+      }
+      if (files.length > numFilesCanAdd) {
+        toggleMaxFilesToast(numFilesCanAdd);
+        e.target.value = ""; // Clear the input field
+      }
+    }
+    if (files && files.length > 0) {
+      const newFiles: File[] = [];
+      const newFileNames: string[] = [];
+      const newFileTypes: string[] = [];
+
+      Array.from(files).forEach((file) => {
+        if (file) {
+          // Add file, name, and type to arrays
+          newFiles.push(file);
+          newFileNames.push(file.name);
+          newFileTypes.push(file.type.split("/")[1]);
+          console.log(formFiles, "formFiles formFiles formFiles");
+          // Set selected file names
+          setSelectedFileNames(newFileNames);
+          console.log(selectedFileNames, "selected file names");
+          // You can handle base64 conversion here if needed
+        }
+      });
+
+      // Update state variables with arrays
+
+      setSelectedFormFiles(newFiles);
+      setFileNames(newFileNames);
+      setFileTypes(newFileTypes);
+    } else {
+      console.warn("No files selected");
+    }
+    setIsSubmitted(false);
+  };
+
+  const toggleMaxFilesToast = (maxFiles: number): void => {
+    setIsSubmitted(false);
+    toast({
+      variant: "destructive",
+      title: "Maximum Number of Files Exceeded!",
+      description: `You can only add ${maxFiles} more file(s). Please try again.`,
+    });
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -112,34 +148,92 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
     }
   };
 
-  const handleSubmit = async (e: any) => {
+  // de
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSubmitted(true);
     e.preventDefault();
-    try {
-      const forms = await createFormsOfPatient(patientId, formData, router);
-      console.log("forms added successfully:", forms);
+    console.log(
+      "SUBMITTING FORM DATA",
+      selectedFileNames,
+      selectedFiles.length
+    );
+    const getUuid = formData.nameOfDocument;
 
-      // Reset the form data after successful submission
+    const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
+    console.log("Current file count:", currentFileCount);
+    // Define the maximum allowed files based on the current count
+    const maxAllowedFiles = currentFileCount === 0 ? 5 : 5 - currentFileCount;
+    if (selectedFiles.length > maxAllowedFiles) {
+      toggleMaxFilesToast(maxAllowedFiles);
+      return;
+    }
+    console.log("FILES TO ADD", maxAllowedFiles);
+
+    console.log(" UUID:", getUuid);
+
+    try {
+      // Create the form result
+      const forms = await createFormsOfPatient(patientId, formData, router);
+      console.log("Form Result added successfully:", forms);
+      const getUuid = forms.uuid;
+      console.log("Form UUID:", getUuid);
+
+      // Iterate through each selected file
+      if (selectedFiles && selectedFiles.length > 0) {
+        // Iterate through each selected file
+        for (let i = 0; i < selectedFiles.length; i++) {
+          const formFileFormData = new FormData();
+          formFileFormData.append("formfile", selectedFiles[i], fileNames[i]);
+
+          // Add form file
+          const addFormFiles = await addFormFile(
+            getUuid,
+            formFileFormData,
+            router
+          );
+
+          console.log(
+            `Form FILE ${fileNames[i]} added successfully:`,
+            addFormFiles
+          );
+          isModalOpen(false);
+        }
+      } else {
+        console.warn("No files selected to upload");
+      }
+      // Reset form data
       setFormData({
-        dateIssued: "",
         nameOfDocument: "",
+        dateIssued: "",
         notes: "",
       });
-      isModalOpen(false); 
       onSuccess();
     } catch (error) {
-      console.error("Error adding forms:", error);
-      setError("Failed to add forms");
+      console.error("Error adding Form Result:", error);
+      setError("Failed to add Form Result");
     }
     setIsSubmitted(false);
   };
+  // de
+
   console.log(formData, "formData");
 
   return (
-    <div className="w-[676px] h-[621px] bg-[#FFFFFF] rounded-md">
+    <div className="w-[676px] h-[621px] bg-[#FFFFFF] rounded-md overflow-hidden">
       <form onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
-          <div className="items-center flex justify-between">
+          <div className="flex justify-between items-center px-[40px] mt-7">
+            <p className="p-title">Add Form Details</p>
+            <X
+              onClick={() => {
+                isSubmitted ? null : isModalOpen(false);
+              }}
+              className={`
+              ${isSubmitted && " cursor-not-allowed"}
+              w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
+            />
+          </div>
+          {/* <div className="items-center flex justify-between">
             <p className="font-semibold text-[20px] text-left  pl-10 mt-7">
               Add Form Details
             </p>
@@ -149,12 +243,12 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
               }}
               className={`
               ${isSubmitted && " cursor-not-allowed"}
-              w-6 h-6 text-black flex items-center mt-6 mr-9 cursor-pointer`}
+              w-7 h-7 text-black flex items-center mt-2 cursor-pointer`}
             />
           </div>
           <p className="text-[15px] pl-10 text-[#667085] pb-10 pt-2">
             Download PDF once your done.
-          </p>
+          </p> */}
         </div>
         <div className=" mb-9 pt-4">
           <div className="h-[600px] max-h-[375px] md:px-10 mt-5">
@@ -221,31 +315,75 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
                   />
                 </div>
               </div>
-              <div className="grid-cols-1 grid">
-                <label className="relative h-[70px] w-[596px] bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-1.5">
-                  <Image
-                    className="w-10 h-10 mr-1"
-                    width={50}
-                    height={50}
-                    src={"/svgs/folder-add.svg"}
-                    alt={""}
+
+              {formFiles.length === 5 ? (
+                <div></div>
+              ) : (
+                <div className="">
+                  <label
+                    htmlFor="imageUpload"
+                    className="relative font-medium h-[70px] w-[600px] flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] bg-[#daf3f5] border-[#007C85] border-dashed border-2"
+                  >
+                    <>
+                      {selectedFileNames.length > 0 ? (
+                        // If files are selected, display filein.svg
+                        <Image
+                          className="w-10 h-10 mr-1"
+                          width={50}
+                          height={50}
+                          src={"/svgs/filein.svg"}
+                          alt=""
+                        />
+                      ) : (
+                        // If no files are selected, display folder-add.svg
+                        <Image
+                          className="w-10 h-10 mr-1"
+                          width={50}
+                          height={50}
+                          src={"/svgs/folder-add.svg"}
+                          alt=""
+                        />
+                      )}
+                      <div className="flex pb-5">
+                        <p className="mt-2 text-[20px] font-medium">
+                          Upload or Attach Files or{" "}
+                          <span className="underline decoration-solid text-[20px] font-medium text-blue-500 ml-1 mt-2">
+                            Browse
+                          </span>
+                        </p>
+                      </div>
+                      <span className="text-[10px] font-normal absolute bottom-2 text-[#667085] ml-10">
+                        {selectedFileNames.length === 0 ? (
+                          // Display "Maximum File Size: 10MB" if no files are attached
+                          <span className="font-medium text-[15px]">
+                            Maximum File Size: 15MB
+                          </span>
+                        ) : (
+                          // Display the file name if one file is attached, or the number of files if more than one are attached
+                          <span>
+                            {selectedFileNames.length < 5
+                              ? // Display the file name if the number of files is less than or equal to 5
+                                selectedFileNames.length === 1
+                                ? selectedFileNames[0]
+                                : `${selectedFileNames.length}/5 files attached`
+                              : // Display a message indicating that the maximum limit has been reached
+                                `Maximum of 5 files added`}
+                          </span>
+                        )}
+                      </span>
+                    </>
+                  </label>
+                  <input
+                    type="file"
+                    id="imageUpload"
+                    multiple={true}
+                    accept="image/*,.pdf"
+                    className="hidden"
+                    name="file"
+                    onChange={(e) => handleFile(e)}
                   />
-                  <div className="flex pb-5 text-nowraptext-[15px] font-medium">
-                    <p className="">Upload or Attach Files or</p>
-                    <p className="underline text-blue-500 ml-1">Browse</p>
-                  </div>
-                  <span className="text-[15px] font-medium absolute bottom-2 text-[#667085] ml-10 pb-1">
-                    Minimum file size 100 MB.
-                  </span>
-                </label>
-                <input
-                  type="file"
-                  id="imageUpload"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => handleImageUpload(e)}
-                />
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -257,7 +395,7 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
               type="button"
               className={`
                 ${isSubmitted && " cursor-not-allowed"}
-                w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+                w-[200px] h-[50px] bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm `}
             >
               Cancel
             </button>
@@ -266,7 +404,7 @@ export const FormsModalContent = ({ isModalOpen, onSuccess }: Modalprops) => {
               type="submit"
               className={`
               ${isSubmitted && " cursor-not-allowed"}
-              w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
+              w-[170px] h-[50px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
             >
               Submit
             </button>

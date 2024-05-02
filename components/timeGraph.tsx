@@ -201,15 +201,7 @@ const TimeGraph = ({
                     return (
                       <td
                         key={`${dataIndex}_${col.time}`}
-                        className={`
-                        ${
-                          patientWithMedicationLogsToday.length === 1
-                            ? "h-[610px]"
-                            : patientWithMedicationLogsToday.length === 2
-                            ? "h-[305px]"
-                            : "h-[204px]"
-                        }
-                        text-center border-x border-dashed  border-black overflow text-nowrap text-ellipsis overflow-hidden  ${
+                        className={`h-[204px] text-center border-x border-dashed  border-black overflow text-nowrap text-ellipsis overflow-hidden  ${
                           parseInt(col.time) <= parseInt(currentTime) - 100
                             ? "bg-[#E4E4E4] "
                             : "bg-white"

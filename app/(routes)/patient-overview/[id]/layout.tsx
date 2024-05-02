@@ -167,7 +167,7 @@ export default function PatientOverviewLayout({
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex justify-center items-center ">
+      <div className="container w-full h-full flex justify-center items-center ">
         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
       </div>
     );
@@ -191,7 +191,7 @@ export default function PatientOverviewLayout({
   };
 
   return (
-    <div className="flex flex-col w-full px-[150px] pt-[90px]">
+    <div className="flex flex-col w-full px-[150px] pt-[90px] h-full">
       <div className="flex flex-col gap-[3px]">
         <div className="p-title pb-2">
           <h1>Patient Overview</h1>
@@ -324,7 +324,7 @@ export default function PatientOverviewLayout({
               </div>
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
-                  <Link href={tab.url}>
+                  <Link key={index} href={tab.url}>
                     <p
                       className={`cursor-pointer font-bold ${
                         pathname === tab.url ||
@@ -353,7 +353,7 @@ export default function PatientOverviewLayout({
           </div>
         </div>
       </div>
-      <div className="w-full flex items-center justify-center mt-4">
+      <div className="w-full flex items-center justify-center mt-4 h-full">
         {children}
       </div>
     </div>

@@ -1,6 +1,5 @@
 "use client";
 
-import { onNavigate } from "@/actions/navigation";
 import {
   getAccessToken,
   setAccessToken,
@@ -9,6 +8,7 @@ import { validateUser } from "@/app/api/login-api/loginHandler";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Footer from "./footer";
+import Image from "next/image";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -23,12 +23,12 @@ export const Login = () => {
   const router = useRouter();
   useEffect(() => {
     if (getAccessToken()) {
+      setIsAccessed(false);
       router.replace("/dashboard");
-      console.log("true");
     } else {
       setIsAccessed(false);
-      console.log("false");
     }
+    setIsAccessed(false);
   }, []);
 
   const handleEmailFocus = () => {
@@ -48,9 +48,9 @@ export const Login = () => {
   };
 
   function handleKeyDown(event: any) {
-    if (event.key === 'Enter' && password && email) {
+    if (event.key === "Enter" && password && email) {
       setIsSubmitted(true);
-      handleLogin(event)
+      handleLogin(event);
     }
   }
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -85,27 +85,44 @@ export const Login = () => {
 
   if (isAccessed) {
     return (
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="container w-full h-full flex justify-center items-center">
         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
       </div>
     );
   }
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full flex ">
       <section className="w-full h-full">
-        <div className="w-full  md:h-screen flex">
-          <div className="flex w-full items-center max-h-screen justify-center overflow-hidden">
-            <img
+        <div className="w-full h-full flex ">
+          <div className="flex w-full items-center h-full justify-center ">
+            <Image
               src="/imgs/login-image.png"
               alt="Your Image"
-              className="w-full h-full object-cover select-none pointer-events-none"
+              className=" w-full h-full object-cover select-none pointer-events-none"
+              width={827}
+              height={1081}
+              priority={true}
             />
+            <div className=" hidden md:flex  absolute lg:px-32 px-10 flex-col gap-5 ">
+              <Image
+                src="/imgs/colina-logo.png"
+                alt="logo"
+                className=" object-cover select-none pointer-events-none -ml-2"
+                width={297}
+                height={37.05}
+                priority={true}
+              />
+              <p className="text-white lg:text-[30px]">
+                The art of medicine lies in listening to what the patient’s body
+                and spirit are trying to say.
+              </p>
+            </div>
           </div>
 
-          <div className="w-[1091px] h-full flex flex-col">
+          <div className="lg:w-[1091px] md:w-[825.24px] w-full h-full px-10 md:px-0 absolute md:relative flex flex-col justify-center items-center">
             <div className=" w-full h-full ">
-              <div className="flex flex-col justify-center items-center w-[1091px]  h-full ">
-                <div className="w-[542.27px] text-left">
+              <div className="flex flex-col justify-center items-center lg:w-[1091px] w-full  h-full ">
+                <div className="md:w-[542.27px] w-full text-left">
                   <h2 className=" text-[20px] font-semibold  md:text-2xl lg:mb-10">
                     Sign in to your Account
                   </h2>
@@ -135,7 +152,7 @@ export const Login = () => {
                           className={`${
                             isInvalid ? "ring-1 ring-red-400" : ""
                           }  
-                      h-[60px] w-full bg-opacity-10 bg-[#FFFFFF] px-3 py-6 pl-5 pb-2 text-md text-[#333333]`}
+                      h-[60px] w-full bg-opacity-10 bg-[#D9D9D91A] px-3 py-6 pl-5 pb-2 text-md text-[#333333]`}
                           value={email}
                           onFocus={handleEmailFocus}
                           onBlur={handleEmailBlur}
@@ -168,7 +185,7 @@ export const Login = () => {
                           className={`${
                             isInvalid ? "ring-1 ring-red-400" : ""
                           }  
-                      h-[60px] w-full bg-opacity-10 bg-[#FFFFFF] px-3 py-6 pl-5 pb-2 text-md text-[#333333]`}
+                      h-[60px] w-full bg-opacity-10 bg-[#D9D9D91A] px-3 py-6 pl-5 pb-2 text-md text-[#333333]`}
                           value={password}
                           onFocus={handlePasswordFocus}
                           onBlur={handlePasswordBlur}
@@ -251,7 +268,9 @@ export const Login = () => {
                 </div>
               </div>
             </div>
-            <Footer />
+            <div className="hidden md:block w-full">
+              <Footer />
+            </div>
           </div>
         </div>
       </section>

@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/icons/colinahealthlogo.png" />
-        <link rel="stylesheet" type="text/css" href="print.css" />
+        {/* <link rel="stylesheet" type="text/css" href="print.css" /> */}
       </head>
       <body className={manrope.className}>
         {children}

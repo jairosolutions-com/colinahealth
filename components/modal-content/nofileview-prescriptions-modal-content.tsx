@@ -14,6 +14,7 @@ interface ModalProps {
   prescriptionUuid: any;
   isModalOpen: (isOpen: boolean) => void;
   onClose: any;
+  onSuccess: any;
 }
 interface PrescriptionFile {
   file: any; // Assuming file property exists for the key
@@ -26,6 +27,7 @@ export const NofileviewPrescriptionsModalContent = ({
   prescriptionUuid,
   isModalOpen,
   onClose, // Receive the callback function
+  onSuccess,
 }: ModalProps) => {
   const { toast } = useToast();
 
@@ -84,7 +86,7 @@ export const NofileviewPrescriptionsModalContent = ({
             addPrescriptionFiles
           );
         }
-
+        onSuccess();
         onClose(false);
         // Call the onSuccess callback function
       } else {
@@ -302,7 +304,9 @@ export const NofileviewPrescriptionsModalContent = ({
             <button
               onClick={() => isModalOpen(false)}
               type="button"
-              className="w-[150px] h-[45px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm"
+              className={`
+              ${isSubmitted && " cursor-not-allowed"}
+              w-[150px] h-[45px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm`}
             >
               Cancel
             </button>
