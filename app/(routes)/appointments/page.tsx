@@ -25,6 +25,7 @@ import {
 import { fetchAllAppointments } from "@/app/api/appointments-api/fetch-all-appointments.api";
 import { ErrorModal } from "@/components/shared/error";
 import Pagination from "@/components/shared/pagination";
+import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 
 export default function AppointmentPage() {
   const router = useRouter();
@@ -166,6 +167,8 @@ export default function AppointmentPage() {
     }
     return pageNumbers;
   };
+  const [patientImages, setPatientImages] = useState<any[]>([]);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -179,7 +182,42 @@ export default function AppointmentPage() {
           endD,
           router
         );
+        // Convert the Set back to an array
+        // Extract unique patient UUIDs using a Set
+        const uniquePatientUuids = new Set(
+          upcomingAppoinments.data.map(
+            (patient: { patient_uuid: any }) => patient.patient_uuid
+          )
+        );
+        
+        const patientUuids = Array.from(uniquePatientUuids);
+        console.log(patientUuids, "patientUuids");
+        setImagesLoaded(true); // Set to true when images are loaded
 
+        const profileImagesResponse = await fetchProfileImages(patientUuids as string[]);
+        if (profileImagesResponse) {
+          const patientImagesData = profileImagesResponse.map((image: any) => {
+            // Convert the image data buffer to a data URL if available
+            if (image.data) {
+              const buffer = Buffer.from(image.data);
+              const dataUrl = `data:image/jpeg;base64,${buffer.toString(
+                "base64"
+              )}`;
+              return {
+                patientUuid: image.patientUuid,
+                data: dataUrl,
+              };
+            } else {
+              // If no data URL is available, return an empty object
+              return {
+                patientUuid: image.patientUuid,
+                data: "",
+              };
+            }
+          });
+          setPatientImages(patientImagesData);
+          console.log(patientImagesData, "patientImagesData");
+        }
         const appointmentsArray = Object.values(upcomingAppoinments.data);
         setTotalPages(upcomingAppoinments.totalPages);
         setAppointmentList(appointmentsArray);
@@ -375,13 +413,66 @@ export default function AppointmentPage() {
                     className="bg-white hover:bg-[#f4f4f4] group border-b "
                   >
                     <td className="px-6 py-5 flex items-center">
-                      <Image
-                        className="rounded-full mr-2 "
-                        src="/imgs/dennis.svg"
-                        alt="Icon"
-                        width={45}
-                        height={45}
-                      />
+                      {patientImages.some(
+                        (image) =>
+                          image.patientUuid === appointment.patient_uuid
+                      ) ? (
+                        // Render the matched image
+                        <div>
+                          {patientImages.map((image, imgIndex) => {
+                            if (
+                              image.patientUuid === appointment.patient_uuid
+                            ) {
+                              return (
+                                <div key={imgIndex}>
+                                  {image.data ? (
+                                    // Render the image if data is not empty
+                                    <img
+                                      className="rounded-full"
+                                      src={image.data} // Use the base64-encoded image data directly
+                                      alt=""
+                                      width={45}
+                                      height={45}
+                                    />
+                                  ) : (
+                                    // Render the stock image (.svg) if data is empty
+                                    <img
+                                      className="rounded-full"
+                                      src="/imgs/user-no-icon.jpg"
+                                      alt=""
+                                      width={45}
+                                      height={45}
+                                    />
+                                  )}
+                                </div>
+                              );
+                            }
+                            return null;
+                          })}
+                        </div>
+                      ) : // Render a placeholder image if no matching image found
+                      imagesLoaded ? ( // Only render stock image when images are loaded
+                        <div>
+                          <img
+                            className="rounded-full"
+                            src="/imgs/loading.gif" // Show loading gif while fetching images
+                            alt="Loading"
+                            width={45}
+                            height={45}
+                          />
+                        </div>
+                      ) : (
+                        // Render loading gif while fetching images
+                        <div>
+                          <img
+                            className="rounded-full"
+                            src="/imgs/loading.gif" // Show loading gif while fetching images
+                            alt="Loading"
+                            width={45}
+                            height={45}
+                          />
+                        </div>
+                      )}
                       <span>
                         {appointment.patient_firstName} {""}
                         {appointment.patient_lastName}
