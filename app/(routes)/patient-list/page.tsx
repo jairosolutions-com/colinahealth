@@ -350,148 +350,149 @@ export default function PatientPage() {
                   <th className="px-6 py-3">Age</th>
                   <th className="px-6 py-3">Gender</th>
 
-                <th className="px-20 py-3 items-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {patientList.length === 0 && (
-                <tr>
-                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="text-[15px] font-normal text-gray-700 flex text-center">
-                      No Patient Found! <br />
-                    </p>
-                  </td>
+                  <th className="px-20 py-3 items-center">Action</th>
                 </tr>
-              )}
+              </thead>
+              <tbody>
+                {patientList.length === 0 && (
+                  <tr>
+                    <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
+                      <p className="text-[15px] font-normal text-gray-700 flex text-center">
+                        No Patient Found! <br />
+                      </p>
+                    </td>
+                  </tr>
+                )}
 
-              {patientList.map((patient, index) => (
-                <tr
-                  key={index}
-                  className="group bg-white hover:bg-gray-100 border-b"
-                >
-                  <td className="truncate flex items-center gap-2 px-6 py-5">
-                    {/* Check if any matching image found for the patient */}
-                    {patientImages.some(
-                      (image) => image.patientUuid === patient.uuid
-                    ) ? (
-                      // Render the matched image
-                      <div>
-                        {patientImages.map((image, imgIndex) => {
-                          if (image.patientUuid === patient.uuid) {
-                            return (
-                              <div key={imgIndex}>
-                                {image.data ? (
-                                  // Render the image if data is not empty
-                                  <img
-                                    className="rounded-full"
-                                    src={image.data} // Use the base64-encoded image data directly
-                                    alt=""
-                                    width={45}
-                                    height={45}
-                                  />
-                                ) : (
-                                  // Render the stock image (.svg) if data is empty
-                                  <img
-                                    className="rounded-full"
-                                    src="/imgs/no-icon-user.svg"
-                                    alt=""
-                                    width={45}
-                                    height={45}
-                                  />
-                                )}
-                              </div>
-                            );
-                          }
-                          return null;
-                        })}
-                      </div>
-                    ) : // Render a placeholder image if no matching image found
-                    imagesLoaded ? ( // Only render stock image when images are loaded
-                      <div>
-                        <img
-                          className="rounded-full"
-                          src="/imgs/loading.gif" // Show loading gif while fetching images
-                          alt="Loading"
-                          width={45}
-                          height={45}
-                        />
-                      </div>
-                    ) : (
-                      // Render loading gif while fetching images
-                      <div>
-                        <img
-                          className="rounded-full"
-                          src="/imgs/loading.gif" // Show loading gif while fetching images
-                          alt="Loading"
-                          width={45}
-                          height={45}
-                        />
-                      </div>
-                    )}
+                {patientList.map((patient, index) => (
+                  <tr
+                    key={index}
+                    className="group bg-white hover:bg-gray-100 border-b"
+                  >
+                    <td className="truncate flex items-center gap-2 px-6 py-5">
+                      {/* Check if any matching image found for the patient */}
+                      {patientImages.some(
+                        (image) => image.patientUuid === patient.uuid
+                      ) ? (
+                        // Render the matched image
+                        <div>
+                          {patientImages.map((image, imgIndex) => {
+                            if (image.patientUuid === patient.uuid) {
+                              return (
+                                <div key={imgIndex}>
+                                  {image.data ? (
+                                    // Render the image if data is not empty
+                                    <img
+                                      className="rounded-full"
+                                      src={image.data} // Use the base64-encoded image data directly
+                                      alt=""
+                                      width={45}
+                                      height={45}
+                                    />
+                                  ) : (
+                                    // Render the stock image (.svg) if data is empty
+                                    <img
+                                      className="rounded-full"
+                                      src="/imgs/no-icon-user.svg"
+                                      alt=""
+                                      width={45}
+                                      height={45}
+                                    />
+                                  )}
+                                </div>
+                              );
+                            }
+                            return null;
+                          })}
+                        </div>
+                      ) : // Render a placeholder image if no matching image found
+                      imagesLoaded ? ( // Only render stock image when images are loaded
+                        <div>
+                          <img
+                            className="rounded-full"
+                            src="/imgs/loading.gif" // Show loading gif while fetching images
+                            alt="Loading"
+                            width={45}
+                            height={45}
+                          />
+                        </div>
+                      ) : (
+                        // Render loading gif while fetching images
+                        <div>
+                          <img
+                            className="rounded-full"
+                            src="/imgs/loading.gif" // Show loading gif while fetching images
+                            alt="Loading"
+                            width={45}
+                            height={45}
+                          />
+                        </div>
+                      )}
 
-                    <p className="truncate ">
-                      {patient.firstName} {patient.lastName}
-                    </p>
-                  </td>
+                      <p className="truncate ">
+                        {patient.firstName} {patient.lastName}
+                      </p>
+                    </td>
 
-                  <td className="truncate px-6 py-5">{patient.uuid}</td>
-                  <td className="truncate px-6 py-5">{patient.age}</td>
-                  <td className="truncate px-6 py-5">{patient.gender}</td>
-                  <td className="px-[70px]">
-                    <p onClick={() => handlePatientClick(patient.uuid)}>
-                      <Edit></Edit>
-                    </p>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    <td className="truncate px-6 py-5">{patient.uuid}</td>
+                    <td className="truncate px-6 py-5">{patient.age}</td>
+                    <td className="truncate px-6 py-5">{patient.gender}</td>
+                    <td className="px-[70px]">
+                      <p onClick={() => handlePatientClick(patient.uuid)}>
+                        <Edit></Edit>
+                      </p>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {/* END OF TABLE */}
         </div>
-        {/* END OF TABLE */}
+        {/* pagination */}
+        <div className=" bg-white ">
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+            setCurrentPage={setCurrentPage}
+          />
+        </div>
+        {isOpen && (
+          <Modal
+            content={
+              <DemographicModalContent
+                isModalOpen={isModalOpen}
+                isOpen={isOpen}
+                label="sample label"
+                onSuccess={onSuccess}
+                onFailed={onFailed}
+                setErrorMessage={setError}
+              />
+            }
+            isModalOpen={isModalOpen}
+          />
+        )}
+        {isSuccessOpen && (
+          <SuccessModal
+            label="Success"
+            isAlertOpen={isSuccessOpen}
+            toggleModal={setIsSuccessOpen}
+            setIsUpdated=""
+            isUpdated=""
+          />
+        )}
+        {isErrorOpen && (
+          <ErrorModal
+            label="Patient already exist"
+            isAlertOpen={isErrorOpen}
+            toggleModal={setIsErrorOpen}
+            isEdit={isEdit}
+            errorMessage={error}
+          />
+        )}
       </div>
-      {/* pagination */}
-      <div className=" bg-white ">
-        <Pagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          pageNumber={pageNumber}
-          setPageNumber={setPageNumber}
-          setCurrentPage={setCurrentPage}
-        />
-      </div>
-      {isOpen && (
-        <Modal
-          content={
-            <DemographicModalContent
-              isModalOpen={isModalOpen}
-              isOpen={isOpen}
-              label="sample label"
-              onSuccess={onSuccess}
-              onFailed={onFailed}
-              setErrorMessage={setError}
-            />
-          }
-          isModalOpen={isModalOpen}
-        />
-      )}
-      {isSuccessOpen && (
-        <SuccessModal
-          label="Success"
-          isAlertOpen={isSuccessOpen}
-          toggleModal={setIsSuccessOpen}
-          setIsUpdated=""
-          isUpdated=""
-        />
-      )}
-      {isErrorOpen && (
-        <ErrorModal
-          label="Patient already exist"
-          isAlertOpen={isErrorOpen}
-          toggleModal={setIsErrorOpen}
-          isEdit={isEdit}
-          errorMessage={error}
-        />
-      )}
     </div>
   );
 }
