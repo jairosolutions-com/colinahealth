@@ -379,14 +379,14 @@ const Allergies = () => {
           <table className="text-left rtl:text-right">
             <thead>
               <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                <td className="px-6 py-3">Allergy ID</td>
-                <td className="px-6 py-3">Date</td>
-                <td className="px-5 py-3">Type</td>
-                <td className="px-5 py-3">Allergen</td>
-                <td className="px-4 py-3">Severity</td>
-                <td className="px-4 py-3">Reaction</td>
-                <td className="px-4 py-3 ">Notes</td>
-                <td className="py-3 px-14">Action </td>
+                <td className="px-6 py-3 w-[200px]">Allergy ID</td>
+                <td className="px-6 py-3 w-[200px]">Date</td>
+                <td className="px-6 py-3 w-[200px]">Type</td>
+                <td className="px-6 py-3 w-[200px]">Allergen</td>
+                <td className="px-6 py-3 w-[200px]">Severity</td>
+                <td className="px-6 py-3 w-[200px]">Reaction</td>
+                <td className="px-6 py-3 w-[200px]">Notes</td>
+                <td className="py-3 px-3">Action </td>
               </tr>
             </thead>
             <tbody className="h-[220px]">
@@ -402,31 +402,31 @@ const Allergies = () => {
                   key={index}
                   className=" group hover:bg-[#f4f4f4]  border-b text-[15px] "
                 >
-                  <td className="truncate px-5 py-3">
+                  <td className="truncate px-5 py-3  w-[200px]">
                     {allergy.allergies_uuid}
                   </td>
-                  <td className="truncate px-5 py-3">
+                  <td className="truncate px-5 py-3 w-[200px]">
                     {" "}
                     {new Date(allergy.allergies_createdAt).toLocaleDateString()}
                   </td>
-                  <td className="truncate px-6  py-3">
+                  <td className="truncate px-6  py-3 w-[200px]">
                     {allergy.allergies_type}
                   </td>
-                  <td className="truncate px-6  py-3">
+                  <td className="truncate px-6  py-3 w-[200px]">
                     {allergy.allergies_allergen}
                   </td>
 
-                  <td className="truncate px-6  py-3">
+                  <td className="truncate px-6  py-3 w-[200px]">
                     {allergy.allergies_severity}
                   </td>
-                  <td className="truncate px-6  py-3">
+                  <td className="truncate px-6  py-3 w-[200px]">
                     {allergy.allergies_reaction}
                   </td>
-                  <td className="truncate px-6  py-3">
+                  <td className="truncate px-6  py-3 w-[200px]">
                     {allergy.allergies_notes ? allergy.allergies_notes : "None"}
                   </td>
 
-                  <td className="py-3 flex justify-center">
+                  <td className="py-3 ">
                     <p
                       onClick={() => {
                         isModalOpen(true);

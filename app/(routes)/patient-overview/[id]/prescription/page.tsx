@@ -305,7 +305,7 @@ export default function prescription() {
                     <td className="px-6 py-3 w-[230px]">INTERVAL (hr/s)</td>
                     <td className="px-6 py-3 w-[230px]">DOSAGE</td>
                     <td className="px-6 py-3 w-[170px] ">STATUS</td>
-                    <td className="px-6 py-3 text-center">ACTION</td>
+                    <td className="py-3 text-justify">ACTION</td>
                   </tr>
                 </thead>
                 <tbody className="h-[220px]">
@@ -331,7 +331,7 @@ export default function prescription() {
                           <td className="truncate  px-6 py-3 w-[230px] ">
                             {prescription.prescriptions_dosage}
                           </td>
-                          <td className="px-6 py-3">
+                          <td className="px-6 py-3 w-[230px]">
                             <div
                               className={`px-2 font-semibold rounded-[20px] ${
                                 prescription.prescriptions_status === "active"
@@ -351,7 +351,7 @@ export default function prescription() {
                             </div>
                           </td>
 
-                          <td className="px-6 py-3 flex gap-2 justify-center">
+                          <td className="py-3 flex gap-2 justify-center">
                             <p
                               onClick={() => {
                                 isModalOpen(true);

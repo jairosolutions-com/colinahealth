@@ -103,20 +103,6 @@ export const Login = () => {
               height={1081}
               priority={true}
             />
-            <div className=" hidden md:flex  absolute lg:px-32 px-10 flex-col gap-5 ">
-              <Image
-                src="/imgs/colina-logo.png"
-                alt="logo"
-                className=" object-cover select-none pointer-events-none -ml-2"
-                width={297}
-                height={37.05}
-                priority={true}
-              />
-              <p className="text-white lg:text-[30px]">
-                The art of medicine lies in listening to what the patient’s body
-                and spirit are trying to say.
-              </p>
-            </div>
           </div>
 
           <div className="lg:w-[1091px] md:w-[825.24px] w-full h-full px-10 md:px-0 absolute md:relative flex flex-col justify-center items-center">
