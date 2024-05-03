@@ -286,7 +286,7 @@ export const FormsModalContent = ({
                     onChange={handleChange}
                     required
                   />
-                  <img
+                  <Image
                     className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                     width={20}
                     height={20}
@@ -327,7 +327,7 @@ export const FormsModalContent = ({
                     <>
                       {selectedFileNames.length > 0 ? (
                         // If files are selected, display filein.svg
-                        <img
+                        <Image
                           className="w-10 h-10 mr-1"
                           width={50}
                           height={50}
@@ -336,7 +336,7 @@ export const FormsModalContent = ({
                         />
                       ) : (
                         // If no files are selected, display folder-add.svg
-                        <img
+                        <Image
                           className="w-10 h-10 mr-1"
                           width={50}
                           height={50}

@@ -255,7 +255,7 @@ export const PrnModalContent = ({
                     value={formData.medicationLogsDate}
                     onChange={handleChange}
                   />
-                  <img
+                  <Image
                     className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                     width={20}
                     height={20}
@@ -280,7 +280,7 @@ export const PrnModalContent = ({
                     value={formData.medicationLogsTime}
                     onChange={handleChange}
                   />
-                  <img
+                  <Image
                     className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                     width={20}
                     height={20}
@@ -317,7 +317,7 @@ export const PrnModalContent = ({
                     style={{ width: '1rem', height: '1rem' }}
                       /> */}
 
-                  <img
+                  <Image
                     className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                     width={20}
                     height={20}
