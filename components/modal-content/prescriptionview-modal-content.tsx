@@ -535,7 +535,7 @@ export const PrescriptionViewModalContent = ({
                                 height="550"
                                 onClick={toggleModal}
                                 src={`data:image/${fileType};base64,${base64String}`}
-                              ></Image>
+                              ></img>
                             )}
                           </div>
                           <div className="filehover ">
