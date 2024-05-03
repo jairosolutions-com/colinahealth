@@ -389,7 +389,7 @@ export default function ChartPage() {
     //     >
     //       <div className="w-full flex items-end lg:mt-14 -mt-8 md:py-5 lg:py-0 bg-[#F4F4F4] ">
     //         <div className="absolute text-start p-title md:ml-5 pt-2 -mb-8 justify-start  flex flex-col items-start gap-1 z-10">
-    //           <img
+    //          <Image
     //             src="/icons/search-icon.svg"
     //             alt="search-icon"
     //             className="absolute ml-1 mt-4"

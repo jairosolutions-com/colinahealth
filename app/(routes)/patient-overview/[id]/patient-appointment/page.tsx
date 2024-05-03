@@ -222,7 +222,7 @@ const Appointment = () => {
   if (isLoading) {
     return (
       <div className="container w-full h-full flex justify-center items-center ">
-        <img
+        <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
           width={100}

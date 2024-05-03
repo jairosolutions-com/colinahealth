@@ -191,7 +191,7 @@ export default function vitalsigns() {
   if (isLoading) {
     return (
       <div className="container w-full h-full flex justify-center items-center ">
-        <img
+        <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
           width={100}
@@ -216,11 +216,16 @@ export default function vitalsigns() {
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <img src="/imgs/add.svg" alt="" width={22} height={22} />
+              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
               <p className="text-[18px]">Add</p>
             </button>
             <button className="btn-pdfs gap-2">
-              <img src="/imgs/downloadpdf.svg" alt="" width={22} height={22} />
+              <Image
+                src="/imgs/downloadpdf.svg"
+                alt=""
+                width={22}
+                height={22}
+              />
               <p className="text-[18px]">Download PDF</p>
             </button>
           </div>

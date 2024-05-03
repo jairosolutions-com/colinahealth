@@ -183,7 +183,7 @@ export const AllergiesModalContent = ({
                     value={formData.type}
                     onChange={handleChange}
                   />
-                  <img
+                  <Image
                     className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                     width={20}
                     height={20}
@@ -228,7 +228,7 @@ export const AllergiesModalContent = ({
                     value={formData.severity}
                     onChange={handleChange}
                   />
-                  <img
+                  <Image
                     className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                     width={20}
                     height={20}

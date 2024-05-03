@@ -321,7 +321,7 @@ export const ScheduledModalContent = ({
                     ))}
                   </select>
 
-                  <img
+                  <Image
                     className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                     width={20}
                     height={20}
@@ -374,7 +374,7 @@ export const ScheduledModalContent = ({
                     onChange={handleChange}
                     required
                   />
-                  <img
+                  <Image
                     className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                     width={20}
                     height={20}
@@ -400,7 +400,7 @@ export const ScheduledModalContent = ({
                     onChange={handleChange}
                     required
                   />
-                  <img
+                  <Image
                     className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                     width={20}
                     height={20}
@@ -431,13 +431,13 @@ export const ScheduledModalContent = ({
                     <option value="Given">GIVEN</option>
                     <option value="Refused">REFUSED</option>
                   </select>
-                  {/* <img
+                  {/* <Image
                     className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                     src="svgs/chevron-up.svg"
                     alt="Dropdown Arrow"
                     style={{ width: "1rem", height: "1rem" }}
                   />   */}
-                  <img
+                  <Image
                     className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                     width={20}
                     height={20}
