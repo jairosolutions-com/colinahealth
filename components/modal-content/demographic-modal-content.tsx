@@ -387,7 +387,7 @@ export const DemographicModalContent = ({
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
                         </select>
-                        <img
+                        <Image
                           className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                           width={20}
                           height={20}
@@ -415,7 +415,7 @@ export const DemographicModalContent = ({
                       value={formData.dateOfBirth}
                       onChange={handleChange}
                     />
-                    <img
+                    <Image
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                       width={20}
                       height={20}
@@ -526,7 +526,7 @@ export const DemographicModalContent = ({
                         </option>
                       ))}
                     </select>
-                    <img
+                    <Image
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                       width={20}
                       height={20}
@@ -578,7 +578,7 @@ export const DemographicModalContent = ({
                         FULL CODE
                       </option>
                     </select>
-                    <img
+                    <Image
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                       width={20}
                       height={20}
@@ -604,7 +604,7 @@ export const DemographicModalContent = ({
                       value={formData.admissionDate}
                       onChange={handleChange}
                     />
-                    <img
+                    <Image
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                       width={20}
                       height={20}
@@ -659,7 +659,7 @@ export const DemographicModalContent = ({
                   >
                     {selectedFileNames.length > 0 ? (
                       // If files are selected, display filein.svg
-                      <img
+                      <Image
                         className="w-10 h-10 mr-1"
                         width={50}
                         height={50}
@@ -668,7 +668,7 @@ export const DemographicModalContent = ({
                       />
                     ) : (
                       // If no files are selected, display folder-add.svg
-                      <img
+                      <Image
                         className="w-10 h-10 mr-1"
                         width={50}
                         height={50}

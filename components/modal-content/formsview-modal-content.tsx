@@ -115,7 +115,7 @@ export const FormsviewModalContent = ({
                     required
                     value={formData.forms_dateIssued}
                   />
-                  <img
+                  <Image
                     className="absolute ml-[560px]  mt-4 pointer-events-none cursor-pointer"
                     width={20}
                     height={20}
