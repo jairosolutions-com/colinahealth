@@ -189,12 +189,14 @@ export default function AppointmentPage() {
             (patient: { patient_uuid: any }) => patient.patient_uuid
           )
         );
-        
+
         const patientUuids = Array.from(uniquePatientUuids);
         console.log(patientUuids, "patientUuids");
         setImagesLoaded(true); // Set to true when images are loaded
 
-        const profileImagesResponse = await fetchProfileImages(patientUuids as string[]);
+        const profileImagesResponse = await fetchProfileImages(
+          patientUuids as string[]
+        );
         if (profileImagesResponse) {
           const patientImagesData = profileImagesResponse.map((image: any) => {
             // Convert the image data buffer to a data URL if available
@@ -493,7 +495,7 @@ export default function AppointmentPage() {
 
                     <td className="text-15px text-nowrap  px-6 py-5 rounded-full">
                       <div
-                        className={`px-2 font-semibold rounded-[20px] relative flex items-center w-fit ${
+                        className={`px-2 font-semibold rounded-[20px] flex items-center w-fit ${
                           appointment.appointments_appointmentStatus ===
                           "Scheduled"
                             ? "bg-[#dfffea] text-[#17C653]" // Green color for Scheduled
