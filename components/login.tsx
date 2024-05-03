@@ -108,7 +108,7 @@ export const Login = () => {
         <div className="w-full h-full flex ">
           <div className="flex w-full items-center h-full justify-center z-10">
             <Image
-              src="/imgs/login-image.png"
+              src="/imgs/login-bg.png"
               alt="login-image"
               className=" w-full h-full object-cover select-none pointer-events-none "
               width={827}
@@ -302,7 +302,7 @@ export const Login = () => {
                           inline-block w-full  text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
                           type="submit"
                         >
-                          {isSubmitted?"Please wait..." : "Sign In"}
+                          {isSubmitted ? "Please wait..." : "Sign In"}
                         </button>
                       </div>
                     </form>
