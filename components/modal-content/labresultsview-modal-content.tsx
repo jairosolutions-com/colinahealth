@@ -469,7 +469,7 @@ export const LabResultsViewModalContent = ({
               <div className="mb-9 pt-4">
                 <div className="h-[380px] md:px-8 mt-5">
                   <div className="w-full h-full flex justify-center items-center ">
-                    <img
+                    <Image
                       src="/imgs/colina-logo-animation.gif"
                       alt="logo"
                       width={100}
@@ -530,13 +530,13 @@ export const LabResultsViewModalContent = ({
                                 className="shadow-md rounded-lg"
                               ></iframe>
                             ) : (
-                              <Image
+                              <img
                                 alt="file image"
                                 width="600"
                                 height="550"
                                 onClick={toggleModal}
                                 src={`data:image/${fileType};base64,${base64String}`}
-                              ></Image>
+                              />
                             )}
                           </div>
                           <div className="filehover">
@@ -582,7 +582,7 @@ export const LabResultsViewModalContent = ({
                             type="button"
                             className="absolute top-0 left-0 m-4 ml-10 text-white hover:underline flex text-[20px]"
                           >
-                            <Image
+                            <img
                               className="mr-2"
                               src="/svgs/print.svg"
                               alt="Icon"
@@ -596,7 +596,7 @@ export const LabResultsViewModalContent = ({
                             className="absolute top-0 left-0 m-4 ml-36 text-white hover:underline flex text-[20px]"
                             onClick={downloadImage}
                           >
-                            <Image
+                            <img
                               className="mr-2"
                               src="/svgs/download.svg"
                               alt="Icon"
@@ -611,7 +611,7 @@ export const LabResultsViewModalContent = ({
                           >
                             Close
                           </button>
-                          <Image
+                          <img
                             alt="Document Full Preview"
                             width={1500}
                             height={1200}

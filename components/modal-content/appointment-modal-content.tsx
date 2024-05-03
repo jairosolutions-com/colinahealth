@@ -241,7 +241,7 @@ export const AppointmentModalContent = ({
                   )}
                 </div>
                 <div className="">
-                  <Image
+                  <img
                     className="absolute mt-2 ml-6 pointer-events-none z-10 "
                     width={15}
                     height={15}
@@ -300,7 +300,7 @@ export const AppointmentModalContent = ({
                   onChange={handleChange}
                   disabled={!isEditable && isView}
                 />
-                <Image
+                <img
                   className="absolute top-5 right-0 mt-3.5 mr-3 pointer-events-none"
                   width={20}
                   height={20}
@@ -328,7 +328,7 @@ export const AppointmentModalContent = ({
                     onChange={handleChange}
                     disabled={!isEditable && isView}
                   />
-                  <Image
+                  <img
                     className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                     width={20}
                     height={20}
@@ -355,7 +355,7 @@ export const AppointmentModalContent = ({
                     value={formData.appointmentEndTime}
                     disabled={!isEditable && isView}
                   />
-                  <Image
+                  <img
                     className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                     width={20}
                     height={20}
@@ -419,7 +419,7 @@ export const AppointmentModalContent = ({
                     <option value="Patient-IN">Patient-IN</option>
                     <option value="Cancelled">Cancel Appointment</option>
                   </select>
-                  <Image
+                  <img
                     className="absolute ml-[260px] mt-[13px]  pointer-events-none"
                     width={20}
                     height={20}

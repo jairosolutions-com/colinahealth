@@ -182,7 +182,7 @@ const Notes = () => {
   if (isLoading) {
     return (
       <div className="container w-full h-full flex justify-center items-center ">
-        <Image
+        <img
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
           width={100}
@@ -222,16 +222,11 @@ const Notes = () => {
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
+              <img src="/imgs/add.svg" alt="" width={22} height={22} />
               <p className="text-[18px]">Add</p>
             </button>
             <button className="btn-pdfs gap-2">
-              <Image
-                src="/imgs/downloadpdf.svg"
-                alt=""
-                width={22}
-                height={22}
-              />
+              <img src="/imgs/downloadpdf.svg" alt="" width={22} height={22} />
               <p className="text-[18px]">Download PDF</p>
             </button>
           </div>
@@ -253,11 +248,11 @@ const Notes = () => {
                     setCurrentPage(1);
                   }}
                 />
-                <img
+                <Image
                   src="/svgs/search.svg"
                   alt="Search"
-                  width="20"
-                  height="20"
+                  width={20}
+                  height={20}
                   className="absolute left-8 top-9 pointer-events-none"
                 />
               </div>

@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import { onNavigate } from "@/actions/navigation";
 import { getAccessToken, setAccessToken } from "../login-api/accessToken";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -8,6 +9,7 @@ export async function fetchPatientProfileImage(patientUuid: string, router: any)
         const accessToken = getAccessToken();
         if (!accessToken) {
             setAccessToken("");
+            onNavigate(router, "/login");
             throw new Error("Unauthorized Access");
         }
 

@@ -2,6 +2,7 @@
 
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface TableProps<T> {
   data: T[];
@@ -77,14 +78,14 @@ export default function Table<T>({
             <p className="text-[#191D23] opacity-[60%] text-[15px]">Order by</p>
             <button className="bg-[#FFFFFF] w-[165px] rounded-[5px] px-[20px] py-[10px] items-center flex justify-between text-[15px]">
               Select
-              <img src="/imgs/dropdown.svg" alt="" />
+              <Image src="/imgs/dropdown.svg" alt="" />
             </button>
           </div>
           <div className="flex items-center gap-[10px]">
             <p className="text-[#191D23] opacity-[60%] text-[15px]">Sort by</p>
             <button className="bg-[#FFFFFF] w-[165px] rounded-[5px] px-[20px] py-[10px] items-center flex justify-between text-[15px]">
               Choose
-              <img src="/imgs/dropdown.svg" alt="" />
+              <Image src="/imgs/dropdown.svg" alt="" />
             </button>
           </div>
         </div>
