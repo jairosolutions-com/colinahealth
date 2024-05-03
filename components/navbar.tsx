@@ -85,7 +85,7 @@ export const Navbar = ({
   return (
     <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[145px] z-10 font-medium text-[15px]">
       <Link href="/dashboard" shallow>
-        <Image
+        <img
           src={"/imgs/colina-logo.png"}
           alt={""}
           width={200}
@@ -124,8 +124,8 @@ export const Navbar = ({
           ))}
         </div>
         <div className="flex gap-3 items-center mr-2">
-          <Image src={"/imgs/admin.svg"} alt={""} width={30} height={30} />
-          <Image
+          <img src={"/imgs/admin.svg"} alt={""} width={30} height={30} />
+          <img
             ref={iconRef}
             className={`cursor-pointer select-none ${
               dropdownOpen ? "rotate-180" : ""

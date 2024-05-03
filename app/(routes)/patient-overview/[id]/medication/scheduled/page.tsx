@@ -39,6 +39,7 @@ const Scheduled = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+
   interface Modalprops {
     label: string;
     isOpen: boolean;

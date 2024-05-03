@@ -59,7 +59,7 @@ export const ErrorModal = ({
               </p>
               <button
                 onClick={() => toggleModal(false)} // Close modal
-                className="w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm"
+                className="w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black rounded-sm"
               >
                 Try again
               </button>

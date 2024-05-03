@@ -66,7 +66,7 @@ export const FormsviewsModalContent = ({ isModalOpen }: ModalProps) => {
                     height: "350px",
                   }}
                 >
-                  <Image
+                  <img
                     src="/imgs/docs.png"
                     alt="Document"
                     width={400}
@@ -151,7 +151,7 @@ export const FormsviewsModalContent = ({ isModalOpen }: ModalProps) => {
                     type="button"
                     className="absolute top-0 left-0 m-4 ml-10 text-white hover:text-gray-800 flex text-[20px] "
                   >
-                    <Image
+                    <img
                       className="mr-2"
                       src="/svgs/print.svg"
                       alt="Icon"
@@ -164,7 +164,7 @@ export const FormsviewsModalContent = ({ isModalOpen }: ModalProps) => {
                     type="button"
                     className="absolute top-0 left-0 m-4 ml-36 text-white hover:text-gray-800 flex text-[20px] "
                   >
-                    <Image
+                    <img
                       className="mr-2"
                       src="/svgs/downlod.svg"
                       alt="Icon"
@@ -179,7 +179,7 @@ export const FormsviewsModalContent = ({ isModalOpen }: ModalProps) => {
                   >
                     Close
                   </button>
-                  <Image
+                  <img
                     src="/imgs/docs.png"
                     alt="Document"
                     width={700}
