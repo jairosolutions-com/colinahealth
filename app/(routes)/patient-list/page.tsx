@@ -16,6 +16,7 @@ import { DemographicModalContent } from "@/components/modal-content/demographic-
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
+import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 import Pagination from "@/components/shared/pagination";
 
 export default function PatientPage() {
@@ -45,6 +46,8 @@ export default function PatientPage() {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const isEdit = false;
+  const [patientImages, setPatientImages] = useState<any[]>([]);
+
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -140,6 +143,7 @@ export default function PatientPage() {
     }
     return pageNumbers;
   };
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -151,17 +155,51 @@ export default function PatientPage() {
           sortOrder as "ASC" | "DESC",
           router
         );
-        if (response.data.length === 0) {
-          setPatientList([]);
 
-          setIsLoading(false);
-          return;
-        }
-
+        // Update patient list
         setPatientList(response.data);
         setTotalPages(response.totalPages);
         setTotalPatient(response.totalCount);
+
+        // Get UUIDs of all patients
+        const patientUuids = response.data.map(
+          (patient: { uuid: any }) => patient.uuid
+        );
+        // Fetch profile images for all patients
+        const profileImagesResponse = await fetchProfileImages(patientUuids);
+
+        // Buffer the images and store them in an array
+        if (profileImagesResponse) {
+          const patientImagesData = profileImagesResponse.map((image: any) => {
+            // Convert the image data buffer to a data URL if available
+            if (image.data) {
+              const buffer = Buffer.from(image.data);
+              const dataUrl = `data:image/jpeg;base64,${buffer.toString(
+                "base64"
+              )}`;
+              return {
+                patientUuid: image.patientUuid,
+                data: dataUrl,
+              };
+            } else {
+              // If no data URL is available, return an empty object
+              return {
+                patientUuid: image.patientUuid,
+                data: "",
+              };
+            }
+          });
+          setPatientImages(patientImagesData);
+        }
+        setImagesLoaded(true); // Set to true when images are loaded
+
         setIsLoading(false);
+
+        if (response.data.length === 0) {
+          setPatientList([]);
+          setImagesLoaded(true); // Set to true when images are loaded
+          setIsLoading(false);
+        }
       } catch (error: any) {
         setError(error.message);
         console.log("error", error.message);
@@ -325,21 +363,77 @@ export default function PatientPage() {
                     </td>
                   </tr>
                 )}
+
                 {patientList.map((patient, index) => (
                   <tr
                     key={index}
-                    className=" group  bg-white hover:bg-gray-100  border-b"
+                    className="group bg-white hover:bg-gray-100 border-b"
                   >
                     <td className="truncate flex items-center gap-2 px-6 py-5">
-                      <Image
-                        className="rounded-full "
-                        src="/imgs/dennis.svg"
-                        alt="Icon"
-                        width={45}
-                        height={45}
-                      />
-                      {patient.firstName} {patient.lastName}
+                      {/* Check if any matching image found for the patient */}
+                      {patientImages.some(
+                        (image) => image.patientUuid === patient.uuid
+                      ) ? (
+                        // Render the matched image
+                        <div>
+                          {patientImages.map((image, imgIndex) => {
+                            if (image.patientUuid === patient.uuid) {
+                              return (
+                                <div key={imgIndex}>
+                                  {image.data ? (
+                                    // Render the image if data is not empty
+                                    <img
+                                      className="rounded-full"
+                                      src={image.data} // Use the base64-encoded image data directly
+                                      alt=""
+                                      width={45}
+                                      height={45}
+                                    />
+                                  ) : (
+                                    // Render the stock image (.svg) if data is empty
+                                    <img
+                                      className="rounded-full"
+                                      src="/imgs/user-no-icon.jpg"
+                                      alt=""
+                                      width={45}
+                                      height={45}
+                                    />
+                                  )}
+                                </div>
+                              );
+                            }
+                            return null;
+                          })}
+                        </div>
+                      ) : // Render a placeholder image if no matching image found
+                      imagesLoaded ? ( // Only render stock image when images are loaded
+                        <div>
+                          <img
+                            className="rounded-full"
+                            src="/imgs/loading.gif" // Show loading gif while fetching images
+                            alt="Loading"
+                            width={45}
+                            height={45}
+                          />
+                        </div>
+                      ) : (
+                        // Render loading gif while fetching images
+                        <div>
+                          <img
+                            className="rounded-full"
+                            src="/imgs/loading.gif" // Show loading gif while fetching images
+                            alt="Loading"
+                            width={45}
+                            height={45}
+                          />
+                        </div>
+                      )}
+
+                      <p className="truncate ">
+                        {patient.firstName} {patient.lastName}
+                      </p>
                     </td>
+
                     <td className="truncate px-6 py-5">{patient.uuid}</td>
                     <td className="truncate px-6 py-5">{patient.age}</td>
                     <td className="truncate px-6 py-5">{patient.gender}</td>
@@ -355,50 +449,50 @@ export default function PatientPage() {
           </div>
           {/* END OF TABLE */}
         </div>
+        {/* pagination */}
+        <div className=" bg-white ">
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+            setCurrentPage={setCurrentPage}
+          />
+        </div>
+        {isOpen && (
+          <Modal
+            content={
+              <DemographicModalContent
+                isModalOpen={isModalOpen}
+                isOpen={isOpen}
+                label="sample label"
+                onSuccess={onSuccess}
+                onFailed={onFailed}
+                setErrorMessage={setError}
+              />
+            }
+            isModalOpen={isModalOpen}
+          />
+        )}
+        {isSuccessOpen && (
+          <SuccessModal
+            label="Success"
+            isAlertOpen={isSuccessOpen}
+            toggleModal={setIsSuccessOpen}
+            setIsUpdated=""
+            isUpdated=""
+          />
+        )}
+        {isErrorOpen && (
+          <ErrorModal
+            label="Patient already exist"
+            isAlertOpen={isErrorOpen}
+            toggleModal={setIsErrorOpen}
+            isEdit={isEdit}
+            errorMessage={error}
+          />
+        )}
       </div>
-      {/* pagination */}
-      <div className=" bg-white ">
-        <Pagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          pageNumber={pageNumber}
-          setPageNumber={setPageNumber}
-          setCurrentPage={setCurrentPage}
-        />
-      </div>
-      {isOpen && (
-        <Modal
-          content={
-            <DemographicModalContent
-              isModalOpen={isModalOpen}
-              isOpen={isOpen}
-              label="sample label"
-              onSuccess={onSuccess}
-              onFailed={onFailed}
-              setErrorMessage={setError}
-            />
-          }
-          isModalOpen={isModalOpen}
-        />
-      )}
-      {isSuccessOpen && (
-        <SuccessModal
-          label="Success"
-          isAlertOpen={isSuccessOpen}
-          toggleModal={setIsSuccessOpen}
-          setIsUpdated=""
-          isUpdated=""
-        />
-      )}
-      {isErrorOpen && (
-        <ErrorModal
-          label="Patient already exist"
-          isAlertOpen={isErrorOpen}
-          toggleModal={setIsErrorOpen}
-          isEdit={isEdit}
-          errorMessage={error}
-        />
-      )}
     </div>
   );
 }

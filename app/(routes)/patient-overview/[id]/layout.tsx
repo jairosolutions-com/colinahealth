@@ -5,7 +5,7 @@ import { Navbar } from "@/components/navbar";
 import { useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
-
+import { fetchPatientProfileImage } from "@/app/api/patients-api/patientProfileImage.api";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
@@ -28,6 +28,8 @@ export default function PatientOverviewLayout({
   }
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
+  const [patientImage, setPatientImage] = useState<string>();
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [error, setError] = useState<string>("");
@@ -129,6 +131,16 @@ export default function PatientOverviewLayout({
       try {
         const response = await fetchPatientOverview(patientId, router);
         console.log(response, "response");
+        const imgResponse = await fetchPatientProfileImage(patientId, router);
+        if (!imgResponse.data || imgResponse.data.length === 0) {
+          // If no image data is available, set patientImage to null
+          setPatientImage("");
+        } else {
+          // Convert the image data buffer to a data URL
+          const buffer = Buffer.from(imgResponse.data);
+          const dataUrl = `data:image/jpeg;base64,${buffer.toString("base64")}`;
+          setPatientImage(dataUrl);
+        }
         setPatientData(response);
         setIsLoading(false);
       } catch (error: any) {
@@ -185,7 +197,7 @@ export default function PatientOverviewLayout({
   };
 
   return (
-    <div className="flex flex-col w-full px-[150px] pt-[90px] h-full">
+    <div className="flex flex-col w-full px-[150px] pt-[90px]">
       <div className="flex flex-col gap-[3px]">
         <div className="p-title pb-2">
           <h1>Patient Overview</h1>
@@ -321,7 +333,7 @@ export default function PatientOverviewLayout({
               </div>
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
-                  <Link key={index} href={tab.url}>
+                  <Link href={tab.url}>
                     <p
                       className={`cursor-pointer font-bold ${
                         pathname === tab.url ||
@@ -350,7 +362,7 @@ export default function PatientOverviewLayout({
           </div>
         </div>
       </div>
-      <div className="w-full flex items-center justify-center mt-4 h-full">
+      <div className="w-full flex items-center justify-center mt-4">
         {children}
       </div>
     </div>
