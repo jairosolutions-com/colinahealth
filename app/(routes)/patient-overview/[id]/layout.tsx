@@ -5,12 +5,13 @@ import { Navbar } from "@/components/navbar";
 import { useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
-
+import { fetchPatientProfileImage } from "@/app/api/patients-api/patientProfileImage.api";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import Link from "next/link";
+import Image from "next/image";
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
@@ -27,6 +28,8 @@ export default function PatientOverviewLayout({
   }
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
+  const [patientImage, setPatientImage] = useState<string>();
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [error, setError] = useState<string>("");
@@ -128,6 +131,16 @@ export default function PatientOverviewLayout({
       try {
         const response = await fetchPatientOverview(patientId, router);
         console.log(response, "response");
+        const imgResponse = await fetchPatientProfileImage(patientId, router);
+        if (!imgResponse.data || imgResponse.data.length === 0) {
+          // If no image data is available, set patientImage to null
+          setPatientImage("");
+        } else {
+          // Convert the image data buffer to a data URL
+          const buffer = Buffer.from(imgResponse.data);
+          const dataUrl = `data:image/jpeg;base64,${buffer.toString("base64")}`;
+          setPatientImage(dataUrl);
+        }
         setPatientData(response);
         setIsLoading(false);
       } catch (error: any) {
@@ -156,7 +169,12 @@ export default function PatientOverviewLayout({
   if (isLoading) {
     return (
       <div className="container w-full h-full flex justify-center items-center ">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          alt="logo"
+          width={100}
+          height={100}
+        />
       </div>
     );
   }
@@ -179,7 +197,7 @@ export default function PatientOverviewLayout({
   };
 
   return (
-    <div className="flex flex-col w-full px-[150px] pt-[90px] h-full">
+    <div className="flex flex-col w-full px-[150px] pt-[90px]">
       <div className="flex flex-col gap-[3px]">
         <div className="p-title pb-2">
           <h1>Patient Overview</h1>
@@ -188,14 +206,14 @@ export default function PatientOverviewLayout({
           <div className="flex">
             <div className="flex">
               <div className="relative">
-                <img
+                <Image
                   src="/imgs/drake.png"
                   alt="profile"
-                  width="200"
-                  height="200"
+                  width={200}
+                  height={200}
                 />
                 {/* <button className="absolute bottom-2 right-[-20px]  ">
-                  <img
+                  <Image
                     src="/svgs/editprof.svg"
                     alt="edit button"
                     width="35"
@@ -239,12 +257,12 @@ export default function PatientOverviewLayout({
                 </div>
                 <div>
                   <div className="flex flex-row w-full mt-2 font-medium text-[15px]">
-                    <img
+                    <Image
                       src="/imgs/profile-circle-new.svg"
                       className="px-1"
                       alt="profile"
-                      width="26"
-                      height="26"
+                      width={26}
+                      height={26}
                     />
                     <div>
                       <p className="flex items-center mr-11">Patient</p>
@@ -264,23 +282,25 @@ export default function PatientOverviewLayout({
                         <p className="flex items-center">
                           ID: <span ref={inputRef}>{patientData[0]?.uuid}</span>
                         </p>
-                        <img
+                        <Image
                           src="/imgs/id.svg"
                           alt="copy"
                           className="cursor-pointer ml-2"
                           onClick={handleCopyClick}
+                          width={23}
+                          height={23}
                         />
                       </div>
                     </div>
                   </div>
                   <div className="mb-5"></div>
                   <div className="flex flex-row w-full font-medium text-[15px]">
-                    <img
+                    <Image
                       src="/imgs/codestatus.svg"
                       className="px-1"
                       alt="codestatus"
-                      width="26"
-                      height="26"
+                      width={26}
+                      height={26}
                     />
                     <div className="">
                       <h1 className={`flex items-center`}>
@@ -313,7 +333,7 @@ export default function PatientOverviewLayout({
               </div>
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
-                  <Link key={index} href={tab.url}>
+                  <Link href={tab.url}>
                     <p
                       className={`cursor-pointer font-bold ${
                         pathname === tab.url ||
@@ -342,7 +362,7 @@ export default function PatientOverviewLayout({
           </div>
         </div>
       </div>
-      <div className="w-full flex items-center justify-center mt-4 h-full">
+      <div className="w-full flex items-center justify-center mt-4">
         {children}
       </div>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 import { merge } from "chart.js/helpers";
 import moment from "moment";
+import Image from "next/image";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 
 import {
@@ -230,7 +231,7 @@ const TimeGraph = ({
                                         }) =>
                                           log.medicationLogStatus !== "pending"
                                       ) && (
-                                        <img
+                                        <Image
                                           src="/icons/chart-done.svg"
                                           alt="chart-done"
                                           width={30}
@@ -332,7 +333,7 @@ const TimeGraph = ({
                                   <HoverCardTrigger>
                                     <div>
                                       <div className="cursor-pointer relative flex items-center justify-center">
-                                        <img
+                                        <Image
                                           src="/icons/chart-list.svg"
                                           alt="list"
                                           width={30}
@@ -488,7 +489,7 @@ const TimeGraph = ({
                                         <span>{log.medicationLogsName}</span>
                                       ) : (
                                         <span>
-                                          <img
+                                          <Image
                                             src="/icons/chart-done.svg"
                                             alt="done"
                                             width={50}

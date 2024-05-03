@@ -332,7 +332,7 @@ export const PrescriptionModalContent = ({
           <div className="">
             <label className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2">
               <>
-                <Image
+                <img
                   className="w-7 h-7 mr-1"
                   width={50}
                   height={50}
@@ -354,7 +354,7 @@ export const PrescriptionModalContent = ({
               <>
                 {selectedFileNames.length > 0 ? (
                   // If files are selected, display filein.svg
-                  <Image
+                  <img
                     className="w-7 h-7 mr-1"
                     width={50}
                     height={50}
@@ -363,7 +363,7 @@ export const PrescriptionModalContent = ({
                   />
                 ) : (
                   // If no files are selected, display folder-add.svg
-                  <Image
+                  <img
                     className="w-7 h-7 mr-1"
                     width={50}
                     height={50}
@@ -442,7 +442,7 @@ export const PrescriptionModalContent = ({
             <div className="mb-9 pt-4">
               <div className="h-[380px] md:px-8 mt-5">
                 <div className="w-full h-full flex justify-center items-center ">
-                  <img
+                  <Image
                     src="/imgs/colina-logo-animation.gif"
                     alt="logo"
                     width={100}
@@ -510,7 +510,7 @@ export const PrescriptionModalContent = ({
                           <option value="Twice Daily">Twice Daily</option>
                           <option value="Thrice Daily">Thrice Daily</option>
                         </select>
-                        <Image
+                        <img
                           className="absolute mt-4   ml-[255px] pointer-events-none"
                           width={20}
                           height={20}
@@ -583,7 +583,7 @@ export const PrescriptionModalContent = ({
                     alt="Dropdown Arrow"
                     style={{ width: '1rem', height: '1rem' }}
                       /> */}
-                        <Image
+                        <img
                           className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                           width={20}
                           height={20}
