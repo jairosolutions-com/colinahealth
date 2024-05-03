@@ -30,7 +30,9 @@ export default function DueMedicationPage() {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortBy, setSortBy] = useState("firstName");
-  const [dueMedSortBy, setDueMedSortBy] = useState("medicationLogsTime");
+  const [dueMedSortBy, setDueMedSortBy] = useState(
+    "medicationlogs.medicationLogsTime"
+  );
   const [patientList, setPatientList] = useState<any[]>([]);
   const [patientId, setPatientId] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -68,12 +70,16 @@ export default function DueMedicationPage() {
   };
 
   const handleSortOptionClick = (option: string) => {
-    if (option == "Age") {
-      setSortBy("age");
-    } else if (option == "Name") {
-      setSortBy("firstName");
-    } else if (option == "Gender") {
-      setSortBy("gender");
+    if (option == "Name") {
+      setDueMedSortBy("patient.firstName");
+    } else if (option == "Due Med UID") {
+      setDueMedSortBy("medicationlogs.medicationLogsName");
+    } else if (option == "Date") {
+      setDueMedSortBy("medicationlogs.medicationLogsDate");
+    } else if (option == "Time") {
+      setDueMedSortBy("medicationlogs.medicationLogsTime");
+    } else if (option == "Medication") {
+      setDueMedSortBy("medicationlogs.medicationLogsName");
     }
     console.log(sortBy, "ooption");
   };
@@ -84,8 +90,10 @@ export default function DueMedicationPage() {
   ];
   const optionsSortBy = [
     { label: "Name", onClick: handleSortOptionClick },
-    { label: "Age", onClick: handleSortOptionClick },
-    { label: "Gender", onClick: handleSortOptionClick },
+    { label: "Due Med UID", onClick: handleSortOptionClick },
+    { label: "Date", onClick: handleSortOptionClick },
+    { label: "Time", onClick: handleSortOptionClick },
+    { label: "Medicaiton", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
   const isModalOpen = (isOpen: boolean) => {
@@ -295,15 +303,15 @@ export default function DueMedicationPage() {
         </div>
       </div>
       {/* pagination */}
-     <div className="">
-     <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
-        setCurrentPage={setCurrentPage}
-      />
-     </div>
+      <div className="">
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+          setCurrentPage={setCurrentPage}
+        />
+      </div>
       {isOpen && (
         <Modal
           content={

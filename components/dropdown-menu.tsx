@@ -31,10 +31,10 @@ const DropdownMenu = ({ open, width, label, options }: DropdownMenuProps) => {
   };
 
   return (
-    <div className={`w-full max-w-[165px] w-${width} `} ref={menuRef}>
+    <div className={` w-full max-w-[165px] w-${width} `} ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-[#FFFFFF] relative w-full h-[47px] rounded-[5px] px-[20px] items-center flex justify-between font-semibold opacity-[60%] text-[15px]"
+        className="bg-[#FFFFFF] w-full h-[47px] rounded-[5px] px-[20px] items-center flex justify-between font-semibold text-[15px]"
       >
         {optionLabel}
         <ChevronDown width={18} height={18} />

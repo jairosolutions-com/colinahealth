@@ -495,7 +495,7 @@ export default function AppointmentPage() {
 
                     <td className="text-15px text-nowrap  px-6 py-5 rounded-full">
                       <div
-                        className={`px-2 font-semibold rounded-[20px] relative flex items-center w-fit ${
+                        className={`px-2 font-semibold rounded-[20px] flex items-center w-fit ${
                           appointment.appointments_appointmentStatus ===
                           "Scheduled"
                             ? "bg-[#E7EAEE] text-[#71717A]" // Green color for Scheduled
