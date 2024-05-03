@@ -442,7 +442,7 @@ export const PrescriptionModalContent = ({
             <div className="mb-9 pt-4">
               <div className="h-[380px] md:px-8 mt-5">
                 <div className="w-full h-full flex justify-center items-center ">
-                  <img
+                  <Image
                     src="/imgs/colina-logo-animation.gif"
                     alt="logo"
                     width={100}
@@ -577,7 +577,7 @@ export const PrescriptionModalContent = ({
                           <option value="active">ACTIVE</option>
                           <option value="inactive">INACTIVE</option>
                         </select>
-                        {/* <img
+                        {/* <
                     className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                     src="svgs/chevron-up.svg"
                     alt="Dropdown Arrow"

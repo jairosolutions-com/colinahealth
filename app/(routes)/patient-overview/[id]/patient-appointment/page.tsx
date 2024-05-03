@@ -247,14 +247,14 @@ const Appointment = () => {
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <img src="/imgs/add.svg" alt="" />
+              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
               <p className="text-[18px]">Add</p>
             </button>
             <button
               onClick={() => isModalReminderOpen(true)}
               className="btn-pdfs gap-2"
             >
-              <ClipboardList width={20} height={20} />
+              <ClipboardList width={22} height={22} />
               <p className="text-[18px]">Reminder</p>
             </button>
           </div>
@@ -276,11 +276,11 @@ const Appointment = () => {
                     setCurrentPage(1);
                   }}
                 />
-                <img
+                <Image
                   src="/svgs/search.svg"
                   alt="Search"
-                  width="20"
-                  height="20"
+                  width={20}
+                  height={20}
                   className="absolute left-8 top-9 pointer-events-none"
                 />
               </div>
@@ -355,20 +355,20 @@ const Appointment = () => {
                           className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                             appointments.appointments_appointmentStatus ===
                             "Scheduled"
-                              ? "bg-[#dfffea] text-[#17C653] text-[15px]" // Green color for Scheduled
+                              ? "bg-[#E7EAEE] text-[#71717A] text-[15px]" // Green color for Scheduled
                               : appointments.appointments_appointmentStatus ===
                                 "Done"
-                              ? "bg-[#E7EAEE] text-[#3C3C3C] text-[15px]" // Dark color for Done
+                              ? "bg-[#CCFFDD] text-[#17C653] text-[15px]" // Dark color for Done
                               : appointments.appointments_appointmentStatus ===
                                   "Patient-IN" ||
                                 appointments.appointments_appointmentStatus ===
                                   "On-going"
-                              ? "bg-[#FFFCDB] text-[#E0BD03] text-[15px]" // Yellow for On Going
+                              ? "bg-[#FFF8DD] text-[#F6C000] text-[15px]" // Yellow for On Going
                               : appointments.appointments_appointmentStatus ===
                                   "Missed" ||
                                 appointments.appointments_appointmentStatus ===
                                   "Cancelled"
-                              ? "bg-[#FEE9E9] text-[#EF4C6A] text-[15px]" // Red color for Missed and Cancelled
+                              ? "bg-[#FFE8EC] text-[#EF4C6A] text-[15px]" // Red color for Missed and Cancelled
                               : ""
                           }`}
                         >
@@ -376,20 +376,20 @@ const Appointment = () => {
                             className={`inline-block h-2 w-2 rounded-full mr-1 ${
                               appointments.appointments_appointmentStatus ===
                               "Scheduled"
-                                ? "bg-green-500" // Green color for Scheduled
+                                ? "bg-[#7E7E7E]" // Green color for Scheduled
                                 : appointments.appointments_appointmentStatus ===
                                   "Done"
-                                ? "bg-[#E7EAEE]" // Dark color for Done
+                                ? "bg-[#0EB146]" // Dark color for Done
                                 : appointments.appointments_appointmentStatus ===
                                     "Patient-IN" ||
                                   appointments.appointments_appointmentStatus ===
                                     "On-going"
-                                ? "bg-[#E0BD03]" // Yellow for On Going
+                                ? "bg-[#E4B90E]" // Yellow for On Going
                                 : appointments.appointments_appointmentStatus ===
                                     "Missed" ||
                                   appointments.appointments_appointmentStatus ===
                                     "Cancelled"
-                                ? "bg-[#EF4C6A]" // Red color for Missed and Cancelled
+                                ? "bg-[#EE4D4D]" // Red color for Missed and Cancelled
                                 : ""
                             }`}
                           ></span>

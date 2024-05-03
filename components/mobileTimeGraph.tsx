@@ -212,7 +212,7 @@
 //                                       (log: { medicationLogStatus: string }) =>
 //                                         log.medicationLogStatus !== "pending"
 //                                     ) && (
-//                                       <img
+//                                       <Image
 //                                         src="/icons/chart-done.svg"
 //                                         alt="chart-done"
 //                                         width={30}
@@ -307,7 +307,7 @@
 //                                 <HoverCardTrigger>
 //                                   <div>
 //                                     <div className="cursor-pointer relative flex items-center justify-center">
-//                                       <img
+//                                       <Image
 //                                         src="/icons/chart-list.svg"
 //                                         alt="list"
 //                                         width={30}
@@ -445,7 +445,7 @@
 //                                       <span>{log.medicationLogsName}</span>
 //                                     ) : (
 //                                       <span>
-//                                         <img
+//                                         <Image
 //                                           src="/icons/chart-done.svg"
 //                                           alt="done"
 //                                           width={50}

@@ -5,7 +5,7 @@ import { Navbar } from "@/components/navbar";
 import { useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
-
+import { fetchPatientProfileImage } from "@/app/api/patients-api/patientProfileImage.api";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
@@ -27,6 +27,8 @@ export default function PatientOverviewLayout({
   }
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
+  const [patientImage, setPatientImage] = useState<string>();
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [error, setError] = useState<string>("");
@@ -128,6 +130,16 @@ export default function PatientOverviewLayout({
       try {
         const response = await fetchPatientOverview(patientId, router);
         console.log(response, "response");
+        const imgResponse = await fetchPatientProfileImage(patientId, router);
+        if (!imgResponse.data || imgResponse.data.length === 0) {
+          // If no image data is available, set patientImage to null
+          setPatientImage("");
+        } else {
+          // Convert the image data buffer to a data URL
+          const buffer = Buffer.from(imgResponse.data);
+          const dataUrl = `data:image/jpeg;base64,${buffer.toString("base64")}`;
+          setPatientImage(dataUrl);
+        }
         setPatientData(response);
         setIsLoading(false);
       } catch (error: any) {
@@ -155,7 +167,7 @@ export default function PatientOverviewLayout({
 
   if (isLoading) {
     return (
-      <div className="container w-full h-full flex justify-center items-center ">
+      <div className="w-full h-full flex justify-center items-center ">
         <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
       </div>
     );
@@ -186,23 +198,22 @@ export default function PatientOverviewLayout({
         </div>
         <div className="form ring-1 w-full h-[220px] ring-[#D0D5DD] px-5 pt-5 rounded-md">
           <div className="flex">
-            <div className="flex">
-              <div className="relative">
+            <div className="flex flex-col">
+              {patientImage ? (
                 <img
-                  src="/imgs/drake.png"
+                  src={patientImage} // Use the patientImage state as the source
                   alt="profile"
                   width="200"
                   height="200"
                 />
-                {/* <button className="absolute bottom-2 right-[-20px]  ">
-                  <img
-                    src="/svgs/editprof.svg"
-                    alt="edit button"
-                    width="35"
-                    height="35"
-                  />
-                </button> */}
-              </div>
+              ) : (
+                <img
+                  src="/imgs/user-no-icon.jpg"
+                  alt="profile"
+                  width="200"
+                  height="200"
+                />
+              )}
             </div>
             <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
               <div>
@@ -313,7 +324,7 @@ export default function PatientOverviewLayout({
               </div>
               <div className="flex gap-[50px] px-2">
                 {tabs.map((tab, index) => (
-                  <Link key={index} href={tab.url}>
+                  <Link href={tab.url}>
                     <p
                       className={`cursor-pointer font-bold ${
                         pathname === tab.url ||
@@ -342,7 +353,7 @@ export default function PatientOverviewLayout({
           </div>
         </div>
       </div>
-      <div className="w-full flex items-center justify-center mt-4 h-full">
+      <div className="w-full h-full flex items-center justify-center mt-4">
         {children}
       </div>
     </div>

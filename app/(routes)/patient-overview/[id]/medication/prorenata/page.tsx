@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
@@ -189,7 +189,12 @@ const Prorenata = () => {
   if (isLoading) {
     return (
       <div className="container w-full h-full flex justify-center items-center ">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          alt="logo"
+          width={100}
+          height={100}
+        />
       </div>
     );
   }
@@ -226,11 +231,16 @@ const Prorenata = () => {
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <img src="/imgs/add.svg" alt="" />
+              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
               <p className="text-[18px]">Add</p>
             </button>
             <button className="btn-pdfs gap-2">
-              <img src="/imgs/downloadpdf.svg" alt="" />
+              <Image
+                src="/imgs/downloadpdf.svg"
+                alt=""
+                width={22}
+                height={22}
+              />
               <p className="text-[18px]">Download PDF</p>
             </button>
           </div>
@@ -252,7 +262,7 @@ const Prorenata = () => {
                     setCurrentPage(1);
                   }}
                 />
-                <img
+                <Image
                   src="/svgs/search.svg"
                   alt="Search"
                   width="20"
@@ -364,13 +374,13 @@ const Prorenata = () => {
                           className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                             prnMed.medicationlogs_medicationLogStatus ===
                             "Given"
-                              ? "bg-[#dfffea] text-[#17C653] text-[15px]" // Green color for Given
+                              ? "bg-[#CCFFDD] text-[#17C653] text-[15px]" // Green color for Given
                               : prnMed.medicationlogs_medicationLogStatus ===
                                 "Held"
-                              ? "bg-[#E7EAEE] text-[#3C3C3C] text-[15px]" // Dark color for Held
+                              ? "bg-[#E7EAEE] text-[#71717A] text-[15px]" // Dark color for Held
                               : prnMed.medicationlogs_medicationLogStatus ===
                                 "Refused"
-                              ? "bg-[#FEE9E9] text-[#EF4C6A] text-[15px]" // Red color for Refused
+                              ? "bg-[#FFE8EC] text-[#EF4C6A] text-[15px]" // Red color for Refused
                               : prnMed.medicationlogs_medicationLogStatus
                           }`}
                         >

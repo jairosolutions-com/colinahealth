@@ -469,7 +469,7 @@ export const LabResultsViewModalContent = ({
               <div className="mb-9 pt-4">
                 <div className="h-[380px] md:px-8 mt-5">
                   <div className="w-full h-full flex justify-center items-center ">
-                    <img
+                    <Image
                       src="/imgs/colina-logo-animation.gif"
                       alt="logo"
                       width={100}
@@ -536,7 +536,7 @@ export const LabResultsViewModalContent = ({
                                 height="550"
                                 onClick={toggleModal}
                                 src={`data:image/${fileType};base64,${base64String}`}
-                              ></Image>
+                              />
                             )}
                           </div>
                           <div className="filehover">
