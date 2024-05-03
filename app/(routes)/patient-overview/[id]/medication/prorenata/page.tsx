@@ -373,13 +373,13 @@ const Prorenata = () => {
                           className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                             prnMed.medicationlogs_medicationLogStatus ===
                             "Given"
-                              ? "bg-[#dfffea] text-[#17C653] text-[15px]" // Green color for Given
+                              ? "bg-[#CCFFDD] text-[#17C653] text-[15px]" // Green color for Given
                               : prnMed.medicationlogs_medicationLogStatus ===
                                 "Held"
-                              ? "bg-[#E7EAEE] text-[#3C3C3C] text-[15px]" // Dark color for Held
+                              ? "bg-[#E7EAEE] text-[#71717A] text-[15px]" // Dark color for Held
                               : prnMed.medicationlogs_medicationLogStatus ===
                                 "Refused"
-                              ? "bg-[#FEE9E9] text-[#EF4C6A] text-[15px]" // Red color for Refused
+                              ? "bg-[#FFE8EC] text-[#EF4C6A] text-[15px]" // Red color for Refused
                               : prnMed.medicationlogs_medicationLogStatus
                           }`}
                         >
