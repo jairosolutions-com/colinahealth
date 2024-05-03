@@ -182,7 +182,7 @@ export const SurgeriesModalContent = ({
                     name="typeOfSurgery"
                     value={formData.typeOfSurgery}
                   />
-                  <img
+                  <Image
                     className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                     width={20}
                     height={20}
@@ -253,7 +253,7 @@ export const SurgeriesModalContent = ({
                     name="dateOfSurgery"
                     value={formData.dateOfSurgery}
                   />
-                  <img
+                  <Image
                     className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                     width={20}
                     height={20}

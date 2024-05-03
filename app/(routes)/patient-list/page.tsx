@@ -382,7 +382,7 @@ export default function PatientPage() {
                                 <div key={imgIndex}>
                                   {image.data ? (
                                     // Render the image if data is not empty
-                                    <img
+                                    <Image
                                       className="rounded-full"
                                       src={image.data} // Use the base64-encoded image data directly
                                       alt=""
@@ -391,7 +391,7 @@ export default function PatientPage() {
                                     />
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
-                                    <img
+                                    <Image
                                       className="rounded-full"
                                       src="/imgs/user-no-icon.jpg"
                                       alt=""
@@ -408,7 +408,7 @@ export default function PatientPage() {
                       ) : // Render a placeholder image if no matching image found
                       imagesLoaded ? ( // Only render stock image when images are loaded
                         <div>
-                          <img
+                          <Image
                             className="rounded-full"
                             src="/imgs/loading.gif" // Show loading gif while fetching images
                             alt="Loading"
@@ -419,7 +419,7 @@ export default function PatientPage() {
                       ) : (
                         // Render loading gif while fetching images
                         <div>
-                          <img
+                          <Image
                             className="rounded-full"
                             src="/imgs/loading.gif" // Show loading gif while fetching images
                             alt="Loading"
