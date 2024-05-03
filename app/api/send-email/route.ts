@@ -9,15 +9,15 @@ export async function POST(req: NextRequest, res: any) {
 
     const { name, emailAddress, subject, message } = body;
 
-    const user = process.env.user;
+    const user = process.env.NEXT_USER;
 
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
       secure: true,
       auth: {
-        user: process.env.user,
-        pass: process.env.pass,
+        user: process.env.NEXT_USER,
+        pass: process.env.NEXT_PASS,
       },
     });
 
