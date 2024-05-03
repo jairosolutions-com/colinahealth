@@ -294,19 +294,24 @@ const Allergies = () => {
               </span>
             </div>
             <div>
-              <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px]">
+              <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
                 Total of {totalAllergies} Allergies
               </p>
             </div>
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <img src="/imgs/add.svg" alt="" />
+              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
               <p className="text-[18px]">Add</p>
             </button>
 
             <button className="btn-pdfs gap-2" onClick={handleDownloadPDF}>
-              <img src="/imgs/downloadpdf.svg" alt="" />
+              <Image
+                src="/imgs/downloadpdf.svg"
+                alt=""
+                width={22}
+                height={22}
+              />
               <p className="text-[18px]">Download PDF</p>
             </button>
           </div>
@@ -318,7 +323,7 @@ const Allergies = () => {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
+                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[15px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -336,57 +341,37 @@ const Allergies = () => {
                 />
               </div>
             </form>
-            <div className="flex gap-2">
-              <button
-                onClick={() => isModalOpen(true)}
-                className="btn-add gap-2"
-              >
-                <Image src="/imgs/add.svg" alt="" width={22} height={22} />
-                <p className="text-[18px]">Add</p>
-              </button>
-
-              <button className="btn-pdfs gap-2" onClick={handleDownloadPDF}>
-                <Image
-                  src="/imgs/downloadpdf.svg"
-                  alt=""
-                  width={22}
-                  height={22}
-                />
-                <p className="text-[18px]">Download PDF</p>
-              </button>
+            <div className="flex w-full justify-end items-center gap-[12px] mr-3">
+              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+                Order by
+              </p>
+              <DropdownMenu
+                options={optionsOrderedBy.map(({ label, onClick }) => ({
+                  label,
+                  onClick: () => {
+                    onClick(label);
+                  },
+                }))}
+                open={isOpenOrderedBy}
+                width={"165px"}
+                label={"Select"}
+              />
+              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+                Sort by
+              </p>
+              <DropdownMenu
+                options={optionsSortBy.map(({ label, onClick }) => ({
+                  label,
+                  onClick: () => {
+                    onClick(label);
+                    console.log("label", label);
+                  },
+                }))}
+                open={isOpenSortedBy}
+                width={"165px"}
+                label={"Select"}
+              />
             </div>
-          </div>
-
-          <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-              Order by
-            </p>
-            <DropdownMenu
-              options={optionsOrderedBy.map(({ label, onClick }) => ({
-                label,
-                onClick: () => {
-                  onClick(label);
-                },
-              }))}
-              open={isOpenOrderedBy}
-              width={"165px"}
-              label={"Select"}
-            />
-            <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
-              Sort by
-            </p>
-            <DropdownMenu
-              options={optionsSortBy.map(({ label, onClick }) => ({
-                label,
-                onClick: () => {
-                  onClick(label);
-                  console.log("label", label);
-                },
-              }))}
-              open={isOpenSortedBy}
-              width={"165px"}
-              label={"Select"}
-            />
           </div>
         </div>
         {/* START OF TABLE */}

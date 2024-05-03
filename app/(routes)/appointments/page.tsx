@@ -29,6 +29,7 @@ import Pagination from "@/components/shared/pagination";
 export default function AppointmentPage() {
   const router = useRouter();
   if (typeof window === "undefined") {
+    return <div>No page found</div>;
   }
 
   if (!getAccessToken()) {
