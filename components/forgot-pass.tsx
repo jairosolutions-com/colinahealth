@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 interface ForgotPassProps {
   isForgotPassword: boolean;
   setIsForgotPassword: (value: boolean) => void;
@@ -23,6 +23,104 @@ const ForgotPass = ({
   isOTP,
   setIsOTP,
 }: ForgotPassProps) => {
+  const [isSent, setIsSent] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [formData, setFormData] = useState({
+    forgotPassEmail: "",
+    subject: "",
+    message: "",
+  });
+
+  const [errors, setErrors] = useState({
+    subject: false,
+    message: false,
+  });
+
+  const handleSend = () => {
+    let newErrors = {
+      subject: false,
+      message: false,
+    };
+    let hasError = false;
+
+    for (const [key, value] of Object.entries(formData)) {
+      if (value.trim() === "") {
+        newErrors = { ...newErrors, [key]: true };
+        hasError = true;
+      }
+    }
+
+    setErrors(newErrors);
+
+    if (!hasError) {
+      setIsLoading(true);
+    }
+  };
+
+  function generateRandomNumbers(): string {
+    const randomNumbers: number[] = [];
+    for (let i = 0; i < 6; i++) {
+      randomNumbers.push(Math.floor(Math.random() * 10));
+    }
+    const joinedNumbers = randomNumbers.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, "");
+
+    return joinedNumbers;
+  }
+  const randomArray = generateRandomNumbers();
+
+  const [sendOTP, setSendOTP] = useState({
+    subject: "Colina Health Forgot Password OTP Code",
+    message: `Your OTP code is ${randomArray}`,
+  });
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setIsSent(true);
+    const data = {
+      name: forgotPassEmail,
+      emailAddress: forgotPassEmail,
+      subject: sendOTP.subject,
+      message: sendOTP.message,
+    };
+
+    if (data.emailAddress != "" && data.subject != "" && data.message != "") {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setIsSent(false);
+        setIsLoading(false);
+        setSendOTP({
+          subject: "Colina Health Forgot Password OTP Code",
+          message: `Your OTP code is ${randomArray}`,
+        })
+        setIsOTP(!isOTP);
+        setIsForgotPassword(!isForgotPassword);
+        console.log("Email Sent Successfully.");
+        // onSuccess();
+        // setToastMessage("Email Sent Successfully.");
+        // setShowToast(true);
+      }
+
+      if (!response.ok) {
+        // setInvalidEmail(true);
+        console.log("failed");
+        setIsLoading(false);
+        // onFailed();
+        // setShowToast(true);
+        // setToastMessage("Something went wrong.");
+      }
+    }
+    setIsSent(false);
+  };
+
   return (
     <div
       className={`flex flex-col fixed justify-center items-center lg:w-[1091px] w-full  duration-500 transition h-full 
@@ -44,9 +142,7 @@ const ForgotPass = ({
         <form
           action=""
           onSubmit={(e) => {
-            e.preventDefault();
-            setIsOTP(!isOTP);
-            setIsForgotPassword(!isForgotPassword);
+            handleSubmit(e);
           }}
         >
           <div className="w-full h-full">
@@ -80,13 +176,14 @@ const ForgotPass = ({
           </div>
 
           <button
-            disabled={isOTP}
+            disabled={isSent}
+            onClick={handleSend}
             className={`
-                          ${isOTP ? "cursor-not-allowed" : "cursor-pointer"}
+                          ${isSent ? "cursor-not-allowed" : "cursor-pointer"}
                           inline-block w-full  max-w-[642.27px] text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
             type="submit"
           >
-            Send
+            {isSent ? "Sending..." : "Send"}
           </button>
         </form>
       </div>

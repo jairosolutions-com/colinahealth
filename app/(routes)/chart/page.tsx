@@ -236,6 +236,8 @@ export default function ChartPage() {
                   src="/icons/search-icon.svg"
                   alt="search-icon"
                   className="absolute ml-2 mt-4"
+                  width={20}
+                  height={20}
                 />
                 <input
                   type="text"

@@ -450,15 +450,7 @@ export default function PatientPage() {
           {/* END OF TABLE */}
         </div>
         {/* pagination */}
-        <div className=" bg-white ">
-          <Pagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            pageNumber={pageNumber}
-            setPageNumber={setPageNumber}
-            setCurrentPage={setCurrentPage}
-          />
-        </div>
+
         {isOpen && (
           <Modal
             content={
@@ -492,6 +484,15 @@ export default function PatientPage() {
             errorMessage={error}
           />
         )}
+      </div>
+      <div className=" bg-white ">
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
     </div>
   );
