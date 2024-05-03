@@ -11,7 +11,6 @@ import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import Link from "next/link";
-import Image from "next/image";
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
@@ -168,13 +167,8 @@ export default function PatientOverviewLayout({
 
   if (isLoading) {
     return (
-      <div className="container w-full h-full flex justify-center items-center ">
-        <Image
-          src="/imgs/colina-logo-animation.gif"
-          alt="logo"
-          width={100}
-          height={100}
-        />
+      <div className="w-full h-full flex justify-center items-center ">
+        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
       </div>
     );
   }
@@ -204,23 +198,22 @@ export default function PatientOverviewLayout({
         </div>
         <div className="form ring-1 w-full h-[220px] ring-[#D0D5DD] px-5 pt-5 rounded-md">
           <div className="flex">
-            <div className="flex">
-              <div className="relative">
-                <Image
-                  src="/imgs/drake.png"
+            <div className="flex flex-col">
+              {patientImage ? (
+                <img
+                  src={patientImage} // Use the patientImage state as the source
                   alt="profile"
-                  width={200}
-                  height={200}
+                  width="200"
+                  height="200"
                 />
-                {/* <button className="absolute bottom-2 right-[-20px]  ">
-                  <Image
-                    src="/svgs/editprof.svg"
-                    alt="edit button"
-                    width="35"
-                    height="35"
-                  />
-                </button> */}
-              </div>
+              ) : (
+                <img
+                  src="/imgs/user-no-icon.jpg"
+                  alt="profile"
+                  width="200"
+                  height="200"
+                />
+              )}
             </div>
             <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
               <div>
@@ -257,12 +250,12 @@ export default function PatientOverviewLayout({
                 </div>
                 <div>
                   <div className="flex flex-row w-full mt-2 font-medium text-[15px]">
-                    <Image
+                    <img
                       src="/imgs/profile-circle-new.svg"
                       className="px-1"
                       alt="profile"
-                      width={26}
-                      height={26}
+                      width="26"
+                      height="26"
                     />
                     <div>
                       <p className="flex items-center mr-11">Patient</p>
@@ -282,25 +275,23 @@ export default function PatientOverviewLayout({
                         <p className="flex items-center">
                           ID: <span ref={inputRef}>{patientData[0]?.uuid}</span>
                         </p>
-                        <Image
+                        <img
                           src="/imgs/id.svg"
                           alt="copy"
                           className="cursor-pointer ml-2"
                           onClick={handleCopyClick}
-                          width={23}
-                          height={23}
                         />
                       </div>
                     </div>
                   </div>
                   <div className="mb-5"></div>
                   <div className="flex flex-row w-full font-medium text-[15px]">
-                    <Image
+                    <img
                       src="/imgs/codestatus.svg"
                       className="px-1"
                       alt="codestatus"
-                      width={26}
-                      height={26}
+                      width="26"
+                      height="26"
                     />
                     <div className="">
                       <h1 className={`flex items-center`}>
