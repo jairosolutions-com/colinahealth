@@ -71,6 +71,10 @@ export default function PatientOverviewLayout({
       url: `/patient-overview/${params.id}/forms`,
     },
   ];
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen);
+  };
 
   const [currentRoute, setCurrentRoute] = useState<string>("");
 
@@ -103,13 +107,12 @@ export default function PatientOverviewLayout({
   useEffect(() => {
     const pathParts = pathname.split("/");
     setCurrentRoute(pathParts[pathParts.length - 1]);
-
     // Check local storage for previous state
     const clicked = localStorage.getItem("seeMoreClicked") === "true";
     const hovered = localStorage.getItem("seeMoreHovered") === "true";
     setSeeMoreClicked(clicked);
     setSeeMoreHovered(hovered);
-  }, [pathname]);
+  }, [pathname, currentRoute]);
   // const handleTabClick = (index: number, url: string) => {
   //   setActiveTab(index);
   //   onNavigate(router, url);
@@ -199,13 +202,18 @@ export default function PatientOverviewLayout({
         <div className="form ring-1 w-full h-[220px] ring-[#D0D5DD] px-5 pt-5 rounded-md">
           <div className="flex">
             <div className="flex flex-col">
+            <div className="flex">
+              <div className="relative">
               {patientImage ? (
-                <img
-                  src={patientImage} // Use the patientImage state as the source
-                  alt="profile"
-                  width="200"
-                  height="200"
-                />
+                <div>
+                  <img
+                    src={patientImage} // Use the patientImage state as the source
+                    alt="profile"
+                    width="200"
+                    height="200"
+                  />
+
+                </div>
               ) : (
                 <img
                   src="/imgs/user-no-icon.jpg"
@@ -214,6 +222,44 @@ export default function PatientOverviewLayout({
                   height="200"
                 />
               )}
+                {currentRoute === "patient-details" && (
+                  <label
+                    htmlFor="fileInput"
+                    className="absolute bottom-2 right-[-20px] cursor-pointer"
+                  >
+                    <img
+                      src="/svgs/editprof.svg"
+                      alt="edit button"
+                      width="35"
+                      height="35"
+                    />
+                  </label>
+                )}
+                <input
+                  id="fileInput"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  // onChange={handleImageChange}
+                />
+              </div>
+
+              {isPopupOpen && (
+                <div className="popup first-letter:">
+                  <div className="popup-content">
+                    <button className="" onClick={togglePopup}>
+                      Close
+                    </button>
+                    <input
+                      className="pt-11"
+                      type="file"
+                      accept="image/*"
+                      // onChange={handleImageChange}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
             </div>
             <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
               <div>
