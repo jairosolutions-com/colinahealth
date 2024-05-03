@@ -193,6 +193,29 @@ export default function PatientOverviewLayout({
     }
   };
 
+  const handleImageChange = (event:any) => {
+    const selectedFile = event.target.files[0]; // Get the selected file
+    
+    if (!selectedFile) {
+      // Handle the case where no file is selected
+      return;
+    }
+  
+    const reader = new FileReader(); // Create a new FileReader instance
+  
+    // Define an onload function for the reader
+    reader.onload = () => {
+      // Check if reader.result is a string
+      if (typeof reader.result === 'string') {
+        // When the reader finishes loading the file and the result is a string, update the patientImage state with the data URL of the selected image
+        setPatientImage(reader.result);
+      }
+    };
+  
+    // Read the selected file as a data URL
+    reader.readAsDataURL(selectedFile);
+  };
+  
   return (
     <div className="flex flex-col w-full px-[150px] pt-[90px]">
       <div className="flex flex-col gap-[3px]">
@@ -240,7 +263,7 @@ export default function PatientOverviewLayout({
                   type="file"
                   accept="image/*"
                   className="hidden"
-                  // onChange={handleImageChange}
+                  onChange={handleImageChange}
                 />
               </div>
 
