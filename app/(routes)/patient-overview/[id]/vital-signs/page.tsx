@@ -242,11 +242,11 @@ export default function vitalsigns() {
                     setCurrentPage(1);
                   }}
                 />
-                <img
+                <Image
                   src="/svgs/search.svg"
                   alt="Search"
-                  width="20"
-                  height="20"
+                  width={20}
+                  height={20}
                   className="absolute left-8 top-9 pointer-events-none"
                 />
               </div>

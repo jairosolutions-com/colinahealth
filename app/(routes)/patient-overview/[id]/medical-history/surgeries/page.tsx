@@ -265,7 +265,7 @@ export default function Surgeries() {
                     setCurrentPage(1);
                   }}
                 />
-                <img
+                <Image
                   src="/svgs/search.svg"
                   alt="Search"
                   width="20"

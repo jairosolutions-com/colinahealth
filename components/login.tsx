@@ -86,7 +86,12 @@ export const Login = () => {
   if (isAccessed) {
     return (
       <div className="container w-full h-full flex justify-center items-center">
-        <img src="/imgs/colina-logo-animation.gif" alt="logo" width={100} />
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          alt="logo"
+          width={100}
+          height={100}
+        />
       </div>
     );
   }
@@ -215,7 +220,7 @@ export const Login = () => {
                           }`}
                           onClick={() => setShowPass(!showPass)}
                         >
-                          <img
+                          <Image
                             className={`${password ? "block" : "hidden"}`}
                             src={`${
                               showPass
@@ -224,6 +229,7 @@ export const Login = () => {
                             }`}
                             alt="show-pass"
                             width={25}
+                            height={25}
                           />
                         </div>
                       </div>
