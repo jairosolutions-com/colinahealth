@@ -374,10 +374,11 @@ export default function FormsTab() {
                   <td className="px-6 py-3">NAME OF DOCUMENT</td>
                   <td className="px-6 py-3">DATE ISSUED</td>
                   <td className="px-6 py-3">NOTES</td>
-                  <td className="px-20 py-3">ACTION</td>
+                  <td className="px-6 py-3 text-center">ACTION</td>
+                  <td className="w-[14px]"></td>
                 </tr>
               </thead>
-              <tbody className="h-[220px]">
+              <tbody className="h-[220px] overflow-y-scroll">
                 {patientForms.length === 0 && (
                   <tr>
                     <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
@@ -401,7 +402,7 @@ export default function FormsTab() {
                     </td>
                     <td className="truncate px-6 py-3 ">{form.forms_notes}</td>
 
-                    <td className="px-6 py-3 flex gap-2">
+                    <td className="px-6 py-3 flex gap-2 justify-center">
                       <p
                         onClick={() => {
                           isModalOpen(true);
