@@ -13,7 +13,6 @@ import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
 import Modal from "@/components/reusable/modal";
 import { PrnModalContent } from "@/components/modal-content/prn-modal-content";
-import Image from "next/image";
 import Pagination from "@/components/shared/pagination";
 const Prorenata = () => {
   const router = useRouter();
