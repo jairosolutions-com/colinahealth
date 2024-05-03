@@ -11,6 +11,7 @@ import Footer from "./footer";
 import Image from "next/image";
 import ForgotPass from "./forgot-pass";
 import OTPCode from "./otp-code";
+import ResetPass from "./reset-pass";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -25,6 +26,7 @@ export const Login = () => {
   const [isForgotPassword, setIsForgotPassword] = useState<boolean>(false);
   const [forgotPassEmail, setForgotPassEmail] = useState<string>("");
   const [isOTP, setIsOTP] = useState<boolean>(false);
+  const [isResetPass, setIsResetPass] = useState<boolean>(false);
   const router = useRouter();
   useEffect(() => {
     if (getAccessToken()) {
@@ -130,7 +132,7 @@ export const Login = () => {
               <div
                 className={`flex flex-col justify-center items-center lg:w-[1091px] w-full  duration-500 transition h-full 
                 ${
-                  isForgotPassword || isOTP
+                  isForgotPassword || isOTP || isResetPass
                     ? "-translate-x-[1000px] opacity-0 -z-50"
                     : " z-11"
                 }`}
@@ -257,14 +259,12 @@ export const Login = () => {
                         </div>
                       </div>
 
-                      {/* COMMENT MUNA KAY DILI PA WORKING */}
-
-                      <div className="flex text-white md:text-black">
-                        <label className="mb-3 flex items-center justify-start pb-4 pl-5 font-medium md:mb-3">
+                      <div className="flex text-white md:text-black justify-between">
+                        <label className="flex items-center justify-start mb-7 l-5 font-medium md:mb-3">
                           <input
                             type="checkbox"
                             name="checkbox"
-                            className="float-left -ml-[20px] mt-1 accent-[#0E646A]"
+                            className="float-left mt-1 accent-[#0E646A]"
                             checked={rememberMe} // Bind checked attribute to rememberMe state
                             onChange={handleCheckboxChange} // Handle checkbox change
                           />
@@ -273,12 +273,16 @@ export const Login = () => {
                             Remember me
                           </span>
                         </label>
-                        <p
-                          className="font-medium text-[15px] ml-auto inline-block cursor-pointer mt-1 "
-                          onClick={() => setIsForgotPassword(!isForgotPassword)}
-                        >
-                          Forgot Password?
-                        </p>
+                        <label className="flex items-center justify-start mb-7 l-5 font-medium md:mb-3">
+                          <p
+                            className="font-medium text-[15px] ml-auto inline-block cursor-pointer mt-1 "
+                            onClick={() =>
+                              setIsForgotPassword(!isForgotPassword)
+                            }
+                          >
+                            Forgot Password?
+                          </p>
+                        </label>
                       </div>
                       <div>
                         <button
@@ -292,7 +296,7 @@ export const Login = () => {
                           inline-block w-full  text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
                           type="submit"
                         >
-                          Sign In
+                          {isSubmitted?"Please wait..." : "Sign In"}
                         </button>
                       </div>
                     </form>
@@ -313,10 +317,17 @@ export const Login = () => {
                 setIsOTP={setIsOTP}
               />
               {/* OTP */}
-              <OTPCode 
-              isOTP={isOTP} 
-              setIsOTP={setIsOTP}
-              forgotPassEmail={forgotPassEmail}
+              <OTPCode
+                isOTP={isOTP}
+                setIsOTP={setIsOTP}
+                forgotPassEmail={forgotPassEmail}
+                setIsResetPass={setIsResetPass}
+                isResetPass={isResetPass}
+              />
+              {/* Reset Pass */}
+              <ResetPass
+                isResetPass={isResetPass}
+                setIsResetPass={setIsResetPass}
               />
             </div>
             <div className="hidden md:block w-full">
