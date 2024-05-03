@@ -318,15 +318,16 @@ export default function Surgeries() {
           <table className="text-left rtl:text-right">
             <thead>
               <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                <td className="px-6 py-3 w-[270px]">Surgery ID </td>
-                <td className="px-6 py-3 w-[270px]">DATE OF SURGERY</td>
-                <td className="px-6 py-3 w-[270px]">TYPE</td>
-                <td className="px-6 py-3 w-[270px]">SURGERY</td>
-                <td className="px-6 py-3 w-[270px]">NOTES</td>
-                <td className="py-3 px-3">Action</td>
+                <td className="px-6 py-3 ">Surgery ID </td>
+                <td className="px-6 py-3 ">DATE OF SURGERY</td>
+                <td className="px-6 py-3 ">TYPE</td>
+                <td className="px-6 py-3 ">SURGERY</td>
+                <td className="px-6 py-3 ">NOTES</td>
+                <td className="py-3 px-6 text-center">Action</td>
+                <td className="w-[14px]"></td>
               </tr>
             </thead>
-            <tbody className="h-[220px]">
+            <tbody className="h-[220px] overflow-y-scroll">
               {patientSurgeries.length == 0 && (
                 <div className="border-1 w-[180vh] py-5  absolute flex justify-center items-center">
                   <p className="text-[15px] font-normal text-gray-700 text-center">
@@ -339,22 +340,22 @@ export default function Surgeries() {
                   key={index}
                   className="group hover:bg-[#f4f4f4]  border-b text-[15px]"
                 >
-                  <td className="truncate px-6 py-3 w-[270px]">
+                  <td className="truncate px-6 py-3 ">
                     {surgery.surgeries_uuid}
                   </td>
-                  <td className="truncate px-6 py-3 w-[270px]">
+                  <td className="truncate px-6 py-3 ">
                     {formatDate(surgery.surgeries_dateOfSurgery)}
                   </td>
-                  <td className="truncate px-6 py-3 w-[270px]">
+                  <td className="truncate px-6 py-3 ">
                     {surgery.surgeries_typeOfSurgery}
                   </td>
-                  <td className="truncate px-6 py-3 w-[270px]">
+                  <td className="truncate px-6 py-3 ">
                     {surgery.surgeries_surgery}
                   </td>
-                  <td className="truncate px-6 py-3 w-[270px]">
+                  <td className="truncate px-6 py-3 ">
                     {surgery.surgeries_notes}
                   </td>
-                  <td className="py-3">
+                  <td className="py-3 px-6 flex justify-center">
                     <div
                       onClick={() => {
                         isModalOpen(true);

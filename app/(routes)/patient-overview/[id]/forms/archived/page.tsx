@@ -289,19 +289,11 @@ export default function ArchiveTab() {
               <div className="w-full flex-col justify-center items-center">
                 <table className="w-full block text-left rtl:text-right">
                   <thead className="w-full ">
-                    <tr className=" text-[#64748B] border-b-[1px] text-[15px]">
-                      <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
-                        NAME OF DOCUMENT
-                      </th>
-                      <th scope="col" className="px-6 py-3 w-[400px]">
-                        DATE ISSUED
-                      </th>
-                      <th scope="col" className="px-6 py-3 w-[750px]">
-                        NOTES
-                      </th>
-                      <th scope="col" className="px-6 py-3 max-w-[300px]">
-                        ACTION
-                      </th>
+                    <tr className=" text-[#64748B] border-b-[1px] text-[15px] ">
+                      <td className="px-6 py-3 h-[70px]">NAME OF DOCUMENT</td>
+                      <td className="px-6 py-3 ">DATE ISSUED</td>
+                      <td className="px-6 py-3 ">NOTES</td>
+                      <td className="px-6 py-3 ">ACTION</td>
                     </tr>
                   </thead>
                 </table>
@@ -315,37 +307,25 @@ export default function ArchiveTab() {
           ) : (
             <table className="w-full block text-left rtl:text-right">
               <thead className="w-full">
-                <tr className=" text-[#64748B] border-b-[1px] text-[15px]">
-                  <th scope="col" className="px-6 py-3 w-[400px] h-[70px]">
-                    NAME OF DOCUMENT
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[400px]">
-                    DATE ISSUED
-                  </th>
-                  <th scope="col" className="px-6 py-3 w-[750px]">
-                    NOTES
-                  </th>
+                <tr className=" text-[#64748B] border-b-[1px] text-[15px] h-[70px] font-semibold">
+                  <td className="px-6 py-3">NAME OF DOCUMENT</td>
+                  <td className="px-6 py-3">DATE ISSUED</td>
+                  <td className="px-6 py-3 ">NOTES</td>
+                  <td className="w-[14px]"></td>
                 </tr>
               </thead>
 
-              <tbody className="overflow-y-scroll">
+              <tbody className="h-[220px] overflow-y-scroll">
                 {patientForms.map((form, index) => (
                   <tr
                     key={index}
                     className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
                   >
-                    <th
-                      scope="row"
-                      className="truncate px-6 py-3 w-[400px] font-medium text-gray-900 whitespace-nowrap"
-                    >
+                    <td className="truncate px-6 py-3  whitespace-nowrap">
                       {form.forms_nameOfDocument}
-                    </th>
-                    <td className="px-6 py-3 w-[400px]">
-                      {form.forms_dateIssued}
                     </td>
-                    <td className="px-6 py-3 w-[750px] max-w-[750px] truncate">
-                      {form.forms_notes}
-                    </td>
+                    <td className="px-6 py-3 ">{form.forms_dateIssued}</td>
+                    <td className="px-6 py-3 truncate">{form.forms_notes}</td>
                   </tr>
                 ))}
               </tbody>

@@ -301,16 +301,17 @@ const Scheduled = () => {
             <table className="text-left rtl:text-right">
               <thead>
                 <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                  <td className="px-6 py-3 w-[235px]">Medication ID</td>
-                  <td className="px-6 py-3 w-[235px]">Date</td>
-                  <td className="px-5 py-3 w-[235px]">Time</td>
-                  <td className="px-6 py-3 w-[235px]">Medication</td>
-                  <td className="px-6 py-3 w-[250px]">Notes</td>
-                  <td className="px-6 py-3 w-[240px]">Status</td>
-                  <td className="px-3 py-4">Action</td>
+                  <td className="px-6 py-3">Medication ID</td>
+                  <td className="px-6 py-3">Date</td>
+                  <td className="px-6 py-3">Time</td>
+                  <td className="px-6 py-3">Medication</td>
+                  <td className="px-6 py-3">Notes</td>
+                  <td className="px-6 py-3 ">Status</td>
+                  <td className="px-9 py-3">Action</td>
+                  <td className="w-[14px]"></td>
                 </tr>
               </thead>
-              <tbody className="h-[220px]">
+              <tbody className="h-[220px] overflow-y-scroll">
                 {patientScheduledMed.length === 0 && (
                   <tr>
                     <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
@@ -327,13 +328,13 @@ const Scheduled = () => {
                         key={index}
                         className="group hover:bg-[#f4f4f4]  border-b text-[15px]"
                       >
-                        <td className="truncate px-6 py-3 w-[235px]">
+                        <td className="truncate px-6 py-3">
                           {schedMed.medicationlogs_uuid}
                         </td>
-                        <td className="truncate px-6 py-3 w-[235px]">
+                        <td className="truncate px-6 py-3">
                           {schedMed.medicationlogs_medicationLogsDate}
                         </td>
-                        <td className="px-6 py-4 w-[235px]">
+                        <td className="px-6 py-4">
                           {new Date(
                             new Date().getFullYear(), // Use current year as default
                             new Date().getMonth(), // Use current month as default
@@ -354,13 +355,13 @@ const Scheduled = () => {
                             hour12: true,
                           })}
                         </td>
-                        <td className="truncate px-6 py-3 w-[235px]">
+                        <td className="truncate px-6 py-3">
                           {schedMed.medicationlogs_medicationLogsName}
                         </td>
-                        <td className="truncate px-6 py-3 w-[250px]">
+                        <td className="truncate px-6 py-3">
                           {schedMed.medicationlogs_notes}
                         </td>
-                        <td className="text-15px me-1 px-6 py-5 w-[240px] rounded-full flex items-center">
+                        <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
                           <div
                             className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                               schedMed.medicationlogs_medicationLogStatus ===
@@ -379,7 +380,7 @@ const Scheduled = () => {
                           </div>
                         </td>
 
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-3">
                           <p
                             onClick={() => {
                               isModalOpen(true);

@@ -307,9 +307,10 @@ const Notes = () => {
                 <td className="px-6 py-3 ">SUBJECT</td>
                 <td className="px-6 py-3 ">DETAILS OF INCIDENT</td>
                 <td className="px-6 py-3 ">REPORTED BY</td>
+                <td className="w-[14px]"></td>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="h-[220px] overflow-y-scroll">
               {patientNotes.length === 0 && (
                 <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                   <p className="text-[15px] font-normal text-gray-700 text-center">

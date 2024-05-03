@@ -324,15 +324,16 @@ const Appointment = () => {
           <table className="text-left rtl:text-right">
             <thead>
               <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                <th className="px-6 py-3 ">STATUS</th>
-                <th className="px-6 py-3 ">DATE</th>
-                <th className="px-6 py-3 ">TIME</th>
-                <th className="px-4 py-3 ">END TIME</th>
-                <th className="px-4 py-3 ">DETAILS</th>
-                <th className="px-24 py-3">ACTION</th>
+                <td className="px-6 py-3 ">STATUS</td>
+                <td className="px-6 py-3 ">DATE</td>
+                <td className="px-6 py-3 ">TIME</td>
+                <td className="px-6 py-3 ">END TIME</td>
+                <td className="px-6 py-3 ">DETAILS</td>
+                <td className="py-3 px-6 text-center">ACTION</td>
+                <td className="w-[14px]"></td>
               </tr>
             </thead>
-            <tbody className="h-[220px]">
+            <tbody className="h-[220px] overflow-y-scroll">
               {patientAppointments.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
@@ -349,7 +350,7 @@ const Appointment = () => {
                       key={index}
                       className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                     >
-                      <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                      <td className="text-[15px] px-6 py-3  rounded-full flex items-center">
                         <div
                           className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                             appointments.appointments_appointmentStatus ===
@@ -396,21 +397,21 @@ const Appointment = () => {
                         </div>
                       </td>
 
-                      <td className="px-6 py-3 text-[15px]">
+                      <td className="px-6 py-3 text-[15px] ">
                         {formatDate(appointments.appointments_appointmentDate)}
                       </td>
-                      <td className="px-6 py-3 text-[15px]">
+                      <td className="px-6 py-3 text-[15px] ">
                         {formatTime(appointments.appointments_appointmentTime)}
                       </td>
-                      <td className="px-6 py-3 text-[15px]">
+                      <td className="px-6 py-3 text-[15px] ">
                         {formatTime(
                           appointments.appointments_appointmentEndTime
                         )}
                       </td>
-                      <td className="px-6 py-3 text-[15px]">
+                      <td className="px-6 py-3 text-[15px] ">
                         {appointments.appointments_details}
                       </td>
-                      <td className="px-[90px] py-3 items-center">
+                      <td className="py-3 px-6 flex justify-center">
                         <p
                           onClick={() => {
                             isModalOpen(true);
