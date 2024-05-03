@@ -31,7 +31,7 @@ const DropdownMenu = ({ open, width, label, options }: DropdownMenuProps) => {
   };
 
   return (
-    <div className={`w-full max-w-[165px] w-${width} `} ref={menuRef}>
+    <div className={`z-10 w-full max-w-[165px] w-${width} `} ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-[#FFFFFF] relative w-full h-[47px] rounded-[5px] px-[20px] items-center flex justify-between font-semibold opacity-[60%] text-[15px]"
