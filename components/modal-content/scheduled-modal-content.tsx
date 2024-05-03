@@ -431,7 +431,7 @@ export const ScheduledModalContent = ({
                     <option value="Given">GIVEN</option>
                     <option value="Refused">REFUSED</option>
                   </select>
-                  {/* <img
+                  {/* <Image
                     className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                     src="svgs/chevron-up.svg"
                     alt="Dropdown Arrow"

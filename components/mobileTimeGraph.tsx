@@ -212,7 +212,7 @@
 //                                       (log: { medicationLogStatus: string }) =>
 //                                         log.medicationLogStatus !== "pending"
 //                                     ) && (
-//                                       <img
+//                                       <Image
 //                                         src="/icons/chart-done.svg"
 //                                         alt="chart-done"
 //                                         width={30}

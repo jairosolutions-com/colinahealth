@@ -577,7 +577,7 @@ export const PrescriptionModalContent = ({
                           <option value="active">ACTIVE</option>
                           <option value="inactive">INACTIVE</option>
                         </select>
-                        {/* <img
+                        {/* <
                     className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                     src="svgs/chevron-up.svg"
                     alt="Dropdown Arrow"
