@@ -1,5 +1,6 @@
 import { error } from "console";
 import { useState } from "react";
+import Image from "next/image";
 
 interface ErrorProps {
   label: string;
@@ -24,7 +25,7 @@ export const ErrorModal = ({
           <div className="fixed z-50 bg-white rounded-[10px] shadow-xl w-[600px] h-[326px] mx-auto">
             <div className="text-center pt-[30px]">
               <div className="mx-auto mb-5 text-gray-400 w-[110px] h-[110px]">
-                <img src="/svgs/error-icon.svg" alt="" />
+                <Image src="/svgs/error-icon.svg" alt="" />
               </div>
               <h1 className="text-[20px] font-bold text-gray-500 mb-4">
                 {label === "Allergy already exist"

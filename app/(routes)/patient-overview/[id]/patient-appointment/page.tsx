@@ -247,14 +247,14 @@ const Appointment = () => {
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <img src="/imgs/add.svg" alt="" />
+              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
               <p className="text-[18px]">Add</p>
             </button>
             <button
               onClick={() => isModalReminderOpen(true)}
               className="btn-pdfs gap-2"
             >
-              <ClipboardList width={20} height={20} />
+              <ClipboardList width={22} height={22} />
               <p className="text-[18px]">Reminder</p>
             </button>
           </div>
@@ -276,11 +276,11 @@ const Appointment = () => {
                     setCurrentPage(1);
                   }}
                 />
-                <img
+                <Image
                   src="/svgs/search.svg"
                   alt="Search"
-                  width="20"
-                  height="20"
+                  width={20}
+                  height={20}
                   className="absolute left-8 top-9 pointer-events-none"
                 />
               </div>

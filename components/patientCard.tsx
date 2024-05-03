@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from "react";
-
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 import { onNavigate } from "@/actions/navigation";
@@ -93,7 +93,7 @@ const PatientCard = ({
               >
                 <div className="flex p-3 pl-5 flex-row w-full mt-2">
                   <div className="rounded-full max-h-[60px] max-w-[60px] p-1 bg-[#007C854D]">
-                    <img
+                    <Image
                       className="rounded-full"
                       src="/imgs/tao1.svg"
                       alt="Patient"
@@ -140,7 +140,7 @@ const PatientCard = ({
 
               <div className="h-full w-1/6 border-[#F4F4F4] border-l-4 border-solid flex justify-between items-center flex-col">
                 <div className="h-full w-full flex flex-col border-[#F4F4F4] border-b-4 text-xs items-center justify-center  cursor-pointer">
-                  <img
+                  <Image
                     src="/icons/chart-order.svg"
                     alt="order"
                     width={20}
@@ -164,7 +164,7 @@ const PatientCard = ({
                     setPatientName(`${patient.firstName} ${patient.lastName}`);
                   }}
                 >
-                  <img
+                  <Image
                     src="/icons/chart-prn.svg"
                     alt="prn"
                     width={20}
@@ -186,7 +186,7 @@ const PatientCard = ({
                 </div>
                 <div className="h-full w-full flex flex-row border-[#F4F4F4] text-xs items-center gap-1 justify-center  cursor-pointer">
                   <div>
-                    <img
+                    <Image
                       src="/icons/chart-status.svg"
                       alt="status"
                       width={15}
@@ -195,7 +195,7 @@ const PatientCard = ({
                     A
                   </div>
                   <div>
-                    <img
+                    <Image
                       src="/icons/chart-status.svg"
                       alt="status"
                       width={15}
@@ -204,7 +204,7 @@ const PatientCard = ({
                     S
                   </div>
                   <div>
-                    <img
+                    <Image
                       src="/icons/chart-status.svg"
                       alt="status"
                       width={15}
@@ -232,7 +232,7 @@ const PatientCard = ({
                           <div
                             className={`bg-[#FACC15] rounded-full p-1.5 cursor-pointer`}
                           >
-                            <img
+                            <Image
                               src="icons/card-list.svg"
                               alt="list"
                               width={20}
