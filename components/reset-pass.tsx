@@ -1,12 +1,23 @@
 "use client";
+import { resetPassword } from "@/app/api/forgot-pass-api/reset-pass";
 import React, { useState } from "react";
-
+import { toast as sonner } from "sonner";
+import { toast } from "./ui/use-toast";
+import { ToastAction } from "./ui/toast";
+import { setResetPassToken } from "@/app/api/forgot-pass-api/reset-pass-token";
 interface ResetPassProps {
   isResetPass: boolean;
   setIsResetPass: (value: boolean) => void;
+  forgotPassEmail: string;
+  setForgotPassEmail:any;
 }
 
-const ResetPass = ({ isResetPass, setIsResetPass }: ResetPassProps) => {
+const ResetPass = ({
+  isResetPass,
+  setIsResetPass,
+  forgotPassEmail,
+  setForgotPassEmail
+}: ResetPassProps) => {
   const [newPassword, setNewPassword] = useState("");
   const [isNewPasswordFocused, setIsNewPasswordFocused] =
     useState<boolean>(false);
@@ -34,17 +45,50 @@ const ResetPass = ({ isResetPass, setIsResetPass }: ResetPassProps) => {
     setIsConfirmPasswordFocused(false);
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setIsSubmitted(true);
-    if (newPassword !== confirmPassword) {
-      setIsInvalid(true);
-    } else {
-      setIsInvalid(false);
+    try {
+      if (newPassword !== confirmPassword) {
+        setIsInvalid(true);
+      } else {
+        if (newPassword !== "" && confirmPassword !== "") {
+          const response = await resetPassword(forgotPassEmail, newPassword);
+
+          if (response) {
+            console.log("Password Changed.");
+            sonner.success("Password Successfully Changed.");
+            setIsResetPass(false);
+            setResetPassToken("");
+            setForgotPassEmail("");
+            setNewPassword("");
+            setConfirmPassword("");
+            setShowConfirmPass(false);
+            setShowNewPass(false);
+          }
+        }
+      }
+    } catch (error:any) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Password change failed. Please try again.",
+        action: (
+          <ToastAction
+            altText="Try again"
+            onClick={() => {
+              window.location.reload();
+            }}
+          >
+            Try again
+          </ToastAction>
+        ),
+      });
     }
     setTimeout(() => {
       setIsInvalid(false);
     }, 3000);
+
     setIsSubmitted(false);
   };
 
