@@ -26,6 +26,7 @@ export const Login = () => {
   const [isForgotPassword, setIsForgotPassword] = useState<boolean>(false);
   const [forgotPassEmail, setForgotPassEmail] = useState<string>("");
   const [isOTP, setIsOTP] = useState<boolean>(false);
+  const [otpCode, setOtpCode] = useState<string>("");
   const [isResetPass, setIsResetPass] = useState<boolean>(false);
   const router = useRouter();
   useEffect(() => {
@@ -334,6 +335,8 @@ export const Login = () => {
               <ResetPass
                 isResetPass={isResetPass}
                 setIsResetPass={setIsResetPass}
+                forgotPassEmail={forgotPassEmail}
+                setForgotPassEmail={setForgotPassEmail}
               />
             </div>
             <div className="hidden md:block w-full">

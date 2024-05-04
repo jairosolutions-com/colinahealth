@@ -1,6 +1,7 @@
 "use client";
+import { verifyOTPCode } from "@/app/api/forgot-pass-api/otp-code";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface OTPCodeProps {
   isOTP: boolean;
@@ -10,107 +11,41 @@ interface OTPCodeProps {
   isResetPass: boolean;
 }
 
-const OTPCode = ({ isOTP, setIsOTP, forgotPassEmail,setIsResetPass,isResetPass }: OTPCodeProps) => {
+const OTPCode = ({
+  isOTP,
+  setIsOTP,
+  forgotPassEmail,
+  setIsResetPass,
+  isResetPass,
+}: OTPCodeProps) => {
   const [otp, setOTP] = useState(new Array(6).fill(""));
   const inputs = useRef<HTMLInputElement[]>([]);
-  const [isVerify, setIsVerify] = useState<boolean>(false);
-  const [currentInputIndex, setCurrentInputIndex] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isVerify, setIsVerify] = useState(false);
+  const [currentInputIndex, setCurrentInputIndex] = useState(0);
 
-  const [formData, setFormData] = useState({
-    subject: "",
-    message: "",
-  });
-
-  const [errors, setErrors] = useState({
-    subject: false,
-    message: false,
-  });
-
-  const handleOTPSubmit = (otp: any) => {
-    console.log("OTP submitted:", otp);
-  };
-
-  const handleVerify = () => {
-    // let newErrors = {
-    //   subject: false,
-    //   message: false,
-    // };
-    // let hasError = false;
-
-    // for (const [key, value] of Object.entries(formData)) {
-    //   if (value.trim() === "") {
-    //     newErrors = { ...newErrors, [key]: true };
-    //     hasError = true;
-    //   }
-    // }
-
-    // setErrors(newErrors);
-
-    // if (!hasError) {
-    //   setIsLoading(true);
-    // }
-  };
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setIsResetPass(true);
-    setIsOTP(false)
-    // const data = {
-    //   emailAddress: forgotPassEmail,
-    //   subject: String(e.target.subject?.value),
-    //   message: String(e.target.message?.value),
-    // };
-
-    // if (data.emailAddress != "" && data.subject != "" && data.message != "") {
-    //   const response = await fetch("/api/send-email", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(data),
-    //   });
-
-    //   if (response.ok) {
-    //     // formData.emailAddress = "";
-    //     // formData.firstName = "";
-    //     // formData.lastName = "";
-    //     setIsLoading(false);
-    //     // onSuccess();
-    //     // setToastMessage("Email Sent Successfully.");
-    //     // setShowToast(true);
-    //   }
-
-    //   if (!response.ok) {
-    //     // setInvalidEmail(true);
-    //     setIsLoading(false);
-    //     // onFailed();
-    //     // setShowToast(true);
-    //     // setToastMessage("Something went wrong.");
-    //   }
-    // }
-    setIsVerify(false);
-  };
-
-  const handleChange = (
+  const handleOTPChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
     const { value } = e.target;
-    const newOTP = [...otp];
     if (value.length > 0 && /\d/.test(value)) {
+      const newOTP = [...otp];
       newOTP[index] = value;
       setOTP(newOTP);
       if (index < 5) {
         inputs.current[index + 1].focus();
         setCurrentInputIndex(index + 1);
       }
-      if (index === 5) {
-        handleOTPSubmit(otp.join(""));
-      }
     }
   };
 
+  useEffect(() => {
+    if (!otp.includes("")) {
+      handleSubmit();
+    }
+  },[otp])
+
+  console.log(otp);
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number
@@ -133,15 +68,46 @@ const OTPCode = ({ isOTP, setIsOTP, forgotPassEmail,setIsResetPass,isResetPass }
     setCurrentInputIndex(index);
     inputs.current[index].focus();
   };
-  console.log(currentInputIndex, "currentInputIndex");
 
+  const handleSubmit = async () => {
+    setIsVerify(true);
+    try {
+      console.log(otp.join(""));
+      if (otp.findLastIndex((digit) => digit === "") !== -1) {
+        console.log("Please fill all the fields");
+        return;
+      } else {
+        const response = await verifyOTPCode(otp.join(""), forgotPassEmail);
+        if (response.isValid) {
+          setIsResetPass(true);
+          setIsOTP(false);
+          setOTP(new Array(6).fill(""));
+          
+          // onSuccess();
+          // setToastMessage("Email Sent Successfully.");
+          // setShowToast(true);
+        } else {
+          // onFailed();
+          // setShowToast(true);
+          // setToastMessage("Something went wrong.");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      // Display error message to the user
+    } finally {
+      setIsVerify(false);
+    }
+  };
   return (
     <div
       className={`flex flex-col fixed justify-center items-center lg:w-[1091px] w-full  duration-500 transition h-full 
                 ${
-                  isOTP ? " opacity-100 z-50" 
-                  : isResetPass? "-translate-x-[1000px] opacity-0"
-                  : "translate-x-[1000px] opacity-0 z-50"
+                  isOTP
+                    ? " opacity-100 z-50"
+                    : isResetPass
+                    ? "-translate-x-[1000px] opacity-0"
+                    : "translate-x-[1000px] opacity-0 z-50"
                 }`}
     >
       <h1 className="md:text-[20px] font-semibold  md:text-2xl lg:mb-3 text-white md:text-black md:mb-0 mb-3">
@@ -160,7 +126,7 @@ const OTPCode = ({ isOTP, setIsOTP, forgotPassEmail,setIsResetPass,isResetPass }
         onSubmit={(e) => {
           e.preventDefault();
           setIsVerify(true);
-          handleSubmit(e);
+          handleSubmit();
         }}
       >
         <div className="flex gap-3">
@@ -179,7 +145,7 @@ const OTPCode = ({ isOTP, setIsOTP, forgotPassEmail,setIsResetPass,isResetPass }
               maxLength={1}
               value={digit}
               ref={(ref: HTMLInputElement) => (inputs.current[index] = ref)}
-              onChange={(e) => handleChange(e, index)}
+              onChange={(e) => handleOTPChange(e, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               onClick={(e) => handleClick(e, index)}
               tabIndex={-1}
@@ -191,7 +157,6 @@ const OTPCode = ({ isOTP, setIsOTP, forgotPassEmail,setIsResetPass,isResetPass }
         </p>
         <button
           disabled={isVerify}
-          onClick={handleVerify}
           className={`
                           ${isVerify ? "cursor-not-allowed" : "cursor-pointer"}
                           inline-block w-full  max-w-[565px] text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
