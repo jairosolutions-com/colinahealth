@@ -58,7 +58,7 @@ const ForgotPass = ({
 
   return (
     <div
-      className={`flex flex-col fixed justify-center items-center lg:w-[1091px] w-full  duration-500 transition h-full 
+      className={`flex flex-col fixed justify-center items-center  md:w-[825.24px] lg:w-[1091px] sm:w-full px-10 md:px-0  duration-500 transition h-full 
                 ${
                   isForgotPassword
                     ? " opacity-100 z-50"
@@ -70,10 +70,10 @@ const ForgotPass = ({
       <h1 className="md:text-[20px] font-semibold  md:text-2xl lg:mb-3 text-white md:text-black md:mb-0 mb-3">
         Forgot Password?
       </h1>
-      <p className="mb-5">
+      <p className="text-white md:text-black mb-5">
         Enter your email below to receive your password reset instructions.
       </p>
-      <div className="relative mb-4 flex flex-col max-w-[642.27px] w-full">
+      <div className="relative mb-4 flex flex-col md:max-w-[642.27px] w-full">
         <form
           action=""
           onSubmit={(e) => {
@@ -122,7 +122,7 @@ const ForgotPass = ({
         </form>
       </div>
       <p
-        className="cursor-pointer bottom-28 absolute"
+        className="cursor-pointer bottom-28 absolute text-white md:text-black"
         onClick={() => setIsForgotPassword(!isForgotPassword)}
       >
         Back to login

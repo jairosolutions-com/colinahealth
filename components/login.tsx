@@ -107,7 +107,7 @@ export const Login = () => {
     <div className="w-full h-full flex ">
       <section className="w-full h-full">
         <div className="w-full h-full flex ">
-          <div className="flex w-full items-center h-full justify-center z-10">
+          <div className="flex w-full items-center h-full justify-center md:z-10 -z-[100]">
             <Image
               src="/imgs/login-bg.png"
               alt="login-image"

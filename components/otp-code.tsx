@@ -101,7 +101,7 @@ const OTPCode = ({
   };
   return (
     <div
-      className={`flex flex-col fixed justify-center items-center lg:w-[1091px] w-full  duration-500 transition h-full 
+      className={`flex flex-col fixed justify-center md:px-0 px-[30px] items-center lg:w-[1091px] md:w-full  duration-500 transition h-full 
                 ${
                   isOTP
                     ? " opacity-100 z-50"
