@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { Navbar } from "@/components/navbar";
-import { useParams, useRouter } from "next/navigation";
+import { redirect, useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
 import { fetchPatientProfileImage } from "@/app/api/patients-api/patientProfileImage.api";
@@ -17,6 +17,9 @@ export default function PatientOverviewLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  if (!getAccessToken()) {
+    redirect("/login");
+  }
   if (typeof window === "undefined") {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -36,9 +39,7 @@ export default function PatientOverviewLayout({
     item: string;
   }>();
 
-  if (!getAccessToken()) {
-    router.replace("/login");
-  }
+  
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
   const [patientImage, setPatientImage] = useState<string>();

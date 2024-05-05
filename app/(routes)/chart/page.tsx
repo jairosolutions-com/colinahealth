@@ -13,11 +13,14 @@ import TimeGraph from "@/components/timeGraph";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { formUrlQuery } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ChartPage() {
   const router = useRouter();
+  if (!getAccessToken()) {
+    redirect("/login");
+  }
   if (typeof window === "undefined") {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -30,10 +33,6 @@ export default function ChartPage() {
       </div>
     );
   }
-  if (!getAccessToken()) {
-    router.replace("/login");
-  }
-
   const { toast } = useToast();
   const [patientList, setPatientList] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);

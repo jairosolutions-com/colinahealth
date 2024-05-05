@@ -4,7 +4,7 @@ import { onNavigate } from "@/actions/navigation";
 import { searchPatientList } from "@/app/api/patients-api/patientList.api";
 import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
@@ -21,6 +21,9 @@ import Pagination from "@/components/shared/pagination";
 
 export default function PatientPage() {
   const router = useRouter();
+  if (!getAccessToken()) {
+    redirect("/login");
+  }
   if (typeof window === "undefined") {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -33,9 +36,7 @@ export default function PatientPage() {
       </div>
     );
   }
-  if (!getAccessToken()) {
-    router.replace("/login");
-  }
+  
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);

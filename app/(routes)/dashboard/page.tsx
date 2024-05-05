@@ -7,12 +7,15 @@ import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { fetchDueMedication } from "@/app/api/medication-logs-api/due-medication-api";
 import { ToastAction } from "@/components/ui/toast";
 import { Edit, View } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
   const router = useRouter();
+  if (!getAccessToken()) {
+    redirect("/login");
+  }
   if (typeof window === "undefined") {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -25,9 +28,7 @@ const Dashboard = () => {
       </div>
     );
   }
-  if (!getAccessToken()) {
-    router.replace("/login");
-  }
+  
   const { toast } = useToast();
   const [term, setTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);

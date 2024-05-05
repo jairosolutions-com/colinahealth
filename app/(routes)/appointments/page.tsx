@@ -3,7 +3,7 @@
 import { searchPatientList } from "@/app/api/patients-api/patientList.api";
 import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
@@ -29,6 +29,9 @@ import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.a
 
 export default function AppointmentPage() {
   const router = useRouter();
+  if (!getAccessToken()) {
+    redirect("/login");
+  }
   if (typeof window === "undefined") {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -40,10 +43,6 @@ export default function AppointmentPage() {
         />
       </div>
     );
-  }
-
-  if (!getAccessToken()) {
-    router.replace("/login");
   }
 
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
