@@ -32,7 +32,7 @@ const Dashboard = () => {
   const { toast } = useToast();
   const [term, setTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [dueMedSortBy, setDueMedSortBy] = useState("medicationLogsTime");
+  const [dueMedSortBy, setDueMedSortBy] = useState("medicationlogs.medicationLogsTime");
   const [upcomingSortBy, setUpcomingSortBy] = useState("appointmentDate");
   const [sortOrder, setSortOrder] = useState("ASC");
   const [isLoading, setIsLoading] = useState<boolean>(true);
