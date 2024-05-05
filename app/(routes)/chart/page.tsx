@@ -19,7 +19,16 @@ import { useEffect, useState } from "react";
 export default function ChartPage() {
   const router = useRouter();
   if (typeof window === "undefined") {
-    return <div>No page found</div>;
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          width={100}
+          height={100}
+          alt="loading"
+        />
+      </div>
+    );
   }
   if (!getAccessToken()) {
     router.replace("/login");
