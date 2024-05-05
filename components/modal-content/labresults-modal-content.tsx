@@ -443,6 +443,7 @@ export const LabresultsModalContent = ({
                     src="/imgs/colina-logo-animation.gif"
                     alt="logo"
                     width={100}
+                    height={100}
                   />
                 </div>
               </div>

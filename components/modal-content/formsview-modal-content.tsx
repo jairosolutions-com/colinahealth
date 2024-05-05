@@ -71,9 +71,9 @@ export const FormsviewModalContent = ({
           </div>
           <p className="text-sm pl-10 text-gray-600 pb-10 pt-2 flex justify-between">
             Download PDF once your done.
-            <button className="hover:underline text-[15px] mr-10">
+            <p className="hover:underline text-[15px] mr-10">
               View Document
-            </button>
+            </p>
           </p>
         </div>
         <div className=" mb-9 pt-4">
