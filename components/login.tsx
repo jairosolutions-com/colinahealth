@@ -5,15 +5,19 @@ import {
   setAccessToken,
 } from "@/app/api/login-api/accessToken";
 import { validateUser } from "@/app/api/login-api/loginHandler";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Footer from "./footer";
 import Image from "next/image";
 import ForgotPass from "./forgot-pass";
 import OTPCode from "./otp-code";
 import ResetPass from "./reset-pass";
+import { Loader2 } from "lucide-react";
 
 export const Login = () => {
+  if (getAccessToken()) {
+    redirect("/dashboard");
+  }
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
@@ -29,14 +33,11 @@ export const Login = () => {
   const [otpCode, setOtpCode] = useState<string>("");
   const [isResetPass, setIsResetPass] = useState<boolean>(false);
   const router = useRouter();
+
   useEffect(() => {
-    if (getAccessToken()) {
-      setIsAccessed(false);
-      router.replace("/dashboard");
-    } else {
+    if (!getAccessToken()) {
       setIsAccessed(false);
     }
-    setIsAccessed(false);
   }, []);
 
   const handleEmailFocus = () => {
@@ -68,7 +69,7 @@ export const Login = () => {
       const accessToken = await validateUser(email, password, rememberMe);
       if (accessToken) {
         // Redirect to patient-list if login successful
-        router.replace("/dashboard");
+        redirect("/dashboard");
       } else {
         // Handle invalid login
         setPassword("");
@@ -303,7 +304,14 @@ export const Login = () => {
                           inline-block w-full  text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
                           type="submit"
                         >
-                          {isSubmitted ? "Please wait..." : "Sign In"}
+                          {isSubmitted ? (
+                            <div className="flex justify-center items-center w-full">
+                              <Loader2 size={20} className="animate-spin" />{" "}
+                              &nbsp; Signing in...
+                            </div>
+                          ) : (
+                            "Sign In"
+                          )}
                         </button>
                       </div>
                     </form>
