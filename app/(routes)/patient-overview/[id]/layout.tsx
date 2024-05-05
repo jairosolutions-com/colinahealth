@@ -11,17 +11,31 @@ import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import Link from "next/link";
+import Image from "next/image";
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  if (typeof window === "undefined") {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          width={100}
+          height={100}
+          alt="loading"
+        />
+      </div>
+    );
+  }
   const router = useRouter();
   const params = useParams<{
     id: any;
     tag: string;
     item: string;
   }>();
+
   if (!getAccessToken()) {
     router.replace("/login");
   }

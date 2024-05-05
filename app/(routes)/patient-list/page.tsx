@@ -22,7 +22,16 @@ import Pagination from "@/components/shared/pagination";
 export default function PatientPage() {
   const router = useRouter();
   if (typeof window === "undefined") {
-    return <div>No page found</div>;
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          width={100}
+          height={100}
+          alt="loading"
+        />
+      </div>
+    );
   }
   if (!getAccessToken()) {
     router.replace("/login");
@@ -160,7 +169,7 @@ export default function PatientPage() {
         setPatientList(response.data);
         setTotalPages(response.totalPages);
         setTotalPatient(response.totalCount);
-
+        setIsLoading(false);
         // Get UUIDs of all patients
         const patientUuids = response.data.map(
           (patient: { uuid: any }) => patient.uuid
@@ -192,8 +201,6 @@ export default function PatientPage() {
           setPatientImages(patientImagesData);
         }
         setImagesLoaded(true); // Set to true when images are loaded
-
-        setIsLoading(false);
 
         if (response.data.length === 0) {
           setPatientList([]);

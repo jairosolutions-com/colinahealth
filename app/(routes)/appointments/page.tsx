@@ -30,7 +30,16 @@ import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.a
 export default function AppointmentPage() {
   const router = useRouter();
   if (typeof window === "undefined") {
-    return <div>No page found</div>;
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          width={100}
+          height={100}
+          alt="loading"
+        />
+      </div>
+    );
   }
 
   if (!getAccessToken()) {
@@ -193,7 +202,11 @@ export default function AppointmentPage() {
         const patientUuids = Array.from(uniquePatientUuids);
         console.log(patientUuids, "patientUuids");
         setImagesLoaded(true); // Set to true when images are loaded
-
+        const appointmentsArray = Object.values(upcomingAppoinments.data);
+        setTotalPages(upcomingAppoinments.totalPages);
+        setAppointmentList(appointmentsArray);
+        setTotalAppointments(upcomingAppoinments.totalCount);
+        setIsLoading(false);
         const profileImagesResponse = await fetchProfileImages(
           patientUuids as string[]
         );
@@ -220,11 +233,7 @@ export default function AppointmentPage() {
           setPatientImages(patientImagesData);
           console.log(patientImagesData, "patientImagesData");
         }
-        const appointmentsArray = Object.values(upcomingAppoinments.data);
-        setTotalPages(upcomingAppoinments.totalPages);
-        setAppointmentList(appointmentsArray);
-        setTotalAppointments(upcomingAppoinments.totalCount);
-        setIsLoading(false);
+
         return upcomingAppoinments;
       } catch (error) {}
     };

@@ -95,9 +95,10 @@ const PatientCard = ({
                   <div className="rounded-full max-h-[60px] max-w-[60px] p-1 bg-[#007C854D]">
                     <Image
                       className="rounded-full"
-                      src="/imgs/tao1.svg"
+                      src="/imgs/drake.png"
                       alt="Patient"
                       width={50}
+                      height={50}
                     />
                   </div>
                   <div className="ml-5 max-w-[250px]  flex flex-col truncate text-ellipsis ">
@@ -144,6 +145,7 @@ const PatientCard = ({
                     src="/icons/chart-order.svg"
                     alt="order"
                     width={20}
+                    height={20}
                     className="pointer-events-none select-none"
                   />
                   Orders
@@ -168,6 +170,7 @@ const PatientCard = ({
                     src="/icons/chart-prn.svg"
                     alt="prn"
                     width={20}
+                    height={20}
                     className="pointer-events-none select-none"
                   />
                   PRN
@@ -190,6 +193,7 @@ const PatientCard = ({
                       src="/icons/chart-status.svg"
                       alt="status"
                       width={15}
+                      height={15}
                       className="pointer-events-none select-none"
                     />
                     A
@@ -199,6 +203,7 @@ const PatientCard = ({
                       src="/icons/chart-status.svg"
                       alt="status"
                       width={15}
+                      height={15}
                       className="pointer-events-none select-none"
                     />
                     S
@@ -208,6 +213,7 @@ const PatientCard = ({
                       src="/icons/chart-status.svg"
                       alt="status"
                       width={15}
+                      height={15}
                       className="pointer-events-none select-none"
                     />
                     D
@@ -236,6 +242,7 @@ const PatientCard = ({
                               src="icons/card-list.svg"
                               alt="list"
                               width={20}
+                              height={20}
                               className="pointer-events-none select-none"
                             />
                             <div className=" h-full  absolute -mt-6 ml-5">
