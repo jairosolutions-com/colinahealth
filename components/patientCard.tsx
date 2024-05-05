@@ -92,13 +92,13 @@ const PatientCard = ({
                 }}
               >
                 <div className="flex p-3 pl-5 flex-row w-full mt-2">
-                  <div className="rounded-full max-h-[60px] max-w-[60px] p-1 bg-[#007C854D]">
+                  <div className="rounded-full min-w-[60px] min-h-[60px] max-h-[60px] max-w-[60px] p-1 bg-[#007C854D]">
                     <Image
                       className="rounded-full"
                       src="/imgs/drake.png"
                       alt="Patient"
-                      width={50}
-                      height={50}
+                      width={60}
+                      height={60}
                     />
                   </div>
                   <div className="ml-5 max-w-[250px]  flex flex-col truncate text-ellipsis ">
