@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   fetchPatientDetails,
@@ -9,10 +9,13 @@ import {
 } from "@/app/api/patients-api/patientDetails.api";
 import { fetchCountryList } from "@/app/api/country-api/countryList.api";
 import { set } from "date-fns";
-
-export default function PatientDetails() {
+import { useEditContext } from "../editContext"; // Assuming you've exported EditContext from your context file
+import { tree } from "next/dist/build/templates/app-page";
+export default function PatientDetails({}) {
+  const { toggleEdit, saveClicked } = useEditContext();
   if (typeof window === "undefined") {
   }
+
   const [patientDetails, setPatientDetails] = useState<any>([]);
   const [patientEditMode, setPatientEditMode] = useState(false);
   const [emergencyEditMode, setEmergencyEditMode] = useState(false);
@@ -96,8 +99,9 @@ export default function PatientDetails() {
   };
 
   const handlePatientEditClick = () => {
-    window.history.pushState(null, "", "#edit");
+    // window.history.pushState(null, "", "#edit");
     setPatientEditMode(!patientEditMode);
+    toggleEdit();
   };
 
   const handleEmergencyEditClick = () => {
@@ -142,11 +146,12 @@ export default function PatientDetails() {
 
   const handleSubmit = async () => {
     setIsSubmitted(true);
+    saveClicked();
     try {
       await updatePatient(patientId, formData, router);
       setIsSuccessFul(true);
       setPatientEditMode(false);
-      window.history.pushState(null, "", "#saved");
+      // window.history.pushState(null, "", "#saved");
       setIsSubmitted(false);
       return;
     } catch (error) {

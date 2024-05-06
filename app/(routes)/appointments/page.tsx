@@ -199,6 +199,7 @@ export default function AppointmentPage() {
         const patientUuids = Array.from(uniquePatientUuids);
         console.log(patientUuids, "patientUuids");
         setImagesLoaded(true); // Set to true when images are loaded
+
         const appointmentsArray = Object.values(upcomingAppoinments.data);
         setTotalPages(upcomingAppoinments.totalPages);
         setAppointmentList(appointmentsArray);
@@ -448,7 +449,8 @@ export default function AppointmentPage() {
                                     // Render the stock image (.svg) if data is empty
                                     <Image
                                       className="rounded-full"
-                                      src="/imgs/user.png"
+                                      src="/imgs/user-no-icon.png"
+
                                       alt=""
                                       width={45}
                                       height={45}
