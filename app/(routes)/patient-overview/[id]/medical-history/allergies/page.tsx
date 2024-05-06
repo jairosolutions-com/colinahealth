@@ -216,31 +216,22 @@ const Allergies = () => {
         ),
       });
     } else {
-      const allergies = await fetchAllergiesForPDF(
-        patientId,
-        term,
-        currentPage,
-        sortBy,
-        sortOrder as "ASC" | "DESC",
-        0,
-        router
-      );
       let patientName =
-        allergies[0]?.patient_lastName +
+        patientAllergies[0]?.patient_lastName +
         ", " +
-        allergies[0]?.patient_firstName +
+        patientAllergies[0]?.patient_firstName +
         " " +
-        allergies[0]?.patient_middleName;
+        patientAllergies[0]?.patient_middleName;
       let jsonFile: {
-        "Allergy UID": string;
+        Uuid: string;
         Date: string;
         Type: string;
         Allergen: string;
         Severity: string;
         Reaction: string;
         Notes: string;
-      }[] = allergies.map((allergy) => ({
-        "Allergy UID": allergy.allergies_uuid,
+      }[] = patientAllergies.map((allergy) => ({
+        Uuid: allergy.allergies_uuid,
         Date: new Date(allergy.allergies_createdAt).toLocaleDateString(),
         Type: allergy.allergies_type,
         Allergen: allergy.allergies_allergen,
