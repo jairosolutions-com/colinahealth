@@ -17,9 +17,6 @@ export default function PatientOverviewLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  if (!getAccessToken()) {
-    redirect("/login");
-  }
   if (typeof window === "undefined") {
     return (
       <div className="w-full h-full flex justify-center items-center">

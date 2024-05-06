@@ -21,9 +21,6 @@ import Pagination from "@/components/shared/pagination";
 
 export default function PatientPage() {
   const router = useRouter();
-  if (!getAccessToken()) {
-    redirect("/login");
-  }
   if (typeof window === "undefined") {
     return (
       <div className="w-full h-full flex justify-center items-center">
