@@ -9,12 +9,12 @@ import { useEffect, useState } from "react";
 import Footer from "@/components/footer";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(()=>{
+  useEffect(() => {
     if (!getAccessToken()) {
       redirect("/login");
     }
-  },[])
+  }, []);
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <>
       <div className="flex flex-col h-screen">
