@@ -216,31 +216,22 @@ const Allergies = () => {
         ),
       });
     } else {
-      const allergies = await fetchAllergiesForPDF(
-        patientId,
-        term,
-        currentPage,
-        sortBy,
-        sortOrder as "ASC" | "DESC",
-        0,
-        router
-      );
       let patientName =
-        allergies[0]?.patient_lastName +
+        patientAllergies[0]?.patient_lastName +
         ", " +
-        allergies[0]?.patient_firstName +
+        patientAllergies[0]?.patient_firstName +
         " " +
-        allergies[0]?.patient_middleName;
+        patientAllergies[0]?.patient_middleName;
       let jsonFile: {
-        "Allergy UID": string;
+        Uuid: string;
         Date: string;
         Type: string;
         Allergen: string;
         Severity: string;
         Reaction: string;
         Notes: string;
-      }[] = allergies.map((allergy) => ({
-        "Allergy UID": allergy.allergies_uuid,
+      }[] = patientAllergies.map((allergy) => ({
+        Uuid: allergy.allergies_uuid,
         Date: new Date(allergy.allergies_createdAt).toLocaleDateString(),
         Type: allergy.allergies_type,
         Allergen: allergy.allergies_allergen,
@@ -263,10 +254,48 @@ const Allergies = () => {
           "Notes",
         ],
         type: "json",
-        gridHeaderStyle: "color: red;  border: 2px solid #3971A5;",
-        header: patientFullName,
-        gridStyle: "border: 2px solid #3971A5;",
-        documentTitle: `${patientFullName}'s Allergies`,
+        style: `
+          @page { size: Letter landscape; }
+          @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+          
+          body {
+            font-family: 'Manrope', sans-serif;
+            font-weight:lighter;
+          }
+          hr.new1 {
+            margin-top: -40px;
+            border: 3px solid #007C85;
+          }
+          hr.new2 {
+            border: 1px solid #007C85;
+          }
+
+          p {
+            font-size: 23.57px;
+            font-weight: lighter;
+          }
+          .logo-bg {
+            
+            height: 77.79px;
+            width: 226.48px;
+          }
+        `,
+        header: `<div> 
+                    <div class="logo-bg">
+                      <img src="https://i.imgur.com/LrS9IUe.png" height="30px alt="">
+                    </div>
+                  <div>
+                  <hr class="new1">
+                  <hr class="new2">
+                    <p>${patientFullName}</p>
+                  </div>
+                </div>`,
+        headerStyle: "color: #64748B; font-size:23.57px; font-weight:lighter",
+        gridHeaderStyle:
+          "color: #64748B;  border: 1.18px solid #EEEEEE; text-align:left; padding-left:5px; height:56.05px; font-weight:lighter; ",
+        gridStyle:
+          "border: 1.18px solid #EEEEEE; padding-left:5px; height:71.87px ",
+        documentTitle: "",
       });
     }
   };
