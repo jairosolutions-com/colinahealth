@@ -1,16 +1,9 @@
 "use client";
 import Image from "next/image";
 import DropdownMenu from "@/components/dropdown-menu";
-import Add from "@/components/shared/buttons/add";
-import DownloadPDF from "@/components/shared/buttons/downloadpdf";
-import Edit from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
-import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
-import Modal from "@/components/reusable/modal";
 import { fetchFormsByPatient } from "@/app/api/forms-api/forms.api";
-import { SuccessModal } from "@/components/shared/success";
 import Pagination from "@/components/shared/pagination";
 
 export default function ArchiveTab() {
@@ -25,20 +18,13 @@ export default function ArchiveTab() {
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState("ASC");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [patientForms, setPatientForms] = useState<any[]>([]);
+  const [patientArchive, setpatientArchive] = useState<any[]>([]);
   const [sortBy, setSortBy] = useState("dateIssued");
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [totalNotes, setTotalNotes] = useState<number>(0);
+  const [totalArchive, setTotalArchive] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState("");
-  const [gotoError, setGotoError] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState("");
   const [term, setTerm] = useState<string>("");
-  const [isEdit, setIsEdit] = useState(false);
-  const [formsToView, setFormsToView] = useState<any[]>([]);
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
-  const [isErrorOpen, setIsErrorOpen] = useState(false);
-  const [isUpdated, setIsUpdated] = useState(false);
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -48,12 +34,12 @@ export default function ArchiveTab() {
   };
 
   const handleSortOptionClick = (option: string) => {
-    if (option == "Age") {
-      setSortBy("age");
-    } else if (option == "Name") {
-      setSortBy("firstName");
-    } else if (option == "Gender") {
-      setSortBy("gender");
+    if (option == "Name") {
+      setSortBy("nameofDocument");
+    } else if (option == "Notes") {
+      setSortBy("notes");
+    } else if (option == "Date") {
+      setSortBy("dateIssued");
     }
     console.log(sortBy, "option");
   };
@@ -63,13 +49,9 @@ export default function ArchiveTab() {
     { label: "Descending", onClick: handleOrderOptionClick },
   ];
   const optionsSortBy = [
-    { label: "Vital Sign ID", onClick: handleSortOptionClick },
-    { label: "Date", onClick: handleSortOptionClick },
-    { label: "Time", onClick: handleSortOptionClick },
-    { label: "Blood Pressure", onClick: handleSortOptionClick },
-    { label: "Heart Rate", onClick: handleSortOptionClick },
-    { label: "Temperature", onClick: handleSortOptionClick },
-    { label: "Respiratory", onClick: handleSortOptionClick },
+    { label: "NAME", onClick: handleSortOptionClick },
+    { label: "DATE ISSUED", onClick: handleSortOptionClick },
+    { label: "NOTES", onClick: handleSortOptionClick },
   ];
   // end of orderby & sortby function
 
@@ -111,36 +93,9 @@ export default function ArchiveTab() {
       setCurrentPage(pageNumberInt);
 
       console.log("Navigate to page:", pageNumberInt);
-    } else {
-      setGotoError(true);
-      setTimeout(() => {
-        setGotoError(false);
-      }, 3000);
-      console.error("Invalid page number:", pageNumber);
     }
   };
 
-  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageNumber(e.target.value);
-  };
-
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          className={`flex border border-px items-center justify-center  w-[49px]  ${
-            currentPage === i ? "btn-pagination" : ""
-          }`}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </button>
-      );
-    }
-    return pageNumbers;
-  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -150,25 +105,20 @@ export default function ArchiveTab() {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
+          true,
           router
         );
-        setPatientForms(response.data);
+        setpatientArchive(response.data);
         setTotalPages(response.totalPages);
-        setTotalNotes(response.totalCount);
+        setTotalArchive(response.totalCount);
         setIsLoading(false);
       } catch (error: any) {
-        setError(error.message);
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [currentPage, sortOrder, sortBy, term, isSuccessOpen]);
-
-  const onSuccess = () => {
-    setIsSuccessOpen(true);
-    setIsEdit(false);
-  };
+  }, [currentPage, sortOrder, sortBy, term]);
 
   if (isLoading) {
     return (
@@ -182,7 +132,7 @@ export default function ArchiveTab() {
       </div>
     );
   }
-  console.log(patientForms, "patientForms");
+  console.log(patientArchive, "patientArchive");
   return (
     <div className="  w-full h-full flex flex-col justify-between">
       <div className="w-full h-full">
@@ -205,7 +155,7 @@ export default function ArchiveTab() {
             </div>
             <div>
               <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
-                Total of 6 logs
+                Total of {totalArchive} logs
               </p>
             </div>
           </div>
@@ -284,7 +234,7 @@ export default function ArchiveTab() {
 
         {/* START OF TABLE */}
         <div>
-          {patientForms.length == 0 ? (
+          {patientArchive.length == 0 ? (
             <div>
               <div className="w-full flex-col justify-center items-center">
                 <table className="w-full block text-left rtl:text-right">
@@ -316,7 +266,7 @@ export default function ArchiveTab() {
               </thead>
 
               <tbody className="h-[220px] overflow-y-scroll">
-                {patientForms.map((form, index) => (
+                {patientArchive.map((form, index) => (
                   <tr
                     key={index}
                     className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
@@ -342,26 +292,6 @@ export default function ArchiveTab() {
         setPageNumber={setPageNumber}
         setCurrentPage={setCurrentPage}
       />
-      {isOpen && (
-        <Modal
-          content={
-            <FormsviewModalContent
-              isModalOpen={isModalOpen}
-              formData={setFormsToView}
-            />
-          }
-          isModalOpen={isModalOpen}
-        />
-      )}
-      {isSuccessOpen && (
-        <SuccessModal
-          label={isEdit ? "Edit Note" : "Add Note"}
-          isAlertOpen={isSuccessOpen}
-          toggleModal={setIsSuccessOpen}
-          isUpdated={isUpdated}
-          setIsUpdated={setIsUpdated}
-        />
-      )}
     </div>
   );
 }
