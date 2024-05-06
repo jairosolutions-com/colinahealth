@@ -350,8 +350,23 @@ const Allergies = () => {
                     {allergy.allergies_allergen}
                   </td>
 
-                  <td className="truncate px-6  py-3">
-                    {allergy.allergies_severity}
+                  <td className="text-15px me-1 px-6 py-3 rounded-full flex items-center">
+                    <div
+                      className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
+                        allergy.allergies_severity === "Mild"
+                          ? "bg-[#e9f3ff] text-[#1b84ff] text-[15px]" // Green color for Mild
+                          : allergy.allergies_severity === "Moderate"
+                          ? "bg-[#fff5ef] text-[#ff6f1e] text-[15px]" // Dark color for Moderate
+                          : allergy.allergies_severity === "Severe"
+                          ? "bg-[#FFE8EC] text-[#EF4C6A] text-[15px]" // Red color for Severe
+                          : ""
+                      }`}
+                    >
+                     
+                        {allergy.allergies_severity}
+                      
+                    </div>
+                    
                   </td>
                   <td className="truncate px-6  py-3">
                     {allergy.allergies_reaction}
