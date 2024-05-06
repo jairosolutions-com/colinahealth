@@ -124,7 +124,7 @@ export const Navbar = ({
           ))}
         </div>
         <div className="flex gap-3 items-center mr-2">
-          <Image src={"/imgs/admin.svg"} alt={""} width={30} height={30} />
+          <Image src={"/imgs/drake.png"} alt={""} width={30} height={30} className="rounded-full"/>
           <Image
             ref={iconRef}
             className={`cursor-pointer select-none ${

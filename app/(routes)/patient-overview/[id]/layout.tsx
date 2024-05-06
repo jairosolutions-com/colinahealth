@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { Navbar } from "@/components/navbar";
-import { useParams, useRouter } from "next/navigation";
+import { redirect, useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
 import { fetchPatientProfileImage } from "@/app/api/patients-api/patientProfileImage.api";
@@ -10,21 +10,32 @@ import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import Image from "next/image";
 import Link from "next/link";
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  if (typeof window === "undefined") {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          width={100}
+          height={100}
+          alt="loading"
+        />
+      </div>
+    );
+  }
   const router = useRouter();
   const params = useParams<{
     id: any;
     tag: string;
     item: string;
   }>();
-  if (!getAccessToken()) {
-    router.replace("/login");
-  }
+
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
   const [patientImage, setPatientImage] = useState<string>();
@@ -190,15 +201,39 @@ export default function PatientOverviewLayout({
     }
   };
 
+  function handleImageChange(event: ChangeEvent<HTMLInputElement>): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
-    <div className="flex flex-col w-full px-[150px] pt-[90px]">
+    <div className="flex flex-col w-full px-[150px] pt-[90px] h-full">
       <div className="flex flex-col gap-[3px]">
         <div className="p-title pb-2">
           <h1>Patient Overview</h1>
         </div>
         <div className="form ring-1 w-full h-[220px] ring-[#D0D5DD] px-5 pt-5 rounded-md">
           <div className="flex">
-            <div className="flex flex-col">
+            <div className="flex flex-col relative">
+              {currentRoute === "patient-details" && (
+                <label
+                  htmlFor="fileInput"
+                  className="absolute bottom-2 right-[-20px] cursor-pointer"
+                >
+                  <img
+                    src="/svgs/editprof.svg"
+                    alt="edit button"
+                    width="35"
+                    height="35"
+                  />
+                  <input
+                    id="fileInput"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+                </label>
+              )}
               {patientImage ? (
                 <img
                   src={patientImage} // Use the patientImage state as the source
@@ -258,11 +293,11 @@ export default function PatientOverviewLayout({
                       height="26"
                     />
                     <div>
-                      <p className="flex items-center mr-11">Patient</p>
+                      <p className="flex items-center mr-10">Patient</p>
                     </div>
                     <div className="flex">
                       <div>
-                        <p className="flex items-center mr-11">
+                        <p className="flex items-center mr-10">
                           Age: {patientData[0]?.age}
                         </p>
                       </div>
@@ -353,7 +388,7 @@ export default function PatientOverviewLayout({
           </div>
         </div>
       </div>
-      <div className="w-full flex items-center justify-center mt-4">
+      <div className="w-full h-full flex items-center justify-center mt-4">
         {children}
       </div>
     </div>

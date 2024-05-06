@@ -294,23 +294,24 @@ export default function Laboratoryresults() {
           <table className="text-left rtl:text-right">
             <thead>
               <tr className="text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                <td className="px-6 py-3 w-[160px]">LAB RESULT ID</td>
-                <td className="px-6 py-3 w-[150px]">DATE</td>
-                <td className="px-6 py-3 w-[210px]">HEMOGLOBIN A1c (%)</td>
-                <td className="px-6 py-3 w-[190px]">
+                <td className="px-6 py-3 w-[170px]">LAB RESULT ID</td>
+                <td className="px-6 py-3 w-[170px]">DATE</td>
+                <td className="px-6 py-3 w-[170px]">HEMOGLOBIN A1c (%)</td>
+                <td className="px-6 py-3 w-[170px]">
                   FASTING BLOOD GLUCOSE (mg/dL)
                 </td>
-                <td className="px-6 py-3 w-[200px]">
+                <td className="px-6 py-3 w-[170px]">
                   TOTAL CHOLESTEROL (mg/dL)
                 </td>
-                <td className="px-6 py-3 w-[150px]">LDL-C (mg/dL)</td>
-                <td className="px-6 py-3 w-[150px]">HDL-C (mg/dL)</td>
-                <td className="px-6 py-3 w-[160px]">TRIGLYCERIDES (mg/dL)</td>
+                <td className="px-6 py-3 w-[170px]">LDL-C (mg/dL)</td>
+                <td className="px-6 py-3 w-[170px]">HDL-C (mg/dL)</td>
+                <td className="px-6 py-3 w-[170px]">TRIGLYCERIDES (mg/dL)</td>
                 <td className="px-6 py-3 text-center">ACTION</td>
+                <td className="w-[14px]"></td>
               </tr>
             </thead>
 
-            <tbody className="h-[220px]">
+            <tbody className="h-[220px] overflow-y-scroll">
               {patientLabResults.length === 0 && (
                 <div className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                   <p className="text-[15px] font-normal text-gray-700 text-center">
@@ -324,28 +325,28 @@ export default function Laboratoryresults() {
                     key={index}
                     className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
                   >
-                    <td className="px-6 py-3 w-[160px]">
+                    <td className="px-6 py-3 w-[170px]">
                       {labResult.labResults_uuid}
                     </td>
-                    <td className=" px-6 py-3 w-[150px]">
+                    <td className=" px-6 py-3 w-[170px]">
                       {labResult.labResults_date}
                     </td>
-                    <td className="px-6 py-3 w-[210px]">
+                    <td className="px-6 py-3 w-[170px]">
                       {labResult.labResults_hemoglobinA1c}%
                     </td>
-                    <td className="px-6 py-3 w-[190px]">
+                    <td className="px-6 py-3 w-[170px]">
                       {labResult.labResults_fastingBloodGlucose}mg/dL
                     </td>
-                    <td className="px-6 py-3 w-[200px]">
+                    <td className="px-6 py-3 w-[170px]">
                       {labResult.labResults_totalCholesterol}mg/dL
                     </td>
-                    <td className="px-6 py-3 w-[150px]">
+                    <td className="px-6 py-3 w-[170px]">
                       {labResult.labResults_ldlCholesterol}mg/dL
                     </td>
-                    <td className="px-6 py-3 w-[150px]">
+                    <td className="px-6 py-3 w-[170px]">
                       {labResult.labResults_hdlCholesterol}mg/dL
                     </td>
-                    <td className="px-6 py-3 w-[160px]">
+                    <td className="px-6 py-3 w-[170px]">
                       {labResult.labResults_triglycerides}mg/dL
                     </td>
                     <td className="px-6 py-3 flex gap-2 justify-center">

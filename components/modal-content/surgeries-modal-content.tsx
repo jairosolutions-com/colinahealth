@@ -38,6 +38,7 @@ export const SurgeriesModalContent = ({
   const [charactersFull, setCharactersFull] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [selectedType, setSelectedType] = useState("");
   const [formData, setFormData] = useState({
     dateOfSurgery: surgeryData.surgeries_dateOfSurgery,
     typeOfSurgery: surgeryData.surgeries_typeOfSurgery,
@@ -53,6 +54,24 @@ export const SurgeriesModalContent = ({
 
   const patientId = params.id.toUpperCase();
   const { toast } = useToast();
+  const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
+    if (value === "Others") {
+      setSelectedType("Others");
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: "",
+      }));
+    } else {
+      setSelectedType("");
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -173,22 +192,87 @@ export const SurgeriesModalContent = ({
                   TYPE
                 </label>
                 <div className="mt-2.5 relative">
-                  <input
-                    type="text"
-                    required
-                    className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                    placeholder="input type"
-                    onChange={handleChange}
-                    name="typeOfSurgery"
-                    value={formData.typeOfSurgery}
-                  />
-                  <Image
-                    className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
-                    width={20}
-                    height={20}
-                    src={"/svgs/chevron-up.svg"}
-                    alt={""}
-                  />
+                  {selectedType === "Others" && (
+                    <input
+                      type="text"
+                      required
+                      className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      placeholder="input type"
+                      onChange={handleChange}
+                      name="typeOfSurgery"
+                      value={formData.typeOfSurgery}
+                    />
+                  )}
+                  {selectedType !== "Others" && (
+                    <>
+                      <select
+                        required
+                        className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+                        name="typeOfSurgery"
+                        value={formData.typeOfSurgery}
+                        onChange={handleTypeChange}
+                      >
+                        <option value="">Select Surgery Type</option>
+                        <option value="Bariatric Surgery">
+                          Bariatric Surgery
+                        </option>
+                        <option value="Breast Surgery">Breast Surgery</option>
+                        <option value="Colon & Rectal Surgery">
+                          Colon & Rectal Surgery
+                        </option>
+                        <option value="Endocrine Surgery">
+                          Endocrine Surgery
+                        </option>
+                        <option value="General Surgery">General Surgery</option>
+                        <option value="Gynecological Surgery">
+                          Gynecological Surgery
+                        </option>
+                        <option value="Hand Surgery">Hand Surgery</option>
+                        <option value="Head & Neck Surgery">
+                          Head & Neck Surgery
+                        </option>
+                        <option value="Hernia Surgery">Hernia Surgery</option>
+                        <option value="Minimally Invasive Surgery">
+                          Minimally Invasive Surgery
+                        </option>
+                        <option value="Neurosurgery">Neurosurgery</option>
+                        <option value="Orthopedic Surgery">
+                          Orthopedic Surgery
+                        </option>
+                        <option value="Ophthalmological Surgery">
+                          Ophthalmological Surgery
+                        </option>
+                        <option value="Outpatient Surgery">
+                          Outpatient Surgery
+                        </option>
+                        <option value="Pediatric Surgery">
+                          Pediatric Surgery
+                        </option>
+                        <option value="Plastic, Reconstructive, Hand & Micro-Vascular Surgery">
+                          Plastic, Reconstructive, Hand & Micro-Vascular Surgery
+                        </option>
+                        <option value="Robotic Surgery">Robotic Surgery</option>
+                        <option value="Thoracic Surgery">
+                          Thoracic Surgery
+                        </option>
+                        <option value="Trauma Surgery">Trauma Surgery</option>
+                        <option value="Urologic Surgery">
+                          Urologic Surgery
+                        </option>
+                        <option value="Vascular Surgery">
+                          Vascular Surgery
+                        </option>
+                        <option value="Others">Others</option>
+                      </select>
+                      <Image
+                        className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
+                        width={20}
+                        height={20}
+                        src={"/svgs/chevron-up.svg"}
+                        alt={""}
+                      />
+                    </>
+                  )}
                 </div>
               </div>
               <div>

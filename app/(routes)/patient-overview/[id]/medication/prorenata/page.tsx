@@ -310,16 +310,17 @@ const Prorenata = () => {
             <table className="text-left rtl:text-right">
               <thead>
                 <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                  <td className="px-6 py-3">Medication ID</td>
-                  <td className="px-6 py-3">Date</td>
-                  <td className="px-6 py-3">Time</td>
-                  <td className="px-6 py-3">Medication</td>
-                  <td className="px-5 py-3">Notes</td>
-                  <td className="px-6 py-3">Status</td>
-                  <td className="px-6 py-4">Action</td>
+                  <td className="px-6 py-3 ">Medication ID</td>
+                  <td className="px-6 py-3 ">Date</td>
+                  <td className="px-6 py-3 ">Time</td>
+                  <td className="px-6 py-3 ">Medication</td>
+                  <td className="px-6 py-3 ">Notes</td>
+                  <td className="px-6 py-3 ">Status</td>
+                  <td className="px-9 py-3">Action</td>
+                  <td className="w-[14px]"></td>
                 </tr>
               </thead>
-              <tbody className="h-[220px]">
+              <tbody className="h-[220px] overflow-y-scroll">
                 {patientPRNMed.length === 0 && (
                   <tr>
                     <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
@@ -335,13 +336,13 @@ const Prorenata = () => {
                       key={index}
                       className="group hover:bg-[#f4f4f4]  border-b text-[15px]"
                     >
-                      <td className="truncate px-6 py-3">
+                      <td className="truncate px-6 py-3 ">
                         {prnMed.medicationlogs_uuid}
                       </td>
-                      <td className="truncate px-6 py-3">
+                      <td className="truncate px-6 py-3 ">
                         {prnMed.medicationlogs_medicationLogsDate}
                       </td>
-                      <td className="px-6 py-3">
+                      <td className="px-6 py-3 ">
                         {new Date(
                           new Date().getFullYear(), // Use current year as default
                           new Date().getMonth(), // Use current month as default
@@ -362,24 +363,24 @@ const Prorenata = () => {
                           hour12: true,
                         })}
                       </td>
-                      <td className="truncate px-6 py-3">
+                      <td className="truncate px-6 py-3 ">
                         {prnMed.medicationlogs_medicationLogsName}
                       </td>
-                      <td className="px-6 py-3">
+                      <td className="px-6 py-3 ">
                         {prnMed.medicationlogs_notes}
                       </td>
-                      <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                      <td className="text-15px me-1 px-6 py-5  rounded-full flex items-center">
                         <div
                           className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                             prnMed.medicationlogs_medicationLogStatus ===
                             "Given"
-                              ? "bg-[#dfffea] text-[#17C653] text-[15px]" // Green color for Given
+                              ? "bg-[#CCFFDD] text-[#17C653] text-[15px]" // Green color for Given
                               : prnMed.medicationlogs_medicationLogStatus ===
                                 "Held"
-                              ? "bg-[#E7EAEE] text-[#3C3C3C] text-[15px]" // Dark color for Held
+                              ? "bg-[#E7EAEE] text-[#71717A] text-[15px]" // Dark color for Held
                               : prnMed.medicationlogs_medicationLogStatus ===
                                 "Refused"
-                              ? "bg-[#FEE9E9] text-[#EF4C6A] text-[15px]" // Red color for Refused
+                              ? "bg-[#FFE8EC] text-[#EF4C6A] text-[15px]" // Red color for Refused
                               : prnMed.medicationlogs_medicationLogStatus
                           }`}
                         >
@@ -387,7 +388,7 @@ const Prorenata = () => {
                         </div>
                       </td>
 
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-3">
                         <p
                           onClick={() => {
                             isModalOpen(true);

@@ -482,6 +482,7 @@ export const PrescriptionViewModalContent = ({
                       src="/imgs/colina-logo-animation.gif"
                       alt="logo"
                       width={100}
+                      height={100}
                     />
                   </div>
                 </div>

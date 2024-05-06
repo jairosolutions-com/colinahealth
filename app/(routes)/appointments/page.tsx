@@ -3,7 +3,7 @@
 import { searchPatientList } from "@/app/api/patients-api/patientList.api";
 import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SuccessModal } from "@/components/shared/success";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
@@ -29,12 +29,18 @@ import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.a
 
 export default function AppointmentPage() {
   const router = useRouter();
-  if (typeof window === "undefined") {
-    return <div>No page found</div>;
-  }
 
-  if (!getAccessToken()) {
-    router.replace("/login");
+  if (typeof window === "undefined") {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          width={100}
+          height={100}
+          alt="loading"
+        />
+      </div>
+    );
   }
 
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
@@ -189,12 +195,18 @@ export default function AppointmentPage() {
             (patient: { patient_uuid: any }) => patient.patient_uuid
           )
         );
-        
+
         const patientUuids = Array.from(uniquePatientUuids);
         console.log(patientUuids, "patientUuids");
         setImagesLoaded(true); // Set to true when images are loaded
-
-        const profileImagesResponse = await fetchProfileImages(patientUuids as string[]);
+        const appointmentsArray = Object.values(upcomingAppoinments.data);
+        setTotalPages(upcomingAppoinments.totalPages);
+        setAppointmentList(appointmentsArray);
+        setTotalAppointments(upcomingAppoinments.totalCount);
+        setIsLoading(false);
+        const profileImagesResponse = await fetchProfileImages(
+          patientUuids as string[]
+        );
         if (profileImagesResponse) {
           const patientImagesData = profileImagesResponse.map((image: any) => {
             // Convert the image data buffer to a data URL if available
@@ -218,11 +230,7 @@ export default function AppointmentPage() {
           setPatientImages(patientImagesData);
           console.log(patientImagesData, "patientImagesData");
         }
-        const appointmentsArray = Object.values(upcomingAppoinments.data);
-        setTotalPages(upcomingAppoinments.totalPages);
-        setAppointmentList(appointmentsArray);
-        setTotalAppointments(upcomingAppoinments.totalCount);
-        setIsLoading(false);
+
         return upcomingAppoinments;
       } catch (error) {}
     };
@@ -285,7 +293,7 @@ export default function AppointmentPage() {
 
         <div className="w-full">
           <div className="w-full bg-[#F4F4F4] justify-between items-center flex px-5 h-[75px] rounded-sm gap-5">
-            <div className="flex items-center bg-white rounded-sm border border-gray-300 shadow-sm px-4 py-2 h-[47px] w-[460px]">
+            <div className="flex items-center bg-white rounded-sm border border-gray-200  px-4 py-2 h-[47px] w-[460px]">
               <Search className="h-4 w-4 text-gray-500 mr-2" />
               <input
                 type="text"
@@ -301,7 +309,9 @@ export default function AppointmentPage() {
 
             <div className="w-[500px]">
               <div className="flex w-full justify-end items-center gap-3">
-                <p>Filter Date</p>
+                <p className="font-semibold text-[#191D23] text-opacity-60">
+                  Filter Date
+                </p>
 
                 <Popover>
                   <PopoverTrigger asChild>
@@ -412,7 +422,7 @@ export default function AppointmentPage() {
                     key={index}
                     className="bg-white hover:bg-[#f4f4f4] group border-b "
                   >
-                    <td className="px-6 py-5 flex items-center">
+                    <td className="px-6 py-5 flex items-center gap-2">
                       {patientImages.some(
                         (image) =>
                           image.patientUuid === appointment.patient_uuid
@@ -438,7 +448,7 @@ export default function AppointmentPage() {
                                     // Render the stock image (.svg) if data is empty
                                     <Image
                                       className="rounded-full"
-                                      src="/imgs/user-no-icon.jpg"
+                                      src="/imgs/user.png"
                                       alt=""
                                       width={45}
                                       height={45}
@@ -493,24 +503,24 @@ export default function AppointmentPage() {
 
                     <td className="text-15px text-nowrap  px-6 py-5 rounded-full">
                       <div
-                        className={`px-2 font-semibold rounded-[20px] relative flex items-center w-fit ${
+                        className={`px-2 font-semibold rounded-[20px] flex items-center w-fit ${
                           appointment.appointments_appointmentStatus ===
                           "Scheduled"
-                            ? "bg-[#dfffea] text-[#17C653]" // Green color for Scheduled
+                            ? "bg-[#E7EAEE] text-[#71717A]" // Green color for Scheduled
                             : appointment.appointments_appointmentStatus ===
                               "Done"
-                            ? "bg-[#E7EAEE] text-[#71717A]" // Dark color for Done
+                            ? "bg-[#CCFFDD] text-[#17C653]" // Dark color for Done
                             : appointment.appointments_appointmentStatus ===
                                 "Patient-IN" ||
                               appointment.appointments_appointmentStatus ===
                                 "On-going"
-                            ? "bg-[#FFFCDB] text-[#E0BD03]" // Yellow for On Going
+                            ? "bg-[#FFF8DD] text-[#F6C000]" // Yellow for On Going
                             : appointment.appointments_appointmentStatus ===
                               "Missed"
-                            ? "bg-[#FEE9E9] text-[#EF4C6A]" // Red color for Missed
+                            ? "bg-[#FFE8EC] text-[#EF4C6A]" // Red color for Missed
                             : appointment.appointments_appointmentStatus ===
                               "Cancelled"
-                            ? "bg-[#FEE9E9] text-[#EF4C6A]" // Red color for Cancelled
+                            ? "bg-[#FFE8EC] text-[#EF4C6A]" // Red color for Cancelled
                             : ""
                         }`}
                       >
@@ -518,24 +528,24 @@ export default function AppointmentPage() {
                           className={`inline-block h-2 w-2 rounded-full mr-1 ${
                             appointment.appointments_appointmentStatus ===
                             "Scheduled"
-                              ? "bg-green-500" // Green color for Scheduled
+                              ? "bg-[#7E7E7E]" // Green color for Scheduled
                               : appointment.appointments_appointmentStatus ===
                                 "Done"
-                              ? "bg-[#7E7E7E]" // Dark color for Done
+                              ? "bg-[#0EB146]" // Dark color for Done
                               : appointment.appointments_appointmentStatus ===
                                   "Patient-IN" ||
                                 appointment.appointments_appointmentStatus ===
                                   "On-going"
-                              ? "bg-[#E0BD03]" // Yellow for On Going
+                              ? "bg-[#E4B90E]" // Yellow for On Going
                               : appointment.appointments_appointmentStatus ===
                                   "Missed" ||
                                 appointment.appointments_appointmentStatus ===
                                   "Cancelled"
-                              ? "bg-[#EF4C6A]" // Red color for Missed and Cancelled
+                              ? "bg-[#EE4D4D]" // Red color for Missed and Cancelled
                               : ""
                           }`}
                         ></span>
-                        {appointment.appointments_appointmentStatus} Appointment
+                        {appointment.appointments_appointmentStatus}
                       </div>
                     </td>
                   </tr>

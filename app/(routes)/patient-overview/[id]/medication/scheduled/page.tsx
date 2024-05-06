@@ -314,14 +314,15 @@ const Scheduled = () => {
                 <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
                   <td className="px-6 py-3">Medication ID</td>
                   <td className="px-6 py-3">Date</td>
-                  <td className="px-5 py-3">Time</td>
-                  <td className="px-4 py-3">Medication</td>
-                  <td className="px-4 py-3">Notes</td>
-                  <td className="px-4 py-3">Status</td>
-                  <td className="px-4 py-4">Action</td>
+                  <td className="px-6 py-3">Time</td>
+                  <td className="px-6 py-3">Medication</td>
+                  <td className="px-6 py-3">Notes</td>
+                  <td className="px-6 py-3 ">Status</td>
+                  <td className="px-9 py-3">Action</td>
+                  <td className="w-[14px]"></td>
                 </tr>
               </thead>
-              <tbody className="h-[220px]">
+              <tbody className="h-[220px] overflow-y-scroll">
                 {patientScheduledMed.length === 0 && (
                   <tr>
                     <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
@@ -376,13 +377,13 @@ const Scheduled = () => {
                             className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                               schedMed.medicationlogs_medicationLogStatus ===
                               "Given"
-                                ? "bg-[#dfffea] text-[#17C653] text-[15px]" // Green color for Given
+                                ? "bg-[#CCFFDD] text-[#17C653] text-[15px]" // Green color for Given
                                 : schedMed.medicationlogs_medicationLogStatus ===
                                   "Held"
-                                ? "bg-[#E7EAEE] text-[#3C3C3C] text-[15px]" // Dark color for Held
+                                ? "bg-[#E7EAEE] text-[#71717A] text-[15px]" // Dark color for Held
                                 : schedMed.medicationlogs_medicationLogStatus ===
                                   "Refused"
-                                ? "bg-[#FEE9E9] text-[#EF4C6A] text-[15px]" // Red color for Refused
+                                ? "bg-[#FFE8EC] text-[#EF4C6A] text-[15px]" // Red color for Refused
                                 : schedMed.medicationlogs_medicationLogStatus
                             }`}
                           >
