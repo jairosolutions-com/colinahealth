@@ -189,12 +189,14 @@ export default function AppointmentPage() {
             (patient: { patient_uuid: any }) => patient.patient_uuid
           )
         );
-        
+
         const patientUuids = Array.from(uniquePatientUuids);
         console.log(patientUuids, "patientUuids");
         setImagesLoaded(true); // Set to true when images are loaded
 
-        const profileImagesResponse = await fetchProfileImages(patientUuids as string[]);
+        const profileImagesResponse = await fetchProfileImages(
+          patientUuids as string[]
+        );
         if (profileImagesResponse) {
           const patientImagesData = profileImagesResponse.map((image: any) => {
             // Convert the image data buffer to a data URL if available
@@ -438,7 +440,7 @@ export default function AppointmentPage() {
                                     // Render the stock image (.svg) if data is empty
                                     <img
                                       className="rounded-full"
-                                      src="/imgs/user-no-icon.jpg"
+                                      src="/imgs/user-no-icon.png"
                                       alt=""
                                       width={45}
                                       height={45}

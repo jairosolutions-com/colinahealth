@@ -10,8 +10,9 @@ import {
 import { fetchCountryList } from "@/app/api/country-api/countryList.api";
 import { set } from "date-fns";
 import { useEditContext } from "../editContext"; // Assuming you've exported EditContext from your context file
+import { tree } from "next/dist/build/templates/app-page";
 export default function PatientDetails({}) {
-  const { toggleEdit } = useEditContext();
+  const { toggleEdit, saveClicked } = useEditContext();
   if (typeof window === "undefined") {
   }
 
@@ -98,7 +99,7 @@ export default function PatientDetails({}) {
   };
 
   const handlePatientEditClick = () => {
-    window.history.pushState(null, "", "#edit");
+    // window.history.pushState(null, "", "#edit");
     setPatientEditMode(!patientEditMode);
     toggleEdit();
   };
@@ -145,11 +146,12 @@ export default function PatientDetails({}) {
 
   const handleSubmit = async () => {
     setIsSubmitted(true);
+    saveClicked();
     try {
       await updatePatient(patientId, formData, router);
       setIsSuccessFul(true);
       setPatientEditMode(false);
-      window.history.pushState(null, "", "#saved");
+      // window.history.pushState(null, "", "#saved");
       setIsSubmitted(false);
       return;
     } catch (error) {

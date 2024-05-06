@@ -5,26 +5,25 @@ import { Navbar } from "@/components/navbar";
 import { useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
-import { fetchPatientProfileImage } from "@/app/api/patients-api/patientProfileImage.api";
+import {
+  fetchPatientProfileImage,
+  updatePatientProfileImage,
+} from "@/app/api/patients-api/patientProfileImage.api";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import Link from "next/link";
 import { EditProvider, useEditContext } from "./editContext"; // Assuming you've exported EditContext from your context file
+import { updatePatient } from "@/app/api/patients-api/patientDetails.api";
 
 function PatientOverview() {
-  const { isEdit, toggleEdit } = useEditContext();
+  const { isEdit, isSave, toggleEdit } = useEditContext();
   console.log("Current value of isEdit:", isEdit);
 
   useEffect(() => {
     console.log("isEdit changed in layout:", isEdit);
   }, [isEdit]); // Include isEdit in the dependency array to ensure that the effect runs whenever the isEdit state changes
-
-  const handleEditChange = (isEdit: Boolean) => {
-    // Handle the patientId change here
-    console.log("Patient isEdit changed:", isEdit);
-  };
   const router = useRouter();
   const params = useParams<{
     id: any;
@@ -134,49 +133,69 @@ function PatientOverview() {
       router.replace(url);
     }
   };
-  console.log(pathname, "pathname");
+  //show loading
+  const loadDefaultImage = async () => {
+    try {
+      // Fetch the default image as a file
+      const response = await fetch("/imgs/loading.gif");
+      const blob = await response.blob();
+
+      // Read the file content as a data URL
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setPatientImage(reader.result); // Set the data URL as the state
+        }
+      };
+      reader.readAsDataURL(blob); // Read the blob content as a data URL
+    } catch (error) {
+      console.error("Error loading default image:", error);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetchPatientOverview(patientId, router);
+      console.log(response, "response");
+      const imgResponse = await fetchPatientProfileImage(patientId, router);
+      setIsLoading(false);
+
+      if (!imgResponse.data || imgResponse.data.length === 0) {
+        // If no image data is available, set patientImage to null
+        setPatientImage("");
+      } else {
+        // Convert the image data buffer to a data URL
+        const buffer = Buffer.from(imgResponse.data);
+        const dataUrl = `data:image/jpeg;base64,${buffer.toString("base64")}`;
+        setPatientImage(dataUrl);
+      }
+      setPatientData(response);
+    } catch (error: any) {
+      setError(error.message);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error.message,
+        action: (
+          <ToastAction
+            altText="Try again"
+            onClick={() => {
+              window.location.reload();
+            }}
+          >
+            Try again
+          </ToastAction>
+        ),
+      });
+    }
+  };
   useEffect(() => {
     const pathParts = pathname.split("/");
     const tabUrl = pathParts[pathParts.length - 1];
-    const fetchData = async () => {
-      try {
-        const response = await fetchPatientOverview(patientId, router);
-        console.log(response, "response");
-        const imgResponse = await fetchPatientProfileImage(patientId, router);
-        if (!imgResponse.data || imgResponse.data.length === 0) {
-          // If no image data is available, set patientImage to null
-          setPatientImage("");
-        } else {
-          // Convert the image data buffer to a data URL
-          const buffer = Buffer.from(imgResponse.data);
-          const dataUrl = `data:image/jpeg;base64,${buffer.toString("base64")}`;
-          setPatientImage(dataUrl);
-        }
-        setPatientData(response);
-        setIsLoading(false);
-      } catch (error: any) {
-        setError(error.message);
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: error.message,
-          action: (
-            <ToastAction
-              altText="Try again"
-              onClick={() => {
-                window.location.reload();
-              }}
-            >
-              Try again
-            </ToastAction>
-          ),
-        });
-      }
-    };
 
     fetchData();
   }, [patientId, router, params]);
-
+  //removed router and params replaced with pathname for reduce icon reload
   console.log(patientData, "patientData");
 
   const pathParts = pathname.split("/");
@@ -194,12 +213,36 @@ function PatientOverview() {
       selection?.removeAllRanges();
     }
   };
+  const toggleMaxSizeToast = (): void => {
+    toast({
+      variant: "destructive",
+      title: "File Size Too Big!",
+      description: `Total size of selected files exceeds the limit of 15MB!`,
+    });
+  };
+  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File[]>([]);
+  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [fileTypes, setFileTypes] = useState<string[]>([]);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    const MAX_FILE_SIZE_MB = 15;
 
-  const handleImageChange = (event: any) => {
-    const selectedFile = event.target.files[0]; // Get the selected file
+    if (!files || files.length === 0) {
+      // No files selected, handle accordingly
+      console.warn("No files selected");
+      return;
+    }
 
-    if (!selectedFile) {
-      // Handle the case where no file is selected
+    const totalSize: number = Array.from(files).reduce(
+      (acc, file) => acc + (file?.size || 0), // Check for null file and size
+      0
+    );
+    const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
+
+    if (totalSizeMB > MAX_FILE_SIZE_MB) {
+      toggleMaxSizeToast();
+      e.target.value = ""; // Clear the input field
       return;
     }
 
@@ -215,7 +258,79 @@ function PatientOverview() {
     };
 
     // Read the selected file as a data URL
-    reader.readAsDataURL(selectedFile);
+    if (files[0]) {
+      reader.readAsDataURL(files[0]);
+    } else {
+      console.warn("No valid file selected");
+    }
+
+    // Handle other file details
+    const newFiles: File[] = [];
+    const newFileNames: string[] = [];
+    const newFileTypes: string[] = [];
+
+    Array.from(files).forEach((file) => {
+      if (file) {
+        // Add file, name, and type to arrays
+        newFiles.push(file);
+        newFileNames.push(file.name);
+        newFileTypes.push(file.type.split("/")[1]);
+      }
+    });
+
+    setSelectedFile(newFiles);
+    setSelectedFileNames(newFileNames);
+    setFileNames(newFileNames);
+    setFileTypes(newFileTypes);
+  };
+
+  //save button
+  useEffect(() => {
+    if (isSave) {
+      handleSubmit();
+    }
+  }, [isSave]);
+
+  const handleSubmit = async () => {
+    console.log("submitting");
+    try {
+      if (selectedFile) {
+        // Iterate through each selected file
+        for (let i = 0; i < selectedFile.length; i++) {
+          const userIconFormData = new FormData();
+          userIconFormData.append(
+            "profileimage",
+            selectedFile[i],
+            fileNames[i]
+          );
+
+          // Add lab file
+          const addUserIcon = await updatePatientProfileImage(
+            patientId,
+            userIconFormData
+          );
+          setIsLoading(true);
+
+          loadDefaultImage(); // Call the function to load the default image
+          fetchData();
+
+          console.log(
+            `Icon FILE ${fileNames[i]} added successfully:`,
+            addUserIcon
+          );
+        }
+      } else {
+        console.warn("No files selected to upload");
+      }
+      // onSuccess();
+      // isModalOpen(false);
+    } catch (error: any) {
+      if (error.message === "Patient already exist") {
+        console.log("conflict error");
+      }
+      console.log(error.message);
+      setError("Failed to add Patient");
+    }
   };
 
   return (
@@ -228,20 +343,46 @@ function PatientOverview() {
           <div className="flex flex-col">
             <div className="flex">
               <div className="relative">
-                {patientImage ? (
-                  <div>
-                    <img
-                      src={patientImage}
-                      onClick={() => handleEditChange(isEdit)} // Use a function reference instead of invoking the function
-                      alt="profile"
-                      width="200"
-                      height="200"
-                    />
-                  </div>
+                {!isLoading ? (
+                  <>
+                    {patientImage ? (
+                      <div
+                        className="rounded-lg"
+                        style={{
+                          width: "180px",
+                          height: "180px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <img
+                          src={patientImage}
+                          alt="profile"
+                          max-width="100%"
+                          height="auto"
+                          className="rounded-lg"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          width: "180px",
+                          height: "180px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <img
+                          src="/imgs/user-no-icon.png"
+                          alt="profile"
+                          max-width="100%"
+                          height="auto"
+                          className="rounded-lg"
+                        />
+                      </div>
+                    )}
+                  </>
                 ) : (
-                  <div className="w-[180px] h-[180px] animate-pulse bg-gray-300 "></div>
+                  <div className="w-[180px] h-[180px] animate-pulse bg-gray-300 rounded-lg "></div>
                 )}
-
                 {currentRoute === "patient-details" && isEdit && (
                   <label
                     htmlFor="fileInput"
@@ -263,21 +404,15 @@ function PatientOverview() {
                   onChange={handleImageChange}
                 />
               </div>
-              {isPopupOpen && (
-                <div className="popup first-letter:">
-                  <div className="popup-content">
-                    <button className="" onClick={togglePopup}>
-                      Close
-                    </button>
-                    <div className="w-full h-10 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
           <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
             <div>
-              <div className={`w-full justify-between p-title flex ${isLoading ? '' : "ml-1"}`}>
+              <div
+                className={`w-full justify-between p-title flex ${
+                  isLoading ? "" : "ml-1"
+                }`}
+              >
                 <h1>
                   {" "}
                   {isLoading ? (
@@ -436,6 +571,7 @@ function PatientOverview() {
                       onClick={() => {
                         setIsLoading(true);
                         // handleTabClick(tab.url, index);
+                        toggleEdit();
                       }}
                     >
                       {tab.label}
@@ -450,6 +586,7 @@ function PatientOverview() {
     </div>
   );
 }
+//created the parent as a function and the wrapped the children with the provider
 export default function PatientOverviewLayout({
   children,
 }: Readonly<{
