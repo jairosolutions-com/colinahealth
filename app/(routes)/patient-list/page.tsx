@@ -36,7 +36,7 @@ export default function PatientPage() {
       </div>
     );
   }
-  
+
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);

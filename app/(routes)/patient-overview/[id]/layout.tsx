@@ -39,7 +39,6 @@ export default function PatientOverviewLayout({
     item: string;
   }>();
 
-  
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
   const [patientImage, setPatientImage] = useState<string>();
@@ -273,11 +272,11 @@ export default function PatientOverviewLayout({
                       height="26"
                     />
                     <div>
-                      <p className="flex items-center mr-11">Patient</p>
+                      <p className="flex items-center mr-10">Patient</p>
                     </div>
                     <div className="flex">
                       <div>
-                        <p className="flex items-center mr-11">
+                        <p className="flex items-center mr-10">
                           Age: {patientData[0]?.age}
                         </p>
                       </div>

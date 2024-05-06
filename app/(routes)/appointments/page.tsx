@@ -545,7 +545,7 @@ export default function AppointmentPage() {
                               : ""
                           }`}
                         ></span>
-                        {appointment.appointments_appointmentStatus} Appointment
+                        {appointment.appointments_appointmentStatus}
                       </div>
                     </td>
                   </tr>
