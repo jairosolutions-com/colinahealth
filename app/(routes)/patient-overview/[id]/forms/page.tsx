@@ -206,6 +206,7 @@ export default function FormsTab() {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
+          false,
           router
         );
         setPatientForms(response.data);
