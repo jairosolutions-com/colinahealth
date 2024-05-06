@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 
+import Image from "next/image";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
@@ -8,7 +8,7 @@ import Edit from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { FormsModalContent } from "@/components/modal-content/forms-modal-content";
-import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
+import { FormViewsModalContent } from "@/components/modal-content/formsview-modal-content";
 import Modal from "@/components/reusable/modal";
 import {
   createFormsOfPatient,
@@ -21,7 +21,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { SuccessModal } from "@/components/shared/success";
 import { ConfirmationModal } from "@/components/modal-content/confirmation-modal-content";
-
+import Pagination from "@/components/shared/pagination";
 interface Modalprops {
   isEdit: any;
   formAddData: any;
@@ -39,8 +39,6 @@ interface FormFile {
 function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>): void {
   throw new Error("Function not implemented.");
 }
-
-import Pagination from "@/components/shared/pagination";
 
 export default function FormsTab() {
   const router = useRouter();
@@ -281,7 +279,9 @@ export default function FormsTab() {
               </span>
             </div>
             <div>
-              <p>Total of {totalForms} logs</p>
+              <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
+                Total of {totalForms} logs
+              </p>
             </div>
           </div>
           <div className="flex gap-2">
@@ -325,8 +325,8 @@ export default function FormsTab() {
                 <Image
                   src="/svgs/search.svg"
                   alt="Search"
-                  width={20}
-                  height={20}
+                  width="20"
+                  height="20"
                   className="absolute left-8 top-9 pointer-events-none"
                 />
               </div>
@@ -369,7 +369,8 @@ export default function FormsTab() {
           <div>
             <table className="text-left rtl:text-right">
               <thead>
-                <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                {" "}
+                <tr className="uppercase text-[#64748B] border-b-[1px] text-[15px] h-[70px] font-semibold">
                   <td className="px-6 py-3">FORM UID</td>
                   <td className="px-6 py-3">NAME OF DOCUMENT</td>
                   <td className="px-6 py-3">DATE ISSUED</td>
@@ -455,46 +456,14 @@ export default function FormsTab() {
           }
           isModalOpen={isConfirmModalOpen}
         />
-        // <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#76898A99]">
-        //   <div className="bg-white max-w-lg rounded-lg w-[600px] h-[146px]">
-        //     <div className="flex justify-center items-center pt-6 pb-6">
-        //       <h2 className="font-semibold text-[20px] text-[#667085]">
-        //         Are you sure to archive this?
-        //       </h2>
-        //     </div>
-        //     <div className="flex justify-center items-center gap-2">
-        //       <button
-        //         onClick={() => setConfirmArchived(false)}
-        //         disabled={isSubmitted}
-        //         type="button"
-        //         className={`
-        //                       ${isSubmitted && " cursor-not-allowed"}
-        //                       w-[160px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black rounded-sm`}
-        //       >
-        //         No
-        //       </button>
-        //       <button
-        //         disabled={isSubmitted}
-        //         type="button"
-        //         onClick={(e) => {
-        //           handleIsArchived(formsUuid, e);
-        //         }}
-        //         className={`
-        //                         ${isSubmitted && " cursor-not-allowed"}
-        //                         w-[160px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium rounded-sm`}
-        //       >
-        //         Yes
-        //       </button>
-        //     </div>
-        //   </div>
-        // </div>
       )}
       {isOpen && (
         <Modal
           content={
-            <FormsviewModalContent
+            <FormViewsModalContent
               isModalOpen={isModalOpen}
-              formData={formViewdData}
+              formsData={formViewdData}
+              isView={false}
             />
           }
           isModalOpen={isModalOpen}

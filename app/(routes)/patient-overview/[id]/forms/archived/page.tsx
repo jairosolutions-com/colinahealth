@@ -7,7 +7,7 @@ import Edit from "@/components/shared/buttons/view";
 import { useEffect, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { FormsviewModalContent } from "@/components/modal-content/formsview-modal-content";
+import { FormViewsModalContent } from "@/components/modal-content/formsview-modal-content";
 import Modal from "@/components/reusable/modal";
 import { fetchFormsByPatient } from "@/app/api/forms-api/forms.api";
 import { SuccessModal } from "@/components/shared/success";
@@ -28,7 +28,7 @@ export default function ArchiveTab() {
   const [patientForms, setPatientForms] = useState<any[]>([]);
   const [sortBy, setSortBy] = useState("dateIssued");
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [totalNotes, setTotalNotes] = useState<number>(0);
+  const [totalArchive, setTotalArchive] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState("");
   const [gotoError, setGotoError] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -154,7 +154,7 @@ export default function ArchiveTab() {
         );
         setPatientForms(response.data);
         setTotalPages(response.totalPages);
-        setTotalNotes(response.totalCount);
+        setTotalArchive(response.totalCount);
         setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
@@ -205,7 +205,7 @@ export default function ArchiveTab() {
             </div>
             <div>
               <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
-                Total of 6 logs
+                Total of {totalArchive} logs
               </p>
             </div>
           </div>
@@ -345,9 +345,10 @@ export default function ArchiveTab() {
       {isOpen && (
         <Modal
           content={
-            <FormsviewModalContent
+            <FormViewsModalContent
               isModalOpen={isModalOpen}
-              formData={setFormsToView}
+              formsData={setFormsToView}
+              isView={false}
             />
           }
           isModalOpen={isModalOpen}
