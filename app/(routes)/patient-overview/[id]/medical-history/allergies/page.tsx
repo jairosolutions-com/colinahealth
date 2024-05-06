@@ -354,7 +354,7 @@ const Allergies = () => {
                     <div
                       className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                         allergy.allergies_severity === "Mild"
-                          ? "bg-[#e9f3ff] text-[#1b84ff] text-[15px]" // Green color for Mild
+                          ? "bg-[#FFF8DD] text-[#F6C000] text-[15px]" // Green color for Mild
                           : allergy.allergies_severity === "Moderate"
                           ? "bg-[#fff5ef] text-[#ff6f1e] text-[15px]" // Dark color for Moderate
                           : allergy.allergies_severity === "Severe"
