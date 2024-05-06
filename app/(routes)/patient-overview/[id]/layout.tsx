@@ -333,9 +333,6 @@ function PatientOverview() {
     }
   };
 
-  function handleImageChange(event: ChangeEvent<HTMLInputElement>): void {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <div className="flex flex-col gap-[3px]">
