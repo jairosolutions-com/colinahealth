@@ -10,15 +10,10 @@ import {
 import { fetchCountryList } from "@/app/api/country-api/countryList.api";
 import { set } from "date-fns";
 import { useEditContext } from "../editContext"; // Assuming you've exported EditContext from your context file
-const PatientDetails = ({ onEditChange }: { onEditChange: (isEdit: boolean) => void }) => {
-  const handleClick = () => {
-    const isEdit = false; // Replace with the actual patientId
-    onEditChange(isEdit);
-  };
-
+export default function PatientDetails({}) {
+  const { toggleEdit } = useEditContext();
   if (typeof window === "undefined") {
   }
-  const { isEdit, toggleEdit } = useEditContext();
 
   const [patientDetails, setPatientDetails] = useState<any>([]);
   const [patientEditMode, setPatientEditMode] = useState(false);
@@ -774,4 +769,3 @@ const PatientDetails = ({ onEditChange }: { onEditChange: (isEdit: boolean) => v
     </div>
   );
 }
-export default PatientDetails;
