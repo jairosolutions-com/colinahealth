@@ -1,16 +1,17 @@
 "use client";
 
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { getAccessToken } from "./api/login-api/accessToken";
 import { onNavigate } from "@/actions/navigation";
 
 export default function Home() {
+  const router = useRouter();
   useEffect(() => {
     if (getAccessToken()) {
-      redirect("/dashboard");
+      onNavigate(router, "/dashboard");
     } else {
-      redirect("login");
+      router.replace("login");
     }
   }, []);
 
