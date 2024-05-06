@@ -188,7 +188,7 @@ export default function Surgeries() {
   if (isLoading) {
     return (
       <div className="container w-full h-full flex justify-center items-center ">
-        <img
+        <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
           width={100}
@@ -239,11 +239,16 @@ export default function Surgeries() {
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <img src="/imgs/add.svg" alt="" width={22} height={22} />
+              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
               <p className="text-[18px]">Add</p>
             </button>
             <button className="btn-pdfs gap-2">
-              <img src="/imgs/downloadpdf.svg" alt="" width={22} height={22} />
+              <Image
+                src="/imgs/downloadpdf.svg"
+                alt=""
+                width={22}
+                height={22}
+              />
               <p className="text-[18px]">Download PDF</p>
             </button>
           </div>
@@ -313,15 +318,16 @@ export default function Surgeries() {
           <table className="text-left rtl:text-right">
             <thead>
               <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                <td className="px-6 py-3">Surgery ID </td>
-                <td className="px-6 py-3">DATE OF SURGERY</td>
-                <td className="px-6 py-3">TYPE</td>
-                <td className="px-6 py-3">SURGERY</td>
-                <td className="px-6 py-3">NOTES</td>
-                <td className="px-20">Action</td>
+                <td className="px-6 py-3 ">Surgery ID </td>
+                <td className="px-6 py-3 ">DATE OF SURGERY</td>
+                <td className="px-6 py-3 ">TYPE</td>
+                <td className="px-6 py-3 ">SURGERY</td>
+                <td className="px-6 py-3 ">NOTES</td>
+                <td className="py-3 px-6 text-center">Action</td>
+                <td className="w-[14px]"></td>
               </tr>
             </thead>
-            <tbody className="h-[220px]">
+            <tbody className="h-[220px] overflow-y-scroll">
               {patientSurgeries.length == 0 && (
                 <div className="border-1 w-[180vh] py-5  absolute flex justify-center items-center">
                   <p className="text-[15px] font-normal text-gray-700 text-center">
@@ -334,22 +340,22 @@ export default function Surgeries() {
                   key={index}
                   className="group hover:bg-[#f4f4f4]  border-b text-[15px]"
                 >
-                  <td className="truncate px-6 py-3">
+                  <td className="truncate px-6 py-3 ">
                     {surgery.surgeries_uuid}
                   </td>
-                  <td className="truncate px-6 py-3">
+                  <td className="truncate px-6 py-3 ">
                     {formatDate(surgery.surgeries_dateOfSurgery)}
                   </td>
-                  <td className="truncate px-6 py-3">
+                  <td className="truncate px-6 py-3 ">
                     {surgery.surgeries_typeOfSurgery}
                   </td>
-                  <td className="truncate px-6 py-3">
+                  <td className="truncate px-6 py-3 ">
                     {surgery.surgeries_surgery}
                   </td>
-                  <td className="truncate px-6 py-3">
+                  <td className="truncate px-6 py-3 ">
                     {surgery.surgeries_notes}
                   </td>
-                  <td className="px-5 py-3 flex items-center justify-center">
+                  <td className="py-3 px-6 flex justify-center">
                     <div
                       onClick={() => {
                         isModalOpen(true);

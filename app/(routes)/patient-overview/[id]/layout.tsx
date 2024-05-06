@@ -1,8 +1,9 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import { onNavigate } from "@/actions/navigation";
 import { Navbar } from "@/components/navbar";
-import { useParams, useRouter } from "next/navigation";
+import { redirect, useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
 import {
@@ -24,15 +25,14 @@ function PatientOverview() {
   useEffect(() => {
     console.log("isEdit changed in layout:", isEdit);
   }, [isEdit]); // Include isEdit in the dependency array to ensure that the effect runs whenever the isEdit state changes
+
   const router = useRouter();
   const params = useParams<{
     id: any;
     tag: string;
     item: string;
   }>();
-  if (!getAccessToken()) {
-    router.replace("/login");
-  }
+
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
   const [patientImage, setPatientImage] = useState<string>();
@@ -333,6 +333,10 @@ function PatientOverview() {
     }
   };
 
+  function handleImageChange(event: ChangeEvent<HTMLInputElement>): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <div className="flex flex-col gap-[3px]">
       <div className="p-title pb-2">
@@ -600,6 +604,7 @@ export default function PatientOverviewLayout({
           {children}
         </div>
       </EditProvider>
+
     </div>
   );
 }

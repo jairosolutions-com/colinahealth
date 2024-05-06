@@ -4,62 +4,64 @@ import Image from "next/image";
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+// import {
+//   addPrescriptionFile,
+//   getCurrentPrescriptionFileCountFromDatabase,
+// } from "@/app/api/prescription-api/prescription.api";
 import {
-  addLabFile,
+  addFormFile,
   getCurrentFileCountFromDatabase,
-} from "@/app/api/lab-results-api/lab-results.api";
+} from "@/app/api/forms-api/forms.api";
 import { useRouter } from "next/navigation";
+
 interface ModalProps {
-  labResultUuid: any;
+  formsUuid: any;
   isModalOpen: (isOpen: boolean) => void;
   onClose: any;
+  onSuccess: any;
 }
-interface LabFile {
+interface FormFile {
   file: any; // Assuming file property exists for the key
   filename: string;
   data: Uint8Array;
   file_uuid: string;
 }
 
-export const NofileviewLabResultsModalContent = ({
-  labResultUuid,
+export const NofileviewFormsModalContent = ({
+  formsUuid,
   isModalOpen,
   onClose, // Receive the callback function
+  onSuccess,
 }: ModalProps) => {
-  const [modalOpen, setModalOpen] = useState(false);
   const { toast } = useToast();
 
-  const [labFiles, setLabFiles] = useState<any[]>([]); //
-  const defaultLabFiles = Array.isArray(labFiles) ? labFiles : [];
+  const [formsFiles, setFormsFiles] = useState<any[]>([]); //
+  const defaultFormsFiles = Array.isArray(formsFiles) ? formsFiles : [];
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
-  const [selectedFiles, setSelectedLabFiles] = useState<File[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [fileTypes, setFileTypes] = useState<string[]>([]);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const router = useRouter();
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSubmitted(true);
     e.preventDefault();
-    const getUuid = labResultUuid;
-
+    const getUuid = formsUuid;
+    console.log(getUuid, "getuuid");
     console.log("submit clicked");
     if (selectedFiles.length === 0) {
       toggleToast();
       return;
     }
-    if (getUuid) {
-      const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
-      console.log("Current file count:", currentFileCount);
-      // Define the maximum allowed files based on the current count
-      const maxAllowedFiles = currentFileCount === 0 ? 5 : 5 - currentFileCount;
-      if (selectedFiles.length > maxAllowedFiles) {
-        toggleMaxFilesToast(maxAllowedFiles);
-        return;
-      }
-      console.log("FILES TO ADD", maxAllowedFiles);
+    const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
+    const maxAllowedFiles = 5 - currentFileCount;
 
-      console.log("Lab UUID:", getUuid);
+    console.log("FILES TO ADD", maxAllowedFiles);
+
+    if (selectedFiles.length > maxAllowedFiles) {
+      toggleMaxFilesToast(maxAllowedFiles);
+      return;
     }
     try {
       console.log(getUuid, "getUuid");
@@ -67,30 +69,24 @@ export const NofileviewLabResultsModalContent = ({
       if (selectedFiles && selectedFiles.length > 0) {
         // Iterate through each selected file
         for (let i = 0; i < selectedFiles.length; i++) {
-          const labFileFormData = new FormData();
-          labFileFormData.append("labfile", selectedFiles[i], fileNames[i]);
+          const formsFormData = new FormData();
+          formsFormData.append("formsfile", selectedFiles[i], fileNames[i]);
 
-          // Add lab file
-          const addLabFiles = await addLabFile(
-            getUuid,
-            labFileFormData,
-            router
-          );
+          const addFormFiles = await addFormFile(getUuid, formsFormData, "");
 
           console.log(
-            `Lab FILE ${fileNames[i]} added successfully:`,
-            addLabFiles
+            `Form FILE ${fileNames[i]} added successfully:`,
+            addFormFiles
           );
         }
-
+        onSuccess();
         onClose(false);
         // Call the onSuccess callback function
       } else {
         console.warn("No files selected to upload");
       }
     } catch (error) {
-      console.error("Error adding Lab Result:", error);
-      // setError("Failed to add Lab Result");
+      console.error("Error adding Forms:", error);
     }
     setIsSubmitted(false);
   };
@@ -98,7 +94,7 @@ export const NofileviewLabResultsModalContent = ({
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsSubmitted(true);
-    const maxAllowedFiles = 5 - labFiles.length;
+    const maxAllowedFiles = 5 - formsFiles.length;
     setNumFilesCanAdd(maxAllowedFiles);
     const files = e.target.files;
     const MAX_FILE_SIZE_MB = 15;
@@ -108,7 +104,6 @@ export const NofileviewLabResultsModalContent = ({
         0
       );
       const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
-
       if (totalSizeMB > MAX_FILE_SIZE_MB) {
         toggleMaxSizeToast();
         e.target.value = ""; // Clear the input field
@@ -136,7 +131,7 @@ export const NofileviewLabResultsModalContent = ({
             }
 
             console.log(selectedFileNames, "selected file names");
-            console.log(labFiles, "labFiles labFiles labFiles");
+            console.log(formsFiles, "FormsFiles");
 
             // Set selected file names
             setSelectedFileNames(selectedFileNames);
@@ -146,10 +141,10 @@ export const NofileviewLabResultsModalContent = ({
       });
 
       // Update state variables with arrays
-      setSelectedLabFiles(newFiles);
+      setSelectedFiles(newFiles);
       setFileNames(newFileNames);
       setFileTypes(newFileTypes);
-      const maxAllowedFiles = 5 - labFiles.length;
+      const maxAllowedFiles = 5 - formsFiles.length;
       setNumFilesCanAdd(maxAllowedFiles);
     } else {
       console.warn("No files selected");
@@ -164,6 +159,7 @@ export const NofileviewLabResultsModalContent = ({
       description: "Please try again.",
     });
   };
+
   const toggleMaxSizeToast = (): void => {
     setIsSubmitted(false);
     toast({
@@ -184,10 +180,9 @@ export const NofileviewLabResultsModalContent = ({
     // Initialize selected file names array
     let selectedFileNames: string[] = [];
 
-    // Only proceed if labFiles is not null and contains files
-    if (labFiles && labFiles.length > 0) {
+    if (formsFiles && formsFiles.length > 0) {
       // Push file names to selectedFileNames array
-      for (let file of labFiles) {
+      for (let file of formsFiles) {
         // Only push the filename if it's defined
         if (file && file.filename) {
           selectedFileNames.push(file.filename);
@@ -195,17 +190,15 @@ export const NofileviewLabResultsModalContent = ({
       }
 
       console.log(selectedFileNames, "selected file names");
-      console.log(labFiles, "labFiles labFiles labFiles");
 
       // Set selected file names
       setSelectedFileNames(selectedFileNames);
     } else {
-      // Log a message when there are no files in labFiles
       console.log("No files in labFiles");
       // Optionally, you can clear the selectedFileNames state here
       setSelectedFileNames([]);
     }
-  }, [labFiles, defaultLabFiles]);
+  }, [formsFiles, defaultFormsFiles]);
   const [isHovering, setIsHovering] = useState(false);
 
   const FileUploadWithHover = () => {
@@ -223,32 +216,32 @@ export const NofileviewLabResultsModalContent = ({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="">
-          <div
-            className={`w-[220px] flex justify-items-center flex-row ${
-              defaultLabFiles.length === 5
+        <div
+          className={`w-[220px] flex justify-items-center flex-row ${
+            defaultFormsFiles.length === 5
+              ? "cursor-not-allowed"
+              : "cursor-pointer"
+          }`}
+        >
+          <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-full ">
+            {selectedFiles.length > 0
+              ? `${selectedFiles.length}/${numFilesCanAdd}selected`
+              : defaultFormsFiles.length < 5
+              ? "Choose files to upload"
+              : "Max Files Uploaded"}
+          </p>
+          <label
+            htmlFor="fileupload"
+            className={` ${
+              defaultFormsFiles.length === 5
                 ? "cursor-not-allowed"
                 : "cursor-pointer"
-            }`}
+            }
+                              text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}
           >
-            <p className="border-2 rounded-l-md text-gray-400 px-2 py-1 text-[13px] text-nowrap w-full ">
-              {selectedFiles.length > 0
-                ? `${selectedFiles.length}/${numFilesCanAdd}selected`
-                : defaultLabFiles.length < 5
-                ? "Choose files to upload"
-                : "Max Files Uploaded"}
-            </p>
-            <label
-              htmlFor="fileupload"
-              className={` ${
-                defaultLabFiles.length === 5
-                  ? "cursor-not-allowed"
-                  : "cursor-pointer"
-              }text-[13px] bg-[#007C85] px-2 py-1 text-white rounded-r-md flex justify-center border-2 border-[#007C85]`}
-            >
-              Browse
-            </label>
-          </div>
+            Browse
+          </label>
+
           <input
             type="file"
             id="fileupload"
@@ -256,18 +249,20 @@ export const NofileviewLabResultsModalContent = ({
             accept=".jpeg,.jpg,.png,.pdf"
             className="hidden"
             name="file"
+            disabled={defaultFormsFiles.length === 5}
             onChange={(e) => handleFile(e)}
+            max={5}
           />
+          {isHovering && selectedFiles.length > 0 && (
+            <div className="absolute bg-[#4E4E4E] p-2 w-[220px] text-[13px] mt-[30px] text-white rounded-md shadow-md ">
+              <ul>
+                {selectedFiles.map((file, index) => (
+                  <li key={index}>{file.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-        {isHovering && selectedFiles.length > 0 && (
-          <div className="absolute bg-[#4E4E4E] p-2 w-[220px] text-[13px] mt-[30px] text-white rounded-md shadow-md">
-            <ul>
-              {selectedFiles.map((file, index) => (
-                <li key={index}>{file.name}</li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
     );
   };
@@ -291,7 +286,7 @@ export const NofileviewLabResultsModalContent = ({
               <div className="flex justify-center text-[15px] font-medium mb-4 mt-2">
                 No image/document found!
               </div>
-              <div className="filehover">
+              <div className="">
                 <FileUploadWithHover />
               </div>
             </div>
@@ -301,11 +296,10 @@ export const NofileviewLabResultsModalContent = ({
           <div className="justify-end flex mr-10">
             <button
               onClick={() => isModalOpen(false)}
-              disabled={isSubmitted}
               type="button"
               className={`
-                ${isSubmitted && " cursor-not-allowed"}
-                w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm `}
+              ${isSubmitted && " cursor-not-allowed"}
+              w-[150px] h-[45px] px-3 py-2 bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black mr-4 rounded-sm`}
             >
               Cancel
             </button>
@@ -313,8 +307,8 @@ export const NofileviewLabResultsModalContent = ({
               disabled={isSubmitted}
               type="submit"
               className={`
-                ${isSubmitted && " cursor-not-allowed"}
-                w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
+              ${isSubmitted && " cursor-not-allowed"}
+              w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
             >
               Submit
             </button>
@@ -324,4 +318,4 @@ export const NofileviewLabResultsModalContent = ({
     </div>
   );
 };
-export default NofileviewLabResultsModalContent;
+export default NofileviewFormsModalContent;

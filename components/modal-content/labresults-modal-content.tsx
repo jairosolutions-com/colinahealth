@@ -329,7 +329,7 @@ export const LabresultsModalContent = ({
           <div className="">
             <label className="relative w-full bg-[#daf3f5] border-[#007C85] border-dashed border-2 flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold">
               <>
-                <img
+                <Image
                   className="w-7 h-7 mr-1"
                   width={50}
                   height={50}
@@ -351,7 +351,7 @@ export const LabresultsModalContent = ({
               <>
                 {selectedFileNames.length > 0 ? (
                   // If files are selected, display filein.svg
-                  <img
+                  <Image
                     className="w-7 h-7 mr-1"
                     width={50}
                     height={50}
@@ -360,7 +360,7 @@ export const LabresultsModalContent = ({
                   />
                 ) : (
                   // If no files are selected, display folder-add.svg
-                  <img
+                  <Image
                     className="w-7 h-7 mr-1"
                     width={50}
                     height={50}
@@ -443,6 +443,7 @@ export const LabresultsModalContent = ({
                     src="/imgs/colina-logo-animation.gif"
                     alt="logo"
                     width={100}
+                    height={100}
                   />
                 </div>
               </div>
@@ -600,7 +601,7 @@ export const LabresultsModalContent = ({
                           className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
                           placeholder="input triglycerides"
                         />
-                        <img
+                        <Image
                           className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
                           width={20}
                           height={20}
@@ -616,7 +617,7 @@ export const LabresultsModalContent = ({
                       <div className="">
                         <label className="relative h-12 w-full flex justify-center items-center rounded-md cursor-pointer text-center text-[#101828] font-bold mt-[33px] bg-[#daf3f5] border-[#007C85] border-dashed border-2">
                           <>
-                            <img
+                            <Image
                               className="w-10 h-10 mr-1"
                               width={50}
                               height={50}
@@ -638,7 +639,7 @@ export const LabresultsModalContent = ({
                           <>
                             {selectedFileNames.length > 0 ? (
                               // If files are selected, display filein.svg
-                              <img
+                              <Image
                                 className="w-10 h-10 mr-1"
                                 width={50}
                                 height={50}
@@ -647,7 +648,7 @@ export const LabresultsModalContent = ({
                               />
                             ) : (
                               // If no files are selected, display folder-add.svg
-                              <img
+                              <Image
                                 className="w-10 h-10 mr-1"
                                 width={50}
                                 height={50}

@@ -235,6 +235,7 @@ const TimeGraph = ({
                                           src="/icons/chart-done.svg"
                                           alt="chart-done"
                                           width={30}
+                                          height={30}
                                           className="pointer-events-none select-none"
                                         />
                                       )}{" "}
@@ -337,6 +338,7 @@ const TimeGraph = ({
                                           src="/icons/chart-list.svg"
                                           alt="list"
                                           width={30}
+                                          height={30}
                                           className="pointer-events-none select-none"
                                         />
                                         {/* Calculate the count of logs where status is not pending */}
@@ -493,6 +495,7 @@ const TimeGraph = ({
                                             src="/icons/chart-done.svg"
                                             alt="done"
                                             width={50}
+                                            height={50}
                                             className="pointer-events-none select-none"
                                             //
                                           />

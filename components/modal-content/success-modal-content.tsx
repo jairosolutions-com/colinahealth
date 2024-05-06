@@ -24,7 +24,12 @@ export const SuccessModal = ({
         <div className=" bg-white rounded-[10px] shadow-xl w-[670px] h-[326px]">
           <div className="text-center pt-[30px]">
             <div className="mx-auto mb-5 text-gray-400 w-[110px] h-[110px]">
-              <Image src="/svgs/successful.svg" alt="" />
+              <Image
+                src="/svgs/successful.svg"
+                alt=""
+                width={110}
+                height={110}
+              />
             </div>
             <h1 className="text-[20px] font-bold text-md text-[#101828] mb-2">
               {isUpdated ? "Updated" : "Submitted"} Successfully!

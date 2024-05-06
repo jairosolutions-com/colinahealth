@@ -222,7 +222,7 @@ const Appointment = () => {
   if (isLoading) {
     return (
       <div className="container w-full h-full flex justify-center items-center ">
-        <img
+        <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
           width={100}
@@ -324,15 +324,16 @@ const Appointment = () => {
           <table className="text-left rtl:text-right">
             <thead>
               <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                <th className="px-6 py-3 ">STATUS</th>
-                <th className="px-6 py-3 ">DATE</th>
-                <th className="px-6 py-3 ">TIME</th>
-                <th className="px-4 py-3 ">END TIME</th>
-                <th className="px-4 py-3 ">DETAILS</th>
-                <th className="px-24 py-3">ACTION</th>
+                <td className="px-6 py-3 ">STATUS</td>
+                <td className="px-6 py-3 ">DATE</td>
+                <td className="px-6 py-3 ">TIME</td>
+                <td className="px-6 py-3 ">END TIME</td>
+                <td className="px-6 py-3 ">DETAILS</td>
+                <td className="py-3 px-6 text-center">ACTION</td>
+                <td className="w-[14px]"></td>
               </tr>
             </thead>
-            <tbody className="h-[220px]">
+            <tbody className="h-[220px] overflow-y-scroll">
               {patientAppointments.length === 0 && (
                 <tr>
                   <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
@@ -349,25 +350,25 @@ const Appointment = () => {
                       key={index}
                       className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                     >
-                      <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                      <td className="text-[15px] px-6 py-3  rounded-full flex items-center">
                         <div
                           className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
                             appointments.appointments_appointmentStatus ===
                             "Scheduled"
-                              ? "bg-[#dfffea] text-[#17C653] text-[15px]" // Green color for Scheduled
+                              ? "bg-[#E7EAEE] text-[#71717A] text-[15px]" // Green color for Scheduled
                               : appointments.appointments_appointmentStatus ===
                                 "Done"
-                              ? "bg-[#E7EAEE] text-[#3C3C3C] text-[15px]" // Dark color for Done
+                              ? "bg-[#CCFFDD] text-[#17C653] text-[15px]" // Dark color for Done
                               : appointments.appointments_appointmentStatus ===
                                   "Patient-IN" ||
                                 appointments.appointments_appointmentStatus ===
                                   "On-going"
-                              ? "bg-[#FFFCDB] text-[#E0BD03] text-[15px]" // Yellow for On Going
+                              ? "bg-[#FFF8DD] text-[#F6C000] text-[15px]" // Yellow for On Going
                               : appointments.appointments_appointmentStatus ===
                                   "Missed" ||
                                 appointments.appointments_appointmentStatus ===
                                   "Cancelled"
-                              ? "bg-[#FEE9E9] text-[#EF4C6A] text-[15px]" // Red color for Missed and Cancelled
+                              ? "bg-[#FFE8EC] text-[#EF4C6A] text-[15px]" // Red color for Missed and Cancelled
                               : ""
                           }`}
                         >
@@ -375,20 +376,20 @@ const Appointment = () => {
                             className={`inline-block h-2 w-2 rounded-full mr-1 ${
                               appointments.appointments_appointmentStatus ===
                               "Scheduled"
-                                ? "bg-green-500" // Green color for Scheduled
+                                ? "bg-[#7E7E7E]" // Green color for Scheduled
                                 : appointments.appointments_appointmentStatus ===
                                   "Done"
-                                ? "bg-[#E7EAEE]" // Dark color for Done
+                                ? "bg-[#0EB146]" // Dark color for Done
                                 : appointments.appointments_appointmentStatus ===
                                     "Patient-IN" ||
                                   appointments.appointments_appointmentStatus ===
                                     "On-going"
-                                ? "bg-[#E0BD03]" // Yellow for On Going
+                                ? "bg-[#E4B90E]" // Yellow for On Going
                                 : appointments.appointments_appointmentStatus ===
                                     "Missed" ||
                                   appointments.appointments_appointmentStatus ===
                                     "Cancelled"
-                                ? "bg-[#EF4C6A]" // Red color for Missed and Cancelled
+                                ? "bg-[#EE4D4D]" // Red color for Missed and Cancelled
                                 : ""
                             }`}
                           ></span>
@@ -396,21 +397,21 @@ const Appointment = () => {
                         </div>
                       </td>
 
-                      <td className="px-6 py-3 text-[15px]">
+                      <td className="px-6 py-3 text-[15px] ">
                         {formatDate(appointments.appointments_appointmentDate)}
                       </td>
-                      <td className="px-6 py-3 text-[15px]">
+                      <td className="px-6 py-3 text-[15px] ">
                         {formatTime(appointments.appointments_appointmentTime)}
                       </td>
-                      <td className="px-6 py-3 text-[15px]">
+                      <td className="px-6 py-3 text-[15px] ">
                         {formatTime(
                           appointments.appointments_appointmentEndTime
                         )}
                       </td>
-                      <td className="px-6 py-3 text-[15px]">
+                      <td className="px-6 py-3 text-[15px] ">
                         {appointments.appointments_details}
                       </td>
-                      <td className="px-[90px] py-3 items-center">
+                      <td className="py-3 px-6 flex justify-center">
                         <p
                           onClick={() => {
                             isModalOpen(true);

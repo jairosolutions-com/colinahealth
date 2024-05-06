@@ -182,7 +182,7 @@ const Notes = () => {
   if (isLoading) {
     return (
       <div className="container w-full h-full flex justify-center items-center ">
-        <img
+        <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
           width={100}
@@ -222,11 +222,16 @@ const Notes = () => {
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <img src="/imgs/add.svg" alt="" width={22} height={22} />
+              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
               <p className="text-[18px]">Add</p>
             </button>
             <button className="btn-pdfs gap-2">
-              <img src="/imgs/downloadpdf.svg" alt="" width={22} height={22} />
+              <Image
+                src="/imgs/downloadpdf.svg"
+                alt=""
+                width={22}
+                height={22}
+              />
               <p className="text-[18px]">Download PDF</p>
             </button>
           </div>
@@ -301,11 +306,12 @@ const Notes = () => {
                 <td className="px-6 py-3">DATE</td>
                 <td className="px-6 py-3">TIME</td>
                 <td className="px-6 py-3">SUBJECT</td>
-                <td className="px-6 py-3 w-[200px]">NOTES</td>
+                <td className="px-6 py-3 ">NOTES</td>
                 <td className="px-6 py-3 text-center">ACTION</td>
+                <td className="w-[14px]"></td>
               </tr>
             </thead>
-            <tbody className="h-[220px]">
+            <tbody className="h-[220px] overflow-y-scroll">
               {patientNotes.length === 0 && (
                 <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
                   <p className="text-[15px] font-normal text-gray-700 text-center">
@@ -333,9 +339,7 @@ const Notes = () => {
                     })}
                   </td>
                   <td className="truncate px-6 py-3">{note.notes_subject}</td>
-                  <td className="truncate px-6 py-3 w-[200px]">
-                    {note.notes_notes}
-                  </td>
+                  <td className="truncate px-6 py-3 ">{note.notes_notes}</td>
                   <td className="flex justify-center px-6 py-3">
                     <p>
                       <View></View>

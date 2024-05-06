@@ -309,16 +309,17 @@ export default function prescription() {
               <table className="text-left rtl:text-right">
                 <thead>
                   <tr className=" text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                    <td className="px-6 py-3 w-[230px]">PRESCRIPTION ID</td>
-                    <td className="px-6 py-3 w-[230px]">MEDICINE NAME</td>
-                    <td className="px-6 py-3 w-[230px]">FREQUENCY</td>
-                    <td className="px-6 py-3 w-[230px]">INTERVAL (hr/s)</td>
-                    <td className="px-6 py-3 w-[230px]">DOSAGE</td>
-                    <td className="px-6 py-3 w-[170px] ">STATUS</td>
-                    <td className="px-6 py-3 text-center">ACTION</td>
+                    <td className="px-6 py-3 ">PRESCRIPTION ID</td>
+                    <td className="px-6 py-3 ">MEDICINE NAME</td>
+                    <td className="px-6 py-3 ">FREQUENCY</td>
+                    <td className="px-6 py-3 ">INTERVAL (hr/s)</td>
+                    <td className="px-6 py-3 ">DOSAGE</td>
+                    <td className="px-6 py-3 ">STATUS</td>
+                    <td className="py-3 px-6 text-center">ACTION</td>
+                    <td className="w-[14px]"></td>
                   </tr>
                 </thead>
-                <tbody className="h-[220px]">
+                <tbody className="h-[220px] overflow-y-scroll">
                   {patientPrescriptions.length > 0 && (
                     <>
                       {patientPrescriptions.map((prescription, index) => (
@@ -326,19 +327,19 @@ export default function prescription() {
                           key={index}
                           className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4] text-[15px]"
                         >
-                          <td className="truncate px-6 py-3 w-[230px]">
+                          <td className="truncate px-6 py-3 ">
                             {prescription.prescriptions_uuid}
                           </td>
-                          <td className="truncate  px-6 py-3 w-[230px] ">
+                          <td className="truncate  px-6 py-3  ">
                             {prescription.prescriptions_name}
                           </td>
-                          <td className="truncate  px-6 py-3 w-[230px]">
+                          <td className="truncate  px-6 py-3 ">
                             {prescription.prescriptions_frequency}
                           </td>
-                          <td className="truncate  px-6 py-3 w-[230px]">
+                          <td className="truncate  px-6 py-3 ">
                             {prescription.prescriptions_interval} hours
                           </td>
-                          <td className="truncate  px-6 py-3 w-[230px] ">
+                          <td className="truncate  px-6 py-3  ">
                             {prescription.prescriptions_dosage}
                           </td>
                           <td className="px-6 py-3">
@@ -361,7 +362,7 @@ export default function prescription() {
                             </div>
                           </td>
 
-                          <td className="px-6 py-3 flex gap-2 justify-center">
+                          <td className="py-3 px-6 flex gap-2 justify-center">
                             <p
                               onClick={() => {
                                 isModalOpen(true);

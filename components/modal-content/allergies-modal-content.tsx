@@ -47,19 +47,46 @@ export const AllergiesModalContent = ({
   const [charactersFull, setCharactersFull] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [selectedType, setSelectedType] = useState("");
   const [formData, setFormData] = useState({
     patientUuid: patientId,
-    type: allergy.allergies_type,
-    allergen: allergy.allergies_allergen,
-    severity: allergy.allergies_severity,
-    reaction: allergy.allergies_reaction,
-    notes: allergy.allergies_notes,
+    type: allergy.allergies_type || "",
+    allergen: allergy.allergies_allergen || "",
+    severity: allergy.allergies_severity || "",
+    reaction: allergy.allergies_reaction || "",
+    notes: allergy.allergies_notes || "",
   });
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+  };
+
+  const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      type: value,
+    }));
+
+    if (value === "Others") {
+      setSelectedType("Others");
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: "",
+      }));
+    } else {
+      setSelectedType("");
+    }
+  };
+
+  const handleSeverityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      severity: value,
     }));
   };
 
@@ -174,22 +201,45 @@ export const AllergiesModalContent = ({
                   TYPE
                 </label>
                 <div className="mt-2.5 relative">
-                  <input
-                    type="text"
-                    required
-                    className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                    placeholder="input type"
-                    name="type"
-                    value={formData.type}
-                    onChange={handleChange}
-                  />
-                  <img
-                    className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
-                    width={20}
-                    height={20}
-                    src={"/svgs/chevron-up.svg"}
-                    alt={""}
-                  />
+                  {selectedType === "Others" && (
+                    <input
+                      type="text"
+                      required
+                      className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      placeholder="Specify other type"
+                      name="type"
+                      value={formData.type}
+                      onChange={handleInputChange}
+                    />
+                  )}
+                  {selectedType !== "Others" && (
+                    <>
+                      <select
+                        required
+                        className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+                        name="type"
+                        value={formData.type}
+                        onChange={handleTypeChange}
+                      >
+                        <option value="">Select Type</option>
+                        <option value="Food">Food</option>
+                        <option value="Pet">Pet</option>
+                        <option value="Drug">Drug</option>
+                        <option value="Latex">Latex</option>
+                        <option value="Animal">Animal</option>
+                        <option value="Insect">Insect</option>
+                        <option value="Pest">Pest</option>
+                        <option value="Others">Others</option>
+                      </select>
+                      <Image
+                        className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
+                        width={20}
+                        height={20}
+                        src={"/svgs/chevron-up.svg"}
+                        alt={""}
+                      />
+                    </>
+                  )}
                 </div>
               </div>
               <div>
@@ -207,7 +257,7 @@ export const AllergiesModalContent = ({
                     placeholder="input allergen"
                     name="allergen"
                     value={formData.allergen}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -219,16 +269,25 @@ export const AllergiesModalContent = ({
                   SEVERITY
                 </label>
                 <div className="mt-2.5 relative">
-                  <input
-                    type="text"
+                  <select
                     required
-                    className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                    placeholder="input severity"
-                    name="severity"
+                    className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+                    name="type"
                     value={formData.severity}
-                    onChange={handleChange}
-                  />
-                  <img
+                    onChange={handleSeverityChange}
+                  >
+                    <option value="">Select Severity</option>
+                    <option value="Mild" className="text-blue-500">
+                      Mild
+                    </option>
+                    <option value="Moderate" className="text-orange-500">
+                      Moderate
+                    </option>
+                    <option value="Severe" className="text-red-500">
+                      Severe
+                    </option>
+                  </select>
+                  <Image
                     className="absolute top-0 right-0 mt-3 mr-3 pointer-events-none"
                     width={20}
                     height={20}
@@ -252,7 +311,7 @@ export const AllergiesModalContent = ({
                     placeholder="input reaction"
                     name="reaction"
                     value={formData.reaction}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>

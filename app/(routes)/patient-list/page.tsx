@@ -4,7 +4,7 @@ import { onNavigate } from "@/actions/navigation";
 import { searchPatientList } from "@/app/api/patients-api/patientList.api";
 import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ErrorModal } from "@/components/shared/error";
 import { SuccessModal } from "@/components/shared/success";
@@ -22,11 +22,18 @@ import Pagination from "@/components/shared/pagination";
 export default function PatientPage() {
   const router = useRouter();
   if (typeof window === "undefined") {
-    return <div>No page found</div>;
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Image
+          src="/imgs/colina-logo-animation.gif"
+          width={100}
+          height={100}
+          alt="loading"
+        />
+      </div>
+    );
   }
-  if (!getAccessToken()) {
-    router.replace("/login");
-  }
+
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
@@ -160,7 +167,7 @@ export default function PatientPage() {
         setPatientList(response.data);
         setTotalPages(response.totalPages);
         setTotalPatient(response.totalCount);
-
+        setIsLoading(false);
         // Get UUIDs of all patients
         const patientUuids = response.data.map(
           (patient: { uuid: any }) => patient.uuid
@@ -192,8 +199,6 @@ export default function PatientPage() {
           setPatientImages(patientImagesData);
         }
         setImagesLoaded(true); // Set to true when images are loaded
-
-        setIsLoading(false);
 
         if (response.data.length === 0) {
           setPatientList([]);
@@ -288,7 +293,7 @@ export default function PatientPage() {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
+                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat "
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -322,7 +327,7 @@ export default function PatientPage() {
                 width={"165px"}
                 label={"Select"}
               />
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+              <p className="text-[#191D23] text-opacity-[60%] font-semibold text-[15px]">
                 Sort by
               </p>
               <DropdownMenu
@@ -382,7 +387,7 @@ export default function PatientPage() {
                                 <div key={imgIndex}>
                                   {image.data ? (
                                     // Render the image if data is not empty
-                                    <img
+                                    <Image
                                       className="rounded-full"
                                       src={image.data} // Use the base64-encoded image data directly
                                       alt=""
@@ -391,7 +396,7 @@ export default function PatientPage() {
                                     />
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
-                                    <img
+                                    <Image
                                       className="rounded-full"
                                       src="/imgs/user-no-icon.png"
                                       alt=""
@@ -408,7 +413,7 @@ export default function PatientPage() {
                       ) : // Render a placeholder image if no matching image found
                       imagesLoaded ? ( // Only render stock image when images are loaded
                         <div>
-                          <img
+                          <Image
                             className="rounded-full"
                             src="/imgs/loading.gif" // Show loading gif while fetching images
                             alt="Loading"
@@ -419,7 +424,7 @@ export default function PatientPage() {
                       ) : (
                         // Render loading gif while fetching images
                         <div>
-                          <img
+                          <Image
                             className="rounded-full"
                             src="/imgs/loading.gif" // Show loading gif while fetching images
                             alt="Loading"
@@ -450,15 +455,7 @@ export default function PatientPage() {
           {/* END OF TABLE */}
         </div>
         {/* pagination */}
-        <div className=" bg-white ">
-          <Pagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            pageNumber={pageNumber}
-            setPageNumber={setPageNumber}
-            setCurrentPage={setCurrentPage}
-          />
-        </div>
+
         {isOpen && (
           <Modal
             content={
@@ -492,6 +489,15 @@ export default function PatientPage() {
             errorMessage={error}
           />
         )}
+      </div>
+      <div className=" bg-white ">
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
     </div>
   );

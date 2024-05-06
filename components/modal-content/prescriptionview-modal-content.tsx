@@ -482,6 +482,7 @@ export const PrescriptionViewModalContent = ({
                       src="/imgs/colina-logo-animation.gif"
                       alt="logo"
                       width={100}
+                      height={100}
                     />
                   </div>
                 </div>
@@ -529,13 +530,13 @@ export const PrescriptionViewModalContent = ({
                                 onClick={toggleModal}
                               ></iframe>
                             ) : (
-                              <img
+                              <Image
                                 alt="file image"
                                 width="600"
                                 height="550"
                                 onClick={toggleModal}
                                 src={`data:image/${fileType};base64,${base64String}`}
-                              ></img>
+                              />
                             )}
                           </div>
                           <div className="filehover ">
@@ -583,7 +584,7 @@ export const PrescriptionViewModalContent = ({
                             type="button"
                             className="absolute top-0 left-0 m-4 ml-10 text-white hover:underline flex text-[20px]"
                           >
-                            <img
+                            <Image
                               className="mr-2"
                               src="/svgs/print.svg"
                               alt="Icon"
@@ -597,7 +598,7 @@ export const PrescriptionViewModalContent = ({
                             className="absolute top-0 left-0 m-4 ml-36 text-white hover:underline flex text-[20px]"
                             onClick={downloadImage}
                           >
-                            <img
+                            <Image
                               className="mr-2"
                               src="/svgs/download.svg"
                               alt="Icon"
@@ -612,7 +613,7 @@ export const PrescriptionViewModalContent = ({
                           >
                             Close
                           </button>
-                          <img
+                          <Image
                             alt="Document Full Preview"
                             width={1500}
                             height={1200}
