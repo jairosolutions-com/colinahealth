@@ -34,7 +34,7 @@ const DropdownMenu = ({ open, width, label, options }: DropdownMenuProps) => {
     <div className={` w-full max-w-[165px] w-${width} `} ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-[#FFFFFF] w-full h-[47px] rounded-[5px] px-[20px] items-center flex justify-between font-semibold text-[15px]"
+        className="bg-white w-full h-[47px] rounded-[5px] px-[20px] items-center flex justify-between font-bold text-[15px] text-[#191D23] text-opacity-60 shadow-sm"
       >
         {optionLabel}
         <ChevronDown width={18} height={18} />
