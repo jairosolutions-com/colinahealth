@@ -15,8 +15,9 @@ import ResetPass from "./reset-pass";
 import { Loader2 } from "lucide-react";
 
 export const Login = () => {
+  const router = useRouter();
   if (getAccessToken()) {
-    redirect("/dashboard");
+    router.push("/dashboard");
   }
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +33,7 @@ export const Login = () => {
   const [isOTP, setIsOTP] = useState<boolean>(false);
   const [otpCode, setOtpCode] = useState<string>("");
   const [isResetPass, setIsResetPass] = useState<boolean>(false);
-  const router = useRouter();
+  
 
   useEffect(() => {
     if (!getAccessToken()) {
