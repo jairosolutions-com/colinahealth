@@ -29,9 +29,7 @@ import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.a
 
 export default function AppointmentPage() {
   const router = useRouter();
-  if (!getAccessToken()) {
-    redirect("/login");
-  }
+  
   if (typeof window === "undefined") {
     return (
       <div className="w-full h-full flex justify-center items-center">
