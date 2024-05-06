@@ -39,7 +39,6 @@ export default function PatientOverviewLayout({
     item: string;
   }>();
 
-  
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
   const [patientImage, setPatientImage] = useState<string>();
@@ -213,7 +212,20 @@ export default function PatientOverviewLayout({
         </div>
         <div className="form ring-1 w-full h-[220px] ring-[#D0D5DD] px-5 pt-5 rounded-md">
           <div className="flex">
-            <div className="flex flex-col">
+            <div className="flex flex-col relative">
+              {currentRoute === "patient-details" && (
+                <label
+                  htmlFor="fileInput"
+                  className="absolute bottom-2 right-[-20px] cursor-pointer"
+                >
+                  <img
+                    src="/svgs/editprof.svg"
+                    alt="edit button"
+                    width="35"
+                    height="35"
+                  />
+                </label>
+              )}
               {patientImage ? (
                 <img
                   src={patientImage} // Use the patientImage state as the source
