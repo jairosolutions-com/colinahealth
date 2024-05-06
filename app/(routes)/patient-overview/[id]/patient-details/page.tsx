@@ -594,7 +594,7 @@ export default function PatientDetails() {
           </div>
           <div></div>
           <div className="mb-4 w-full ">
-            <div className="justify-end flex pt-5">
+            <div className="justify-end flex pt-5 mr-8">
               {patientEditMode && (
                 <button
                   type="button"
