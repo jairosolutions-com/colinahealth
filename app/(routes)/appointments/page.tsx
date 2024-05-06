@@ -29,9 +29,7 @@ import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.a
 
 export default function AppointmentPage() {
   const router = useRouter();
-  if (!getAccessToken()) {
-    redirect("/login");
-  }
+
   if (typeof window === "undefined") {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -295,7 +293,7 @@ export default function AppointmentPage() {
 
         <div className="w-full">
           <div className="w-full bg-[#F4F4F4] justify-between items-center flex px-5 h-[75px] rounded-sm gap-5">
-            <div className="flex items-center bg-white rounded-sm border border-gray-300 shadow-sm px-4 py-2 h-[47px] w-[460px]">
+            <div className="flex items-center bg-white rounded-sm border border-gray-200  px-4 py-2 h-[47px] w-[460px]">
               <Search className="h-4 w-4 text-gray-500 mr-2" />
               <input
                 type="text"
@@ -311,7 +309,9 @@ export default function AppointmentPage() {
 
             <div className="w-[500px]">
               <div className="flex w-full justify-end items-center gap-3">
-                <p>Filter Date</p>
+                <p className="font-semibold text-[#191D23] text-opacity-60">
+                  Filter Date
+                </p>
 
                 <Popover>
                   <PopoverTrigger asChild>

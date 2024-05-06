@@ -18,9 +18,6 @@ import { useEffect, useState } from "react";
 
 export default function ChartPage() {
   const router = useRouter();
-  if (!getAccessToken()) {
-    redirect("/login");
-  }
   if (typeof window === "undefined") {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -301,7 +298,7 @@ export default function ChartPage() {
                     />
                   </div>
                 </div>
-                <div className=" relative  z-50 r-0">
+                <div className=" relative  r-0">
                   <div
                     className="absolute w-1 bg-[#d9d9d9] endLine "
                     style={{ height: endLineHeight + "px", right: 0 }}

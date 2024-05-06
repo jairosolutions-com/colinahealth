@@ -594,7 +594,7 @@ export default function PatientDetails() {
           </div>
           <div></div>
           <div className="mb-4 w-full ">
-            <div className="justify-end flex pt-5">
+            <div className="justify-end flex pt-5 mr-8">
               {patientEditMode && (
                 <button
                   type="button"
@@ -623,143 +623,144 @@ export default function PatientDetails() {
       <div className="text-xl  font-semibold px-16 w-full h-[50px] pt-3 ring-1 ring-gray-300 pl-[110px]">
         Emergency Contact
       </div>
-
-      <div className=" w-full h-full ring-1 ring-gray-300 px-5 pt-5 pb-5 ">
-        <div className="pl-11">
-          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
-            <div className="mt-12 flex items-center">
-              <label className=" font-medium text-md mr-[147px] text-nowrap">
-                First Name:
-              </label>
-              {emergencyEditMode ? (
-                <input
-                  type="text"
-                  className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
-                  placeholder="Scarlette"
-                />
-              ) : (
-                <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3 text-nowrap">
-                  <span>Scarlette </span>
-                </p>
-              )}
+      <div className="pb-10">
+        <div className=" w-full h-full ring-1 ring-gray-300 px-5 pt-5 pb-5 ">
+          <div className="pl-11">
+            <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
+              <div className="mt-12 flex items-center">
+                <label className=" font-medium text-md mr-[147px] text-nowrap">
+                  First Name:
+                </label>
+                {emergencyEditMode ? (
+                  <input
+                    type="text"
+                    className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
+                    placeholder="Scarlette"
+                  />
+                ) : (
+                  <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3 text-nowrap">
+                    <span>Scarlette </span>
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
+              <div className="mt-12 flex items-center">
+                <label className=" font-medium text-md mr-[147px] text-nowrap">
+                  Last Name:
+                </label>
+                {emergencyEditMode ? (
+                  <input
+                    type="text"
+                    className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
+                    placeholder=" Johnson"
+                  />
+                ) : (
+                  <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3 text-nowrap">
+                    <span> Johnson</span>
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
+              <div className="mt-12 flex items-center">
+                <label className=" font-medium text-md mr-[130px] text-nowrap">
+                  Middle Name:
+                </label>
+                {emergencyEditMode ? (
+                  <input
+                    type="text"
+                    className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
+                    placeholder="S"
+                  />
+                ) : (
+                  <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3 text-nowrap">
+                    <span>S</span>
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
+              <div className="mt-12 flex items-center">
+                <label className=" font-medium text-md mr-[133px] text-nowrap">
+                  Relationship:
+                </label>
+                {emergencyEditMode ? (
+                  <input
+                    type="text"
+                    className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
+                    placeholder="Siblings"
+                  />
+                ) : (
+                  <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
+                    <span>Siblings</span>
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
+              <div className="mt-12 flex items-center">
+                <label className=" font-medium text-md mr-[102px] text-nowrap">
+                  Contact Number:
+                </label>
+                {emergencyEditMode ? (
+                  <input
+                    type="text"
+                    className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
+                    placeholder="(555) 789078"
+                  />
+                ) : (
+                  <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3 text-nowrap">
+                    <span>(555) 789078</span>
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
+              <div className="mt-12 flex items-center">
+                <label className=" font-medium text-md mr-[122px] text-nowrap">
+                  Contact Email:
+                </label>
+                {emergencyEditMode ? (
+                  <input
+                    type="email"
+                    className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
+                    placeholder="scarlette@gmail.com"
+                  />
+                ) : (
+                  <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
+                    <span>scarlette@gmail.com</span>
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
-            <div className="mt-12 flex items-center">
-              <label className=" font-medium text-md mr-[147px] text-nowrap">
-                Last Name:
-              </label>
-              {emergencyEditMode ? (
-                <input
-                  type="text"
-                  className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
-                  placeholder=" Johnson"
-                />
-              ) : (
-                <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3 text-nowrap">
-                  <span> Johnson</span>
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
-            <div className="mt-12 flex items-center">
-              <label className=" font-medium text-md mr-[130px] text-nowrap">
-                Middle Name:
-              </label>
-              {emergencyEditMode ? (
-                <input
-                  type="text"
-                  className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
-                  placeholder="S"
-                />
-              ) : (
-                <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3 text-nowrap">
-                  <span>S</span>
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
-            <div className="mt-12 flex items-center">
-              <label className=" font-medium text-md mr-[133px] text-nowrap">
-                Relationship:
-              </label>
-              {emergencyEditMode ? (
-                <input
-                  type="text"
-                  className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
-                  placeholder="Siblings"
-                />
-              ) : (
-                <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>Siblings</span>
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
-            <div className="mt-12 flex items-center">
-              <label className=" font-medium text-md mr-[102px] text-nowrap">
-                Contact Number:
-              </label>
-              {emergencyEditMode ? (
-                <input
-                  type="text"
-                  className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
-                  placeholder="(555) 789078"
-                />
-              ) : (
-                <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3 text-nowrap">
-                  <span>(555) 789078</span>
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="grid grid-rows-1 max-w-[736px] w-full pl-[50px]">
-            <div className="mt-12 flex items-center">
-              <label className=" font-medium text-md mr-[122px] text-nowrap">
-                Contact Email:
-              </label>
-              {emergencyEditMode ? (
-                <input
-                  type="email"
-                  className="h-9 w-[400px] bg-[#FCFCFC]  px-3 py-2 text-sm text-[#333333] text-normal rounded border border-gray-200"
-                  placeholder="scarlette@gmail.com"
-                />
-              ) : (
-                <p className=" font-normal  text-gray-400 text-md h-[36px] flex items-center ml-3">
-                  <span>scarlette@gmail.com</span>
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-        <div className="mb-4 ">
-          <div className="justify-end flex pt-5">
-            {emergencyEditMode && (
-              <button
-                disabled={isSubmitted}
-                type="button"
-                className={`
+          <div className="mb-4 mr-8">
+            <div className="justify-end flex pt-5">
+              {emergencyEditMode && (
+                <button
+                  disabled={isSubmitted}
+                  type="button"
+                  className={`
                 ${isSubmitted && "cursor-not-allowed"}
                 bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3`}
-                onClick={handleEmergencyEditClick}
-              >
-                Cancel
-              </button>
-            )}
+                  onClick={handleEmergencyEditClick}
+                >
+                  Cancel
+                </button>
+              )}
 
-            <button
-              disabled={isSubmitted}
-              type="submit"
-              className={`
+              <button
+                disabled={isSubmitted}
+                type="submit"
+                className={`
               ${isSubmitted && "cursor-not-allowed"}
               bg-blue-500 hover:bg-blue-700 text-white font-normal font-manrope py-1 px-4 rounded w-24 h-8 `}
-              onClick={handleEmergencyEditClick}
-            >
-              {emergencyEditMode ? "Save" : "Edit"}
-            </button>
+                onClick={handleEmergencyEditClick}
+              >
+                {emergencyEditMode ? "Save" : "Edit"}
+              </button>
+            </div>
           </div>
         </div>
       </div>

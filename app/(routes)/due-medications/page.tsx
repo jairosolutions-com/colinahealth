@@ -20,9 +20,6 @@ import Pagination from "@/components/shared/pagination";
 
 export default function DueMedicationPage() {
   const router = useRouter();
-  if (!getAccessToken()) {
-    redirect("/login");
-  }
   if (typeof window === "undefined") {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -35,7 +32,7 @@ export default function DueMedicationPage() {
       </div>
     );
   }
- 
+
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
@@ -202,7 +199,7 @@ export default function DueMedicationPage() {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
+                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat "
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}

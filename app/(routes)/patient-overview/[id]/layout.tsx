@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { Navbar } from "@/components/navbar";
 import { redirect, useParams, useRouter } from "next/navigation";
@@ -17,9 +17,6 @@ export default function PatientOverviewLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  if (!getAccessToken()) {
-    redirect("/login");
-  }
   if (typeof window === "undefined") {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -39,7 +36,6 @@ export default function PatientOverviewLayout({
     item: string;
   }>();
 
-  
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
   const [patientImage, setPatientImage] = useState<string>();
@@ -205,6 +201,10 @@ export default function PatientOverviewLayout({
     }
   };
 
+  function handleImageChange(event: ChangeEvent<HTMLInputElement>): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <div className="flex flex-col w-full px-[150px] pt-[90px] h-full">
       <div className="flex flex-col gap-[3px]">
@@ -213,7 +213,27 @@ export default function PatientOverviewLayout({
         </div>
         <div className="form ring-1 w-full h-[220px] ring-[#D0D5DD] px-5 pt-5 rounded-md">
           <div className="flex">
-            <div className="flex flex-col">
+            <div className="flex flex-col relative">
+              {currentRoute === "patient-details" && (
+                <label
+                  htmlFor="fileInput"
+                  className="absolute bottom-2 right-[-20px] cursor-pointer"
+                >
+                  <img
+                    src="/svgs/editprof.svg"
+                    alt="edit button"
+                    width="35"
+                    height="35"
+                  />
+                  <input
+                    id="fileInput"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+                </label>
+              )}
               {patientImage ? (
                 <img
                   src={patientImage} // Use the patientImage state as the source
