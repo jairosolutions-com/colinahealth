@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { Navbar } from "@/components/navbar";
 import { redirect, useParams, useRouter } from "next/navigation";
@@ -204,6 +204,10 @@ export default function PatientOverviewLayout({
     }
   };
 
+  function handleImageChange(event: ChangeEvent<HTMLInputElement>): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <div className="flex flex-col w-full px-[150px] pt-[90px] h-full">
       <div className="flex flex-col gap-[3px]">
@@ -223,6 +227,13 @@ export default function PatientOverviewLayout({
                     alt="edit button"
                     width="35"
                     height="35"
+                  />
+                  <input
+                    id="fileInput"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageChange}
                   />
                 </label>
               )}
