@@ -22,12 +22,18 @@ export async function generateOTPCode(
     return otpCode;
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
+      console.log(error,'wew')
       const axiosError = error as AxiosError;
       if (axiosError.message === "Network Error") {
         // Handle network error
         console.error("Connection refused or network error occurred.");
         return Promise.reject(
           new Error("Connection refused or network error occurred.")
+        );
+      }
+      if (axiosError.message == "Request failed with status code 404"){
+        return Promise.reject(
+          new Error("User not found.")
         );
       }
     }
