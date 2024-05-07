@@ -328,7 +328,7 @@ function PatientOverview() {
               )}
             </>
           ) : (
-            <div className="w-[180px] h-[180px] animate-pulse bg-gray-300 rounded-lg "></div>
+            <div className="w-[400px] h-[400px] animate-pulse bg-gray-300 rounded-lg "></div>
           )}
           {currentRoute === "patient-details" && isEdit && (
             <label
@@ -417,7 +417,7 @@ function PatientOverview() {
             </div>
             <div className="flex gap-[50px] px-2">
               {tabs.map((tab, index) => (
-                <Link key= {index} href={tab.url}>
+                <Link key={index} href={tab.url}>
                   <p
                     className={`cursor-pointer font-bold ${
                       pathname === tab.url ||
