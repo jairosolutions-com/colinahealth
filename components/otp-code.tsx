@@ -1,5 +1,9 @@
 "use client";
-import { verifyOTPCode } from "@/app/api/forgot-pass-api/otp-code";
+import {
+  generateOTPCode,
+  verifyOTPCode,
+} from "@/app/api/forgot-pass-api/otp-code";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -22,7 +26,9 @@ const OTPCode = ({
   const inputs = useRef<HTMLInputElement[]>([]);
   const [isVerify, setIsVerify] = useState(false);
   const [currentInputIndex, setCurrentInputIndex] = useState(0);
-
+  const [isNewCode, setIsNewCode] = useState<boolean>(false);
+  const [countdown, setCountdown] = useState<number>(60);
+  const [isError, setIsError] = useState<boolean>(false);
   const handleOTPChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -43,7 +49,7 @@ const OTPCode = ({
     if (!otp.includes("")) {
       handleSubmit();
     }
-  },[otp])
+  }, [otp]);
 
   console.log(otp);
   const handleKeyDown = (
@@ -54,6 +60,7 @@ const OTPCode = ({
       const newOTP = [...otp];
       newOTP[index] = "";
       setOTP(newOTP);
+      setIsError(false);
       if (index > 0 && otp[index - 1] !== "") {
         inputs.current[index - 1].focus();
         setCurrentInputIndex(index - 1);
@@ -82,14 +89,12 @@ const OTPCode = ({
           setIsResetPass(true);
           setIsOTP(false);
           setOTP(new Array(6).fill(""));
-          
+
           // onSuccess();
           // setToastMessage("Email Sent Successfully.");
           // setShowToast(true);
         } else {
-          // onFailed();
-          // setShowToast(true);
-          // setToastMessage("Something went wrong.");
+          setIsError(true);
         }
       }
     } catch (error) {
@@ -99,6 +104,52 @@ const OTPCode = ({
       setIsVerify(false);
     }
   };
+
+  const handleSendNewCode = async (e: any) => {
+    e.preventDefault();
+    setIsNewCode(true);
+    setCountdown(60); // Reset countdown to 60 seconds
+    const intervalId = setInterval(() => {
+      setCountdown((prevCountdown) => prevCountdown - 1);
+    }, 1000);
+
+    // Clear interval after 1 minute (60 seconds)
+    setTimeout(() => {
+      clearInterval(intervalId);
+      setIsNewCode(false);
+    }, 60000);
+    try {
+      if (forgotPassEmail !== "") {
+        const response = await generateOTPCode(forgotPassEmail);
+
+        if (response) {
+          console.log("Email Sent Successfully.");
+        }
+      }
+    } catch (error: any) {
+      // Handle error
+    }
+  };
+
+  function maskEmail(email: string): string {
+    const segments = email.split("@");
+    const username = segments[0];
+    const domain = segments[1];
+
+    const maskedUsername =
+      username.charAt(0) +
+      "*".repeat(Math.max(0, username.length - 2)) +
+      username.slice(-1);
+    const maskedDomain =
+      domain?.charAt(0) +
+      "*".repeat(Math.max(0, domain?.length - 5)) +
+      domain?.slice(-4);
+
+    return maskedUsername + "@" + maskedDomain;
+  }
+
+  const maskedEmail = maskEmail(forgotPassEmail);
+
   return (
     <div
       className={`flex flex-col fixed justify-center md:px-0 px-[30px] items-center lg:w-[1091px] md:w-full  duration-500 transition h-full 
@@ -113,15 +164,7 @@ const OTPCode = ({
       <h1 className="md:text-[20px] font-semibold  md:text-2xl lg:mb-3 text-white md:text-black md:mb-0 mb-3">
         Enter your verification code!
       </h1>
-      <p className="mb-5">
-        We’ve sent the verification code to{" "}
-        <span className="text-underline text-blue-400 cursor-pointer">
-          <Link href={"https://mail.google.com/mail/u/0/#inbox"}>
-            {forgotPassEmail}
-          </Link>
-        </span>
-        .
-      </p>
+      <p className="mb-5">We’ve sent the verification code to {maskedEmail}.</p>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -138,7 +181,9 @@ const OTPCode = ({
                 otp[index] !== ""
                   ? "bg-[#007C85] text-white"
                   : "bg-[#D9D9D91A]  border border-slate-500"
-              } ${currentInputIndex === index ? "border-blue-500" : ""}`}
+              } 
+              ${isError ? "border-red-500 border bg-red-500" : ""}
+              ${currentInputIndex === index ? "border-blue-500" : ""}`}
               key={index}
               type="text"
               id={`otpInput${index + 1}`}
@@ -152,9 +197,25 @@ const OTPCode = ({
             />
           ))}
         </div>
-        <p className="underline text-end w-full  my-2 cursor-pointer">
-          Send a new code
-        </p>
+
+        <div className="flex justify-between items-center">
+          {isError && (
+            <p className="text-red-500 w-full">Verification code not valid!</p>
+          )}
+          {isNewCode ? (
+            <p className="text-end w-full my-2 cursor-pointer">
+              Send a new code in: {countdown} seconds.
+            </p>
+          ) : (
+            <p
+              className="underline text-end w-full my-2 cursor-pointer"
+              onClick={handleSendNewCode}
+            >
+              Send a new code.
+            </p>
+          )}
+        </div>
+
         <button
           disabled={isVerify}
           className={`
@@ -162,7 +223,13 @@ const OTPCode = ({
                           inline-block w-full  max-w-[565px] text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
           type="submit"
         >
-          Verify
+          {isVerify ? (
+            <div className="flex justify-center items-center w-full">
+              <Loader2 size={20} className="animate-spin" /> &nbsp; Verifying...
+            </div>
+          ) : (
+            "Verify"
+          )}
         </button>
       </form>
       <p

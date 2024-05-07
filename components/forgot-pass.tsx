@@ -1,4 +1,5 @@
 import { generateOTPCode } from "@/app/api/forgot-pass-api/otp-code";
+import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
 interface ForgotPassProps {
   isForgotPassword: boolean;
@@ -25,33 +26,31 @@ const ForgotPass = ({
   setIsOTP,
 }: ForgotPassProps) => {
   const [isSent, setIsSent] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setIsSent(true);
 
-    if (forgotPassEmail !== "") {
-      const response = await generateOTPCode(forgotPassEmail);
+    try {
+      if (forgotPassEmail !== "") {
+        const response = await generateOTPCode(forgotPassEmail);
 
-      if (response) {
-        setIsSent(false);
-        setIsLoading(false);
-        setIsOTP(!isOTP);
-        setIsForgotPassword(!isForgotPassword);
-        console.log("Email Sent Successfully.");
-        // onSuccess();
-        // setToastMessage("Email Sent Successfully.");
-        // setShowToast(true);
+        if (response) {
+          setIsError(false);
+          setIsSent(false);
+          setIsOTP(!isOTP);
+          setIsForgotPassword(!isForgotPassword);
+          console.log("Email Sent Successfully.");
+          // onSuccess();
+          // setToastMessage("Email Sent Successfully.");
+          // setShowToast(true);
+        }
       }
-      if (!response) {
-        // setInvalidEmail(true);
-        console.log("failed");
-        setIsLoading(false);
-        // onFailed();
-        // setShowToast(true);
-        // setToastMessage("Something went wrong.");
-      }
+    } catch (error:any) {
+        if(error.message === 'User not found.'){
+          setIsError(true);
+        }
     }
     setIsSent(false);
   };
@@ -82,10 +81,9 @@ const ForgotPass = ({
         >
           <div className="w-full h-full">
             <input
-              autoFocus
               id="email"
               type="email"
-              className={`${isInvalid ? "ring-1 ring-red-400" : ""}  
+              className={`${isError ? "ring-1 ring-red-400" : ""}  
                       h-[60px] w-full focus:bg-opacity-10 md:bg-[#D9D9D91A] bg-[#D9D9D94D] px-3 py-6 pl-5 pb-2 text-md md:text-[#333333] text-white`}
               value={forgotPassEmail}
               onFocus={handleEmailFocus}
@@ -99,14 +97,14 @@ const ForgotPass = ({
                 isEmailFocused || forgotPassEmail
                   ? "top-2 text-[12px] md:text-[#333333]"
                   : "top-5 text-[15px]"
-              } ${isInvalid ? "md:text-[#928989]" : "md:text-[#928989]"}`}
+              } ${isError ? "md:text-[#928989]" : "md:text-[#928989]"}`}
             >
-              {isInvalid ? "Email" : "Email"}
+              {isError ? "Email" : "Email"}
             </label>
             <p
-              className={`${isInvalid ? "block" : "hidden"} mt-2 text-red-500`}
+              className={`${isError ? "block" : "hidden"} mt-2 text-red-500`}
             >
-              Enter a valid email
+              User email not found. Please try again.
             </p>
           </div>
 
@@ -117,7 +115,13 @@ const ForgotPass = ({
                           inline-block w-full  max-w-[642.27px] text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
             type="submit"
           >
-            {isSent ? "Sending..." : "Send"}
+            {isSent ? (
+              <div className="flex justify-center items-center w-full">
+                <Loader2 size={20} className="animate-spin" /> &nbsp; Sending...
+              </div>
+            ) : (
+              "Send"
+            )}
           </button>
         </form>
       </div>
