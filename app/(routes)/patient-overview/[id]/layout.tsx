@@ -16,7 +16,7 @@ import { ToastAction } from "@/components/ui/toast";
 import Link from "next/link";
 import Image from "next/image";
 import { EditProvider, useEditContext } from "./editContext";
-function PatientOverview() {
+function PatientOverview({ setIsTableLoading }: { setIsTableLoading: any }) {
   const { isEdit, isSave, toggleEdit, disableEdit } = useEditContext();
 
   useEffect(() => {
@@ -121,6 +121,7 @@ function PatientOverview() {
   };
 
   const fetchData = async () => {
+    setIsTableLoading(false);
     try {
       const response = await fetchPatientOverview(patientId, router);
       console.log(response, "response");
@@ -159,7 +160,7 @@ function PatientOverview() {
   useEffect(() => {
     const pathParts = pathname.split("/");
     const tabUrl = pathParts[pathParts.length - 1];
-
+    setIsTableLoading(false);
     fetchData();
   }, [patientId, router, params]);
   //removed router and params replaced with pathname for reduce icon reload
@@ -470,6 +471,7 @@ function PatientOverview() {
                           : "hover:text-[#007C85] hover:border-b-2 pb-1 h-[31px] border-[#007C85] text-[15px]"
                       }`}
                       onClick={() => {
+                        setIsTableLoading(true);
                         disableEdit(); // disable edit on tab change
                       }}
                     >
@@ -484,6 +486,7 @@ function PatientOverview() {
           <div className={`cursor-pointer ${isLoading ? "hidden" : ""}`}>
             <Link href={`/patient-overview/${params.id}/patient-details`}>
               <p
+              onClick={()=>{setIsTableLoading(true)}}
                 className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85] ${
                   currentRoute === "patient-details" ? "text-[#007C85]" : ""
                 }`}
@@ -505,12 +508,25 @@ export default function PatientOverviewLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [isTableLoading, setIsTableLoading] = useState<boolean>(false);
+
   return (
     <div className="flex flex-col w-full px-[150px] pt-[90px] h-full">
       <EditProvider>
-        <PatientOverview />
+        <PatientOverview setIsTableLoading={setIsTableLoading} />
         <div className="w-full flex items-center justify-center mt-4 h-full">
-          {children}
+          {isTableLoading ? (
+            <div className="container w-full h-full flex justify-center items-center ">
+              <Image
+                src="/imgs/colina-logo-animation.gif"
+                alt="logo"
+                width={100}
+                height={100}
+              />
+            </div>
+          ) : (
+            children
+          )}
         </div>
       </EditProvider>
     </div>
