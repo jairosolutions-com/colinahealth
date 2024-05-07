@@ -12,7 +12,7 @@ import { set } from "date-fns";
 import { useEditContext } from "../editContext"; // Assuming you've exported EditContext from your context file
 import { tree } from "next/dist/build/templates/app-page";
 export default function PatientDetails({}) {
-  const { toggleEdit, saveClicked } = useEditContext();
+  const { toggleEdit, saveClicked, cancelClicked } = useEditContext();
   if (typeof window === "undefined") {
   }
 
@@ -102,6 +102,12 @@ export default function PatientDetails({}) {
     // window.history.pushState(null, "", "#edit");
     setPatientEditMode(!patientEditMode);
     toggleEdit();
+  };
+  const handlePatientCancelClick = () => {
+    // window.history.pushState(null, "", "#edit");
+    setPatientEditMode(!patientEditMode);
+    toggleEdit();
+    cancelClicked();
   };
 
   const handleEmergencyEditClick = () => {
@@ -604,7 +610,7 @@ export default function PatientDetails({}) {
                 <button
                   type="button"
                   className="bg-[#D9D9D9] hover:bg-[#D9D9D9] text-[#000] font-normal font-manrope py-1 px-4 rounded w-24 h-8 mr-3 "
-                  onClick={handlePatientEditClick}
+                  onClick={handlePatientCancelClick}
                 >
                   Cancel
                 </button>

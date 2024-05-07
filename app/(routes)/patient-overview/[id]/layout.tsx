@@ -1,30 +1,25 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { onNavigate } from "@/actions/navigation";
-import { Navbar } from "@/components/navbar";
-import { redirect, useParams, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
 import {
   fetchPatientProfileImage,
   updatePatientProfileImage,
 } from "@/app/api/patients-api/patientProfileImage.api";
-import { getAccessToken } from "@/app/api/login-api/accessToken";
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { EditProvider, useEditContext } from "./editContext";
 import Link from "next/link";
-import { EditProvider, useEditContext } from "./editContext"; // Assuming you've exported EditContext from your context file
-import { updatePatient } from "@/app/api/patients-api/patientDetails.api";
 
 function PatientOverview() {
-  const { isEdit, isSave, toggleEdit } = useEditContext();
-  console.log("Current value of isEdit:", isEdit);
+  const { isEdit, isSave, toggleEdit, disableEdit } = useEditContext();
 
   useEffect(() => {
     console.log("isEdit changed in layout:", isEdit);
-  }, [isEdit]); // Include isEdit in the dependency array to ensure that the effect runs whenever the isEdit state changes
+  }, [isEdit]);
 
   const router = useRouter();
   const params = useParams<{
@@ -36,11 +31,8 @@ function PatientOverview() {
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
   const [patientImage, setPatientImage] = useState<string>();
-  // const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [activeTab, setActiveTab] = useState<number>(0);
   const [error, setError] = useState<string>("");
-  const [detailsClicked, setDetailsClicked] = useState<boolean>(false); // State to track if "See more details" is clicked
   const patientId = params.id.toUpperCase();
   const pathname = usePathname();
   const inputRef = useRef<HTMLSpanElement>(null);
@@ -86,53 +78,26 @@ function PatientOverview() {
 
   const [currentRoute, setCurrentRoute] = useState<string>("");
 
-  const [seeMoreClicked, setSeeMoreClicked] = useState(
-    localStorage.getItem("seeMoreClicked") === "true" ? true : false
-  );
-  const [seeMoreHovered, setSeeMoreHovered] = useState(
-    localStorage.getItem("seeMoreHovered") === "true" ? true : false
-  );
-
-  const handleSeeMoreDetails = (url: string, tabIndex: number) => {
-    if (url) {
-      setActiveTab(-1);
-      setDetailsClicked(true);
-      localStorage.setItem("seeMoreClicked", "true"); // Set local storage
-      router.replace(url);
-    }
-  };
+  const [seeMoreClicked, setSeeMoreClicked] = useState(false);
+  const [seeMoreHovered, setSeeMoreHovered] = useState(false);
 
   const handleSeeMoreHover = () => {
     setSeeMoreHovered(true);
-    localStorage.setItem("seeMoreHovered", "true"); // Set local storage
   };
 
   const handleSeeMoreLeave = () => {
     setSeeMoreHovered(false);
-    localStorage.setItem("seeMoreHovered", "false"); // Set local storage
   };
 
   useEffect(() => {
     const pathParts = pathname.split("/");
     setCurrentRoute(pathParts[pathParts.length - 1]);
-    // Check local storage for previous state
-    const clicked = localStorage.getItem("seeMoreClicked") === "true";
-    const hovered = localStorage.getItem("seeMoreHovered") === "true";
+    const clicked = true;
+    const hovered = true;
     setSeeMoreClicked(clicked);
     setSeeMoreHovered(hovered);
   }, [pathname, currentRoute]);
-  // const handleTabClick = (index: number, url: string) => {
-  //   setActiveTab(index);
-  //   onNavigate(router, url);
-  //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
-  // };
-  const handleTabClick = (url: string, tabIndex: number) => {
-    if (url) {
-      setActiveTab(tabIndex);
-      setDetailsClicked(false);
-      router.replace(url);
-    }
-  };
+
   //show loading
   const loadDefaultImage = async () => {
     try {
@@ -288,6 +253,7 @@ function PatientOverview() {
   useEffect(() => {
     if (isSave) {
       handleSubmit();
+      toggleEdit();
     }
   }, [isSave]);
 
@@ -332,7 +298,6 @@ function PatientOverview() {
       setError("Failed to add Patient");
     }
   };
-
 
   return (
     <div className="flex flex-col gap-[3px]">
@@ -422,27 +387,32 @@ function PatientOverview() {
                     `${patientData[0]?.firstName} ${patientData[0]?.middleName} ${patientData[0]?.lastName}`
                   )}
                 </h1>
-                <div className=" cursor-pointer items-center ml-10 flex ">
-                  <Link href={`/patient-overview/${params.id}/patient-details`}>
-                    <p
-                      className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85] ${
-                        currentRoute === "patient-details"
-                          ? "text-[#007C85]"
-                          : ""
-                      }`}
+                <div className="cursor-pointer items-center ml-10 flex">
+                  {currentRoute === "patient-details" ? (
+                    <span
+                      className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85] cursor-not-allowed`}
                       onMouseEnter={handleSeeMoreHover}
                       onMouseLeave={handleSeeMoreLeave}
-                      onClick={() => {
-                        setIsLoading(true);
-                        // handleSeeMoreDetails(
-                        //   `/patient-overview/${params.id}/patient-details`,
-                        //   -1
-                        // );
-                      }}
                     >
                       See more details
-                    </p>
-                  </Link>
+                    </span>
+                  ) : (
+                    <Link
+                      href={`/patient-overview/${params.id}/patient-details`}
+                    >
+                      <p
+                        className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85]`}
+                        onMouseEnter={handleSeeMoreHover}
+                        onMouseLeave={handleSeeMoreLeave}
+                        onClick={() => {
+                          setIsLoading(true);
+                          disableEdit();
+                        }}
+                      >
+                        See more details
+                      </p>
+                    </Link>
+                  )}
                 </div>
               </div>
               <div>
@@ -571,9 +541,8 @@ function PatientOverview() {
                       }`}
                       onClick={() => {
                         setIsLoading(true);
-                        // handleTabClick(tab.url, index);
-                        toggleEdit();
-                      }}
+                        disableEdit(); // disable edit on tab change
+                        }}
                     >
                       {tab.label}
                     </p>
@@ -601,7 +570,6 @@ export default function PatientOverviewLayout({
           {children}
         </div>
       </EditProvider>
-
     </div>
   );
 }
