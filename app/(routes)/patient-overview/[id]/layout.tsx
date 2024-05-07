@@ -311,17 +311,17 @@ function PatientOverview() {
             <>
               {patientImage ? (
                 <Image
-                  className="object-cover rounded-md w-[200px] h-[200px]"
-                  width={400}
-                  height={400}
+                  className="object-cover rounded-md min-w-[200px] min-h-[200px] max-w-[200px] max-h-[200px]"
+                  width={200}
+                  height={200}
                   src={patientImage}
                   alt="profile"
                 />
               ) : (
                 <Image
-                  className="object-cover rounded-md w-[200px] h-[200px]"
-                  width={400}
-                  height={400}
+                  className="object-cover rounded-md min-w-[200px] min-h-[200px] max-w-[200px] max-h-[200px]"
+                  width={200}
+                  height={200}
                   src="/imgs/user-no-icon.jpg"
                   alt="profile"
                 />
