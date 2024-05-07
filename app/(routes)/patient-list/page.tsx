@@ -261,7 +261,7 @@ export default function PatientPage() {
   return (
     <div className="w-full  px-[150px] pt-[90px] flex flex-col justify-between h-full">
       <div className="w-full h-full">
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <p
             onClick={() => {
               setIsLoading(true);
@@ -271,7 +271,7 @@ export default function PatientPage() {
           >
             Back to Dashboard
           </p>
-        </div>
+        </div> */}
         <div className="flex justify-between items-center">
           <div className="flex flex-col mb-3">
             <p className="p-title">Patients List Records</p>

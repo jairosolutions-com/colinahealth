@@ -25,6 +25,10 @@ export const Navbar = ({
 
   const routes = [
     {
+      label: "Dashboard",
+      url: "/dashboard",
+    },
+    {
       label: "Due Medications",
       url: "/due-medications",
     },
@@ -124,7 +128,13 @@ export const Navbar = ({
           ))}
         </div>
         <div className="flex gap-3 items-center mr-2">
-          <Image src={"/imgs/drake.png"} alt={""} width={30} height={30} className="rounded-full"/>
+          <Image
+            src={"/imgs/drake.png"}
+            alt={""}
+            width={30}
+            height={30}
+            className="rounded-full"
+          />
           <Image
             ref={iconRef}
             className={`cursor-pointer select-none ${
