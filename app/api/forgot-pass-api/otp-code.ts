@@ -1,14 +1,18 @@
 import axios, { AxiosError } from "axios";
 import { setResetPassToken } from "./reset-pass-token";
+import { setAccessToken } from "../login-api/accessToken";
+import { redirect } from "next/navigation";
 
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function generateOTPCode(
   email: string,
+  variant: string
 ): Promise<any> {
   const requestData = {
     email: email,
+    variant: variant,
   }
   try {
     const response = await axios.post(
@@ -44,10 +48,12 @@ export async function generateOTPCode(
 export async function verifyOTPCode(
     userOTP: string,
     email: string,
+    variant: string,
   ): Promise<any> {
     const requestData = {
         userOTP: userOTP,
         email: email,
+        variant: variant,
     }
     try {
       const response = await axios.post(
@@ -56,8 +62,11 @@ export async function verifyOTPCode(
         { }
       );
       const otpCode = response.data;
-      setResetPassToken(otpCode.expiryToken);
-      console.log(otpCode);
+     if (variant ==="signIn"){
+      setAccessToken(otpCode.expiryToken);
+     }
+     setResetPassToken(otpCode.expiryToken);
+     console.log(otpCode);
       return otpCode;
     } catch (error: any) {
       if (axios.isAxiosError(error)) {

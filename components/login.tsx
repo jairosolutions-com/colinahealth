@@ -13,6 +13,7 @@ import ForgotPass from "./forgot-pass";
 import OTPCode from "./otp-code";
 import ResetPass from "./reset-pass";
 import { Loader2 } from "lucide-react";
+import { generateOTPCode } from "@/app/api/forgot-pass-api/otp-code";
 
 export const Login = () => {
   const router = useRouter();
@@ -31,9 +32,8 @@ export const Login = () => {
   const [isForgotPassword, setIsForgotPassword] = useState<boolean>(false);
   const [forgotPassEmail, setForgotPassEmail] = useState<string>("");
   const [isOTP, setIsOTP] = useState<boolean>(false);
-  const [otpCode, setOtpCode] = useState<string>("");
+  const [twoFa, setTwoFa] = useState<boolean>(false);
   const [isResetPass, setIsResetPass] = useState<boolean>(false);
-  
 
   useEffect(() => {
     if (!getAccessToken()) {
@@ -65,12 +65,13 @@ export const Login = () => {
   }
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSubmitted(true);
+    setTwoFa(true);
     e.preventDefault();
     try {
       const accessToken = await validateUser(email, password, rememberMe);
-      if (accessToken) {
-        // Redirect to patient-list if login successful
-        redirect("/dashboard");
+      const response = await generateOTPCode(email,"signIn");
+      if (accessToken && response) {
+        setIsOTP(true);
       } else {
         // Handle invalid login
         setPassword("");
@@ -336,9 +337,10 @@ export const Login = () => {
               <OTPCode
                 isOTP={isOTP}
                 setIsOTP={setIsOTP}
-                forgotPassEmail={forgotPassEmail}
+                forgotPassEmail={twoFa ? email : forgotPassEmail}
                 setIsResetPass={setIsResetPass}
                 isResetPass={isResetPass}
+                variant={twoFa ? "signIn" : "forgotPass"}
               />
               {/* Reset Pass */}
               <ResetPass

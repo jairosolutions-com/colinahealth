@@ -5,6 +5,7 @@ import {
 } from "@/app/api/forgot-pass-api/otp-code";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 
 interface OTPCodeProps {
@@ -13,6 +14,7 @@ interface OTPCodeProps {
   forgotPassEmail: string;
   setIsResetPass: (value: boolean) => void;
   isResetPass: boolean;
+  variant: string;
 }
 
 const OTPCode = ({
@@ -21,7 +23,9 @@ const OTPCode = ({
   forgotPassEmail,
   setIsResetPass,
   isResetPass,
+  variant,
 }: OTPCodeProps) => {
+  const router = useRouter();
   const [otp, setOTP] = useState(new Array(6).fill(""));
   const inputs = useRef<HTMLInputElement[]>([]);
   const [isVerify, setIsVerify] = useState(false);
@@ -75,7 +79,7 @@ const OTPCode = ({
     setCurrentInputIndex(index);
     inputs.current[index].focus();
   };
-
+  console.log(variant, "var");
   const handleSubmit = async () => {
     setIsVerify(true);
     try {
@@ -84,15 +88,20 @@ const OTPCode = ({
         console.log("Please fill all the fields");
         return;
       } else {
-        const response = await verifyOTPCode(otp.join(""), forgotPassEmail);
+        const response = await verifyOTPCode(
+          otp.join(""),
+          forgotPassEmail,
+          variant
+        );
         if (response.isValid) {
-          setIsResetPass(true);
-          setIsOTP(false);
-          setOTP(new Array(6).fill(""));
-
-          // onSuccess();
-          // setToastMessage("Email Sent Successfully.");
-          // setShowToast(true);
+          if (variant === "signIn") {
+            router.push("/dashboard");
+          }
+          if (variant === "forgotPass") {
+            setIsResetPass(true);
+            setIsOTP(false);
+            setOTP(new Array(6).fill(""));
+          }
         } else {
           setIsError(true);
         }
@@ -120,7 +129,7 @@ const OTPCode = ({
     }, 60000);
     try {
       if (forgotPassEmail !== "") {
-        const response = await generateOTPCode(forgotPassEmail);
+        const response = await generateOTPCode(forgotPassEmail,variant);
 
         if (response) {
           console.log("Email Sent Successfully.");

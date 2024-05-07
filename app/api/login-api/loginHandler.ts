@@ -29,7 +29,7 @@ export async function validateUser(
 
       if (accessToken) {
         // Store the access token in local storage
-        setAccessToken(accessToken);
+        // setAccessToken(accessToken);
 
         return accessToken;
       } else {
