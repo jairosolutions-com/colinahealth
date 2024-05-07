@@ -234,7 +234,7 @@ export const ScheduledModalContent = ({
       <form onSubmit={handleSubmit}>
         <div className="bg-[#ffffff] w-full h-[70px] flex flex-col justify-start rounded-md">
           <div className="items-center flex justify-between">
-            <h2 className="p-title text-left text-[#071437] pl-10 mt-7">
+            <h2 className="p-title text-left text-[#071437] pl-10 mt-7 truncate">
               {isEdit ? "Update" : "Add"} Scheduled Medication Log{" "}
               {name ? "for" : ""}{" "}
               <span className="text-[#007C85]">{name ? name : ""}</span>

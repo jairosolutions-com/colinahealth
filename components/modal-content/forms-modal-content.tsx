@@ -196,8 +196,8 @@ export const FormsModalContent = ({
             `Form FILE ${fileNames[i]} added successfully:`,
             addFormFiles
           );
-          isModalOpen(false);
         }
+        
       } else {
         console.warn("No files selected to upload");
       }
@@ -211,6 +211,9 @@ export const FormsModalContent = ({
     } catch (error) {
       console.error("Error adding Form Result:", error);
       setError("Failed to add Form Result");
+    }
+    finally{
+      isModalOpen(false);
     }
     setIsSubmitted(false);
   };
