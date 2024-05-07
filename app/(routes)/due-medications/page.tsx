@@ -340,7 +340,7 @@ export default function DueMedicationPage() {
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
                                     <Image
-                                      className="rounded-full"
+                                      className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
                                       src="/imgs/user.png"
                                       alt=""
                                       width={45}
@@ -357,7 +357,7 @@ export default function DueMedicationPage() {
                       imagesLoaded ? ( // Only render stock image when images are loaded
                         <div>
                           <Image
-                            className="rounded-full"
+                            className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
                             src="/imgs/loading.gif" // Show loading gif while fetching images
                             alt="Loading"
                             width={45}
@@ -368,7 +368,7 @@ export default function DueMedicationPage() {
                         // Render loading gif while fetching images
                         <div>
                           <Image
-                            className="rounded-full"
+                            className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
                             src="/imgs/loading.gif" // Show loading gif while fetching images
                             alt="Loading"
                             width={45}
@@ -376,7 +376,7 @@ export default function DueMedicationPage() {
                           />
                         </div>
                       )}
-                      <span>
+                      <span className="truncate">
                         {dueMedication.patient_firstName} {""}
                         {dueMedication.patient_lastName}
                       </span>
