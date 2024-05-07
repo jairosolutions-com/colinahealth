@@ -13,12 +13,14 @@ interface Modalprops {
   label: string;
   isOpen: boolean;
   onSuccess: () => void;
+  PatientNotesData : any
 }
 
 export const NursenotesModalContent = ({
   label,
   isOpen,
   isModalOpen,
+  PatientNotesData,
   onSuccess,
 }: Modalprops) => {
   const params = useParams<{
@@ -32,8 +34,8 @@ export const NursenotesModalContent = ({
   const [error, setError] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [formData, setFormData] = useState({
-    subject: "",
-    notes: "",
+    subject: PatientNotesData.notes_subject || "",
+    notes:PatientNotesData.notes_notes || "",
     type: "nn",
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,6 +1,5 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
 import { onNavigate } from "@/actions/navigation";
 import { Navbar } from "@/components/navbar";
 import { redirect, useParams, useRouter } from "next/navigation";
@@ -10,21 +9,19 @@ import {
   fetchPatientProfileImage,
   updatePatientProfileImage,
 } from "@/app/api/patients-api/patientProfileImage.api";
-import { getAccessToken } from "@/app/api/login-api/accessToken";
+
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import Link from "next/link";
-import { EditProvider, useEditContext } from "./editContext"; // Assuming you've exported EditContext from your context file
-import { updatePatient } from "@/app/api/patients-api/patientDetails.api";
-
+import Image from "next/image";
+import { EditProvider, useEditContext } from "./editContext";
 function PatientOverview() {
-  const { isEdit, isSave, toggleEdit } = useEditContext();
-  console.log("Current value of isEdit:", isEdit);
+  const { isEdit, isSave, toggleEdit, disableEdit } = useEditContext();
 
   useEffect(() => {
     console.log("isEdit changed in layout:", isEdit);
-  }, [isEdit]); // Include isEdit in the dependency array to ensure that the effect runs whenever the isEdit state changes
+  }, [isEdit]);
 
   const router = useRouter();
   const params = useParams<{
@@ -36,11 +33,8 @@ function PatientOverview() {
   const { toast } = useToast();
   const [patientData, setPatientData] = useState<any[]>([]);
   const [patientImage, setPatientImage] = useState<string>();
-  // const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [activeTab, setActiveTab] = useState<number>(0);
   const [error, setError] = useState<string>("");
-  const [detailsClicked, setDetailsClicked] = useState<boolean>(false); // State to track if "See more details" is clicked
   const patientId = params.id.toUpperCase();
   const pathname = usePathname();
   const inputRef = useRef<HTMLSpanElement>(null);
@@ -86,53 +80,26 @@ function PatientOverview() {
 
   const [currentRoute, setCurrentRoute] = useState<string>("");
 
-  const [seeMoreClicked, setSeeMoreClicked] = useState(
-    localStorage.getItem("seeMoreClicked") === "true" ? true : false
-  );
-  const [seeMoreHovered, setSeeMoreHovered] = useState(
-    localStorage.getItem("seeMoreHovered") === "true" ? true : false
-  );
-
-  const handleSeeMoreDetails = (url: string, tabIndex: number) => {
-    if (url) {
-      setActiveTab(-1);
-      setDetailsClicked(true);
-      localStorage.setItem("seeMoreClicked", "true"); // Set local storage
-      router.replace(url);
-    }
-  };
+  const [seeMoreClicked, setSeeMoreClicked] = useState(false);
+  const [seeMoreHovered, setSeeMoreHovered] = useState(false);
 
   const handleSeeMoreHover = () => {
     setSeeMoreHovered(true);
-    localStorage.setItem("seeMoreHovered", "true"); // Set local storage
   };
 
   const handleSeeMoreLeave = () => {
     setSeeMoreHovered(false);
-    localStorage.setItem("seeMoreHovered", "false"); // Set local storage
   };
 
   useEffect(() => {
     const pathParts = pathname.split("/");
     setCurrentRoute(pathParts[pathParts.length - 1]);
-    // Check local storage for previous state
-    const clicked = localStorage.getItem("seeMoreClicked") === "true";
-    const hovered = localStorage.getItem("seeMoreHovered") === "true";
+    const clicked = true;
+    const hovered = true;
     setSeeMoreClicked(clicked);
     setSeeMoreHovered(hovered);
   }, [pathname, currentRoute]);
-  // const handleTabClick = (index: number, url: string) => {
-  //   setActiveTab(index);
-  //   onNavigate(router, url);
-  //   setDetailsClicked(false); // Reset detailsClicked to false when a tab is clicked
-  // };
-  const handleTabClick = (url: string, tabIndex: number) => {
-    if (url) {
-      setActiveTab(tabIndex);
-      setDetailsClicked(false);
-      router.replace(url);
-    }
-  };
+
   //show loading
   const loadDefaultImage = async () => {
     try {
@@ -288,6 +255,7 @@ function PatientOverview() {
   useEffect(() => {
     if (isSave) {
       handleSubmit();
+      toggleEdit();
     }
   }, [isSave]);
 
@@ -332,120 +300,71 @@ function PatientOverview() {
       setError("Failed to add Patient");
     }
   };
-
   return (
     <div className="flex flex-col gap-[3px]">
       <div className="p-title pb-2">
         <h1>Patient Overview</h1>
       </div>
-      <div className="form ring-1 w-full h-[220px] ring-[#D0D5DD] px-5 pt-5 rounded-md">
-        <div className="flex">
-          <div className="flex flex-col">
-            <div className="flex">
-              <div className="relative">
-                {!isLoading ? (
-                  <>
-                    {patientImage ? (
-                      <div
-                        className="rounded-lg"
-                        style={{
-                          width: "180px",
-                          height: "180px",
-                          overflow: "hidden",
-                        }}
-                      >
-                        <img
-                          src={patientImage}
-                          alt="profile"
-                          max-width="100%"
-                          height="auto"
-                          className="rounded-lg"
-                        />
-                      </div>
-                    ) : (
-                      <div
-                        style={{
-                          width: "180px",
-                          height: "180px",
-                          overflow: "hidden",
-                        }}
-                      >
-                        <img
-                          src="/imgs/user-no-icon.png"
-                          alt="profile"
-                          max-width="100%"
-                          height="auto"
-                          className="rounded-lg"
-                        />
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <div className="w-[180px] h-[180px] animate-pulse bg-gray-300 rounded-lg "></div>
-                )}
-                {currentRoute === "patient-details" && isEdit && (
-                  <label
-                    htmlFor="fileInput"
-                    className="absolute bottom-2 right-[-20px] cursor-pointer"
-                  >
-                    <img
-                      src="/svgs/editprof.svg"
-                      alt="edit button"
-                      width="35"
-                      height="35"
-                    />
-                  </label>
-                )}
-                <input
-                  id="fileInput"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageChange}
+      <div className="flex ring-1 w-full gap-[30px]  ring-[#D0D5DD] p-5 rounded-md">
+        <div className="relative">
+          {!isLoading ? (
+            <>
+              {patientImage ? (
+                <Image
+                  className="object-cover rounded-md min-w-[200px] min-h-[200px] max-w-[200px] max-h-[200px]"
+                  width={200}
+                  height={200}
+                  src={patientImage}
+                  alt="profile"
                 />
-              </div>
-            </div>
-          </div>
-          <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
-            <div>
-              <div
-                className={`w-full justify-between p-title flex ${
-                  isLoading ? "" : "ml-1"
-                }`}
-              >
-                <h1>
-                  {" "}
-                  {isLoading ? (
-                    <div className="h-[30px] w-52 bg-gray-300 rounded-full animate-pulse"></div>
-                  ) : (
-                    `${patientData[0]?.firstName} ${patientData[0]?.middleName} ${patientData[0]?.lastName}`
-                  )}
-                </h1>
-                <div className=" cursor-pointer items-center ml-10 flex ">
-                  <Link href={`/patient-overview/${params.id}/patient-details`}>
-                    <p
-                      className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85] ${
-                        currentRoute === "patient-details"
-                          ? "text-[#007C85]"
-                          : ""
-                      }`}
-                      onMouseEnter={handleSeeMoreHover}
-                      onMouseLeave={handleSeeMoreLeave}
-                      onClick={() => {
-                        setIsLoading(true);
-                        // handleSeeMoreDetails(
-                        //   `/patient-overview/${params.id}/patient-details`,
-                        //   -1
-                        // );
-                      }}
-                    >
-                      See more details
-                    </p>
-                  </Link>
-                </div>
-              </div>
-              <div>
-                <div className="flex flex-row w-full mt-2 font-medium text-[15px]">
+              ) : (
+                <Image
+                  className="object-cover rounded-md min-w-[200px] min-h-[200px] max-w-[200px] max-h-[200px]"
+                  width={200}
+                  height={200}
+                  src="/imgs/user-no-icon.jpg"
+                  alt="profile"
+                />
+              )}
+            </>
+          ) : (
+            <div className="w-[200px] h-[200px] animate-pulse bg-gray-300 rounded-lg "></div>
+          )}
+          {currentRoute === "patient-details" && isEdit && (
+            <label
+              htmlFor="fileInput"
+              className="absolute bottom-2 right-[-20px] cursor-pointer"
+            >
+              <Image
+                src="/svgs/editprof.svg"
+                alt="edit button"
+                width={35}
+                height={35}
+              />
+            </label>
+          )}
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageChange}
+          />
+        </div>
+
+        <div className="flex w-full justify-between">
+          <div className="flex flex-col gap-[20px] justify-between pt-[10px]">
+            <div className="flex flex-col gap-[15px]">
+              {isLoading ? (
+                <div className="h-[30px] w-52 bg-gray-300 rounded-full animate-pulse"></div>
+              ) : (
+                <p className="p-title ml-1">
+                  {patientData[0]?.firstName} {patientData[0]?.middleName}{" "}
+                  {patientData[0]?.lastName}
+                </p>
+              )}
+              <div className="flex flex-col gap-[15px]">
+                <div className="flex gap-[55px]">
                   {isLoading ? (
                     <div className="flex items-start animate-pulse ">
                       <div className="h-[22px] w-32 bg-gray-300 rounded-full mr-2"></div>
@@ -455,47 +374,33 @@ function PatientOverview() {
                     </div>
                   ) : (
                     <>
-                      <img
-                        src="/imgs/profile-circle-new.svg"
-                        className="px-1"
-                        alt="profile"
-                        width="26"
-                        height="26"
-                      />
-                      <div>
-                        <p className="flex items-center mr-11">Patient</p>
+                      <div className="flex gap-[3px]">
+                        <img
+                          src="/imgs/profile-circle-new.svg"
+                          className="px-1"
+                          alt="profile"
+                          width="26"
+                          height="26"
+                        />
+                        <p className="">Patient</p>
                       </div>
-                      <div className="flex">
-                        <div>
-                          <p className="flex items-center mr-11">
-                            Age:
-                            {patientData[0]?.age}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="flex items-center mr-10 ml-1 ">
-                            Gender:
-                            {patientData[0]?.gender}
-                          </p>
-                        </div>
-                        <div className="flex">
-                          <p className="flex items-center">
-                            ID:
-                            <span ref={inputRef}>{patientData[0]?.uuid}</span>
-                          </p>
-                          <img
-                            src="/imgs/id.svg"
-                            alt="copy"
-                            className="cursor-pointer ml-2"
-                            onClick={handleCopyClick}
-                          />
-                        </div>
+                      <p className="">Age: {patientData[0]?.age}</p>
+                      <p className=" ">Gender: {patientData[0]?.gender}</p>
+                      <div className="flex gap-[8px]">
+                        <p className="flex items-center">
+                          ID: <span ref={inputRef}>{patientData[0]?.uuid}</span>
+                        </p>
+                        <img
+                          src="/imgs/id.svg"
+                          alt="copy"
+                          className="cursor-pointer"
+                          onClick={handleCopyClick}
+                        />
                       </div>
                     </>
                   )}
                 </div>
-                <div className="mb-5"></div>
-                <div className="flex flex-row w-full font-medium text-[15px]">
+                <div className="flex gap-[35px]">
                   {isLoading ? (
                     <div className="flex items-start animate-pulse">
                       <div className="h-5 w-44 bg-gray-400 rounded-full mr-12"></div>
@@ -503,38 +408,34 @@ function PatientOverview() {
                     </div>
                   ) : (
                     <>
-                      <img
-                        src="/imgs/codestatus.svg"
-                        className="px-1"
-                        alt="codestatus"
-                        width="26"
-                        height="26"
-                      />
-                      <div>
-                        <h1 className={`flex items-center`}>
+                      <div className="flex gap-[3px] w-[212px]">
+                        <img
+                          src="/imgs/codestatus.svg"
+                          className="px-1"
+                          alt="codestatus"
+                          width="26"
+                          height="26"
+                        />
+                        <p>
                           Code Status:
-                          <p
-                            className={`${
-                              patientData[0]?.codeStatus === "DNR"
-                                ? "text-red-500"
-                                : "text-blue-500"
-                            } ml-1 w-[100px]`}
+                          <span
+                            className={` 
+                          ${
+                            patientData[0]?.codeStatus === "DNR"
+                              ? "text-red-500"
+                              : "text-blue-500"
+                          } ml-1 w-[100px]`}
                           >
                             {patientData[0]?.codeStatus}
-                          </p>
-                        </h1>
+                          </span>
+                        </p>
                       </div>
-
-                      <div>
-                        <div>
-                          <p className="flex items-center">
-                            Allergy:{" "}
-                            {patientData[0]?.allergies
-                              ? patientData[0]?.allergies
-                              : "None"}
-                          </p>
-                        </div>
-                      </div>
+                      <p className="flex">
+                        Allergy:{" "}
+                        {patientData[0]?.allergies
+                          ? patientData[0]?.allergies
+                          : "None"}
+                      </p>
                     </>
                   )}
                 </div>
@@ -569,9 +470,7 @@ function PatientOverview() {
                           : "hover:text-[#007C85] hover:border-b-2 pb-1 h-[31px] border-[#007C85] text-[15px]"
                       }`}
                       onClick={() => {
-                        setIsLoading(true);
-                        // handleTabClick(tab.url, index);
-                        toggleEdit();
+                        disableEdit(); // disable edit on tab change
                       }}
                     >
                       {tab.label}
@@ -580,6 +479,20 @@ function PatientOverview() {
                 ))
               )}
             </div>
+          </div>
+
+          <div className={`cursor-pointer ${isLoading ? "hidden" : ""}`}>
+            <Link href={`/patient-overview/${params.id}/patient-details`}>
+              <p
+                className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85] ${
+                  currentRoute === "patient-details" ? "text-[#007C85]" : ""
+                }`}
+                onMouseEnter={handleSeeMoreHover}
+                onMouseLeave={handleSeeMoreLeave}
+              >
+                See more details
+              </p>
+            </Link>
           </div>
         </div>
       </div>

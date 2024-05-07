@@ -261,7 +261,7 @@ export default function PatientPage() {
   return (
     <div className="w-full  px-[150px] pt-[90px] flex flex-col justify-between h-full">
       <div className="w-full h-full">
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <p
             onClick={() => {
               setIsLoading(true);
@@ -271,7 +271,7 @@ export default function PatientPage() {
           >
             Back to Dashboard
           </p>
-        </div>
+        </div> */}
         <div className="flex justify-between items-center">
           <div className="flex flex-col mb-3">
             <p className="p-title">Patients List Records</p>
@@ -388,7 +388,7 @@ export default function PatientPage() {
                                   {image.data ? (
                                     // Render the image if data is not empty
                                     <Image
-                                      className="rounded-full"
+                                      className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
                                       src={image.data} // Use the base64-encoded image data directly
                                       alt=""
                                       width={45}
@@ -398,7 +398,7 @@ export default function PatientPage() {
                                     // Render the stock image (.svg) if data is empty
                                     <Image
                                       className="rounded-full"
-                                      src="/imgs/user-no-icon.png"
+                                      src="/imgs/no-icon-user.svg"
                                       alt=""
                                       width={45}
                                       height={45}
