@@ -5,18 +5,19 @@ import { toast as sonner } from "sonner";
 import { toast } from "./ui/use-toast";
 import { ToastAction } from "./ui/toast";
 import { setResetPassToken } from "@/app/api/forgot-pass-api/reset-pass-token";
+import { Loader2 } from "lucide-react";
 interface ResetPassProps {
   isResetPass: boolean;
   setIsResetPass: (value: boolean) => void;
   forgotPassEmail: string;
-  setForgotPassEmail:any;
+  setForgotPassEmail: any;
 }
 
 const ResetPass = ({
   isResetPass,
   setIsResetPass,
   forgotPassEmail,
-  setForgotPassEmail
+  setForgotPassEmail,
 }: ResetPassProps) => {
   const [newPassword, setNewPassword] = useState("");
   const [isNewPasswordFocused, setIsNewPasswordFocused] =
@@ -68,7 +69,7 @@ const ResetPass = ({
           }
         }
       }
-    } catch (error:any) {
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -196,6 +197,7 @@ const ResetPass = ({
             />
           </div>
         </div>
+        {isInvalid && <p className="text-red-500 pb-2 text-start max-w-[642.27px] w-full">Password does not match.</p>}
         <button
           disabled={isSubmitted}
           className={`
@@ -207,7 +209,13 @@ const ResetPass = ({
                           inline-block w-full  max-w-[642.27px] text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
           type="submit"
         >
-          Reset Password
+          {isSubmitted ? (
+            <div className="flex justify-center items-center w-full">
+              <Loader2 size={20} className="animate-spin" /> &nbsp; Resetting...
+            </div>
+          ) : (
+            "Reset Password"
+          )}
         </button>
       </form>
       <p
