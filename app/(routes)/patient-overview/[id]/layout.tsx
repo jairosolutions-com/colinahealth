@@ -328,7 +328,7 @@ function PatientOverview() {
               )}
             </>
           ) : (
-            <div className="w-[400px] h-[400px] animate-pulse bg-gray-300 rounded-lg "></div>
+            <div className="w-[200px] h-[200px] animate-pulse bg-gray-300 rounded-lg "></div>
           )}
           {currentRoute === "patient-details" && isEdit && (
             <label
