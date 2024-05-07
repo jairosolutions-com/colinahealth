@@ -139,64 +139,6 @@ export default function FormsTab() {
     }
   };
   // add form
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Function to handle going to next page
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const pageNumberInt = parseInt(pageNumber, 10);
-
-    // Check if pageNumber is a valid number and greater than 0
-    if (
-      !isNaN(pageNumberInt) &&
-      pageNumberInt <= totalPages &&
-      pageNumberInt > 0
-    ) {
-      setCurrentPage(pageNumberInt);
-
-      console.log("Navigate to page:", pageNumberInt);
-    } else {
-      setGotoError(true);
-      setTimeout(() => {
-        setGotoError(false);
-      }, 3000);
-      console.error("Invalid page number:", pageNumber);
-    }
-  };
-
-  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageNumber(e.target.value);
-  };
-
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          className={`flex border border-px items-center justify-center  w-[49px]  ${
-            currentPage === i ? "btn-pagination" : ""
-          }`}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </button>
-      );
-    }
-    return pageNumbers;
-  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -241,9 +183,10 @@ export default function FormsTab() {
       isModalOpen(false);
 
       return;
-    } catch (error) {}
-
-    setIsSubmitted(false);
+    } catch (error) {
+    } finally {
+      setIsSubmitted(false);
+    }
   };
 
   if (isLoading) {

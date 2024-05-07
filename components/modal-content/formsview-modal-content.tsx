@@ -173,7 +173,6 @@ export const FormViewsModalContent = ({
   }, [fileIndex, FormsFiles]);
   //fetching files from database
   useEffect(() => {
-    setIsSubmitted(true);
     const fetchData = async () => {
       setFormsUuid(formsData.forms_uuid);
       try {
@@ -195,14 +194,14 @@ export const FormViewsModalContent = ({
         }
       } catch (error: any) {
         setError(error.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     if (formsData.forms_uuid) {
       fetchData();
     }
-
-    setIsSubmitted(false);
   }, [
     formsData.forms_uuid,
     router,
@@ -310,8 +309,9 @@ export const FormViewsModalContent = ({
     }
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setIsSubmitted(true);
     e.preventDefault();
+    setIsSubmitted(true);
+
     const getUuid = formsUuid;
 
     console.log("submit clicked");
@@ -344,8 +344,9 @@ export const FormViewsModalContent = ({
           const adFormsFiles = await addFormFile(
             getUuid,
             formsFileFormData,
-            ""
+            router
           );
+          adFormsFiles;
           console.log(
             `Forms FILE ${fileNames[i]} added successfully:`,
             addFormFile
