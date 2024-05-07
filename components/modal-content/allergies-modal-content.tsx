@@ -277,13 +277,13 @@ export const AllergiesModalContent = ({
                     onChange={handleSeverityChange}
                   >
                     <option value="">Select Severity</option>
-                    <option value="Mild" className="text-blue-500">
+                    <option value="Mild" className="text-[#F6C000]">
                       Mild
                     </option>
-                    <option value="Moderate" className="text-orange-500">
+                    <option value="Moderate" className="text-[#ff6f1e]">
                       Moderate
                     </option>
-                    <option value="Severe" className="text-red-500">
+                    <option value="Severe" className="text-[#EF4C6A]">
                       Severe
                     </option>
                   </select>

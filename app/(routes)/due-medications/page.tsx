@@ -205,7 +205,7 @@ export default function DueMedicationPage() {
     <div className="w-full px-[150px] pt-[90px] flex flex-col justify-between h-full">
       <div className="w-full h-full">
         <div className="flex justify-end">
-          <p
+          {/* <p
             onClick={() => {
               setIsLoading(true);
               onNavigate(router, "/dashboard");
@@ -213,7 +213,7 @@ export default function DueMedicationPage() {
             className="text-[#64748B] underline cursor-pointer text-[15px]"
           >
             Back to Dashboard
-          </p>
+          </p> */}
         </div>
         <div className="flex justify-between items-center">
           <div className="flex flex-col mb-3">
