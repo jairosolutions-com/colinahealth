@@ -25,12 +25,14 @@ const Notes = () => {
   const [sortOrder, setSortOrder] = useState<string>("ASC");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [patientNotes, setPatientNotes] = useState<any[]>([]);
+  const [PatientNotesData, setPatientNotesData] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalNotes, setTotalNotes] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState("");
   const [gotoError, setGotoError] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState("");
+  const [isView, setIsView] = useState(false);
   const [term, setTerm] = useState<string>("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [isEdit, setIsEdit] = useState(false);
@@ -341,7 +343,14 @@ const Notes = () => {
                   <td className="truncate px-6 py-3">{note.notes_subject}</td>
                   <td className="truncate px-6 py-3 ">{note.notes_notes}</td>
                   <td className="flex justify-center px-6 py-3">
-                    <p>
+                    <p
+                      onClick={() => {
+                        isModalOpen(true);
+                        setIsView(true);
+
+                        setPatientNotesData(note);
+                      }}
+                    >
                       <View></View>
                     </p>
                   </td>
@@ -368,12 +377,24 @@ const Notes = () => {
               isModalOpen={isModalOpen}
               isOpen={isOpen}
               label="sample label"
+              PatientNotesData={PatientNotesData}
               onSuccess={onSuccess}
             />
           }
           isModalOpen={isModalOpen}
         />
       )}
+      {/* {isView && (
+        <Modal
+          content={
+            <NursenotesModalContent
+              isModalOpen={isModalOpen}
+              isView={isView}
+            />
+          }
+          isModalOpen={isModalOpen}
+        />
+      )} */}
 
       {isSuccessOpen && (
         <SuccessModal
