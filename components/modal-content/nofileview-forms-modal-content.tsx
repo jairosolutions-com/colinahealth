@@ -27,179 +27,109 @@ interface FormFile {
   file_uuid: string;
 }
 
-export const NofileviewFormsModalContent = ({
+export const NofileviewFormsModalContent: React.FC<ModalProps> = ({
   formsUuid,
   isModalOpen,
-  onClose, // Receive the callback function
+  onClose,
   onSuccess,
-}: ModalProps) => {
+}) => {
   const { toast } = useToast();
+  const router = useRouter();
 
-  const [formsFiles, setFormsFiles] = useState<any[]>([]); //
-  const defaultFormsFiles = Array.isArray(formsFiles) ? formsFiles : [];
+  const [formsFiles, setFormsFiles] = useState<any[]>([]);
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [fileTypes, setFileTypes] = useState<string[]>([]);
-  const router = useRouter();
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const defaultFormsFiles = Array.isArray(formsFiles) ? formsFiles : [];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setIsSubmitted(true);
     e.preventDefault();
-    const getUuid = formsUuid;
-    console.log(getUuid, "getuuid");
-    console.log("submit clicked");
-    if (selectedFiles.length === 0) {
-      toggleToast();
-      return;
-    }
-    const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
-    const maxAllowedFiles = 5 - currentFileCount;
+    setIsSubmitted(true);
 
-    console.log("FILES TO ADD", maxAllowedFiles);
-
-    if (selectedFiles.length > maxAllowedFiles) {
-      toggleMaxFilesToast(maxAllowedFiles);
-      return;
-    }
     try {
-      console.log(getUuid, "getUuid");
-      // Iterate through each selected file
-      if (selectedFiles && selectedFiles.length > 0) {
-        // Iterate through each selected file
-        for (let i = 0; i < selectedFiles.length; i++) {
-          const formsFormData = new FormData();
-          formsFormData.append("formsfile", selectedFiles[i], fileNames[i]);
+      const getUuid = formsUuid;
+      console.log("getUuid", getUuid);
 
-          const addFormFiles = await addFormFile(getUuid, formsFormData, "");
-
-          console.log(
-            `Form FILE ${fileNames[i]} added successfully:`,
-            addFormFiles
-          );
-        }
-        onSuccess();
-        onClose(false);
-        // Call the onSuccess callback function
-      } else {
-        console.warn("No files selected to upload");
+      if (selectedFiles.length === 0) {
+        toggleToast("No File Attached!", "Please try again.");
+        return;
       }
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const formsFormData = new FormData();
+        formsFormData.append("formfile", selectedFiles[i], fileNames[i]);
+
+        const addFormFiles = await addFormFile(getUuid, formsFormData, router);
+
+        console.log(
+          `Form FILE ${fileNames[i]} added successfully:`,
+          addFormFile
+        );
+      }
+
+      setSelectedFileNames([]);
+      setSelectedFiles([]);
+      onSuccess();
+      onClose(false);
     } catch (error) {
       console.error("Error adding Forms:", error);
+    } finally {
+      setIsSubmitted(false);
     }
-    setIsSubmitted(false);
   };
-  const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsSubmitted(true);
-    const maxAllowedFiles = 5 - formsFiles.length;
-    setNumFilesCanAdd(maxAllowedFiles);
     const files = e.target.files;
-    const MAX_FILE_SIZE_MB = 15;
-    if (files) {
-      const totalSize = Array.from(files).reduce(
-        (acc, file) => acc + file.size,
-        0
-      );
-      const totalSizeMB = totalSize / (1024 * 1024); // Convert bytes to MB
-      if (totalSizeMB > MAX_FILE_SIZE_MB) {
-        toggleMaxSizeToast();
-        e.target.value = ""; // Clear the input field
-      }
-      if (files.length > numFilesCanAdd) {
-        toggleMaxFilesToast(numFilesCanAdd);
-        e.target.value = ""; // Clear the input field
-      }
-    }
-    if (files && files.length > 0) {
-      const newFiles: File[] = [];
-      const newFileNames: string[] = [];
-      const newFileTypes: string[] = [];
+    const newFiles: File[] = [];
+    const newFileNames: string[] = [];
+    const newFileTypes: string[] = [];
 
+    if (files && files.length > 0) {
       Array.from(files).forEach((file) => {
         if (file) {
-          // Add file, name, and type to arrays
           newFiles.push(file);
           newFileNames.push(file.name);
           newFileTypes.push(file.type.split("/")[1]);
-          if (files && files.length > 0) {
-            // Push file names to selectedFileNames array
-            if (file && file.name) {
-              selectedFileNames.push(file.name);
-            }
-
-            console.log(selectedFileNames, "selected file names");
-            console.log(formsFiles, "FormsFiles");
-
-            // Set selected file names
-            setSelectedFileNames(selectedFileNames);
-          }
-          // You can handle base64 conversion here if needed
         }
       });
-
-      // Update state variables with arrays
-      setSelectedFiles(newFiles);
-      setFileNames(newFileNames);
-      setFileTypes(newFileTypes);
-      const maxAllowedFiles = 5 - formsFiles.length;
-      setNumFilesCanAdd(maxAllowedFiles);
-    } else {
-      console.warn("No files selected");
     }
+
+    setSelectedFiles(newFiles);
+    setFileNames(newFileNames);
+    setFileTypes(newFileTypes);
     setIsSubmitted(false);
   };
-  const toggleToast = (): void => {
+
+  const toggleToast = (title: string, description: string): void => {
     setIsSubmitted(false);
     toast({
       variant: "destructive",
-      title: "No File Attached!",
-      description: "Please try again.",
+      title,
+      description,
     });
   };
 
-  const toggleMaxSizeToast = (): void => {
-    setIsSubmitted(false);
-    toast({
-      variant: "destructive",
-      title: "File Size Too Big!",
-      description: `Total size of selected files exceeds the limit of 15MB!`,
-    });
-  };
-  const toggleMaxFilesToast = (maxFiles: number): void => {
-    setIsSubmitted(false);
-    toast({
-      variant: "destructive",
-      title: "Maximum Number of Files Exceeded!",
-      description: `You can only add ${maxFiles} more file(s). Please try again.`,
-    });
-  };
   useEffect(() => {
-    // Initialize selected file names array
     let selectedFileNames: string[] = [];
 
     if (formsFiles && formsFiles.length > 0) {
-      // Push file names to selectedFileNames array
       for (let file of formsFiles) {
-        // Only push the filename if it's defined
         if (file && file.filename) {
           selectedFileNames.push(file.filename);
         }
       }
 
-      console.log(selectedFileNames, "selected file names");
-
-      // Set selected file names
       setSelectedFileNames(selectedFileNames);
     } else {
-      console.log("No files in labFiles");
-      // Optionally, you can clear the selectedFileNames state here
       setSelectedFileNames([]);
     }
-  }, [formsFiles, defaultFormsFiles]);
+  }, [formsFiles]);
+
   const [isHovering, setIsHovering] = useState(false);
+  const [numFilesCanAdd, setNumFilesCanAdd] = useState<number>(5);
 
   const FileUploadWithHover = () => {
     const handleMouseEnter = () => {

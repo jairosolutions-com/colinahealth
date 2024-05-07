@@ -338,15 +338,14 @@ export const FormViewsModalContent = ({
         setIsLoading(true);
         for (let i = 0; i < selectedFiles.length; i++) {
           const formsFileFormData = new FormData();
-          formsFileFormData.append("formsfile", selectedFiles[i], fileNames[i]);
+          formsFileFormData.append("formfile", selectedFiles[i], fileNames[i]);
 
           // Add  file
-          const adFormsFiles = await addFormFile(
+          const addFormsFiles = await addFormFile(
             getUuid,
             formsFileFormData,
             router
           );
-          adFormsFiles;
           console.log(
             `Forms FILE ${fileNames[i]} added successfully:`,
             addFormFile
@@ -443,7 +442,7 @@ export const FormViewsModalContent = ({
     <div>
       {defaultFormsFiles?.length === 0 && isLoading === false ? (
         <NofileviewFormsModalContent
-          formsUuid={formsData.forms_uuid}
+          formsUuid={formsUuid}
           onClose={handleNoFileModalClose}
           isModalOpen={(isOpen: boolean): void => {
             isModalOpen(isOpen);
