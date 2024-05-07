@@ -213,7 +213,6 @@ export async function deleteFormFiles(formsUuid: string, fileUUID: string): Prom
 export async function getCurrentFileCountFromDatabase(
   formsUuid: string,
 ): Promise<any> {
-  console.log(formsUuid);
   try {
     const accessToken = getAccessToken();
     if (!accessToken) {

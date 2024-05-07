@@ -7,7 +7,6 @@ import {
   fetchFormsByPatient,
   addFormFile,
   deleteFormFiles,
-  getCurrentFileCountFromDatabase,
   updateFormsOfPatient,
 } from "@/app/api/forms-api/forms.api";
 import { toast, useToast } from "@/components/ui/use-toast";
@@ -157,19 +156,6 @@ export const FormsModalContent = ({
       selectedFileNames,
       selectedFiles.length
     );
-    const getUuid = formData.nameOfDocument;
-
-    const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
-    console.log("Current file count:", currentFileCount);
-    // Define the maximum allowed files based on the current count
-    const maxAllowedFiles = currentFileCount === 0 ? 5 : 5 - currentFileCount;
-    if (selectedFiles.length > maxAllowedFiles) {
-      toggleMaxFilesToast(maxAllowedFiles);
-      return;
-    }
-    console.log("FILES TO ADD", maxAllowedFiles);
-
-    console.log(" UUID:", getUuid);
 
     try {
       // Create the form result
@@ -197,7 +183,6 @@ export const FormsModalContent = ({
             addFormFiles
           );
         }
-        
       } else {
         console.warn("No files selected to upload");
       }
@@ -211,8 +196,7 @@ export const FormsModalContent = ({
     } catch (error) {
       console.error("Error adding Form Result:", error);
       setError("Failed to add Form Result");
-    }
-    finally{
+    } finally {
       isModalOpen(false);
     }
     setIsSubmitted(false);
