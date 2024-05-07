@@ -5,8 +5,11 @@ import { Navbar } from "@/components/navbar";
 import { redirect, useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
-import { fetchPatientProfileImage } from "@/app/api/patients-api/patientProfileImage.api";
-import { getAccessToken } from "@/app/api/login-api/accessToken";
+import {
+  fetchPatientProfileImage,
+  updatePatientProfileImage,
+} from "@/app/api/patients-api/patientProfileImage.api";
+
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
@@ -205,92 +208,214 @@ export default function PatientOverviewLayout({
   };
 
   return (
-    <div className="flex flex-col w-full px-[150px] pt-[90px] h-full">
-      <div className="flex flex-col gap-[3px]">
-        <div className="p-title pb-2">
-          <h1>Patient Overview</h1>
-        </div>
-        <div className="flex ring-1 w-full gap-[30px]  ring-[#D0D5DD] p-5 rounded-md">
-          <>
-            {patientImage ? (
-              <Image
-                className="object-cover rounded-md w-[200px] h-[200px]"
-                width={400}
-                height={400}
-                src={patientImage}
-                alt="profile"
-              />
-            ) : (
-              <Image
-                className="object-cover rounded-md w-[200px] h-[200px]"
-                width={400}
-                height={400}
-                src="/imgs/user-no-icon.jpg"
-                alt="profile"
-              />
-            )}
-          </>
-          <div className="flex w-full">
-            <div className="flex flex-col gap-[20px] justify-between pt-[10px]">
-              <p className="p-title">
-                {patientData[0]?.firstName} {patientData[0]?.middleName}{" "}
-                {patientData[0]?.lastName}
-              </p>
-              <div className="flex flex-col gap-[20px]">
-                <div className="flex gap-[55px]">
-                  <div className="flex gap-[3px]">
-                    <img
-                      src="/imgs/profile-circle-new.svg"
-                      className="px-1"
-                      alt="profile"
-                      width="26"
-                      height="26"
-                    />
-                    <p className="">Patient</p>
-                  </div>
-                  <p className="">Age: {patientData[0]?.age}</p>
-                  <p className=" ">Gender: {patientData[0]?.gender}</p>
-                  <div className="flex gap-[8px]">
-                    <p className="flex items-center">
-                      ID: <span ref={inputRef}>{patientData[0]?.uuid}</span>
-                    </p>
-                    <img
-                      src="/imgs/id.svg"
-                      alt="copy"
-                      className="cursor-pointer"
-                      onClick={handleCopyClick}
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-[35px]">
-                  <div className="flex gap-[3px] w-[212px]">
-                    <img
-                      src="/imgs/codestatus.svg"
-                      className="px-1"
-                      alt="codestatus"
-                      width="26"
-                      height="26"
-                    />
-                    <p>
-                      Code Status:
-                      <span
-                        className={` 
-                          ${
-                            patientData[0]?.codeStatus === "DNR"
-                              ? "text-red-500"
-                              : "text-blue-500"
-                          } ml-1 w-[100px]`}
+    <div className="flex flex-col gap-[3px]">
+      <div className="p-title pb-2">
+        <h1>Patient Overview</h1>
+      </div>
+      <div className="form ring-1 w-full h-[220px] ring-[#D0D5DD] px-5 pt-5 rounded-md">
+        <div className="flex">
+          <div className="flex flex-col">
+            <div className="flex">
+              <div className="relative">
+                {!isLoading ? (
+                  <>
+                    {patientImage ? (
+                      <div
+                        className="rounded-lg"
+                        style={{
+                          width: "180px",
+                          height: "180px",
+                          overflow: "hidden",
+                        }}
                       >
-                        {patientData[0]?.codeStatus}
-                      </span>
-                    </p>
-                  </div>
-                  <p className="flex">
-                    Allergy:{" "}
-                    {patientData[0]?.allergies
-                      ? patientData[0]?.allergies
-                      : "None"}
-                  </p>
+                        <img
+                          src={patientImage}
+                          alt="profile"
+                          max-width="100%"
+                          height="auto"
+                          className="rounded-lg"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          width: "180px",
+                          height: "180px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <img
+                          src="/imgs/user-no-icon.png"
+                          alt="profile"
+                          max-width="100%"
+                          height="auto"
+                          className="rounded-lg"
+                        />
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="w-[180px] h-[180px] animate-pulse bg-gray-300 rounded-lg "></div>
+                )}
+                {currentRoute === "patient-details" && isEdit && (
+                  <label
+                    htmlFor="fileInput"
+                    className="absolute bottom-2 right-[-20px] cursor-pointer"
+                  >
+                    <img
+                      src="/svgs/editprof.svg"
+                      alt="edit button"
+                      width="35"
+                      height="35"
+                    />
+                  </label>
+                )}
+                <input
+                  id="fileInput"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
+            <div>
+              <div
+                className={`w-full justify-between p-title flex ${
+                  isLoading ? "" : "ml-1"
+                }`}
+              >
+                <h1>
+                  {" "}
+                  {isLoading ? (
+                    <div className="h-[30px] w-52 bg-gray-300 rounded-full animate-pulse"></div>
+                  ) : (
+                    `${patientData[0]?.firstName} ${patientData[0]?.middleName} ${patientData[0]?.lastName}`
+                  )}
+                </h1>
+                <div className="cursor-pointer items-center ml-10 flex">
+                  {currentRoute === "patient-details" ? (
+                    <span
+                      className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85] cursor-not-allowed`}
+                      onMouseEnter={handleSeeMoreHover}
+                      onMouseLeave={handleSeeMoreLeave}
+                    >
+                      See more details
+                    </span>
+                  ) : (
+                    <Link
+                      href={`/patient-overview/${params.id}/patient-details`}
+                    >
+                      <p
+                        className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85]`}
+                        onMouseEnter={handleSeeMoreHover}
+                        onMouseLeave={handleSeeMoreLeave}
+                        onClick={() => {
+                          setIsLoading(true);
+                          disableEdit();
+                        }}
+                      >
+                        See more details
+                      </p>
+                    </Link>
+                  )}
+                </div>
+              </div>
+              <div>
+                <div className="flex flex-row w-full mt-2 font-medium text-[15px]">
+                  {isLoading ? (
+                    <div className="flex items-start animate-pulse ">
+                      <div className="h-[22px] w-32 bg-gray-300 rounded-full mr-2"></div>
+                      <div className="h-[22px] w-24 bg-gray-400 rounded-full mr-2 "></div>
+                      <div className="h-[22px] w-36 bg-gray-300 rounded-full mr-2"></div>
+                      <div className="h-[22px] w-36 bg-gray-200 rounded-full mr-2"></div>
+                    </div>
+                  ) : (
+                    <>
+                      <img
+                        src="/imgs/profile-circle-new.svg"
+                        className="px-1"
+                        alt="profile"
+                        width="26"
+                        height="26"
+                      />
+                      <div>
+                        <p className="flex items-center mr-11">Patient</p>
+                      </div>
+                      <div className="flex">
+                        <div>
+                          <p className="flex items-center mr-11">
+                            Age:
+                            {patientData[0]?.age}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="flex items-center mr-10 ml-1 ">
+                            Gender:
+                            {patientData[0]?.gender}
+                          </p>
+                        </div>
+                        <div className="flex">
+                          <p className="flex items-center">
+                            ID:
+                            <span ref={inputRef}>{patientData[0]?.uuid}</span>
+                          </p>
+                          <img
+                            src="/imgs/id.svg"
+                            alt="copy"
+                            className="cursor-pointer ml-2"
+                            onClick={handleCopyClick}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className="mb-5"></div>
+                <div className="flex flex-row w-full font-medium text-[15px]">
+                  {isLoading ? (
+                    <div className="flex items-start animate-pulse">
+                      <div className="h-5 w-44 bg-gray-400 rounded-full mr-12"></div>
+                      <div className="h-5 w-60 bg-gray-400 rounded-full"></div>
+                    </div>
+                  ) : (
+                    <>
+                      <img
+                        src="/imgs/codestatus.svg"
+                        className="px-1"
+                        alt="codestatus"
+                        width="26"
+                        height="26"
+                      />
+                      <div>
+                        <h1 className={`flex items-center`}>
+                          Code Status:
+                          <p
+                            className={`${
+                              patientData[0]?.codeStatus === "DNR"
+                                ? "text-red-500"
+                                : "text-blue-500"
+                            } ml-1 w-[100px]`}
+                          >
+                            {patientData[0]?.codeStatus}
+                          </p>
+                        </h1>
+                      </div>
+
+                      <div>
+                        <div>
+                          <p className="flex items-center">
+                            Allergy:{" "}
+                            {patientData[0]?.allergies
+                              ? patientData[0]?.allergies
+                              : "None"}
+                          </p>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="flex gap-[50px] px-2">
@@ -322,6 +447,7 @@ export default function PatientOverviewLayout({
               </div>
             </div>
 
+
             <div className=" cursor-pointer">
               <Link href={`/patient-overview/${params.id}/patient-details`}>
                 <p
@@ -342,6 +468,7 @@ export default function PatientOverviewLayout({
                 </p>
               </Link>
             </div>
+
           </div>
         </div>
       </div>
@@ -351,3 +478,21 @@ export default function PatientOverviewLayout({
     </div>
   );
 }
+//created the parent as a function and the wrapped the children with the provider
+export default function PatientOverviewLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <div className="flex flex-col w-full px-[150px] pt-[90px] h-full">
+      <EditProvider>
+        <PatientOverview />
+        <div className="w-full flex items-center justify-center mt-4 h-full">
+          {children}
+        </div>
+      </EditProvider>
+    </div>
+  );
+}
+
