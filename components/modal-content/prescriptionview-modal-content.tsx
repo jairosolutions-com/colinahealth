@@ -53,18 +53,18 @@ export const PrescriptionViewModalContent = ({
   const [toastVisible, setToastVisible] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-  // update isNoFileModalOpen state
+
   const handleNoFileModalClose = (isModalOpen: boolean) => {
     setIsNoFileModalOpen(isModalOpen);
     setIsLoading(true);
     console.log("isNoFileModalOpen HANDLE", isNoFileModalOpen);
   };
 
-  const isConfirmModalOpen = (confirmDelete: boolean) => {
-    setConfirmDelete(confirmDelete);
-    if (confirmDelete) {
+  const isConfirmModalOpen = (deleteModalOpen: boolean) => {
+    setConfirmDelete(deleteModalOpen);
+    if (deleteModalOpen) {
       document.body.style.overflow = "hidden";
-    } else if (!confirmDelete) {
+    } else if (!deleteModalOpen) {
       document.body.style.overflow = "visible";
     }
   };
@@ -627,7 +627,7 @@ export const PrescriptionViewModalContent = ({
                         content={
                           <ConfirmationModal
                             uuid={selectedFileUUID}
-                            setConfirm={setConfirmDelete}
+                            setConfirm={setDeleteModalOpen}
                             label="Delete"
                             handleFunction={(e) => {
                               handleDeleteClick();

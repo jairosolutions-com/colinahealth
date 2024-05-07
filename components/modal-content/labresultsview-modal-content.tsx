@@ -626,7 +626,7 @@ export const LabResultsViewModalContent = ({
                         content={
                           <ConfirmationModal
                             uuid={selectedFileUUID}
-                            setConfirm={setConfirmDelete}
+                            setConfirm={setDeleteModalOpen}
                             label="Delete"
                             handleFunction={(e) => {
                               handleDeleteClick();
