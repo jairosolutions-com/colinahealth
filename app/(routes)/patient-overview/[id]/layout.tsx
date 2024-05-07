@@ -210,60 +210,35 @@ export default function PatientOverviewLayout({
         <div className="p-title pb-2">
           <h1>Patient Overview</h1>
         </div>
-        <div className="form ring-1 w-full h-[220px] ring-[#D0D5DD] px-5 pt-5 rounded-md">
-          <div className="flex">
-            <div className="flex flex-col">
-              {patientImage ? (
-                <img
-                  src={patientImage} // Use the patientImage state as the source
-                  alt="profile"
-                  width="200"
-                  height="200"
-                />
-              ) : (
-                <img
-                  src="/imgs/user-no-icon.jpg"
-                  alt="profile"
-                  width="200"
-                  height="200"
-                />
-              )}
-            </div>
-            <div className="justify-between ml-4 mt-1 flex flex-col w-full ">
-              <div>
-                <div className="w-full justify-between p-title flex ml-2">
-                  <h1>
-                    {" "}
-                    {patientData[0]?.firstName} {patientData[0]?.middleName}{" "}
-                    {patientData[0]?.lastName}
-                  </h1>
-                  <div className=" cursor-pointer items-center ml-10 flex ">
-                    <Link
-                      href={`/patient-overview/${params.id}/patient-details`}
-                    >
-                      <p
-                        className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85] ${
-                          currentRoute === "patient-details"
-                            ? "text-[#007C85]"
-                            : ""
-                        }`}
-                        onMouseEnter={handleSeeMoreHover}
-                        onMouseLeave={handleSeeMoreLeave}
-                        onClick={() => {
-                          setIsLoading(true);
-                          // handleSeeMoreDetails(
-                          //   `/patient-overview/${params.id}/patient-details`,
-                          //   -1
-                          // );
-                        }}
-                      >
-                        See more details
-                      </p>
-                    </Link>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex flex-row w-full mt-2 font-medium text-[15px]">
+        <div className="flex ring-1 w-full gap-[30px]  ring-[#D0D5DD] p-5 rounded-md">
+          <>
+            {patientImage ? (
+              <Image
+                className="object-cover rounded-md w-[200px] h-[200px]"
+                width={400}
+                height={400}
+                src={patientImage}
+                alt="profile"
+              />
+            ) : (
+              <Image
+                className="object-cover rounded-md w-[200px] h-[200px]"
+                width={400}
+                height={400}
+                src="/imgs/user-no-icon.jpg"
+                alt="profile"
+              />
+            )}
+          </>
+          <div className="flex w-full">
+            <div className="flex flex-col gap-[20px] justify-between pt-[10px]">
+              <p className="p-title">
+                {patientData[0]?.firstName} {patientData[0]?.middleName}{" "}
+                {patientData[0]?.lastName}
+              </p>
+              <div className="flex flex-col gap-[20px]">
+                <div className="flex gap-[55px]">
+                  <div className="flex gap-[3px]">
                     <img
                       src="/imgs/profile-circle-new.svg"
                       className="px-1"
@@ -271,35 +246,24 @@ export default function PatientOverviewLayout({
                       width="26"
                       height="26"
                     />
-                    <div>
-                      <p className="flex items-center mr-10">Patient</p>
-                    </div>
-                    <div className="flex">
-                      <div>
-                        <p className="flex items-center mr-10">
-                          Age: {patientData[0]?.age}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="flex items-center mr-10 ml-1 ">
-                          Gender: {patientData[0]?.gender}
-                        </p>
-                      </div>
-                      <div className="flex">
-                        <p className="flex items-center">
-                          ID: <span ref={inputRef}>{patientData[0]?.uuid}</span>
-                        </p>
-                        <img
-                          src="/imgs/id.svg"
-                          alt="copy"
-                          className="cursor-pointer ml-2"
-                          onClick={handleCopyClick}
-                        />
-                      </div>
-                    </div>
+                    <p className="">Patient</p>
                   </div>
-                  <div className="mb-5"></div>
-                  <div className="flex flex-row w-full font-medium text-[15px]">
+                  <p className="">Age: {patientData[0]?.age}</p>
+                  <p className=" ">Gender: {patientData[0]?.gender}</p>
+                  <div className="flex gap-[8px]">
+                    <p className="flex items-center">
+                      ID: <span ref={inputRef}>{patientData[0]?.uuid}</span>
+                    </p>
+                    <img
+                      src="/imgs/id.svg"
+                      alt="copy"
+                      className="cursor-pointer"
+                      onClick={handleCopyClick}
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-[35px]">
+                  <div className="flex gap-[3px] w-[212px]">
                     <img
                       src="/imgs/codestatus.svg"
                       className="px-1"
@@ -307,33 +271,26 @@ export default function PatientOverviewLayout({
                       width="26"
                       height="26"
                     />
-                    <div className="">
-                      <h1 className={`flex items-center`}>
-                        Code Status:
-                        <p
-                          className={` 
+                    <p>
+                      Code Status:
+                      <span
+                        className={` 
                           ${
                             patientData[0]?.codeStatus === "DNR"
                               ? "text-red-500"
                               : "text-blue-500"
                           } ml-1 w-[100px]`}
-                        >
-                          {patientData[0]?.codeStatus}
-                        </p>
-                      </h1>
-                    </div>
-
-                    <div className="">
-                      <div>
-                        <p className="flex items-center">
-                          Allergy:{" "}
-                          {patientData[0]?.allergies
-                            ? patientData[0]?.allergies
-                            : "None"}
-                        </p>
-                      </div>
-                    </div>
+                      >
+                        {patientData[0]?.codeStatus}
+                      </span>
+                    </p>
                   </div>
+                  <p className="flex">
+                    Allergy:{" "}
+                    {patientData[0]?.allergies
+                      ? patientData[0]?.allergies
+                      : "None"}
+                  </p>
                 </div>
               </div>
               <div className="flex gap-[50px] px-2">
@@ -363,6 +320,27 @@ export default function PatientOverviewLayout({
                   </Link>
                 ))}
               </div>
+            </div>
+
+            <div className=" cursor-pointer">
+              <Link href={`/patient-overview/${params.id}/patient-details`}>
+                <p
+                  className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85] ${
+                    currentRoute === "patient-details" ? "text-[#007C85]" : ""
+                  }`}
+                  onMouseEnter={handleSeeMoreHover}
+                  onMouseLeave={handleSeeMoreLeave}
+                  onClick={() => {
+                    setIsLoading(true);
+                    // handleSeeMoreDetails(
+                    //   `/patient-overview/${params.id}/patient-details`,
+                    //   -1
+                    // );
+                  }}
+                >
+                  See more details
+                </p>
+              </Link>
             </div>
           </div>
         </div>
