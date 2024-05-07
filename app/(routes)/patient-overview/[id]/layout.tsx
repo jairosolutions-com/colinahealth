@@ -354,89 +354,91 @@ function PatientOverview() {
 
         <div className="flex w-full justify-between">
           <div className="flex flex-col gap-[20px] justify-between pt-[10px]">
-            {isLoading ? (
-              <div className="h-[30px] w-52 bg-gray-300 rounded-full animate-pulse"></div>
-            ) : (
-              <p className="p-title ml-1">
-                {patientData[0]?.firstName} {patientData[0]?.middleName}{" "}
-                {patientData[0]?.lastName}
-              </p>
-            )}
-            <div className="flex flex-col gap-[20px]">
-              <div className="flex gap-[55px]">
-                {isLoading ? (
-                  <div className="flex items-start animate-pulse ">
-                    <div className="h-[22px] w-32 bg-gray-300 rounded-full mr-2"></div>
-                    <div className="h-[22px] w-24 bg-gray-400 rounded-full mr-2 "></div>
-                    <div className="h-[22px] w-36 bg-gray-300 rounded-full mr-2"></div>
-                    <div className="h-[22px] w-36 bg-gray-200 rounded-full mr-2"></div>
-                  </div>
-                ) : (
-                  <>
-                    <div className="flex gap-[3px]">
-                      <img
-                        src="/imgs/profile-circle-new.svg"
-                        className="px-1"
-                        alt="profile"
-                        width="26"
-                        height="26"
-                      />
-                      <p className="">Patient</p>
+            <div className="flex flex-col gap-[15px]">
+              {isLoading ? (
+                <div className="h-[30px] w-52 bg-gray-300 rounded-full animate-pulse"></div>
+              ) : (
+                <p className="p-title ml-1">
+                  {patientData[0]?.firstName} {patientData[0]?.middleName}{" "}
+                  {patientData[0]?.lastName}
+                </p>
+              )}
+              <div className="flex flex-col gap-[15px]">
+                <div className="flex gap-[55px]">
+                  {isLoading ? (
+                    <div className="flex items-start animate-pulse ">
+                      <div className="h-[22px] w-32 bg-gray-300 rounded-full mr-2"></div>
+                      <div className="h-[22px] w-24 bg-gray-400 rounded-full mr-2 "></div>
+                      <div className="h-[22px] w-36 bg-gray-300 rounded-full mr-2"></div>
+                      <div className="h-[22px] w-36 bg-gray-200 rounded-full mr-2"></div>
                     </div>
-                    <p className="">Age: {patientData[0]?.age}</p>
-                    <p className=" ">Gender: {patientData[0]?.gender}</p>
-                    <div className="flex gap-[8px]">
-                      <p className="flex items-center">
-                        ID: <span ref={inputRef}>{patientData[0]?.uuid}</span>
-                      </p>
-                      <img
-                        src="/imgs/id.svg"
-                        alt="copy"
-                        className="cursor-pointer"
-                        onClick={handleCopyClick}
-                      />
+                  ) : (
+                    <>
+                      <div className="flex gap-[3px]">
+                        <img
+                          src="/imgs/profile-circle-new.svg"
+                          className="px-1"
+                          alt="profile"
+                          width="26"
+                          height="26"
+                        />
+                        <p className="">Patient</p>
+                      </div>
+                      <p className="">Age: {patientData[0]?.age}</p>
+                      <p className=" ">Gender: {patientData[0]?.gender}</p>
+                      <div className="flex gap-[8px]">
+                        <p className="flex items-center">
+                          ID: <span ref={inputRef}>{patientData[0]?.uuid}</span>
+                        </p>
+                        <img
+                          src="/imgs/id.svg"
+                          alt="copy"
+                          className="cursor-pointer"
+                          onClick={handleCopyClick}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className="flex gap-[35px]">
+                  {isLoading ? (
+                    <div className="flex items-start animate-pulse">
+                      <div className="h-5 w-44 bg-gray-400 rounded-full mr-12"></div>
+                      <div className="h-5 w-60 bg-gray-400 rounded-full"></div>
                     </div>
-                  </>
-                )}
-              </div>
-              <div className="flex gap-[35px]">
-                {isLoading ? (
-                  <div className="flex items-start animate-pulse">
-                    <div className="h-5 w-44 bg-gray-400 rounded-full mr-12"></div>
-                    <div className="h-5 w-60 bg-gray-400 rounded-full"></div>
-                  </div>
-                ) : (
-                  <>
-                    <div className="flex gap-[3px] w-[212px]">
-                      <img
-                        src="/imgs/codestatus.svg"
-                        className="px-1"
-                        alt="codestatus"
-                        width="26"
-                        height="26"
-                      />
-                      <p>
-                        Code Status:
-                        <span
-                          className={` 
+                  ) : (
+                    <>
+                      <div className="flex gap-[3px] w-[212px]">
+                        <img
+                          src="/imgs/codestatus.svg"
+                          className="px-1"
+                          alt="codestatus"
+                          width="26"
+                          height="26"
+                        />
+                        <p>
+                          Code Status:
+                          <span
+                            className={` 
                           ${
                             patientData[0]?.codeStatus === "DNR"
                               ? "text-red-500"
                               : "text-blue-500"
                           } ml-1 w-[100px]`}
-                        >
-                          {patientData[0]?.codeStatus}
-                        </span>
+                          >
+                            {patientData[0]?.codeStatus}
+                          </span>
+                        </p>
+                      </div>
+                      <p className="flex">
+                        Allergy:{" "}
+                        {patientData[0]?.allergies
+                          ? patientData[0]?.allergies
+                          : "None"}
                       </p>
-                    </div>
-                    <p className="flex">
-                      Allergy:{" "}
-                      {patientData[0]?.allergies
-                        ? patientData[0]?.allergies
-                        : "None"}
-                    </p>
-                  </>
-                )}
+                    </>
+                  )}
+                </div>
               </div>
             </div>
             <div className="flex gap-[50px] px-2 ">
@@ -479,7 +481,7 @@ function PatientOverview() {
             </div>
           </div>
 
-          <div className={`cursor-pointer ${isLoading ? 'hidden' : ''}`}>
+          <div className={`cursor-pointer ${isLoading ? "hidden" : ""}`}>
             <Link href={`/patient-overview/${params.id}/patient-details`}>
               <p
                 className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85] ${
