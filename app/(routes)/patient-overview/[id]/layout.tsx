@@ -352,9 +352,9 @@ function PatientOverview() {
           />
         </div>
 
-        <div className="flex w-full">
+        <div className="flex w-full justify-between">
           <div className="flex flex-col gap-[20px] justify-between pt-[10px]">
-            <p className="p-title">
+            <p className="p-title ml-1">
               {patientData[0]?.firstName} {patientData[0]?.middleName}{" "}
               {patientData[0]?.lastName}
             </p>
