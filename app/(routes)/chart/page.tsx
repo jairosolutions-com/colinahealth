@@ -266,7 +266,7 @@ export default function ChartPage() {
               </div>
             </div>
             {patientWithMedicationLogsToday.length == 0 && term ? (
-              <div className="w-full h-full py-80 flex items-center  justify-center font-thin  ">
+              <div className="w-full h-full  flex items-center  justify-center font-thin  ">
                 No Patient Found
               </div>
             ) : (

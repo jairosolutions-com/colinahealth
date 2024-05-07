@@ -322,7 +322,7 @@ function PatientOverview() {
                 className="object-cover rounded-md w-[200px] h-[200px]"
                 width={400}
                 height={400}
-                src="/imgs/user-no-icon.jpg"
+                src="/imgs/no-icon-user.svg"
                 alt="profile"
               />
             )}
