@@ -1,21 +1,21 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-
-import { useParams, useRouter } from "next/navigation";
+import { onNavigate } from "@/actions/navigation";
+import { Navbar } from "@/components/navbar";
+import { redirect, useParams, useRouter } from "next/navigation";
 import { fetchPatientOverview } from "@/app/api/patients-api/patientOverview.api";
 import { usePathname } from "next/navigation";
 import {
   fetchPatientProfileImage,
   updatePatientProfileImage,
 } from "@/app/api/patients-api/patientProfileImage.api";
-import { getAccessToken } from "@/app/api/login-api/accessToken";
-import Image from "next/image";
+
 import { toast as sonner } from "sonner";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { EditProvider, useEditContext } from "./editContext";
 import Link from "next/link";
-
+import Image from "next/image";
+import { EditProvider, useEditContext } from "./editContext";
 function PatientOverview() {
   const { isEdit, isSave, toggleEdit, disableEdit } = useEditContext();
 
@@ -300,135 +300,146 @@ function PatientOverview() {
       setError("Failed to add Patient");
     }
   };
-
   return (
-    <div className="flex flex-col w-full px-[150px] pt-[90px] h-full">
-      <div className="flex flex-col gap-[3px]">
-        <div className="p-title pb-2">
-          <h1>Patient Overview</h1>
+    <div className="flex flex-col gap-[3px]">
+      <div className="p-title pb-2">
+        <h1>Patient Overview</h1>
+      </div>
+      <div className="flex ring-1 w-full gap-[30px]  ring-[#D0D5DD] p-5 rounded-md">
+        <div className="relative">
+          {!isLoading ? (
+            <>
+              {patientImage ? (
+                <Image
+                  className="object-cover rounded-md min-w-[200px] min-h-[200px] max-w-[200px] max-h-[200px]"
+                  width={200}
+                  height={200}
+                  src={patientImage}
+                  alt="profile"
+                />
+              ) : (
+                <Image
+                  className="object-cover rounded-md min-w-[200px] min-h-[200px] max-w-[200px] max-h-[200px]"
+                  width={200}
+                  height={200}
+                  src="/imgs/user-no-icon.jpg"
+                  alt="profile"
+                />
+              )}
+            </>
+          ) : (
+            <div className="w-[200px] h-[200px] animate-pulse bg-gray-300 rounded-lg "></div>
+          )}
+          {currentRoute === "patient-details" && isEdit && (
+            <label
+              htmlFor="fileInput"
+              className="absolute bottom-2 right-[-20px] cursor-pointer"
+            >
+              <Image
+                src="/svgs/editprof.svg"
+                alt="edit button"
+                width={35}
+                height={35}
+              />
+            </label>
+          )}
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageChange}
+          />
         </div>
-        <div className="flex ring-1 w-full gap-[30px]  ring-[#D0D5DD] p-5 rounded-md">
-          <>
-            {patientImage ? (
-              <Image
-                className="object-cover rounded-md w-[200px] h-[200px]"
-                width={400}
-                height={400}
-                src={patientImage}
-                alt="profile"
-              />
-            ) : (
-              <Image
-                className="object-cover rounded-md w-[200px] h-[200px]"
-                width={400}
-                height={400}
-                src="/imgs/no-icon-user.svg"
-                alt="profile"
-              />
-            )}
-          </>
-          <div className="flex w-full">
-            <div className="flex flex-col gap-[20px] justify-between pt-[10px]">
-              <p className="p-title">
-                {patientData[0]?.firstName} {patientData[0]?.middleName}{" "}
-                {patientData[0]?.lastName}
-              </p>
-              <div className="flex flex-col gap-[20px]">
-                <div className="flex gap-[55px]">
-                  <div className="flex gap-[3px]">
-                    <img
-                      src="/imgs/profile-circle-new.svg"
-                      className="px-1"
-                      alt="profile"
-                      width="26"
-                      height="26"
-                    />
-                    <p className="">Patient</p>
-                  </div>
-                  <p className="">Age: {patientData[0]?.age}</p>
-                  <p className=" ">Gender: {patientData[0]?.gender}</p>
-                  <div className="flex gap-[8px]">
-                    <p className="flex items-center">
-                      ID: <span ref={inputRef}>{patientData[0]?.uuid}</span>
-                    </p>
-                    <img
-                      src="/imgs/id.svg"
-                      alt="copy"
-                      className="cursor-pointer"
-                      onClick={handleCopyClick}
-                    />
-                  </div>
+
+        <div className="flex w-full">
+          <div className="flex flex-col gap-[20px] justify-between pt-[10px]">
+            <p className="p-title">
+              {patientData[0]?.firstName} {patientData[0]?.middleName}{" "}
+              {patientData[0]?.lastName}
+            </p>
+            <div className="flex flex-col gap-[20px]">
+              <div className="flex gap-[55px]">
+                <div className="flex gap-[3px]">
+                  <img
+                    src="/imgs/profile-circle-new.svg"
+                    className="px-1"
+                    alt="profile"
+                    width="26"
+                    height="26"
+                  />
+                  <p className="">Patient</p>
                 </div>
-                <div className="flex gap-[35px]">
-                  <div className="flex gap-[3px] w-[212px]">
-                    <img
-                      src="/imgs/codestatus.svg"
-                      className="px-1"
-                      alt="codestatus"
-                      width="26"
-                      height="26"
-                    />
-                    <p>
-                      Code Status:
-                      <span
-                        className={` 
+                <p className="">Age: {patientData[0]?.age}</p>
+                <p className=" ">Gender: {patientData[0]?.gender}</p>
+                <div className="flex gap-[8px]">
+                  <p className="flex items-center">
+                    ID: <span ref={inputRef}>{patientData[0]?.uuid}</span>
+                  </p>
+                  <img
+                    src="/imgs/id.svg"
+                    alt="copy"
+                    className="cursor-pointer"
+                    onClick={handleCopyClick}
+                  />
+                </div>
+              </div>
+              <div className="flex gap-[35px]">
+                <div className="flex gap-[3px] w-[212px]">
+                  <img
+                    src="/imgs/codestatus.svg"
+                    className="px-1"
+                    alt="codestatus"
+                    width="26"
+                    height="26"
+                  />
+                  <p>
+                    Code Status:
+                    <span
+                      className={` 
                           ${
                             patientData[0]?.codeStatus === "DNR"
                               ? "text-red-500"
                               : "text-blue-500"
                           } ml-1 w-[100px]`}
-                      >
-                        {patientData[0]?.codeStatus}
-                      </span>
-                    </p>
-                  </div>
-                  <p className="flex">
-                    Allergy:{" "}
-                    {patientData[0]?.allergies
-                      ? patientData[0]?.allergies
-                      : "None"}
+                    >
+                      {patientData[0]?.codeStatus}
+                    </span>
                   </p>
                 </div>
+                <p className="flex">
+                  Allergy:{" "}
+                  {patientData[0]?.allergies
+                    ? patientData[0]?.allergies
+                    : "None"}
+                </p>
               </div>
             </div>
-            <div className="flex gap-[50px] px-2 ">
-              {isLoading ? (
-                <div className="flex items-start animate-pulse">
-                  <div className="h-8 w-28 bg-gray-300 rounded-full mr-12"></div>
-                  <div className="h-8 w-28 bg-gray-200 rounded-full mr-12"></div>
-                  <div className="h-8 w-24 bg-gray-300 rounded-full mr-12"></div>
-                  <div className="h-8 w-20 bg-gray-400 rounded-full mr-12"></div>
-                  <div className="h-8 w-36 bg-gray-300 rounded-full mr-12"></div>
-                  <div className="h-8 w-24 bg-gray-200 rounded-full mr-12"></div>
-                  <div className="h-8 w-14 bg-gray-400 rounded-full mr-12"></div>
-                  <div className="h-8 w-14 bg-gray-200 rounded-full "></div>
-                </div>
-              ) : (
-                tabs.map((tab, index) => (
-                  <Link href={tab.url} key={index}>
-                    <p
-                      className={`cursor-pointer font-bold ${
-                        pathname === tab.url ||
-                        (tabUrl === "surgeries" &&
-                          tab.label === "Medical History") ||
-                        (tabUrl === "prorenata" &&
-                          tab.label === "Medication Log") ||
-                        (tabUrl === "incident-report" &&
-                          tab.label === "Notes") ||
-                        (tabUrl === "archived" && tab.label === "Forms")
-                          ? "text-[#007C85] border-b-2 border-[#007C85] text-[15px] pb-1"
-                          : "hover:text-[#007C85] hover:border-b-2 pb-1 h-[31px] border-[#007C85] text-[15px]"
-                      }`}
-                      onClick={() => {
-                        setIsLoading(true);
-                        disableEdit(); // disable edit on tab change
-                        }}
-                    >
-                      {tab.label}
-                    </p>
-                  </Link>
-                ))
-              )}
+            <div className="flex gap-[50px] px-2">
+              {tabs.map((tab, index) => (
+                <Link key={index} href={tab.url}>
+                  <p
+                    className={`cursor-pointer font-bold ${
+                      pathname === tab.url ||
+                      (tabUrl === "surgeries" &&
+                        tab.label === "Medical History") ||
+                      (tabUrl === "prorenata" &&
+                        tab.label === "Medication Log") ||
+                      (tabUrl === "incident-report" && tab.label === "Notes") ||
+                      (tabUrl === "archived" && tab.label === "Forms")
+                        ? "text-[#007C85] border-b-2 border-[#007C85] text-[15px] pb-1"
+                        : "hover:text-[#007C85] hover:border-b-2 pb-1 h-[31px] border-[#007C85] text-[15px]"
+                    }`}
+                    key={index}
+                    onClick={() => {
+                      setIsLoading(true);
+                      disableEdit();
+                    }}
+                  >
+                    {tab.label}
+                  </p>
+                </Link>
+              ))}
             </div>
           </div>
 
@@ -457,7 +468,6 @@ function PatientOverview() {
     </div>
   );
 }
-
 //created the parent as a function and the wrapped the children with the provider
 export default function PatientOverviewLayout({
   children,
