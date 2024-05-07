@@ -102,11 +102,11 @@ const Dashboard = () => {
           medicationlogs_medicationLogsDate: string;
           medicationlogs_medicationLogsTime: string;
         }[] = Object.values(filteredData);
-        const limitedArray = filteredArray.slice(0, 6);
+        const limitedArray = filteredArray.slice(0, 5);
 
         setDueMedicationList(limitedArray);
         setDueMedTotalPages(dueMedicationList.totalPages);
-        setTotalDueMedication(filteredArray.length);
+        setTotalDueMedication(dueMedicationList.totalCount);
         setIsLoading(false);
       } catch (error) {
         // Handle error
@@ -213,13 +213,13 @@ const Dashboard = () => {
           {/* {/ Start of Upcoming Appointments /} */}
 
           <div className="w-[930px] min-w-max-[930px] max-h-[670px] ">
-            <div className="border-[1px] h-[95px] px-18 pt-3">
+            <div className="border-x-[1px] border-t-[1px] h-[95px] px-18 pt-3">
               <p className="p-title mx-[30px] pt-2">
                 Upcoming Appointment
                 <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
               </p>
               <p className="font-normal text-[15px] text-[#71717A] mx-[30px] pt-3">
-                Total of {totalUpcoming} Appointment{" "}
+                Total of {totalUpcoming} upcoming appointment
                 <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
               </p>
             </div>
@@ -280,7 +280,7 @@ const Dashboard = () => {
                 <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
               </p>
               <p className="font-normal text-[15px] text-[#71717A] pt-3 mb-3">
-                Total of {totalDueMedication} Due Medication
+                Total of {totalDueMedication} due medication
                 <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
               </p>
             </div>

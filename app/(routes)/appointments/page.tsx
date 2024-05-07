@@ -439,7 +439,7 @@ export default function AppointmentPage() {
                                   {image.data ? (
                                     // Render the image if data is not empty
                                     <Image
-                                      className="rounded-full"
+                                      className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
                                       src={image.data} // Use the base64-encoded image data directly
                                       alt=""
                                       width={45}
@@ -449,7 +449,7 @@ export default function AppointmentPage() {
                                     // Render the stock image (.svg) if data is empty
                                     <Image
                                       className="rounded-full"
-                                      src="/imgs/user-no-icon.png"
+                                      src="/imgs/no-icon-user.svg"
                                       alt=""
                                       width={45}
                                       height={45}
