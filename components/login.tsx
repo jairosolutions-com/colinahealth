@@ -68,10 +68,13 @@ export const Login = () => {
     setTwoFa(true);
     e.preventDefault();
     try {
-      const accessToken = await validateUser(email, password, rememberMe);
-      const response = await generateOTPCode(email,"signIn");
-      if (accessToken && response) {
-        setIsOTP(true);
+      const signIn = await validateUser(email, password, rememberMe);
+
+      if (signIn != false) {
+        const response = await generateOTPCode(email, "signIn");
+        if (response) {
+          setIsOTP(true);
+        }
       } else {
         // Handle invalid login
         setPassword("");
@@ -341,6 +344,7 @@ export const Login = () => {
                 setIsResetPass={setIsResetPass}
                 isResetPass={isResetPass}
                 variant={twoFa ? "signIn" : "forgotPass"}
+                rememberMe={rememberMe}
               />
               {/* Reset Pass */}
               <ResetPass

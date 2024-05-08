@@ -49,11 +49,14 @@ export async function verifyOTPCode(
     userOTP: string,
     email: string,
     variant: string,
+    rememberMe: boolean 
   ): Promise<any> {
+    const expiresIn = rememberMe ? "30d" : "1d";
     const requestData = {
         userOTP: userOTP,
         email: email,
         variant: variant,
+        expiresIn:expiresIn,
     }
     try {
       const response = await axios.post(
