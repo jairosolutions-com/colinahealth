@@ -149,7 +149,7 @@ const TimeGraph = ({
         <div className=" relative z-10">
           <div
             ref={lineRef}
-            className="absolute w-1 bg-[#1B84FF] "
+            className="absolute w-1 bg-red-500 "
             style={linePosition}
           ></div>
         </div>
@@ -335,7 +335,8 @@ const TimeGraph = ({
                                     <div>
                                       <div className="cursor-pointer relative flex items-center justify-center">
                                         <Image
-                                          src="/icons/chart-list.svg"
+                                          src={`${ parseInt(col.time) <= 
+                                            parseInt(currentTime) - 100? "/icons/chart-list-red.svg":"/icons/chart-list.svg"}`}
                                           alt="list"
                                           width={30}
                                           height={30}

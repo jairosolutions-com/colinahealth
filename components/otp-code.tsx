@@ -15,6 +15,7 @@ interface OTPCodeProps {
   setIsResetPass: (value: boolean) => void;
   isResetPass: boolean;
   variant: string;
+  rememberMe: boolean;
 }
 
 const OTPCode = ({
@@ -24,6 +25,7 @@ const OTPCode = ({
   setIsResetPass,
   isResetPass,
   variant,
+  rememberMe,
 }: OTPCodeProps) => {
   const router = useRouter();
   const [otp, setOTP] = useState(new Array(6).fill(""));
@@ -91,7 +93,8 @@ const OTPCode = ({
         const response = await verifyOTPCode(
           otp.join(""),
           forgotPassEmail,
-          variant
+          variant,
+          rememberMe
         );
         if (response.isValid) {
           if (variant === "signIn") {
