@@ -10,6 +10,7 @@ import { Edit, View } from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import NurseDrawer from "@/components/nurse-drawer";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -200,13 +201,18 @@ const Dashboard = () => {
   return (
     <div className="w-full">
       <div className="justify-center items-center mx-[154px] mt-[90px] overflow-hidden">
-        <div className="w-full">
-          <p className="p-title select-none mb-1">WELCOME TO DASHBOARD!</p>
-          <div className="font-bold text-[15px] flex mb-4 select-none">
-            Hey Alexa Dramos -
-            <p className="font-normal text-[15px] pl-1 text-[#71717A] select-none">
-              here's what's happening with your clinic today!
-            </p>
+        <div className="w-full flex justify-between items-center">
+          <div className="w-full">
+            <p className="p-title select-none mb-1">WELCOME TO DASHBOARD!</p>
+            <div className="font-bold text-[15px] flex mb-4 select-none">
+              Hey Alexa Dramos -
+              <p className="font-normal text-[15px] pl-1 text-[#71717A] select-none">
+                here's what's happening with your clinic today!
+              </p>
+            </div>
+          </div>
+          <div className="">
+            <NurseDrawer />
           </div>
         </div>
         <div className="flex justify-between gap-[28px]">
