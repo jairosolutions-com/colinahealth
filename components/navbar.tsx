@@ -17,7 +17,7 @@ export const Navbar = ({
   const [isActive, setIsActive] = useState(false);
   const pathname = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const [showGlobalSearch, setShowGlobalSearch] = useState(false);
   const handleTabClick = (url: string, isActive: boolean) => {
     setIsActive(isActive);
     router.replace(url);
@@ -85,6 +85,15 @@ export const Navbar = ({
       setIsLoading(false);
     }
   }, [pathname]);
+
+  const handleMouseEnter = () => {
+    setShowGlobalSearch(true);
+  };
+
+  // Event handler for when mouse leaves the line
+  const handleMouseLeave = () => {
+    setShowGlobalSearch(false);
+  };
   console.log(dropdownOpen, "dropdownOpen");
   return (
     <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[145px] z-10 font-medium text-[15px]">
@@ -119,13 +128,44 @@ export const Navbar = ({
               }}
             >
               <p className="hover:text-gray-200">{route.label}</p>
-              {pathname === route.url && (
+              {pathname === route.url && !showGlobalSearch && (
                 <p
                   className={`${"border-b-[3px] border-[#ffffff] w-full absolute bottom-[-20px]"}`}
                 ></p>
               )}
             </Link>
           ))}
+        </div>
+        <div
+          className="flex justify-center items-center"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <Image
+            src="/icons/search-icon-white.svg"
+            width={15}
+            height={15}
+            alt="search"
+            className="cursor-pointer absolute"
+          />
+          {showGlobalSearch && (
+            <div
+              className={`bg-white flex items-center animate global-search h-[40px] rounded-lg shadow-md transition duration-300`}
+            >
+              <Image
+                src="/icons/search-icon.svg"
+                width={15}
+                height={15}
+                alt="search"
+                className="cursor-pointer absolute ml-2"
+              />
+              <input
+                type="text"
+                className="w-full h-full rounded-lg ml-7 appearance-none outline-none"
+                placeholder="Search..."
+              />
+            </div>
+          )}
         </div>
         <div className="flex gap-3 items-center mr-2">
           <Image
