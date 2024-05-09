@@ -9,6 +9,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import Tooltip from "./reusable/tooltip";
 
 const TimeGraph = ({
   patientWithMedicationLogsToday,
@@ -27,6 +28,8 @@ const TimeGraph = ({
 }) => {
   const [currentTime, setCurrentTime] = useState(moment().format("HHmm"));
   const [tableHeight, setTableHeight] = useState<number>(0);
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const lineRef = useRef<HTMLDivElement>(null);
 
   console.log("Updating currentTime:", currentTime);
@@ -55,6 +58,7 @@ const TimeGraph = ({
 
   // Concatenate hours, minutes, and AM/PM to form the time string
   const timeStrings = `${hours}:${minutesString} ${ampm}`;
+  console.log(timeStrings, "timeStrings");
 
   function convertTimeToHundreds(timeString: string): number {
     // Split the time string into hours, minutes, and AM/PM
@@ -142,6 +146,17 @@ const TimeGraph = ({
     }
     setEndLineHeight(tableHeight);
   }, [linePosition]);
+
+  // Event handler for when mouse enters the line
+  const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+    setTooltipPosition({ x: event.clientX, y: event.clientY });
+    setShowTooltip(true);
+  };
+
+  // Event handler for when mouse leaves the line
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
+  };
   console.log(patientWithMedicationLogsToday.length, "lenght");
   return (
     <div className="w-full  ">
@@ -151,7 +166,20 @@ const TimeGraph = ({
             ref={lineRef}
             className="absolute w-1 bg-red-500 "
             style={linePosition}
-          ></div>
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            {showTooltip && (
+              <div
+                className="fixed"
+                style={{ left: tooltipPosition.x, top: tooltipPosition.y }}
+              >
+                <Tooltip text={timeStrings}>
+                  <div></div>
+                </Tooltip>
+              </div>
+            )}
+          </div>
         </div>
 
         <table
@@ -335,8 +363,12 @@ const TimeGraph = ({
                                     <div>
                                       <div className="cursor-pointer relative flex items-center justify-center">
                                         <Image
-                                          src={`${ parseInt(col.time) <= 
-                                            parseInt(currentTime) - 100? "/icons/chart-list-red.svg":"/icons/chart-list.svg"}`}
+                                          src={`${
+                                            parseInt(col.time) <=
+                                            parseInt(currentTime) - 100
+                                              ? "/icons/chart-list-red.svg"
+                                              : "/icons/chart-list.svg"
+                                          }`}
                                           alt="list"
                                           width={30}
                                           height={30}

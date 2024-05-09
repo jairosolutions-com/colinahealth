@@ -382,6 +382,7 @@ table {
   width: 100%;
 }
 
+
 .global-search {
   position: absolute;
   right: 225px;
@@ -401,3 +402,5 @@ table {
     width: 650px;
   }
 }
+
+
