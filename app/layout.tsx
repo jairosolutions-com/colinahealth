@@ -5,6 +5,8 @@ import { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 
+
+
 const inter = Inter({ subsets: ["latin"] });
 const manrope = Manrope({ subsets: ["latin"] });
 
@@ -30,7 +32,6 @@ export default function RootLayout({
         <Toaster />
         <Sonner />
       </body>
-      
     </html>
   );
 }
