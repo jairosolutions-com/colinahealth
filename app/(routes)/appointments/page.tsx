@@ -26,6 +26,7 @@ import { fetchAllAppointments } from "@/app/api/appointments-api/fetch-all-appoi
 import { ErrorModal } from "@/components/shared/error";
 import Pagination from "@/components/shared/pagination";
 import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
+import ResuableTooltip from "@/components/reusable/tooltip";
 
 export default function AppointmentPage() {
   const router = useRouter();
@@ -484,9 +485,11 @@ export default function AppointmentPage() {
                           />
                         </div>
                       )}
-                      <span className="truncate">
-                        {appointment.patient_firstName} {""}
-                        {appointment.patient_lastName}
+                      <span>
+                        <ResuableTooltip
+                          text={`${appointment.patient_firstName} 
+                        ${appointment.patient_lastName}`}
+                        />
                       </span>
                     </td>
                     <td className="px-6 py-5 ">

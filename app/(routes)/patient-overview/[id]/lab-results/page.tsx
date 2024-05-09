@@ -14,6 +14,7 @@ import { SuccessModal } from "@/components/shared/success";
 import { LabresultsModalContent } from "@/components/modal-content/labresults-modal-content";
 import { LabResultsViewModalContent } from "@/components/modal-content/labresultsview-modal-content";
 import Pagination from "@/components/shared/pagination";
+import ResuableTooltip from "@/components/reusable/tooltip";
 export default function Laboratoryresults() {
   const router = useRouter();
   if (typeof window === "undefined") {
@@ -326,28 +327,40 @@ export default function Laboratoryresults() {
                     className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
                   >
                     <td className="px-6 py-3 w-[170px]">
-                      {labResult.labResults_uuid}
+                      <ResuableTooltip text={`${labResult.labResults_uuid}`} />
                     </td>
                     <td className=" px-6 py-3 w-[170px]">
                       {labResult.labResults_date}
                     </td>
                     <td className="px-6 py-3 w-[170px]">
-                      {labResult.labResults_hemoglobinA1c}%
+                      <ResuableTooltip
+                        text={`${labResult.labResults_hemoglobinA1c}%`}
+                      />
                     </td>
                     <td className="px-6 py-3 w-[170px]">
-                      {labResult.labResults_fastingBloodGlucose}mg/dL
+                      <ResuableTooltip
+                        text={`${labResult.labResults_fastingBloodGlucose}mg/dL`}
+                      />
                     </td>
                     <td className="px-6 py-3 w-[170px]">
-                      {labResult.labResults_totalCholesterol}mg/dL
+                      <ResuableTooltip
+                        text={`${labResult.labResults_totalCholesterol}mg/dL`}
+                      />
                     </td>
                     <td className="px-6 py-3 w-[170px]">
-                      {labResult.labResults_ldlCholesterol}mg/dL
+                      <ResuableTooltip
+                        text={`${labResult.labResults_ldlCholesterol}mg/dL`}
+                      />
                     </td>
                     <td className="px-6 py-3 w-[170px]">
-                      {labResult.labResults_hdlCholesterol}mg/dL
+                      <ResuableTooltip
+                        text={`${labResult.labResults_hdlCholesterol}mg/dL`}
+                      />
                     </td>
                     <td className="px-6 py-3 w-[170px]">
-                      {labResult.labResults_triglycerides}mg/dL
+                      <ResuableTooltip
+                        text={`${labResult.labResults_triglycerides}mg/dL`}
+                      />
                     </td>
                     <td className="px-6 py-3 flex gap-2 justify-center">
                       <p

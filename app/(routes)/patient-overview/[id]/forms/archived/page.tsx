@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { fetchFormsByPatient } from "@/app/api/forms-api/forms.api";
 import Pagination from "@/components/shared/pagination";
+import ResuableTooltip from "@/components/reusable/tooltip";
 
 export default function ArchiveTab() {
   const router = useRouter();
@@ -271,11 +272,13 @@ export default function ArchiveTab() {
                     key={index}
                     className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
                   >
-                    <td className="truncate px-6 py-3  whitespace-nowrap">
-                      {form.forms_nameOfDocument}
+                    <td className=" px-6 py-3 ">
+                      <ResuableTooltip text={form.forms_nameOfDocument} />
                     </td>
                     <td className="px-6 py-3 ">{form.forms_dateIssued}</td>
-                    <td className="px-6 py-3 truncate">{form.forms_notes}</td>
+                    <td className="px-6 py-3 ">
+                      <ResuableTooltip text={form.forms_notes} />
+                    </td>
                   </tr>
                 ))}
               </tbody>

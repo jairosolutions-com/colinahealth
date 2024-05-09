@@ -1,19 +1,30 @@
-import React from "react";
-
-interface TooltipProps {
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+interface ResuableTooltipProps {
   text: string;
-  children: React.ReactNode;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ text, children }) => {
+const ResuableTooltip = ({ text }: ResuableTooltipProps) => {
   return (
-    <div className="relative inline-block">
-      {children}
-      <div className="absolute bg-blue-600 text-white px-2 py-1 rounded whitespace-nowrap bottom-full left-1/2 transform -translate-x-1/2">
-        {text}
-      </div>
-    </div>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger className={`truncate max-w-[100%]`}>
+          {text}
+        </TooltipTrigger>
+        <TooltipContent
+          className={`break-words bg-[#007C85] text-white overflow-visible max-w-[429px]`}
+        >
+          <p className="relative z-[51]">{text}</p>
+          <div className="absolute bottom-[-5px] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#007C85] rotate-45 z-[49]"></div>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
-export default Tooltip;
+export default ResuableTooltip;

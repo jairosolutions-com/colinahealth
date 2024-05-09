@@ -16,6 +16,7 @@ import View from "@/components/shared/buttons/view";
 import { PrescriptionViewModalContent } from "@/components/modal-content/prescriptionview-modal-content";
 import Pagination from "@/components/shared/pagination";
 import Image from "next/image";
+import ResuableTooltip from "@/components/reusable/tooltip";
 export default function prescription() {
   const router = useRouter();
   if (typeof window === "undefined") {
@@ -327,19 +328,25 @@ export default function prescription() {
                           key={index}
                           className="group  even:bg-gray-50  border-b hover:bg-[#f4f4f4] text-[15px]"
                         >
-                          <td className="truncate px-6 py-3 ">
-                            {prescription.prescriptions_uuid}
+                          <td className="px-6 py-3 ">
+                            <ResuableTooltip
+                              text={prescription.prescriptions_uuid}
+                            />
                           </td>
-                          <td className="truncate  px-6 py-3  ">
-                            {prescription.prescriptions_name}
+                          <td className=" px-6 py-3  ">
+                            <ResuableTooltip
+                              text={prescription.prescriptions_name}
+                            />
                           </td>
-                          <td className="truncate  px-6 py-3 ">
+                          <td className=" px-6 py-3 ">
                             {prescription.prescriptions_frequency}
                           </td>
-                          <td className="truncate  px-6 py-3 ">
-                            {prescription.prescriptions_interval} hours
+                          <td className=" px-6 py-3 ">
+                            {prescription.prescriptions_interval === "1"
+                              ? "1 hour"
+                              : `${prescription.prescriptions_interval} hours`}
                           </td>
-                          <td className="truncate  px-6 py-3  ">
+                          <td className=" px-6 py-3  ">
                             {prescription.prescriptions_dosage}
                           </td>
                           <td className="px-6 py-3">

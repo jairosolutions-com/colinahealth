@@ -22,6 +22,7 @@ import { toast } from "@/components/ui/use-toast";
 import { SuccessModal } from "@/components/shared/success";
 import { ConfirmationModal } from "@/components/modal-content/confirmation-modal-content";
 import Pagination from "@/components/shared/pagination";
+import ResuableTooltip from "@/components/reusable/tooltip";
 interface Modalprops {
   isEdit: any;
   formAddData: any;
@@ -338,14 +339,16 @@ export default function FormsTab() {
                     key={index}
                     className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
                   >
-                    <td className="truncate px-6 py-3">{form.forms_uuid}</td>
-                    <td className="truncate px-6 py-3 ">
-                      {form.forms_nameOfDocument}
+                    <td className="px-6 py-3">
+                      <ResuableTooltip text={form.forms_uuid} />
                     </td>
-                    <td className="truncate px-6 py-3 ">
-                      {form.forms_dateIssued}
+                    <td className="px-6 py-3 ">
+                      <ResuableTooltip text={form.forms_nameOfDocument} />
                     </td>
-                    <td className="truncate px-6 py-3 ">{form.forms_notes}</td>
+                    <td className="px-6 py-3 ">{form.forms_dateIssued}</td>
+                    <td className="px-6 py-3 ">
+                      <ResuableTooltip text={form.forms_notes} />
+                    </td>
 
                     <td className="px-6 py-3 flex gap-2 justify-center">
                       <p

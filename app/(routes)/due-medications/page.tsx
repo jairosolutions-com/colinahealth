@@ -18,6 +18,7 @@ import { fetchDueMedication } from "@/app/api/medication-logs-api/due-medication
 import Image from "next/image";
 import Pagination from "@/components/shared/pagination";
 import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
+import ResuableTooltip from "@/components/reusable/tooltip";
 
 export default function DueMedicationPage() {
   const router = useRouter();
@@ -376,13 +377,17 @@ export default function DueMedicationPage() {
                           />
                         </div>
                       )}
-                      <span className="truncate">
-                        {dueMedication.patient_firstName} {""}
-                        {dueMedication.patient_lastName}
+                      <span>
+                        <ResuableTooltip
+                          text={`${dueMedication.patient_firstName} ${""}
+                        ${dueMedication.patient_lastName}`}
+                        />
                       </span>
                     </td>
                     <td className="px-6 py-5 ">
-                      {dueMedication.medicationlogs_uuid}
+                      <ResuableTooltip
+                        text={dueMedication.medicationlogs_uuid}
+                      />
                     </td>
                     <td className="px-6 py-5 ">
                       {dueMedication.medicationlogs_medicationLogsDate}
@@ -391,7 +396,9 @@ export default function DueMedicationPage() {
                       {dueMedication.medicationlogs_medicationLogsTime}
                     </td>
                     <td className="px-6 py-5">
-                      {dueMedication.medicationlogs_medicationLogsName}
+                      <ResuableTooltip
+                        text={dueMedication.medicationlogs_medicationLogsName}
+                      />
                     </td>
                   </tr>
                 ))}
