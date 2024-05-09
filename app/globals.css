@@ -381,3 +381,23 @@ tbody tr {
 table {
   width: 100%;
 }
+
+.global-search {
+  position: absolute;
+  right: 225px;
+  width: 650px;
+  transition: padding-left 0.5s ease-in; 
+}
+
+.global-search.animate {
+  animation: global-search-animation 0.5s ease forwards;
+}
+
+@keyframes global-search-animation {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 650px;
+  }
+}
