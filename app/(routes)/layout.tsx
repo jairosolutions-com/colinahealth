@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, []);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [timeout, setTimeout] = useState(1000 * 10); // 1 minute
+  const [timeout, setTimeout] = useState(5000 * 60); // 5 minute
   const [lastActive, setLastActive] = useState(Date.now());
   const { getRemainingTime, isIdle } = useIdleTimer({
     timeout,
