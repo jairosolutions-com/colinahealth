@@ -21,6 +21,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Pagination from "@/components/shared/pagination";
 import PdfDownloader from "@/components/pdfDownloader";
+import ResuableTooltip from "@/components/reusable/tooltip";
 
 const Allergies = () => {
   const router = useRouter();
@@ -336,18 +337,18 @@ const Allergies = () => {
                   key={index}
                   className=" group hover:bg-[#f4f4f4]  border-b text-[15px] "
                 >
-                  <td className="truncate px-6 py-3 ">
-                    {allergy.allergies_uuid}
+                  <td className="px-6 py-3 ">
+                    <ResuableTooltip text={allergy.allergies_uuid} />
                   </td>
-                  <td className="truncate px-6 py-3">
+                  <td className="px-6 py-3">
                     {" "}
                     {new Date(allergy.allergies_createdAt).toLocaleDateString()}
                   </td>
-                  <td className="truncate px-6  py-3">
-                    {allergy.allergies_type}
+                  <td className="px-6  py-3">
+                    <ResuableTooltip text={allergy.allergies_type} />
                   </td>
-                  <td className="truncate px-6  py-3">
-                    {allergy.allergies_allergen}
+                  <td className="px-6  py-3">
+                    <ResuableTooltip text={allergy.allergies_allergen} />
                   </td>
 
                   <td className="text-15px me-1 px-6 py-3 rounded-full flex items-center">
@@ -362,17 +363,20 @@ const Allergies = () => {
                           : ""
                       }`}
                     >
-                     
-                        {allergy.allergies_severity}
-                      
+                      {allergy.allergies_severity}
                     </div>
-                    
                   </td>
-                  <td className="truncate px-6  py-3">
-                    {allergy.allergies_reaction}
+                  <td className="px-6  py-3">
+                    <ResuableTooltip text={allergy.allergies_reaction} />
                   </td>
-                  <td className="truncate px-6  py-3">
-                    {allergy.allergies_notes ? allergy.allergies_notes : "None"}
+                  <td className="px-6  py-3">
+                    <ResuableTooltip
+                      text={
+                        allergy.allergies_notes
+                          ? allergy.allergies_notes
+                          : "None"
+                      }
+                    />
                   </td>
 
                   <td className="py-3 px-6 flex justify-center ">

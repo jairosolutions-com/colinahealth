@@ -18,6 +18,7 @@ import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 import Pagination from "@/components/shared/pagination";
+import ResuableTooltip from "@/components/reusable/tooltip";
 
 export default function PatientPage() {
   const router = useRouter();
@@ -374,7 +375,7 @@ export default function PatientPage() {
                     key={index}
                     className="group bg-white hover:bg-gray-100 border-b"
                   >
-                    <td className="truncate flex items-center gap-2 px-6 py-5">
+                    <td className="flex items-center gap-2 px-6 py-5">
                       {/* Check if any matching image found for the patient */}
                       {patientImages.some(
                         (image) => image.patientUuid === patient.uuid
@@ -434,14 +435,18 @@ export default function PatientPage() {
                         </div>
                       )}
 
-                      <p className="truncate ">
-                        {patient.firstName} {patient.lastName}
+                      <p>
+                        <ResuableTooltip
+                          text={`${patient.firstName} ${patient.lastName}`}
+                        />
                       </p>
                     </td>
 
-                    <td className="truncate px-6 py-5">{patient.uuid}</td>
-                    <td className="truncate px-6 py-5">{patient.age}</td>
-                    <td className="truncate px-6 py-5">{patient.gender}</td>
+                    <td className="px-6 py-5">
+                      <ResuableTooltip text={patient.uuid} />
+                    </td>
+                    <td className="px-6 py-5">{patient.age}</td>
+                    <td className="px-6 py-5">{patient.gender}</td>
                     <td className="px-[70px]">
                       <p onClick={() => handlePatientClick(patient.uuid)}>
                         <Edit></Edit>

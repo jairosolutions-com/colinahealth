@@ -18,6 +18,7 @@ import { AppointmentemailModalContent } from "@/components/modal-content/appoint
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
 import Pagination from "@/components/shared/pagination";
+import ResuableTooltip from "@/components/reusable/tooltip";
 const Appointment = () => {
   const router = useRouter();
   if (typeof window === "undefined") {
@@ -398,7 +399,7 @@ const Appointment = () => {
                       </td>
 
                       <td className="px-6 py-3 text-[15px] ">
-                        {formatDate(appointments.appointments_appointmentDate)}
+                        {appointments.appointments_appointmentDate}
                       </td>
                       <td className="px-6 py-3 text-[15px] ">
                         {formatTime(appointments.appointments_appointmentTime)}
@@ -409,7 +410,9 @@ const Appointment = () => {
                         )}
                       </td>
                       <td className="px-6 py-3 text-[15px] ">
-                        {appointments.appointments_details}
+                        <ResuableTooltip
+                          text={appointments.appointments_details}
+                        />
                       </td>
                       <td className="py-3 px-6 flex justify-center">
                         <p

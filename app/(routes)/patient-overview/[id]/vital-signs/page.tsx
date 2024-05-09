@@ -13,6 +13,7 @@ import { SuccessModal } from "@/components/shared/success";
 import Modal from "@/components/reusable/modal";
 import { VitalModalContent } from "@/components/modal-content/vital-modal-content";
 import Pagination from "@/components/shared/pagination";
+import ResuableTooltip from "@/components/reusable/tooltip";
 export default function vitalsigns() {
   const router = useRouter();
   if (typeof window === "undefined") {
@@ -320,7 +321,9 @@ export default function vitalsigns() {
                   key={index}
                   className="odd:bg-white border-b hover:bg-[#f4f4f4] group text-[15px]"
                 >
-                  <td className="px-6 py-3 ">{vitalSign.vitalsign_uuid}</td>
+                  <td className="px-6 py-3 ">
+                    <ResuableTooltip text={vitalSign.vitalsign_uuid} />
+                  </td>
                   <td className="px-6 py-3 ">
                     {formatDate(vitalSign.vitalsign_date)}
                   </td>
@@ -328,7 +331,9 @@ export default function vitalsigns() {
                     {formatTime(vitalSign.vitalsign_time)}
                   </td>
                   <td className="px-6 py-3 ">
-                    {vitalSign.vitalsign_bloodPressure}mmHg
+                    <ResuableTooltip
+                      text={`${vitalSign.vitalsign_bloodPressure}mmHg`}
+                    />
                   </td>
                   <td className="px-6 py-3 ">
                     {vitalSign.vitalsign_heartRate}bpm
@@ -337,7 +342,9 @@ export default function vitalsigns() {
                     {vitalSign.vitalsign_temperature}°F
                   </td>
                   <td className="px-6 py-3 ">
-                    {vitalSign.vitalsign_respiratoryRate}breaths/min
+                    <ResuableTooltip
+                      text={`${vitalSign.vitalsign_respiratoryRate}breaths/min`}
+                    />
                   </td>
 
                   <td className="px-6 py-3 flex justify-center">
