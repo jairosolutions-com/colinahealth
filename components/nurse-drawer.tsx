@@ -42,6 +42,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
   const [open, setOpen] = React.useState(false);
   const [patientId, setPatientId] = React.useState("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState("");
   const [patientList, setPatientList] = useState([
     {
@@ -78,9 +79,11 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
       setIsSubmitted(true);
       try {
         const notes = await createNotesOfPatient(patientId, formData, router);
-        console.log("notesadded successfully:", notes);
+        if (notes) {
+          setIsSuccess(true);
+          console.log(isSuccess, "issuccess");
+        }
 
-        // Reset the form data after successful submission
         setFormData({
           subject: "",
           notes: "",
@@ -109,7 +112,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
         }
         console.error("Error adding note:", error);
         setError("Failed to add note");
-      }
+      } 
     } else {
       setError("no patient id");
     }
@@ -145,6 +148,18 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
     }
   };
   console.log(formData, "formData");
+  console.log(isSuccess, "isSUccess");
+
+  useEffect(() => {
+    if (isSuccess) {
+      const cancelButton = document.querySelector(
+        ".cancel-button"
+      ) as HTMLButtonElement;
+      const clickEvent = new MouseEvent("click", { bubbles: true });
+      cancelButton.dispatchEvent(clickEvent);
+      setIsSuccess(false);
+    }
+  }, [isSuccess]);
   return (
     <>
       {" "}
@@ -160,7 +175,6 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
             Nurse's Note
           </div>
         </DrawerTrigger>
-
         <DrawerContent className="top-0 right-0 left-auto mt-0 w-[500px] rounded-none">
           <DrawerHeader className="bg-[#007C85]">
             <DrawerTitle className="text-white w-full flex justify-between">
@@ -171,7 +185,6 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
                 </DrawerClose>
               </p>
             </DrawerTitle>
-            {/* <DrawerDescription>This action cannot be undone.</DrawerDescription> */}
           </DrawerHeader>
           <form
             onSubmit={handleSubmit}
@@ -319,7 +332,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
                   type="button"
                   disabled={isSubmitted}
                   variant="outline"
-                  className={`
+                  className={` cancel-button
                   ${isSubmitted && " cursor-not-allowed"}
                   w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm`}
                 >

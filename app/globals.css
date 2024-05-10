@@ -76,11 +76,12 @@
 }
 
 html,
-body,
+body ,
 :root {
   height: 100%;
   /* color: white; */
 }
+
 .App {
   text-align: center;
 }
