@@ -36,6 +36,7 @@ import Image from "next/image";
 import { createNotesOfPatient } from "@/app/api/notes-api/notes-api";
 import { toast } from "./ui/use-toast";
 import { ToastAction } from "./ui/toast";
+import { selectPatient } from "@/app/api/patients-api/patientSelect.api";
 
 const NurseDrawer = ({ setIsSuccessOpen }: any) => {
   const router = useRouter();
@@ -124,13 +125,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await searchPatientList(
-          "",
-          1,
-          "lastName",
-          "ASC",
-          router
-        );
+        const response = await selectPatient(router);
         setPatientList(response.data);
       } catch (error: any) {
         console.log(error);
@@ -231,7 +226,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
                       />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[458px] p-0 ">
+                  <PopoverContent className="w-[458px] p-0 overflow-y-auto">
                     <Command
                       className="w-full"
                       onClick={() => {
@@ -241,7 +236,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
                       <CommandInput placeholder="Search patient..." />
                       <CommandEmpty>No patient found.</CommandEmpty>
                       <CommandGroup>
-                        <CommandList>
+                        <CommandList className=" z-[9999] ">
                           {patientList.map((patient) => (
                             <CommandItem
                               key={patient.uuid}
