@@ -18,6 +18,7 @@ export const Navbar = ({
   const pathname = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showGlobalSearch, setShowGlobalSearch] = useState(false);
+  const [isAnimate, setIsAnimate] = useState(false);
   const handleTabClick = (url: string, isActive: boolean) => {
     setIsActive(isActive);
     router.replace(url);
@@ -49,6 +50,7 @@ export const Navbar = ({
   const [OpenProfile, setOpenProfile] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLImageElement>(null);
 
   const handleMouseDownOutside = useCallback(
@@ -74,6 +76,31 @@ export const Navbar = ({
     };
   }, [handleMouseDownOutside]);
 
+  const handleMouseDownOutsideSearch = useCallback(
+    (event: MouseEvent) => {
+      if (
+        showGlobalSearch &&
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        console.log("Dropdown is being closed");
+        setIsAnimate(false)
+        setTimeout(()=>{
+          setShowGlobalSearch(false);
+        },300)
+      }
+    },
+    [showGlobalSearch]
+  );
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleMouseDownOutsideSearch);
+
+    return () => {
+      document.removeEventListener("mousedown", handleMouseDownOutsideSearch);
+    };
+  }, [handleMouseDownOutsideSearch]);
+
   useEffect(() => {
     if (
       pathname === "/due-medications" ||
@@ -86,14 +113,11 @@ export const Navbar = ({
     }
   }, [pathname]);
 
-  const handleMouseEnter = () => {
+  const handleSearchClick = () => {
     setShowGlobalSearch(true);
+    setIsAnimate(true);
   };
 
-  // Event handler for when mouse leaves the line
-  const handleMouseLeave = () => {
-    setShowGlobalSearch(false);
-  };
   console.log(dropdownOpen, "dropdownOpen");
   return (
     <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[145px] z-10 font-medium text-[15px]">
@@ -138,8 +162,8 @@ export const Navbar = ({
         </div>
         <div
           className="flex justify-center items-center"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          onClick={handleSearchClick}
+          ref={searchRef}
         >
           <Image
             src="/icons/search-icon-white.svg"
@@ -150,7 +174,8 @@ export const Navbar = ({
           />
           {showGlobalSearch && (
             <div
-              className={`bg-white flex items-center animate global-search h-[40px] rounded-lg shadow-md transition duration-300`}
+              className={`bg-white flex items-center global-search h-[40px] rounded-lg shadow-md transition duration-300
+              ${isAnimate ? 'animate ' : 'animate-close'}`}
             >
               <Image
                 src="/icons/search-icon.svg"

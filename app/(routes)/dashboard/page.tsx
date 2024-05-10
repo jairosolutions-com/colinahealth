@@ -11,6 +11,7 @@ import { redirect, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import NurseDrawer from "@/components/nurse-drawer";
+import { SuccessModal } from "@/components/shared/success";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -38,6 +39,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLoading2, setIsLoading2] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const [isSuccessOpen, setIsSuccessOpen] = useState<boolean>(false);
   const [dueMedicationList, setDueMedicationList] = useState<
     {
       patient_uuid: string;
@@ -211,9 +213,7 @@ const Dashboard = () => {
               </p>
             </div>
           </div>
-          <div className="">
-            <NurseDrawer />
-          </div>
+            <NurseDrawer setIsSuccessOpen={setIsSuccessOpen} />
         </div>
         <div className="flex justify-between gap-[28px]">
           {/* {/ Start of Upcoming Appointments /} */}
@@ -367,6 +367,15 @@ const Dashboard = () => {
           {/* End of Due Medications */}
         </div>
       </div>
+      {isSuccessOpen && (
+        <SuccessModal
+          label={''}
+          isAlertOpen={isSuccessOpen}
+          toggleModal={setIsSuccessOpen}
+          isUpdated={''}
+          setIsUpdated={''}
+        />
+      )}
     </div>
   );
 };
