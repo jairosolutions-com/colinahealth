@@ -9,7 +9,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import Tooltip from "./reusable/tooltip";
+import ResuableTooltip from "./reusable/tooltip";
 
 const TimeGraph = ({
   patientWithMedicationLogsToday,
@@ -170,14 +170,14 @@ const TimeGraph = ({
             onMouseLeave={handleMouseLeave}
           >
             {showTooltip && (
+              
               <div
                 className="fixed"
                 style={{ left: tooltipPosition.x, top: tooltipPosition.y }}
               >
-                <Tooltip text={timeStrings}>
-                  <div></div>
-                </Tooltip>
+                <ResuableTooltip text={timeStrings}/>
               </div>
+              
             )}
           </div>
         </div>
