@@ -120,52 +120,45 @@ export const Navbar = ({
   // }, [selectedPatientId]);
 
   const onPatientClick = (patientId: string, url: string) => {
-    // const patientIds = searchData.map((data) => data.patientId);
-    // const index = patientIds.indexOf(patientId);
-
-    // if (index !== -1) {
-    //   setSelectedPatientId(searchData[index].patientId);
-    //   console.log("ID:", searchData[index].patientId);
-    //   console.log("URL:", url);
-    // }
-    // console.log("selectedPatientId:", selectedPatientId);
-
     setSelectedPatientId(patientId);
-    console.log("ID:", selectedPatientId);
-    console.log("URL:", url);
+    const urlParts = url.split("/");
+    const path = `/${urlParts[urlParts.length - 2]}/${
+      urlParts[urlParts.length - 1]
+    }`;
+    router.push(`/patient-overview/${patientId}${path}`);
   };
   const tabsUrls = [
     {
       label: "Medical History",
-      url: `/patient-overview/${id}/medical-history/allergies`,
+      url: `/patient-overview/${selectedPatientId}/medical-history/allergies`,
     },
     {
       label: "Medication Log",
-      url: `/patient-overview/${id}/medication/scheduled`,
+      url: `/patient-overview/${selectedPatientId}/medication/scheduled`,
     },
     {
       label: "Prescription",
-      url: `/patient-overview/${id}/prescription`,
+      url: `/patient-overview/${selectedPatientId}/prescription`,
     },
     {
       label: "Vital Signs",
-      url: `/patient-overview/${id}/vital-signs`,
+      url: `/patient-overview/${selectedPatientId}/vital-signs`,
     },
     {
       label: "Laboratory Results",
-      url: `/patient-overview/${id}/lab-results`,
+      url: `/patient-overview/${selectedPatientId}/lab-results`,
     },
     {
       label: "Appointment",
-      url: `/patient-overview/${id}/patient-appointment`,
+      url: `/patient-overview/${selectedPatientId}/patient-appointment`,
     },
     {
       label: "Notes",
-      url: `/patient-overview/${id}/notes/nurses-notes`,
+      url: `/patient-overview/${selectedPatientId}/notes/nurses-notes`,
     },
     {
       label: "Forms",
-      url: `/patient-overview/${id}/forms`,
+      url: `/patient-overview/${selectedPatientId}/forms`,
     },
   ];
 
