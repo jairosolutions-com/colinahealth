@@ -302,7 +302,7 @@ const Dashboard = () => {
               <div
                 onClick={() => {
                   setIsLoading(true);
-                  onNavigate(router, "/due-medications");
+                  router.push("/due-medications");
                 }}
                 className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] mt-3"
               >
@@ -391,11 +391,11 @@ const Dashboard = () => {
               <div
                 onClick={() => {
                   setIsLoading(true);
-                  onNavigate(router, "/due-medications");
+                  router.push("/appointments");
                 }}
                 className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] mt-3"
               >
-                SEE ALL DUE
+                SEE ALL UPCOMING
                 <svg
                   className="text-[#71717A] ml-2 group-hover:text-[#007C85]"
                   width="17"
