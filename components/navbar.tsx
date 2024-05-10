@@ -7,6 +7,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import NavBarDropdown from "./shared/navbardropdown";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import Link from "next/link";
+import { searchPatientList } from "@/app/api/patients-api/patientList.api";
+
+interface Tabs {
+  label: string;
+  url: string;
+}
 
 export const Navbar = ({
   setIsLoading,
@@ -18,7 +24,23 @@ export const Navbar = ({
   const pathname = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showGlobalSearch, setShowGlobalSearch] = useState(false);
+  const [suggestionContainer, setSuggestionContainer] = useState(false);
   const [isAnimate, setIsAnimate] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [tabs, setTabs] = useState<Tabs[]>([]);
+  const [selectedPatientId, setSelectedPatientId] = useState("");
+  const [id, setId] = useState(selectedPatientId);
+  const [filteredTabs, setFilteredTabs] = useState<Tabs[]>([]);
+
+  const handleSearchChange = (e: { target: { value: any } }) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    const filteredTabs = tabsUrls.filter((tab) =>
+      tab.label.toLowerCase().startsWith(value.toLowerCase())
+    );
+    setFilteredTabs(filteredTabs);
+  };
+
   const handleTabClick = (url: string, isActive: boolean) => {
     setIsActive(isActive);
     router.replace(url);
@@ -44,6 +66,106 @@ export const Navbar = ({
     {
       label: "Chart",
       url: "/chart",
+    },
+  ];
+
+  const searchData = [
+    {
+      name: "Chesky Marga Chesky Marga Marga C. Palma Gil",
+      patientId: "PTN-20234A41",
+    },
+    {
+      name: "Daryl Lesiguez Estrada",
+      patientId: "PTN-25613682",
+    },
+  ];
+
+  // useEffect(() => {
+  //   const newTabsUrls = [
+  //     {
+  //       label: "Medical History",
+  //       url: `/patient-overview/${selectedPatientId}/medical-history/allergies`,
+  //     },
+  //     {
+  //       label: "Medication Log",
+  //       url: `/patient-overview/${selectedPatientId}/medication/scheduled`,
+  //     },
+  //     {
+  //       label: "Prescription",
+  //       url: `/patient-overview/${selectedPatientId}/prescription`,
+  //     },
+  //     {
+  //       label: "Vital Signs",
+  //       url: `/patient-overview/${selectedPatientId}/vital-signs`,
+  //     },
+  //     {
+  //       label: "Laboratory Results",
+  //       url: `/patient-overview/${selectedPatientId}/lab-results`,
+  //     },
+  //     {
+  //       label: "Appointment",
+  //       url: `/patient-overview/${selectedPatientId}/patient-appointment`,
+  //     },
+  //     {
+  //       label: "Notes",
+  //       url: `/patient-overview/${selectedPatientId}/notes/nurses-notes`,
+  //     },
+  //     {
+  //       label: "Forms",
+  //       url: `/patient-overview/${selectedPatientId}/forms`,
+  //     },
+  //   ];
+
+  //   setTabs(newTabsUrls);
+  // }, [selectedPatientId]);
+
+  const onPatientClick = (patientId: string, url: string) => {
+    // const patientIds = searchData.map((data) => data.patientId);
+    // const index = patientIds.indexOf(patientId);
+
+    // if (index !== -1) {
+    //   setSelectedPatientId(searchData[index].patientId);
+    //   console.log("ID:", searchData[index].patientId);
+    //   console.log("URL:", url);
+    // }
+    // console.log("selectedPatientId:", selectedPatientId);
+
+    setSelectedPatientId(patientId);
+    console.log("ID:", selectedPatientId);
+    console.log("URL:", url);
+  };
+  const tabsUrls = [
+    {
+      label: "Medical History",
+      url: `/patient-overview/${id}/medical-history/allergies`,
+    },
+    {
+      label: "Medication Log",
+      url: `/patient-overview/${id}/medication/scheduled`,
+    },
+    {
+      label: "Prescription",
+      url: `/patient-overview/${id}/prescription`,
+    },
+    {
+      label: "Vital Signs",
+      url: `/patient-overview/${id}/vital-signs`,
+    },
+    {
+      label: "Laboratory Results",
+      url: `/patient-overview/${id}/lab-results`,
+    },
+    {
+      label: "Appointment",
+      url: `/patient-overview/${id}/patient-appointment`,
+    },
+    {
+      label: "Notes",
+      url: `/patient-overview/${id}/notes/nurses-notes`,
+    },
+    {
+      label: "Forms",
+      url: `/patient-overview/${id}/forms`,
     },
   ];
 
@@ -84,10 +206,12 @@ export const Navbar = ({
         !searchRef.current.contains(event.target as Node)
       ) {
         console.log("Dropdown is being closed");
-        setIsAnimate(false)
-        setTimeout(()=>{
+        setIsAnimate(false);
+        setSearchValue("");
+        setTimeout(() => {
           setShowGlobalSearch(false);
-        },300)
+          setSuggestionContainer(false);
+        }, 300);
       }
     },
     [showGlobalSearch]
@@ -118,7 +242,6 @@ export const Navbar = ({
     setIsAnimate(true);
   };
 
-  console.log(dropdownOpen, "dropdownOpen");
   return (
     <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[145px] z-10 font-medium text-[15px]">
       <Link href="/dashboard" shallow>
@@ -173,23 +296,60 @@ export const Navbar = ({
             className="cursor-pointer absolute"
           />
           {showGlobalSearch && (
-            <div
-              className={`bg-white flex items-center global-search h-[40px] rounded-lg shadow-md transition duration-300
-              ${isAnimate ? 'animate ' : 'animate-close'}`}
-            >
-              <Image
-                src="/icons/search-icon.svg"
-                width={15}
-                height={15}
-                alt="search"
-                className="cursor-pointer absolute ml-2"
-              />
-              <input
-                type="text"
-                className="w-full h-full rounded-lg ml-7 appearance-none outline-none"
-                placeholder="Search..."
-              />
-            </div>
+            <>
+              <div
+                className={`bg-white flex items-center global-search h-[40px] rounded-lg shadow-md transition duration-300 relative
+              ${isAnimate ? "animate " : "animate-close"}`}
+              >
+                <Image
+                  src="/icons/search-icon.svg"
+                  width={15}
+                  height={15}
+                  alt="search"
+                  className="cursor-pointer absolute ml-2"
+                />
+                <input
+                  type="text"
+                  className="w-full h-full rounded-lg ml-7 appearance-none outline-none"
+                  placeholder="Search..."
+                  value={searchValue}
+                  onChange={(e) => handleSearchChange(e)}
+                />
+              </div>
+              {searchValue && (
+                <div
+                  className={`bg-white w-full h-[310px]  bottom-[-300px] global-search truncate p-[10px] rounded-sm shadow-md ${
+                    isAnimate ? " " : "animate-close"
+                  }`}
+                >
+                  <div className="h-full w-full overflow-y-scroll flex flex-col gap-[8px]">
+                    {filteredTabs.map((tab, index) => (
+                      <div className="flex flex-col gap-[8px]">
+                        <p
+                          className="bg-[#007C85] p-[10px] text-white font-bold"
+                          key={index}
+                        >
+                          {tab.label}
+                        </p>
+                        {searchData.map((patient, index) => (
+                          <p
+                            onClick={() => {
+                              onPatientClick(patient.patientId, tab.url);
+                            }}
+                            key={index}
+                            data-uuid={patient.patientId}
+                            className="bg-[#D9D9D933] p-[10px] flex justify-between"
+                          >
+                            <span>{patient.name}</span>
+                            <span>{patient.patientId}</span>
+                          </p>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
         <div className="flex gap-3 items-center mr-2">
