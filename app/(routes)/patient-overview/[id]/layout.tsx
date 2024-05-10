@@ -41,16 +41,12 @@ function PatientOverview({ setIsTableLoading }: { setIsTableLoading: any }) {
 
   const tabs = [
     {
-      label: "Medical History",
-      url: `/patient-overview/${params.id}/medical-history/allergies`,
-    },
-    {
-      label: "Medication Log",
+      label: "MAR",
       url: `/patient-overview/${params.id}/medication/scheduled`,
     },
     {
-      label: "Prescription",
-      url: `/patient-overview/${params.id}/prescription`,
+      label: "Notes",
+      url: `/patient-overview/${params.id}/notes/nurses-notes`,
     },
     {
       label: "Vital Signs",
@@ -61,17 +57,23 @@ function PatientOverview({ setIsTableLoading }: { setIsTableLoading: any }) {
       url: `/patient-overview/${params.id}/lab-results`,
     },
     {
-      label: "Appointment",
-      url: `/patient-overview/${params.id}/patient-appointment`,
+      label: "Medical History",
+      url: `/patient-overview/${params.id}/medical-history/allergies`,
     },
     {
-      label: "Notes",
-      url: `/patient-overview/${params.id}/notes/nurses-notes`,
+      label: "Prescription",
+      url: `/patient-overview/${params.id}/prescription`,
     },
     {
       label: "Forms",
       url: `/patient-overview/${params.id}/forms`,
     },
+    {
+      label: "Appointment",
+      url: `/patient-overview/${params.id}/patient-appointment`,
+    },
+    
+    
   ];
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const togglePopup = () => {
