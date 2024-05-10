@@ -218,7 +218,7 @@ const Dashboard = () => {
         <div className="flex justify-between gap-[28px]">
           {/* {/ Start of Upcoming Appointments /} */}
 
-          <div className="w-[930px] min-w-max-[930px] max-h-[670px] ">
+          <div className="w-[930px] min-w-max-[930px] max-h-[670px] bg-white">
             <div className="border-x-[1px] border-t-[1px] h-[95px] px-18 pt-3">
               <p className="p-title mx-[30px] pt-2">
                 Upcoming Appointment
@@ -279,7 +279,7 @@ const Dashboard = () => {
           </div>
           {/* {/ End of Upcoming Appointments /}
       {/ Start of Due Medications /} */}
-          <div className="w-[621px]  border-[1px] border-[#E4E4E7] py-3 select-none px-[40px]">
+          <div className="w-[621px]  border-[1px] border-[#E4E4E7] py-3 select-none px-[40px] bg-white">
             <div className="">
               <p className="p-title pt-2">
                 Due Medication

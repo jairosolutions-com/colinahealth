@@ -8,6 +8,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useEffect, useState } from "react";
 import Footer from "@/components/footer";
 import { useIdleTimer } from "react-idle-timer";
+import { toast } from "@/components/ui/use-toast";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -23,8 +24,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { getRemainingTime, isIdle } = useIdleTimer({
     timeout,
     onIdle: () => {
-      // Log out the user
       setAccessToken("");
+      toast({
+        variant: "destructive",
+        title: "Automatic Logout.",
+        description: "You have been away for 5 minutes.",
+      });
       router.push("/login");
     },
     onActive: () => {
@@ -52,7 +57,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen ">
         <Navbar setIsLoading={setIsLoading} />
         {isLoading ? (
           <div className="w-full h-full flex justify-center items-center ">
