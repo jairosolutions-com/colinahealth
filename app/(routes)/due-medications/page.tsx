@@ -124,6 +124,7 @@ export default function DueMedicationPage() {
           currentPage,
           dueMedSortBy,
           sortOrder as "ASC" | "DESC",
+          5,
           router
         );
 
