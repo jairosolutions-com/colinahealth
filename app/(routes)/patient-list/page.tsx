@@ -435,7 +435,7 @@ export default function PatientPage() {
                         </div>
                       )}
 
-                      <p>
+                      <p className="overflow-hidden">
                         <ResuableTooltip
                           text={`${patient.firstName} ${patient.lastName}`}
                         />
