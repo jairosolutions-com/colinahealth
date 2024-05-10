@@ -338,10 +338,7 @@ const Prorenata = () => {
                       className="group hover:bg-[#f4f4f4]  border-b text-[15px]"
                     >
                       <td className="px-6 py-3 ">
-                        <ResuableTooltip
-                          maxWidth="429px"
-                          text={prnMed.medicationlogs_uuid}
-                        />
+                        <ResuableTooltip text={prnMed.medicationlogs_uuid} />
                       </td>
                       <td className="px-6 py-3 ">
                         {prnMed.medicationlogs_medicationLogsDate}
@@ -369,15 +366,11 @@ const Prorenata = () => {
                       </td>
                       <td className="px-6 py-3 ">
                         <ResuableTooltip
-                          maxWidth="429px"
                           text={prnMed.medicationlogs_medicationLogsName}
                         />
                       </td>
                       <td className="px-6 py-3 ">
-                        <ResuableTooltip
-                          maxWidth="429px"
-                          text={prnMed.medicationlogs_notes}
-                        />
+                        <ResuableTooltip text={prnMed.medicationlogs_notes} />
                       </td>
                       <td className="text-15px me-1 px-6 py-5  rounded-full flex items-center">
                         <div

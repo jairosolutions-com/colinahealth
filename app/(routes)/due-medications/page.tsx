@@ -377,7 +377,7 @@ export default function DueMedicationPage() {
                           />
                         </div>
                       )}
-                      <span>
+                      <span className="overflow-hidden">
                         <ResuableTooltip
                           text={`${dueMedication.patient_firstName} ${""}
                         ${dueMedication.patient_lastName}`}
