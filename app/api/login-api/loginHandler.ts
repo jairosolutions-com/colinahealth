@@ -1,5 +1,9 @@
 import axios, { AxiosError } from "axios";
-import { getRememberToken, setAccessToken, setRememberToken } from "./accessToken";
+import {
+  getRememberToken,
+  setAccessToken,
+  setRememberToken,
+} from "./accessToken";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function checkTokenValidity(): Promise<any> {
@@ -74,13 +78,11 @@ export async function validateUser(
       const userDetail = data.userDetail;
 
       if (accessToken) {
-        if (getRememberToken()){
+        if (getRememberToken()) {
           setAccessToken(accessToken);
           return accessToken;
         }
-        if (rememberMe) {
-          setRememberToken(accessToken);
-        }
+
         return accessToken;
       } else {
         console.log(false);

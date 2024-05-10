@@ -6,7 +6,10 @@ import {
   setAccessToken,
   setRememberToken,
 } from "@/app/api/login-api/accessToken";
-import { checkTokenValidity, validateUser } from "@/app/api/login-api/loginHandler";
+import {
+  checkTokenValidity,
+  validateUser,
+} from "@/app/api/login-api/loginHandler";
 import { redirect, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Footer from "./footer";
@@ -68,17 +71,17 @@ export const Login = () => {
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchToken = async () => {
       const result = await checkTokenValidity();
-      console.log(result,'check')
-      if(!result) {
-        setRememberToken('')
+      console.log(result, "check");
+      if (!result) {
+        setRememberToken("");
       }
     };
 
     fetchToken();
-  },[])
+  }, []);
 
   console.log(rememberMeToken, "rememberme");
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -89,33 +92,23 @@ export const Login = () => {
       const signIn = await validateUser(email, password, rememberMe);
 
       if (signIn != false) {
-        if (rememberMeToken==="") {
+        if (rememberMeToken === "") {
           const response = await generateOTPCode(email, "signIn");
           if (response) {
             setIsOTP(true);
           }
-        } else if (rememberMeToken !=="") {
+        } else if (rememberMeToken !== "") {
           router.push("/dashboard");
         }
+      } else {
+        // Handle invalid login
+        setPassword("");
+        setIsInvalid(true);
+        setTimeout(() => {
+          setIsInvalid(false);
+        }, 2000);
       }
 
-      // const signIn = await validateUser(email, password, rememberMe);
-
-      // if (signIn != false && rememberMeToken===null) {
-      //   const response = await generateOTPCode(email, "signIn");
-      //   if (response) {
-      //     setIsOTP(true);
-      //   }
-      // } else if (rememberMeToken){
-      //   router.push('/dashboard')
-      // }else {
-      //   // Handle invalid login
-      //   setPassword("");
-      //   setIsInvalid(true);
-      //   setTimeout(() => {
-      //     setIsInvalid(false);
-      //   }, 2000);
-      // }
     } catch (error) {
       console.error("Error during login:", error);
       // Handle error
