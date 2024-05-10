@@ -75,6 +75,7 @@ const Dashboard = () => {
           currentPage,
           dueMedSortBy,
           sortOrder as "ASC" | "DESC",
+          3,
           router
         );
 
@@ -126,6 +127,7 @@ const Dashboard = () => {
           currentPage,
           upcomingSortBy,
           sortOrder as "ASC" | "DESC",
+          3,
           router
         );
         setUpcomingAppointments(upcomingAppoinments.data);
@@ -202,7 +204,7 @@ const Dashboard = () => {
 
   return (
     <div className="w-full">
-      <div className="justify-center items-center mx-[154px] mt-[90px] overflow-hidden">
+      <div className="justify-center h-full items-center mx-[154px] mt-[90px] overflow-hidden">
         <div className="w-full flex justify-between items-center">
           <div className="w-full">
             <p className="p-title select-none mb-1">WELCOME TO DASHBOARD!</p>
@@ -213,167 +215,216 @@ const Dashboard = () => {
               </p>
             </div>
           </div>
-            <NurseDrawer setIsSuccessOpen={setIsSuccessOpen} />
+          <NurseDrawer setIsSuccessOpen={setIsSuccessOpen} />
         </div>
-        <div className="flex justify-between gap-[28px]">
-          {/* {/ Start of Upcoming Appointments /} */}
 
-          <div className="w-[930px] min-w-max-[930px] max-h-[670px] bg-white">
-            <div className="border-x-[1px] border-t-[1px] h-[95px] px-18 pt-3">
-              <p className="p-title mx-[30px] pt-2">
-                Upcoming Appointment
-                <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
-              </p>
-              <p className="font-normal text-[15px] text-[#71717A] mx-[30px] pt-3">
-                Total of {totalUpcoming} upcoming appointment
-                <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
-              </p>
+        <div className="w-full h-full flex gap-5">
+          <div className="w-4/6 flex flex-col justify-between gap-3">
+            <div className="h-4/6 bg-red-200 w-full flex gap-3">
+              <div className="w-1/2 flex flex-col  gap-3">
+                <div className="h-3/4 bg-slate-300"></div>
+                <div className="h-1/4 bg-yellow-400"></div>
+              </div>
+              <div className="w-1/2 flex flex-col gap-3">
+                <div className="h-2/6 bg-orange-400"></div>
+                <div className="h-2/6 bg-violet-500"></div>
+                <div className="h-2/6 bg-pink-600"></div>
+              </div>
             </div>
-            {/* {/ content /} */}
-            <div className="border-t-0 border-[1px]">
-              <div className="divide-y">
-                {upcomingAppointments.length > 0 ? (
-                  <div>
-                    {upcomingAppointments.map((upcomingAppointment, index) => (
-                      <div
-                        key={index}
-                        className="h-[95px] flex justify-evenly items-center hover:bg-slate-50 px-4 min-w-max"
-                      >
-                        <div className="flex bg-[#FEF9C3] px-2 me-2 py-0.5 items-center rounded-[30px]">
-                          <p className="text-[#FACC15] text-[15px] mr-2">●</p>
-                          <span className="pr-1 text-[#713F12] font-semibold text-[15px]">
-                            Pending
-                          </span>
+            <div className="h-2/6  w-full flex gap-3">
+              <div className="w-1/2 bg-blue-500"></div>
+              <div className="w-1/2 bg-green-500"></div>
+            </div>
+          </div>
+          <div className="w-2/6 h-full flex flex-col gap-3">
+            {/* {/ Start of Due Medications /} */}
+            <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white">
+              <div className="">
+                <p className="p-title pt-2">
+                  Due Medication
+                  <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
+                </p>
+                <p className="font-normal text-[15px] text-[#71717A] pt-3 mb-3">
+                  Total of {totalDueMedication} due medication
+                  <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
+                </p>
+              </div>
+              {dueMedicationList.length > 0 ? (
+                <div>
+                  {dueMedicationList.map((dueMedication, index) => (
+                    <div
+                      key={index}
+                      className="w-full flex flex-row h-[70px] mb-1 hover:bg-slate-100 cursor-pointer justify-between"
+                    >
+                      <div className="flex w-3/4">
+                        <div className="flex mr-3 items-center ">
+                          <Image
+                            className="rounded-full"
+                            src="/imgs/drake.png"
+                            width={45}
+                            height={45}
+                            alt="picture"
+                          />
                         </div>
-                        <p className="font-bold w-1/4 truncate hover:ho hover:text-wrap text-[15px]">
-                          {upcomingAppointment.patient_firstName}{" "}
-                          {upcomingAppointment.patient_middleName}{" "}
-                          {upcomingAppointment.patient_lastName}
+                        <div className="flex w-4/6">
+                          <div className="flex flex-col justify-center gap-1">
+                            <p className="font-bold text-[15px] truncate hover:text-wrap">
+                              {dueMedication.patient_firstName}{" "}
+                              {dueMedication.patient_middleName}{" "}
+                              {dueMedication.patient_lastName}
+                            </p>
+                            <p className="text-[#71717A] font-normal text-[15px]">
+                              {dueMedication.medicationlogs_medicationLogsName}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-1/4  flex flex-col justify-center items-end text-end gap-1">
+                        <p className="font-semibold text-[15px] flex">
+                          {dueMedication.medicationlogs_medicationLogsDate}
                         </p>
-                        <div className=" items-center flex flex-col w-1/4">
-                          <p className="font-bold text-[15px]">
-                            {upcomingAppointment.appointments_appointmentDate}
-                          </p>
+                        <p className="text-[#71717A] font-medium text-[15px] ml-4">
+                          {formatTime(
+                            dueMedication.medicationlogs_medicationLogsTime
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex items-center text-center justify-center font-normal text-[15px] w-full h-full -mt-10">
+                  No Due Medication/s
+                  <br />
+                </div>
+              )}
+
+              <div
+                onClick={() => {
+                  setIsLoading(true);
+                  onNavigate(router, "/due-medications");
+                }}
+                className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] mt-3"
+              >
+                SEE ALL DUE
+                <svg
+                  className="text-[#71717A] ml-2 group-hover:text-[#007C85]"
+                  width="17"
+                  height="14"
+                  viewBox="0 0 10 17"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2.14795 2.15826L8.7739 8.78421L2.14795 15.4102"
+                    stroke="currentColor"
+                    strokeWidth="2.43402"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+            {/* {/ End of Due Medications /} */}
+            {/* {/ Start of Upcoming Appointments /} */}
+            <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white">
+              <div className="">
+                <p className="p-title pt-2">
+                  Upcoming Appointment
+                  <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
+                </p>
+                <p className="font-normal text-[15px] text-[#71717A] pt-3 mb-3">
+                  Total of {totalUpcoming} upcoming appointment
+                  <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
+                </p>
+              </div>
+              {upcomingAppointments.length > 0 ? (
+                <div>
+                  {upcomingAppointments.map((upcomingAppointment, index) => (
+                    <div
+                      key={index}
+                      className="w-full flex flex-row h-[70px] mb-1 hover:bg-slate-100 cursor-pointer justify-between"
+                    >
+                      <div className="flex w-3/4">
+                        <div className="flex mr-3 items-center ">
+                          <Image
+                            className="rounded-full"
+                            src="/imgs/drake.png"
+                            width={45}
+                            height={45}
+                            alt="picture"
+                          />
                         </div>
-                        <p className="text-[#71717A] font-medium text-[15px] w-1/4 text-center">
+                        <div className="flex w-4/6">
+                          <div className="flex flex-col justify-center gap-1">
+                            <p className="font-bold text-[15px] truncate ">
+                              {upcomingAppointment.patient_firstName}{" "}
+                              {upcomingAppointment.patient_middleName}{" "}
+                              {upcomingAppointment.patient_lastName}
+                            </p>
+                            <p className="text-[#E4B90E] font-normal text-[15px]">
+                              Pending
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-1/4  flex flex-col justify-center items-end text-end gap-1">
+                        <p className="font-semibold text-[15px] flex">
+                          {upcomingAppointment.appointments_appointmentDate}
+                        </p>
+                        <p className="text-[#71717A] font-medium text-[15px] ml-4">
                           {formatTime(
                             upcomingAppointment.appointments_appointmentTime
                           )}
-                          -
-                          {formatTime(
-                            upcomingAppointment.appointments_appointmentEndTime
-                          )}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex mt-10 items-center text-center justify-center font-semibold text-3xl w-full h-full ">
-                    No Upcoming Appointments/s
-                    <br />
-                  </div>
-                )}
-              </div>
-            </div>
-            {/* {/ content /} */}
-          </div>
-          {/* {/ End of Upcoming Appointments /}
-      {/ Start of Due Medications /} */}
-          <div className="w-[621px]  border-[1px] border-[#E4E4E7] py-3 select-none px-[40px] bg-white">
-            <div className="">
-              <p className="p-title pt-2">
-                Due Medication
-                <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
-              </p>
-              <p className="font-normal text-[15px] text-[#71717A] pt-3 mb-3">
-                Total of {totalDueMedication} due medication
-                <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
-              </p>
-            </div>
-            {dueMedicationList.length > 0 ? (
-              <div>
-                {dueMedicationList.map((dueMedication, index) => (
-                  <div
-                    key={index}
-                    className="w-full flex flex-row h-[75px] mb-1 hover:bg-slate-100 cursor-pointer"
-                  >
-                    <div className="flex w-1/6 items-center ">
-                      <Image
-                        className="rounded-full"
-                        src="/imgs/drake.png"
-                        width={58}
-                        height={58}
-                        alt="picture"
-                      />
-                    </div>
-                    <div className="flex w-4/6">
-                      <div className="flex flex-col justify-center gap-1">
-                        <p className="font-bold text-[15px] truncate hover:text-wrap">
-                          {dueMedication.patient_firstName}{" "}
-                          {dueMedication.patient_middleName}{" "}
-                          {dueMedication.patient_lastName}
-                        </p>
-                        <p className="text-[#71717A] font-normal text-[15px]">
-                          {dueMedication.medicationlogs_medicationLogsName}
                         </p>
                       </div>
                     </div>
-                    <div className="w-1/6  flex flex-col justify-center items-start gap-1">
-                      <p className="font-semibold text-[15px] flex">
-                        {dueMedication.medicationlogs_medicationLogsDate}
-                      </p>
-                      <p className="text-[#71717A] font-medium text-[15px] ml-4">
-                        {formatTime(
-                          dueMedication.medicationlogs_medicationLogsTime
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="flex items-center text-center justify-center font-normal text-[15px] w-full h-full -mt-10">
-                No Due Medication/s
-                <br />
-              </div>
-            )}
+                  ))}
+                </div>
+              ) : (
+                <div className="flex items-center text-center justify-center font-normal text-[15px] w-full h-full -mt-10">
+                  No Due Medication/s
+                  <br />
+                </div>
+              )}
 
-            <div
-              onClick={() => {
-                setIsLoading(true);
-                onNavigate(router, "/due-medications");
-              }}
-              className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] py-[40px]"
-            >
-              SEE ALL DUE
-              <svg
-                className="text-[#71717A] ml-2 group-hover:text-[#007C85]"
-                width="17"
-                height="14"
-                viewBox="0 0 10 17"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <div
+                onClick={() => {
+                  setIsLoading(true);
+                  onNavigate(router, "/due-medications");
+                }}
+                className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] mt-3"
               >
-                <path
-                  d="M2.14795 2.15826L8.7739 8.78421L2.14795 15.4102"
-                  stroke="currentColor"
-                  strokeWidth="2.43402"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+                SEE ALL DUE
+                <svg
+                  className="text-[#71717A] ml-2 group-hover:text-[#007C85]"
+                  width="17"
+                  height="14"
+                  viewBox="0 0 10 17"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2.14795 2.15826L8.7739 8.78421L2.14795 15.4102"
+                    stroke="currentColor"
+                    strokeWidth="2.43402"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
             </div>
+            {/* /* / End of Upcoming Appointments / */}
           </div>
-          {/* End of Due Medications */}
         </div>
       </div>
       {isSuccessOpen && (
         <SuccessModal
-          label={''}
+          label={""}
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
-          isUpdated={''}
-          setIsUpdated={''}
+          isUpdated={""}
+          setIsUpdated={""}
         />
       )}
     </div>

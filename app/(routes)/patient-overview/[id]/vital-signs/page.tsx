@@ -299,10 +299,10 @@ export default function vitalsigns() {
                 <td className="px-6 py-3 ">VITAL SIGN ID</td>
                 <td className="px-6 py-3 ">DATE</td>
                 <td className="px-6 py-3 ">TIME</td>
-                <td className="px-6 py-3 ">BLOOD PRESSURE (mmHg)</td>
-                <td className="px-6 py-3 ">HEART RATE (bpm)</td>
-                <td className="px-6 py-3 ">TEMPERATURE (°F)</td>
-                <td className="px-6 py-3 ">RESPIRATORY (brtds/min)</td>
+                <td className="px-6 py-3 ">BP (mmHg)</td>
+                <td className="px-6 py-3 ">HR (bpm)</td>
+                <td className="px-6 py-3 ">TEMP (°F)</td>
+                <td className="px-6 py-3 ">RESP (brtds/min)</td>
                 <td className="px-6 py-3 text-center">ACTION</td>
                 <td className="w-[14px]"></td>
               </tr>

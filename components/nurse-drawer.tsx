@@ -172,7 +172,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
         </DrawerTrigger>
         <DrawerContent className="top-0 right-0 left-auto mt-0 w-[500px] rounded-none">
           <DrawerHeader className="bg-[#007C85]">
-            <DrawerTitle className="text-white w-full flex justify-between">
+            <DrawerTitle className="text-white w-full flex justify-between items-center">
               <p className="ml-1">Nurse's Notes</p>
               <p>
                 <DrawerClose>
@@ -186,7 +186,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
             className="flex flex-col h-full justify-between"
           >
             <div className="w-full h-full">
-              <div className="w-full px-[20px] mt-8">
+              <div className="w-full px-[20px] mt-3">
                 <h1 className="text-md font-bold leading-6 text-gray-900 mb-2">
                   PATIENT
                 </h1>
@@ -196,7 +196,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={open}
-                      className="w-full justify-between mb-5 h-12 rounded-md shadow-sm"
+                      className="w-full justify-between mb-5 h-12 rounded-md shadow-sm" 
                     >
                       {patientId
                         ? patientList.find(

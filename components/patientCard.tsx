@@ -66,7 +66,7 @@ const PatientCard = ({
     const lowercasePatientId = patientId.toLowerCase();
 
     router.replace(
-      `/patient-overview/${lowercasePatientId}/medical-history/allergies`
+      `/patient-overview/${lowercasePatientId}/medication/scheduled`
     );
   };
 
