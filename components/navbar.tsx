@@ -8,10 +8,11 @@ import NavBarDropdown from "./shared/navbardropdown";
 import { getAccessToken } from "@/app/api/login-api/accessToken";
 import Link from "next/link";
 import { searchPatientList } from "@/app/api/patients-api/patientList.api";
+import { CornerDownRightIcon } from "lucide-react";
 
 interface Tabs {
-  label: string;
-  url: string;
+  name: string;
+  patientId: string;
 }
 
 export const Navbar = ({
@@ -30,15 +31,17 @@ export const Navbar = ({
   const [tabs, setTabs] = useState<Tabs[]>([]);
   const [selectedPatientId, setSelectedPatientId] = useState("");
   const [id, setId] = useState(selectedPatientId);
-  const [filteredTabs, setFilteredTabs] = useState<Tabs[]>([]);
+  const [filteredPatient, setFilteredPatient] = useState<Tabs[]>([]);
 
   const handleSearchChange = (e: { target: { value: any } }) => {
     const value = e.target.value;
     setSearchValue(value);
-    const filteredTabs = tabsUrls.filter((tab) =>
-      tab.label.toLowerCase().startsWith(value.toLowerCase())
+    const filteredPatient = searchData.filter(
+      (patient) =>
+        patient.name.toLowerCase().startsWith(value.toLowerCase()) ||
+        patient.patientId.toLowerCase().startsWith(value.toLowerCase())
     );
-    setFilteredTabs(filteredTabs);
+    setFilteredPatient(filteredPatient);
   };
 
   const handleTabClick = (url: string, isActive: boolean) => {
@@ -80,45 +83,6 @@ export const Navbar = ({
     },
   ];
 
-  // useEffect(() => {
-  //   const newTabsUrls = [
-  //     {
-  //       label: "Medical History",
-  //       url: `/patient-overview/${selectedPatientId}/medical-history/allergies`,
-  //     },
-  //     {
-  //       label: "Medication Log",
-  //       url: `/patient-overview/${selectedPatientId}/medication/scheduled`,
-  //     },
-  //     {
-  //       label: "Prescription",
-  //       url: `/patient-overview/${selectedPatientId}/prescription`,
-  //     },
-  //     {
-  //       label: "Vital Signs",
-  //       url: `/patient-overview/${selectedPatientId}/vital-signs`,
-  //     },
-  //     {
-  //       label: "Laboratory Results",
-  //       url: `/patient-overview/${selectedPatientId}/lab-results`,
-  //     },
-  //     {
-  //       label: "Appointment",
-  //       url: `/patient-overview/${selectedPatientId}/patient-appointment`,
-  //     },
-  //     {
-  //       label: "Notes",
-  //       url: `/patient-overview/${selectedPatientId}/notes/nurses-notes`,
-  //     },
-  //     {
-  //       label: "Forms",
-  //       url: `/patient-overview/${selectedPatientId}/forms`,
-  //     },
-  //   ];
-
-  //   setTabs(newTabsUrls);
-  // }, [selectedPatientId]);
-
   const onPatientClick = (patientId: string, url: string) => {
     setSelectedPatientId(patientId);
     const urlParts = url.split("/");
@@ -126,19 +90,37 @@ export const Navbar = ({
       urlParts[urlParts.length - 1]
     }`;
     router.push(`/patient-overview/${patientId}${path}`);
+    setTimeout(() => {
+      setShowGlobalSearch(false);
+      setSuggestionContainer(false);
+    }, 300);
   };
   const tabsUrls = [
     {
-      label: "Medical History",
-      url: `/patient-overview/${selectedPatientId}/medical-history/allergies`,
+      label: "MAR",
+      subTab: [
+        {
+          label: "Scheduled",
+          url: `/patient-overview/${selectedPatientId}/medication/scheduled`,
+        },
+        {
+          label: "PRN",
+          url: `/patient-overview/${selectedPatientId}/medication/prorenata`,
+        },
+      ],
     },
     {
-      label: "Medication Log",
-      url: `/patient-overview/${selectedPatientId}/medication/scheduled`,
-    },
-    {
-      label: "Prescription",
-      url: `/patient-overview/${selectedPatientId}/prescription`,
+      label: "Notes",
+      subTab: [
+        {
+          label: "Nurse's Notes",
+          url: `/patient-overview/${selectedPatientId}/notes/nurses-notes`,
+        },
+        {
+          label: "Incident Report",
+          url: `/patient-overview/${selectedPatientId}/notes/incident-report`,
+        },
+      ],
     },
     {
       label: "Vital Signs",
@@ -149,16 +131,35 @@ export const Navbar = ({
       url: `/patient-overview/${selectedPatientId}/lab-results`,
     },
     {
-      label: "Appointment",
-      url: `/patient-overview/${selectedPatientId}/patient-appointment`,
+      label: "Medical History",
+      subTab: [
+        {
+          label: "Surgeries",
+          url: `/patient-overview/${selectedPatientId}/medical-history/surgeries`,
+        },
+        {
+          label: "Allergies",
+          url: `/patient-overview/${selectedPatientId}/medical-history/allergies`,
+        },
+      ],
     },
     {
-      label: "Notes",
-      url: `/patient-overview/${selectedPatientId}/notes/nurses-notes`,
+      label: "Prescription",
+      url: `/patient-overview/${selectedPatientId}/prescription`,
     },
     {
       label: "Forms",
       url: `/patient-overview/${selectedPatientId}/forms`,
+      subTab: [
+        {
+          label: "Archived",
+          url: `/patient-overview/${selectedPatientId}/forms/archived`,
+        },
+      ],
+    },
+    {
+      label: "Appointment",
+      url: `/patient-overview/${selectedPatientId}/patient-appointment`,
     },
   ];
 
@@ -304,7 +305,7 @@ export const Navbar = ({
                 <input
                   type="text"
                   className="w-full h-full rounded-lg ml-7 appearance-none outline-none"
-                  placeholder="Search..."
+                  placeholder="Search for patient names or id..."
                   value={searchValue}
                   onChange={(e) => handleSearchChange(e)}
                 />
@@ -316,27 +317,119 @@ export const Navbar = ({
                   }`}
                 >
                   <div className="h-full w-full overflow-y-scroll flex flex-col gap-[8px]">
-                    {filteredTabs.map((tab, index) => (
-                      <div className="flex flex-col gap-[8px]">
+                    {tabsUrls.map((tab, index) => (
+                      <div key={index} className="flex flex-col gap-[8px]">
                         <p
-                          className="bg-[#007C85] p-[10px] text-white font-bold"
+                          className="bg-[#007C85] p-[10px] text-white font-bold flex justify-between items-center"
                           key={index}
                         >
-                          {tab.label}
+                          <span>{tab.label}</span>
+                          <span className="italic">TAB</span>
                         </p>
-                        {searchData.map((patient, index) => (
-                          <p
-                            onClick={() => {
-                              onPatientClick(patient.patientId, tab.url);
-                            }}
-                            key={index}
-                            data-uuid={patient.patientId}
-                            className="bg-[#D9D9D933] p-[10px] flex justify-between"
-                          >
-                            <span>{patient.name}</span>
-                            <span>{patient.patientId}</span>
-                          </p>
-                        ))}
+                        {!tab.url ? (
+                          <>
+                            {tab.subTab && (
+                              <>
+                                {tab.subTab.map((sub, subIndex) => (
+                                  <div key={subIndex}>
+                                    <div
+                                      className="bg-[#007C85] p-[10px] text-white font-bold flex justify-between items-center"
+                                      key={index}
+                                    >
+                                      <div className="flex gap-[10px]">
+                                        <CornerDownRightIcon
+                                          width={20}
+                                          height={20}
+                                        />
+                                        <p>{sub.label}</p>
+                                      </div>
+                                      <p className="italic">SUBTAB</p>
+                                    </div>
+
+                                    {filteredPatient.map((patient, index) => (
+                                      <p
+                                        onClick={() => {
+                                          onPatientClick(
+                                            patient.patientId,
+                                            tab.subTab[index]?.url
+                                          );
+                                        }}
+                                        key={index}
+                                        data-uuid={patient.patientId}
+                                        className="bg-white hover:bg-[#D9D9D933] p-[10px] pl-[40px] flex justify-between cursor-pointer"
+                                      >
+                                        <span>{patient.name}</span>
+                                        <span>{patient.patientId}</span>
+                                      </p>
+                                    ))}
+                                  </div>
+                                ))}
+                              </>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            {filteredPatient.map((patient, index) => (
+                              <p
+                                onClick={() => {
+                                  onPatientClick(patient.patientId, tab.url);
+                                }}
+                                key={index}
+                                data-uuid={patient.patientId}
+                                className="bg-white hover:bg-[#D9D9D933] p-[10px] flex justify-between cursor-pointer"
+                              >
+                                <span>{patient.name}</span>
+                                <span>{patient.patientId}</span>
+                              </p>
+                            ))}
+
+                            {tab.subTab && (
+                              <>
+                                {tab.url && (
+                                  <>
+                                    {tab.subTab.map((sub, subIndex) => (
+                                      <div key={subIndex}>
+                                        <div
+                                          className="bg-[#007C85] p-[10px] text-white font-bold flex justify-between items-center"
+                                          key={index}
+                                        >
+                                          <div className="flex gap-[10px]">
+                                            <CornerDownRightIcon
+                                              width={20}
+                                              height={20}
+                                            />
+                                            <p>{sub.label}</p>
+                                          </div>
+
+                                          <p className="italic">SUBTAB</p>
+                                        </div>
+
+                                        {filteredPatient.map(
+                                          (patient, index) => (
+                                            <p
+                                              onClick={() => {
+                                                onPatientClick(
+                                                  patient.patientId,
+                                                  tab.subTab[index]?.url
+                                                );
+                                              }}
+                                              key={index}
+                                              data-uuid={patient.patientId}
+                                              className="bg-white hover:bg-[#D9D9D933] p-[10px] pl-[40px] flex justify-between cursor-pointer"
+                                            >
+                                              <span>{patient.name}</span>
+                                              <span>{patient.patientId}</span>
+                                            </p>
+                                          )
+                                        )}
+                                      </div>
+                                    ))}
+                                  </>
+                                )}
+                              </>
+                            )}
+                          </>
+                        )}
                       </div>
                     ))}
                   </div>

@@ -342,7 +342,6 @@ const Scheduled = () => {
                       >
                         <td className="px-6 py-3">
                           <ResuableTooltip
-                            maxWidth="429px"
                             text={schedMed.medicationlogs_uuid}
                           />
                         </td>
@@ -372,13 +371,11 @@ const Scheduled = () => {
                         </td>
                         <td className="px-6 py-3">
                           <ResuableTooltip
-                            maxWidth="429px"
                             text={schedMed.medicationlogs_medicationLogsName}
                           />
                         </td>
                         <td className="px-6 py-3">
                           <ResuableTooltip
-                            maxWidth="429px"
                             text={schedMed.medicationlogs_notes}
                           />
                         </td>

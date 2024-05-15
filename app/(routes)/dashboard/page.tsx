@@ -12,6 +12,9 @@ import React, { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import NurseDrawer from "@/components/nurse-drawer";
 import { SuccessModal } from "@/components/shared/success";
+import ResuableTooltip from "@/components/reusable/tooltip";
+import { searchPatientList } from "@/app/api/patients-api/patientList.api";
+import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -40,6 +43,8 @@ const Dashboard = () => {
   const [isLoading2, setIsLoading2] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [isSuccessOpen, setIsSuccessOpen] = useState<boolean>(false);
+  const [patientImages, setPatientImages] = useState<any[]>([]);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const [dueMedicationList, setDueMedicationList] = useState<
     {
       patient_uuid: string;
@@ -59,6 +64,7 @@ const Dashboard = () => {
       patient_firstName: string;
       patient_middleName: string;
       patient_lastName: string;
+      appointments_uuid: string;
       appointments_appointmentDate: string;
       appointments_appointmentEndTime: string;
       appointments_appointmentTime: string;
@@ -108,10 +114,44 @@ const Dashboard = () => {
         }[] = Object.values(filteredData);
         const limitedArray = filteredArray.slice(0, 5);
 
+        const uniquePatientUuids = new Set(
+          dueMedicationList.data.map(
+            (patient: { patient_uuid: any }) => patient.patient_uuid
+          )
+        );
+
+        const patientUuids = Array.from(uniquePatientUuids);
+
         setDueMedicationList(limitedArray);
         setDueMedTotalPages(dueMedicationList.totalPages);
         setTotalDueMedication(dueMedicationList.totalCount);
         setIsLoading(false);
+        const profileImagesResponse = await fetchProfileImages(
+          patientUuids as string[]
+        );
+        if (profileImagesResponse) {
+          const patientImagesData = profileImagesResponse.map((image: any) => {
+            // Convert the image data buffer to a data URL if available
+            if (image.data) {
+              const buffer = Buffer.from(image.data);
+              const dataUrl = `data:image/jpeg;base64,${buffer.toString(
+                "base64"
+              )}`;
+              return {
+                patientUuid: image.patientUuid,
+                data: dataUrl,
+              };
+            } else {
+              // If no data URL is available, return an empty object
+              return {
+                patientUuid: image.patientUuid,
+                data: "",
+              };
+            }
+          });
+          setPatientImages(patientImagesData);
+          console.log(patientImagesData, "patientImagesData");
+        }
       } catch (error) {
         // Handle error
       }
@@ -134,6 +174,40 @@ const Dashboard = () => {
         setTotalUpcoming(upcomingAppoinments.totalCount);
         setUpcomingTotalPages(upcomingAppoinments.totalPages);
         setIsLoading2(false);
+        const uniquePatientUuids = new Set(
+          upcomingAppoinments.data.map(
+            (patient: { patient_uuid: any }) => patient.patient_uuid
+          )
+        );
+
+        const patientUuids = Array.from(uniquePatientUuids);
+
+        const profileImagesResponse = await fetchProfileImages(
+          patientUuids as string[]
+        );
+        if (profileImagesResponse) {
+          const patientImagesData = profileImagesResponse.map((image: any) => {
+            // Convert the image data buffer to a data URL if available
+            if (image.data) {
+              const buffer = Buffer.from(image.data);
+              const dataUrl = `data:image/jpeg;base64,${buffer.toString(
+                "base64"
+              )}`;
+              return {
+                patientUuid: image.patientUuid,
+                data: dataUrl,
+              };
+            } else {
+              // If no data URL is available, return an empty object
+              return {
+                patientUuid: image.patientUuid,
+                data: "",
+              };
+            }
+          });
+          setPatientImages(patientImagesData);
+          console.log(patientImagesData, "patientImagesData");
+        }
       } catch (error: any) {
         setError(error.message);
         console.log("error");
@@ -240,7 +314,7 @@ const Dashboard = () => {
             {/* {/ Start of Due Medications /} */}
             <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white">
               <div className="">
-                <p className="p-title pt-2">
+                <p className="p-title ">
                   Due Medication
                   <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
                 </p>
@@ -254,27 +328,89 @@ const Dashboard = () => {
                   {dueMedicationList.map((dueMedication, index) => (
                     <div
                       key={index}
-                      className="w-full flex flex-row h-[70px] mb-1 hover:bg-slate-100 cursor-pointer justify-between"
+                      className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-slate-100 cursor-pointer justify-between"
                     >
                       <div className="flex w-3/4">
                         <div className="flex mr-3 items-center ">
-                          <Image
-                            className="rounded-full"
-                            src="/imgs/drake.png"
-                            width={45}
-                            height={45}
-                            alt="picture"
-                          />
+                          {patientImages.some(
+                            (image) =>
+                              image.patientUuid === dueMedication.patient_uuid
+                          ) ? (
+                            // Render the matched image
+                            <div>
+                              {patientImages.map((image, imgIndex) => {
+                                if (
+                                  image.patientUuid ===
+                                  dueMedication.patient_uuid
+                                ) {
+                                  return (
+                                    <div key={imgIndex}>
+                                      {image.data ? (
+                                        // Render the image if data is not empty
+                                        <Image
+                                          className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px] "
+                                          src={image.data} // Use the base64-encoded image data directly
+                                          alt=""
+                                          width={45}
+                                          height={45}
+                                        />
+                                      ) : (
+                                        // Render the stock image (.svg) if data is empty
+                                        <Image
+                                          className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                          src="/imgs/user.png"
+                                          alt=""
+                                          width={45}
+                                          height={45}
+                                        />
+                                      )}
+                                    </div>
+                                  );
+                                }
+                                return null;
+                              })}
+                            </div>
+                          ) : // Render a placeholder image if no matching image found
+                          imagesLoaded ? ( // Only render stock image when images are loaded
+                            <div>
+                              <Image
+                                className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                src="/imgs/loading.gif" // Show loading gif while fetching images
+                                alt="Loading"
+                                width={45}
+                                height={45}
+                              />
+                            </div>
+                          ) : (
+                            // Render loading gif while fetching images
+                            <div>
+                              <Image
+                                className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                src="/imgs/loading.gif" // Show loading gif while fetching images
+                                alt="Loading"
+                                width={45}
+                                height={45}
+                              />
+                            </div>
+                          )}
                         </div>
                         <div className="flex w-4/6">
                           <div className="flex flex-col justify-center gap-1">
                             <p className="font-bold text-[15px] truncate hover:text-wrap">
-                              {dueMedication.patient_firstName}{" "}
-                              {dueMedication.patient_middleName}{" "}
-                              {dueMedication.patient_lastName}
+                              <ResuableTooltip
+                                text={`${
+                                  dueMedication.patient_firstName
+                                }${" "}${
+                                  dueMedication.patient_middleName
+                                }${" "}${dueMedication.patient_lastName}`}
+                              />
                             </p>
                             <p className="text-[#71717A] font-normal text-[15px]">
-                              {dueMedication.medicationlogs_medicationLogsName}
+                              <ResuableTooltip
+                                text={
+                                  dueMedication.medicationlogs_medicationLogsName
+                                }
+                              />
                             </p>
                           </div>
                         </div>
@@ -329,7 +465,7 @@ const Dashboard = () => {
             {/* {/ Start of Upcoming Appointments /} */}
             <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white">
               <div className="">
-                <p className="p-title pt-2">
+                <p className="p-title ">
                   Upcoming Appointment
                   <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
                 </p>
@@ -343,24 +479,84 @@ const Dashboard = () => {
                   {upcomingAppointments.map((upcomingAppointment, index) => (
                     <div
                       key={index}
-                      className="w-full flex flex-row h-[70px] mb-1 hover:bg-slate-100 cursor-pointer justify-between"
+                      className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-slate-100 cursor-pointer justify-between"
                     >
-                      <div className="flex w-3/4">
-                        <div className="flex mr-3 items-center ">
-                          <Image
-                            className="rounded-full"
-                            src="/imgs/drake.png"
-                            width={45}
-                            height={45}
-                            alt="picture"
-                          />
-                        </div>
-                        <div className="flex w-4/6">
+                      <div className="flex items-center gap-[10px]">
+                        {patientImages.some(
+                          (image) =>
+                            image.patientUuid ===
+                            upcomingAppointment.appointments_uuid
+                        ) ? (
+                          // Render the matched image
+                          <div>
+                            {patientImages.map((image, imgIndex) => {
+                              if (
+                                image.patientUuid ===
+                                upcomingAppointment.appointments_uuid
+                              ) {
+                                return (
+                                  <div key={imgIndex}>
+                                    {image.data ? (
+                                      // Render the image if data is not empty
+                                      <Image
+                                        className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                        src={image.data} // Use the base64-encoded image data directly
+                                        alt=""
+                                        width={45}
+                                        height={45}
+                                      />
+                                    ) : (
+                                      // Render the stock image (.svg) if data is empty
+                                      <Image
+                                        className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                        src="/imgs/no-icon-user.svg"
+                                        alt=""
+                                        width={45}
+                                        height={45}
+                                      />
+                                    )}
+                                  </div>
+                                );
+                              }
+                              return null;
+                            })}
+                          </div>
+                        ) : // Render a placeholder image if no matching image found
+                        imagesLoaded ? ( // Only render stock image when images are loaded
+                          <div>
+                            <Image
+                              className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                              src="/imgs/loading.gif" // Show loading gif while fetching images
+                              alt="Loading"
+                              width={45}
+                              height={45}
+                            />
+                          </div>
+                        ) : (
+                          // Render loading gif while fetching images
+                          <div>
+                            <Image
+                              className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                              src="/imgs/loading.gif" // Show loading gif while fetching images
+                              alt="Loading"
+                              width={45}
+                              height={45}
+                            />
+                          </div>
+                        )}
+                        <div className="flex ">
                           <div className="flex flex-col justify-center gap-1">
-                            <p className="font-bold text-[15px] truncate ">
-                              {upcomingAppointment.patient_firstName}{" "}
-                              {upcomingAppointment.patient_middleName}{" "}
-                              {upcomingAppointment.patient_lastName}
+                            <p className="font-bold text-[15px] w-[300px]">
+                              <ResuableTooltip
+                                text={`${
+                                  upcomingAppointment.patient_firstName
+                                }${" "}${
+                                  upcomingAppointment.patient_middleName
+                                }${" "}${upcomingAppointment.patient_lastName}`}
+                              />
+                              {/* {upcomingAppointment.patient_firstName}
+                              {upcomingAppointment.patient_middleName}
+                              {upcomingAppointment.patient_lastName} */}
                             </p>
                             <p className="text-[#E4B90E] font-normal text-[15px]">
                               Pending
@@ -368,7 +564,7 @@ const Dashboard = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="w-1/4  flex flex-col justify-center items-end text-end gap-1">
+                      <div className=" flex flex-col justify-center items-end text-end gap-1">
                         <p className="font-semibold text-[15px] flex">
                           {upcomingAppointment.appointments_appointmentDate}
                         </p>

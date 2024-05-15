@@ -8,9 +8,9 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export async function searchPatientList(
   term: string,
   currentPage: number,
-  sortBy: string,
-  sortOrder: "ASC" | "DESC",
-  router: any // Pass router instance as a parameter
+  sortBy?: string,
+  sortOrder?: "ASC" | "DESC",
+  router?: any // Pass router instance as a parameter
 ): Promise<any> {
   const requestData = {
     term: term,
