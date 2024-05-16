@@ -76,7 +76,7 @@
 }
 
 html,
-body ,
+body,
 :root {
   height: 100%;
   /* color: white; */
@@ -330,7 +330,7 @@ body ,
   top: 3.5rem;
   right: 1.5rem;
   width: 215px;
-  height: 215px;
+  height: 160px;
   padding: 15px;
   border-radius: 8px;
   background-color: white;
@@ -383,12 +383,11 @@ table {
   width: 100%;
 }
 
-
 .global-search {
   position: absolute;
   right: 225px;
   width: 650px;
-  transition: padding-left 0.3s ease-in; 
+  transition: padding-left 0.3s ease-in;
 }
 
 .global-search.animate {
@@ -416,4 +415,3 @@ table {
     width: 0;
   }
 }
-
