@@ -113,7 +113,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
         }
         console.error("Error adding note:", error);
         setError("Failed to add note");
-      } 
+      }
     } else {
       setError("no patient id");
     }
@@ -134,6 +134,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
 
     fetchData();
   }, []);
+  
 
   const ref = useRef<HTMLTextAreaElement>(null);
   const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
@@ -155,6 +156,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
       setIsSuccess(false);
     }
   }, [isSuccess]);
+  
   return (
     <>
       {" "}
@@ -196,7 +198,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={open}
-                      className="w-full justify-between mb-5 h-12 rounded-md shadow-sm" 
+                      className="w-full justify-between mb-5 h-12 rounded-md shadow-sm"
                     >
                       {patientId
                         ? patientList.find(
@@ -240,7 +242,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
                           {patientList.map((patient) => (
                             <CommandItem
                               key={patient.uuid}
-                              value={patient.uuid}
+                              value={patient.uuid ? patient.uuid : ''}
                               onSelect={(currentUuid) => {
                                 setPatientId(
                                   currentUuid === patientId ? "" : currentUuid
