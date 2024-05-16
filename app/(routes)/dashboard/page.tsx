@@ -43,8 +43,10 @@ const Dashboard = () => {
   const [isLoading2, setIsLoading2] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [isSuccessOpen, setIsSuccessOpen] = useState<boolean>(false);
-  const [patientImages, setPatientImages] = useState<any[]>([]);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [patientDueMedImages, setDueMedPatientImages] = useState<any[]>([]);
+  const [patientAppointmentImages, setAppointmentPatientImages] = useState<
+    any[]
+  >([]);
   const [dueMedicationList, setDueMedicationList] = useState<
     {
       patient_uuid: string;
@@ -61,6 +63,7 @@ const Dashboard = () => {
 
   const [upcomingAppointments, setUpcomingAppointments] = useState<
     {
+      patient_uuid: string;
       patient_firstName: string;
       patient_middleName: string;
       patient_lastName: string;
@@ -68,6 +71,7 @@ const Dashboard = () => {
       appointments_appointmentDate: string;
       appointments_appointmentEndTime: string;
       appointments_appointmentTime: string;
+      
     }[]
   >([]);
   const [upcomingTotalPages, setUpcomingTotalPages] = useState(0);
@@ -149,7 +153,7 @@ const Dashboard = () => {
               };
             }
           });
-          setPatientImages(patientImagesData);
+          setDueMedPatientImages(patientImagesData);
           console.log(patientImagesData, "patientImagesData");
         }
       } catch (error) {
@@ -205,8 +209,8 @@ const Dashboard = () => {
               };
             }
           });
-          setPatientImages(patientImagesData);
-          console.log(patientImagesData, "patientImagesData");
+          setAppointmentPatientImages(patientImagesData);
+          console.log(setAppointmentPatientImages, "patientAppointmentImages");
         }
       } catch (error: any) {
         setError(error.message);
@@ -332,13 +336,13 @@ const Dashboard = () => {
                     >
                       <div className="flex w-3/4">
                         <div className="flex mr-3 items-center ">
-                          {patientImages.some(
+                          {patientDueMedImages.some(
                             (image) =>
                               image.patientUuid === dueMedication.patient_uuid
                           ) ? (
                             // Render the matched image
                             <div>
-                              {patientImages.map((image, imgIndex) => {
+                              {patientDueMedImages.map((image, imgIndex) => {
                                 if (
                                   image.patientUuid ===
                                   dueMedication.patient_uuid
@@ -370,19 +374,8 @@ const Dashboard = () => {
                                 return null;
                               })}
                             </div>
-                          ) : // Render a placeholder image if no matching image found
-                          imagesLoaded ? ( // Only render stock image when images are loaded
-                            <div>
-                              <Image
-                                className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
-                                src="/imgs/loading.gif" // Show loading gif while fetching images
-                                alt="Loading"
-                                width={45}
-                                height={45}
-                              />
-                            </div>
                           ) : (
-                            // Render loading gif while fetching images
+                            // Render a placeholder image if no matching image found
                             <div>
                               <Image
                                 className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
@@ -482,17 +475,17 @@ const Dashboard = () => {
                       className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-slate-100 cursor-pointer justify-between"
                     >
                       <div className="flex items-center gap-[10px]">
-                        {patientImages.some(
+                        {patientAppointmentImages.some(
                           (image) =>
                             image.patientUuid ===
-                            upcomingAppointment.appointments_uuid
+                            upcomingAppointment.patient_uuid
                         ) ? (
                           // Render the matched image
                           <div>
-                            {patientImages.map((image, imgIndex) => {
+                            {patientAppointmentImages.map((image, imgIndex) => {
                               if (
                                 image.patientUuid ===
-                                upcomingAppointment.appointments_uuid
+                                upcomingAppointment.patient_uuid
                               ) {
                                 return (
                                   <div key={imgIndex}>
@@ -521,19 +514,8 @@ const Dashboard = () => {
                               return null;
                             })}
                           </div>
-                        ) : // Render a placeholder image if no matching image found
-                        imagesLoaded ? ( // Only render stock image when images are loaded
-                          <div>
-                            <Image
-                              className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
-                              src="/imgs/loading.gif" // Show loading gif while fetching images
-                              alt="Loading"
-                              width={45}
-                              height={45}
-                            />
-                          </div>
                         ) : (
-                          // Render loading gif while fetching images
+                          // Render a placeholder image if no matching image found
                           <div>
                             <Image
                               className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
