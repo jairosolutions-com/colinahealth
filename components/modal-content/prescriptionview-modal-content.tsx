@@ -160,6 +160,8 @@ export const PrescriptionViewModalContent = ({
   const [fileType, setFileType] = useState<string>("");
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [blobUrl, setBlobUrl] = useState("");
+
   //switching to through previews
   useEffect(() => {
     if (PrescriptionFiles && PrescriptionFiles.length > 0) {
@@ -174,6 +176,18 @@ export const PrescriptionViewModalContent = ({
 
         const newFileType = file.filename.split(".").pop();
         setFileType(newFileType as string);
+
+        if (newFileType === "pdf") {
+          const binaryString = window.atob(newBase64String);
+          const len = binaryString.length;
+          const bytes = new Uint8Array(len);
+          for (let i = 0; i < len; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          const blob = new Blob([bytes], { type: "application/pdf" });
+          const url = URL.createObjectURL(blob);
+          setBlobUrl(url);
+        }
       }
     }
   }, [fileIndex, PrescriptionFiles]);
@@ -523,11 +537,13 @@ export const PrescriptionViewModalContent = ({
                           >
                             {fileType === "pdf" ? (
                               <iframe
-                                src={`data:application/pdf;base64,${base64String}`}
+                                src={blobUrl}
                                 width="600px"
                                 height="550px"
                                 className="shadow-md rounded-lg"
+                                title="PDF Document"
                                 onClick={toggleModal}
+                                onLoad={(e) => {}}
                               ></iframe>
                             ) : (
                               <Image
