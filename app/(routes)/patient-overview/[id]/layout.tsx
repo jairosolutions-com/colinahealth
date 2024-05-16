@@ -447,14 +447,14 @@ function PatientOverview({ setIsTableLoading }: { setIsTableLoading: any }) {
             <div className="flex gap-[50px] px-2 ">
               {isLoading ? (
                 <div className="flex items-start animate-pulse">
+                  <div className="h-8 w-10 bg-gray-300 rounded-full mr-12"></div>
+                  <div className="h-8 w-14 bg-gray-200 rounded-full mr-12"></div>
+                  <div className="h-8 w-20 bg-gray-300 rounded-full mr-12"></div>
+                  <div className="h-8 w-36 bg-gray-400 rounded-full mr-12"></div>
                   <div className="h-8 w-28 bg-gray-300 rounded-full mr-12"></div>
-                  <div className="h-8 w-28 bg-gray-200 rounded-full mr-12"></div>
-                  <div className="h-8 w-24 bg-gray-300 rounded-full mr-12"></div>
-                  <div className="h-8 w-20 bg-gray-400 rounded-full mr-12"></div>
-                  <div className="h-8 w-36 bg-gray-300 rounded-full mr-12"></div>
                   <div className="h-8 w-24 bg-gray-200 rounded-full mr-12"></div>
                   <div className="h-8 w-14 bg-gray-400 rounded-full mr-12"></div>
-                  <div className="h-8 w-14 bg-gray-200 rounded-full "></div>
+                  <div className="h-8 w-24 bg-gray-200 rounded-full "></div>
                 </div>
               ) : (
                 tabs.map((tab, index) => (
