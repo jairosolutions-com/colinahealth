@@ -707,7 +707,7 @@ export const DemographicModalContent = ({
                     type="file"
                     id="imageUpload"
                     accept="image/*"
-                    // className="hidden"
+                    className="hidden"
                     onChange={(e) => handleFile(e)}
                   />
                 </div>

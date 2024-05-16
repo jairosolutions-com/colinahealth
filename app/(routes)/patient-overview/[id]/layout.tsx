@@ -325,7 +325,7 @@ function PatientOverview({ setIsTableLoading }: { setIsTableLoading: any }) {
                   className="object-cover rounded-md min-w-[200px] min-h-[200px] max-w-[200px] max-h-[200px]"
                   width={200}
                   height={200}
-                  src="/imgs/user-no-icon.jpg"
+                  src="/imgs/no-icon-user.svg"
                   alt="profile"
                 />
               )}
