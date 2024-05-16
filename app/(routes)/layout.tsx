@@ -9,6 +9,7 @@ import { Suspense, useEffect, useState } from "react";
 import Footer from "@/components/footer";
 import { useIdleTimer } from "react-idle-timer";
 import Loading from "./loading";
+import { toast } from "@/components/ui/use-toast";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -24,8 +25,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { getRemainingTime, isIdle } = useIdleTimer({
     timeout,
     onIdle: () => {
-      // Log out the user
       setAccessToken("");
+      toast({
+        variant: "destructive",
+        title: "Automatic Logout.",
+        description: "You have been away for 5 minutes.",
+      });
       router.push("/login");
     },
     onActive: () => {
@@ -53,7 +58,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen ">
         <Navbar setIsLoading={setIsLoading} />
         <Suspense fallback={<Loading />}>
           <div className="flex-grow">{children}</div>

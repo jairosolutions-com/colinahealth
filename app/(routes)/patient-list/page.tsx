@@ -234,7 +234,7 @@ export default function PatientPage() {
     const lowercasePatientId = patientId.toLowerCase();
     setIsLoading(true);
     router.replace(
-      `/patient-overview/${lowercasePatientId}/medical-history/allergies`
+      `/patient-overview/${lowercasePatientId}/medication/scheduled`
     );
   };
 
@@ -435,7 +435,7 @@ export default function PatientPage() {
                         </div>
                       )}
 
-                      <p>
+                      <p className="overflow-hidden">
                         <ResuableTooltip
                           text={`${patient.firstName} ${patient.lastName}`}
                         />

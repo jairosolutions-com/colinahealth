@@ -124,6 +124,7 @@ export default function DueMedicationPage() {
           currentPage,
           dueMedSortBy,
           sortOrder as "ASC" | "DESC",
+          5,
           router
         );
 
@@ -377,7 +378,7 @@ export default function DueMedicationPage() {
                           />
                         </div>
                       )}
-                      <span>
+                      <span className="overflow-hidden">
                         <ResuableTooltip
                           text={`${dueMedication.patient_firstName} ${""}
                         ${dueMedication.patient_lastName}`}

@@ -295,18 +295,18 @@ export default function Laboratoryresults() {
           <table className="text-left rtl:text-right">
             <thead>
               <tr className="text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                <td className="px-6 py-3 w-[170px]">LAB RESULT ID</td>
+                <td className="px-6 py-3 w-[170px]">LAB RESULT UID</td>
                 <td className="px-6 py-3 w-[170px]">DATE</td>
-                <td className="px-6 py-3 w-[170px]">HEMOGLOBIN A1c (%)</td>
+                <td className="px-6 py-3 w-[170px]">HEMO A1c (%)</td>
                 <td className="px-6 py-3 w-[170px]">
-                  FASTING BLOOD GLUCOSE (mg/dL)
+                  FBG (mg/dL)
                 </td>
                 <td className="px-6 py-3 w-[170px]">
-                  TOTAL CHOLESTEROL (mg/dL)
+                  TC (mg/dL)
                 </td>
                 <td className="px-6 py-3 w-[170px]">LDL-C (mg/dL)</td>
                 <td className="px-6 py-3 w-[170px]">HDL-C (mg/dL)</td>
-                <td className="px-6 py-3 w-[170px]">TRIGLYCERIDES (mg/dL)</td>
+                <td className="px-6 py-3 w-[170px]">TG (mg/dL)</td>
                 <td className="px-6 py-3 text-center">ACTION</td>
                 <td className="w-[14px]"></td>
               </tr>

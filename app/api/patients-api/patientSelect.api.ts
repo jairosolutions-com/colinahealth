@@ -5,26 +5,16 @@ import { getAccessToken, setAccessToken } from "../login-api/accessToken";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 // Function to get the access token from local storage
 
-export async function fetchDueMedication(
-  term: string,
-  currentPage: number,
-  sortBy: string,
-  sortOrder: "ASC" | "DESC",
-  perPage: number,
+export async function selectPatient(
+
   router: any // Pass router instance as a parameter
-  
 ): Promise<any> {
-  const requestData = {
-    term: term,
-    page: currentPage,
-    sortBy: sortBy,
-    sortOrder: sortOrder,
-    perPage: perPage
-  };
+
   try {
-    console.log("searchPatient", requestData);
     const accessToken = getAccessToken();
     if (!accessToken) {
+      setAccessToken("");
+      onNavigate(router, "/login");
       throw new Error("Unauthorized Access");
     }
 
@@ -32,16 +22,13 @@ export async function fetchDueMedication(
       Authorization: `Bearer ${accessToken}`,
     };
 
-    const response = await axios.post(
-      `${apiUrl}/medication-logs/due-medications`,
-      requestData,
+    const response = await axios.get(
+      `${apiUrl}/patient-information/select`,
       { headers }
     );
 
-    console.log(response.data);
-    const dueMedications = response.data;
-    console.log(dueMedications, "patient dueMedications after search");
-    return dueMedications;
+    const patientList = response.data;
+    return patientList;
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;

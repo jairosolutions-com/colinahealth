@@ -76,11 +76,12 @@
 }
 
 html,
-body,
+body ,
 :root {
   height: 100%;
   /* color: white; */
 }
+
 .App {
   text-align: center;
 }
@@ -387,11 +388,11 @@ table {
   position: absolute;
   right: 225px;
   width: 650px;
-  transition: padding-left 0.5s ease-in; 
+  transition: padding-left 0.3s ease-in; 
 }
 
 .global-search.animate {
-  animation: global-search-animation 0.5s ease forwards;
+  animation: global-search-animation 0.3s ease forwards;
 }
 
 @keyframes global-search-animation {
@@ -403,4 +404,16 @@ table {
   }
 }
 
+.global-search.animate-close {
+  animation: global-search-animation-close 0.3s ease forwards;
+}
+
+@keyframes global-search-animation-close {
+  0% {
+    width: 650px;
+  }
+  100% {
+    width: 0;
+  }
+}
 
