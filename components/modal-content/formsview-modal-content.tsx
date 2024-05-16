@@ -170,17 +170,26 @@ export const FormViewsModalContent = ({
 
         const newFileType = file.filename.split(".").pop();
         setFileType(newFileType as string);
-        if (newFileType === "pdf") {
-          const binaryString = window.atob(newBase64String);
-          const len = binaryString.length;
-          const bytes = new Uint8Array(len);
-          for (let i = 0; i < len; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
-          }
-          const blob = new Blob([bytes], { type: "application/pdf" });
-          const url = URL.createObjectURL(blob);
-          setBlobUrl(url);
-        }
+         // Create a Blob URL for PDF and images
+         const binaryString = window.atob(newBase64String);
+         const len = binaryString.length;
+         const bytes = new Uint8Array(len);
+         for (let i = 0; i < len; i++) {
+           bytes[i] = binaryString.charCodeAt(i);
+         }
+ 
+         let mimeType;
+         if (newFileType === "pdf") {
+           mimeType = "application/pdf";
+         } else if (["png", "jpg", "jpeg", "gif"].includes(newFileType as string)) {
+           mimeType = `image/${newFileType}`;
+         }
+ 
+         if (mimeType) {
+           const blob = new Blob([bytes], { type: mimeType });
+           const url = URL.createObjectURL(blob);
+           setBlobUrl(url);
+         }  
       }
     }
   }, [fileIndex, FormsFiles]);
