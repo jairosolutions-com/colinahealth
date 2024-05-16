@@ -16,6 +16,7 @@ interface Modalprops {
   label: string;
   isOpen: boolean;
   isModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
 }
 
 export const AppointmentModalContent = ({
@@ -24,6 +25,7 @@ export const AppointmentModalContent = ({
   label,
   isOpen,
   isModalOpen,
+  onSuccess,
 }: Modalprops) => {
   const router = useRouter();
   const params = useParams<{
@@ -133,9 +135,7 @@ export const AppointmentModalContent = ({
           router
         );
         isModalOpen(false);
-
-        console.log("Appointment added successfully:", prescription);
-
+        onSuccess();
         // Reset the form data after successful submission
         setFormData({
           appointmentDate: "",

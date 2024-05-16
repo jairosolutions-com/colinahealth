@@ -447,6 +447,7 @@ const Appointment = () => {
           content={
             <AppointmentModalContent
               isModalOpen={isModalOpen}
+              onSuccess={onSuccess}
               isOpen={isOpen}
               isView={isEdit}
               appointmentData={appointmentData}
