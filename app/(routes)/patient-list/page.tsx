@@ -29,7 +29,7 @@ export default function PatientPage() {
           src="/imgs/colina-logo-animation.gif"
           width={100}
           height={100}
-          alt="loading"
+          alt="logo"
         />
       </div>
     );
@@ -151,7 +151,6 @@ export default function PatientPage() {
     }
     return pageNumbers;
   };
-  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -199,11 +198,9 @@ export default function PatientPage() {
           });
           setPatientImages(patientImagesData);
         }
-        setImagesLoaded(true); // Set to true when images are loaded
 
         if (response.data.length === 0) {
           setPatientList([]);
-          setImagesLoaded(true); // Set to true when images are loaded
           setIsLoading(false);
         }
       } catch (error: any) {
@@ -240,7 +237,7 @@ export default function PatientPage() {
 
   if (isLoading) {
     return (
-      <div className=" w-full h-full flex justify-center items-center">
+      <div className="w-full h-full flex justify-center items-center">
         <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
@@ -388,18 +385,20 @@ export default function PatientPage() {
                                 <div key={imgIndex}>
                                   {image.data ? (
                                     // Render the image if data is not empty
-                                    <Image
-                                      className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
-                                      src={image.data} // Use the base64-encoded image data directly
-                                      alt=""
-                                      width={45}
-                                      height={45}
-                                    />
+                                    <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
+                                      <Image
+                                        className="rounded-full object-cover w-12 h-12"
+                                        src={image.data} // Use the base64-encoded image data directly
+                                        alt=""
+                                        width={45}
+                                        height={45}
+                                      />
+                                    </div>
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
                                     <Image
                                       className="rounded-full  min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
-                                      src="/imgs/no-icon-user.svg"
+                                      src="/imgs/user-no-icon.svg"
                                       alt=""
                                       width={45}
                                       height={45}
@@ -408,22 +407,10 @@ export default function PatientPage() {
                                 </div>
                               );
                             }
-                            return null;
                           })}
                         </div>
-                      ) : // Render a placeholder image if no matching image found
-                      imagesLoaded ? ( // Only render stock image when images are loaded
-                        <div>
-                          <Image
-                            className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
-                            src="/imgs/loading.gif" // Show loading gif while fetching images
-                            alt="Loading"
-                            width={45}
-                            height={45}
-                          />
-                        </div>
                       ) : (
-                        // Render loading gif while fetching images
+                        // Render a placeholder image if no matching image found
                         <div>
                           <Image
                             className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"

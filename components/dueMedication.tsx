@@ -45,7 +45,6 @@ const DueMedication = () => {
   const [dueMedTotalPages, setDueMedTotalPages] = useState(0);
   const [totalDueMedication, setTotalDueMedication] = useState(0);
   const [patientImages, setPatientImages] = useState<any[]>([]);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
   const [dueMedicationList, setDueMedicationList] = useState<
     {
       patient_uuid: string;
@@ -124,7 +123,6 @@ const DueMedication = () => {
         const patientUuids = Array.from(uniquePatientUuids);
         setDueMedicationList(dueMedicationList.data);
         setTotalPages(dueMedicationList.totalPages);
-        setImagesLoaded(true);
         setTotalDueMedication(dueMedicationList.totalCount);
         setIsLoading(false);
         const profileImagesResponse = await fetchProfileImages(
@@ -311,13 +309,15 @@ const DueMedication = () => {
                                 <div key={imgIndex}>
                                   {image.data ? (
                                     // Render the image if data is not empty
+                                    <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
                                     <Image
-                                      className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px] "
+                                      className="rounded-full object-cover w-12 h-12"
                                       src={image.data} // Use the base64-encoded image data directly
                                       alt=""
                                       width={45}
                                       height={45}
                                     />
+                                  </div>
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
                                     <Image
@@ -335,7 +335,7 @@ const DueMedication = () => {
                           })}
                         </div>
                       ) : // Render a placeholder image if no matching image found
-                      imagesLoaded ? ( // Only render stock image when images are loaded
+                 ( // Only render stock image when images are loaded
                         <div>
                           <Image
                             className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
@@ -345,17 +345,7 @@ const DueMedication = () => {
                             height={45}
                           />
                         </div>
-                      ) : (
-                        // Render loading gif while fetching images
-                        <div>
-                          <Image
-                            className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
-                            src="/imgs/loading.gif" // Show loading gif while fetching images
-                            alt="Loading"
-                            width={45}
-                            height={45}
-                          />
-                        </div>
+
                       )}
                       <span className="overflow-hidden">
                         <ResuableTooltip

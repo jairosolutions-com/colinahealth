@@ -72,8 +72,6 @@ function PatientOverview({ setIsTableLoading }: { setIsTableLoading: any }) {
       label: "Appointment",
       url: `/patient-overview/${params.id}/patient-appointment`,
     },
-    
-    
   ];
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const togglePopup = () => {
@@ -325,7 +323,7 @@ function PatientOverview({ setIsTableLoading }: { setIsTableLoading: any }) {
                   className="object-cover rounded-md min-w-[200px] min-h-[200px] max-w-[200px] max-h-[200px]"
                   width={200}
                   height={200}
-                  src="/imgs/no-icon-user.svg"
+                  src="/imgs/user-no-icon.svg"
                   alt="profile"
                 />
               )}
@@ -488,7 +486,9 @@ function PatientOverview({ setIsTableLoading }: { setIsTableLoading: any }) {
           <div className={`cursor-pointer ${isLoading ? "hidden" : ""}`}>
             <Link href={`/patient-overview/${params.id}/patient-details`}>
               <p
-              onClick={()=>{setIsTableLoading(true)}}
+                onClick={() => {
+                  setIsTableLoading(true);
+                }}
                 className={`underline text-[15px] font-semibold text-right mr-10 hover:text-[#007C85] ${
                   currentRoute === "patient-details" ? "text-[#007C85]" : ""
                 }`}

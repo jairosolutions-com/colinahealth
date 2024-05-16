@@ -174,18 +174,20 @@ const DBUpcomingAppointments = () => {
                             <div key={imgIndex}>
                               {image.data ? (
                                 // Render the image if data is not empty
+                                <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
                                 <Image
-                                  className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                  className="rounded-full object-cover w-12 h-12"
                                   src={image.data} // Use the base64-encoded image data directly
                                   alt=""
                                   width={45}
                                   height={45}
                                 />
+                              </div>
                               ) : (
                                 // Render the stock image (.svg) if data is empty
                                 <Image
                                   className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
-                                  src="/imgs/no-icon-user.svg"
+                                  src="/imgs/user-no-icon.svg"
                                   alt=""
                                   width={45}
                                   height={45}
