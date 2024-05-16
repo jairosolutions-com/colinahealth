@@ -3,7 +3,8 @@ import { onNavigate } from "@/actions/navigation";
 import { setAccessToken } from "@/app/api/login-api/accessToken";
 import { useRouter } from "next/navigation";
 import React, { forwardRef, useEffect, useRef, useState } from "react";
-
+import { TabbleSettingsModal } from "@/components/modal-content/tablesetting-modal-content";
+import Modal from "../reusable/modal";
 interface NavBarDropdownProps {
   dropDownOpen: boolean;
   ref: React.RefObject<HTMLInputElement>;
@@ -13,6 +14,16 @@ const NavBarDropdown = forwardRef<HTMLDivElement, NavBarDropdownProps>(
     const router = useRouter();
     const { dropDownOpen } = props;
     console.log(dropDownOpen, "dropdownopen");
+    const [isOpen, setIsOpen] = useState(false);
+    const isModalOpen = (isOpen: boolean) => {
+      setIsOpen(isOpen);
+      if (isOpen) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "visible";
+      }
+    };
+
     return (
       <div
         ref={ref}
@@ -29,11 +40,12 @@ const NavBarDropdown = forwardRef<HTMLDivElement, NavBarDropdownProps>(
             </div>
           </li>
           <hr className="my-3" />
-          <li className=" rounded-[5px] hover:text-[#83C5CA] cursor-pointer pl-2 mb-4">
-            Language
-          </li>
-          <li className=" rounded-[5px] hover:text-[#83C5CA] cursor-pointer pl-2 mb-4">
-            Acount Settings
+
+          <li
+            onClick={() => isModalOpen(true)}
+            className=" rounded-[5px] hover:text-[#83C5CA] cursor-pointer pl-2 mb-4"
+          >
+            Settings
           </li>
           <li
             className=" rounded-[5px] hover:text-[#83C5CA] cursor-pointer pl-2 mb-4"
@@ -45,6 +57,12 @@ const NavBarDropdown = forwardRef<HTMLDivElement, NavBarDropdownProps>(
             Sign Out
           </li>
         </ul>
+        {isOpen && (
+          <Modal
+            content={<TabbleSettingsModal isModalOpen={isModalOpen} />}
+            isModalOpen={isModalOpen}
+          />
+        )}
       </div>
     );
   }
