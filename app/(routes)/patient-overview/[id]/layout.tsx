@@ -463,7 +463,7 @@ function PatientOverview({ setIsTableLoading }: { setIsTableLoading: any }) {
                         (tabUrl === "surgeries" &&
                           tab.label === "Medical History") ||
                         (tabUrl === "prorenata" &&
-                          tab.label === "Medication Log") ||
+                          tab.label === "MAR") ||
                         (tabUrl === "incident-report" &&
                           tab.label === "Notes") ||
                         (tabUrl === "archived" && tab.label === "Forms")

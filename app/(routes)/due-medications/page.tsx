@@ -1,5 +1,5 @@
 import DueMedication from "@/components/dueMedication";
-import DueMedicationLoader from "@/components/loaders/dueMedicationLoader";
+import DueMedicationLoader from "@/components/loaders/DueMedicationLoader";
 import { Suspense } from "react";
 
 export default function DueMedicationPage() {

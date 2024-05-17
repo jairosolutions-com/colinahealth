@@ -28,3 +28,21 @@ export const setRememberToken = (accessRememberToken: string): void => {
     localStorage.setItem("accessRememberToken", accessRememberToken);
   }
 };
+
+export const setUserDetail = (userDetail:any[]): void => {
+  if (typeof window !== "undefined") {
+    // Check if window object is defined (client-side)
+    localStorage.setItem("userDetail", JSON.stringify(userDetail));
+  }
+};
+
+export const getUserDetail = (): any | null => {
+  if (typeof window !== "undefined") {
+    const userDetailString = localStorage.getItem("userDetail");
+    if (userDetailString) {
+      const userDetail = JSON.parse(userDetailString);
+      return userDetail;
+    }
+  }
+  return null;
+};

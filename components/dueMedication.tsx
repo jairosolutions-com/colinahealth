@@ -19,7 +19,8 @@ import Image from "next/image";
 import Pagination from "@/components/shared/pagination";
 import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 import ResuableTooltip from "@/components/reusable/tooltip";
-import DueMedicationLoader from "./loaders/dueMedicationLoader";
+import DueMedicationLoader from "@/components/loaders/DueMedicationLoader";
+
 const DueMedication = () => {
   const router = useRouter();
   const { toast } = useToast();
@@ -168,9 +169,7 @@ const DueMedication = () => {
   };
 
   if (isLoading) {
-    return (
-      <DueMedicationLoader/>
-    );
+    return <DueMedicationLoader />;
   }
   console.log("patientList", patientList);
 

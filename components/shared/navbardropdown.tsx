@@ -1,6 +1,6 @@
 "use client";
 import { onNavigate } from "@/actions/navigation";
-import { setAccessToken } from "@/app/api/login-api/accessToken";
+import { getUserDetail, setAccessToken } from "@/app/api/login-api/accessToken";
 import { useRouter } from "next/navigation";
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { TabbleSettingsModal } from "@/components/modal-content/tablesetting-modal-content";
@@ -9,9 +9,17 @@ interface NavBarDropdownProps {
   dropDownOpen: boolean;
   ref: React.RefObject<HTMLInputElement>;
 }
+
+interface UserDetail {
+  fName?: string;
+  lName?: string;
+  uuid?: string;
+}
 const NavBarDropdown = forwardRef<HTMLDivElement, NavBarDropdownProps>(
   (props, ref) => {
     const router = useRouter();
+    const userDetail: UserDetail = getUserDetail();
+    console.log(userDetail, "userDetail");
     const { dropDownOpen } = props;
     console.log(dropDownOpen, "dropdownopen");
     const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +44,9 @@ const NavBarDropdown = forwardRef<HTMLDivElement, NavBarDropdownProps>(
           <li className="flex">
             <div className="flex flex-col">
               <h1 className="pl-3 font-bold ">ADMIN</h1>
-              <div className="pl-3">alexdramos@gmail.com</div>
+              <div className="pl-3">
+                {userDetail.fName} {userDetail.lName}
+              </div>
             </div>
           </li>
           <hr className="my-3" />

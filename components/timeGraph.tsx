@@ -161,7 +161,7 @@ const TimeGraph = ({
   return (
     <div className="w-full  ">
       <div className="w-[320vh] h-full overflow-hidden ">
-        <div className=" relative z-10">
+        <div className=" relative z-5">
           <div
             ref={lineRef}
             className="absolute w-1 bg-red-500 "
