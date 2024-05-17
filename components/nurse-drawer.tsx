@@ -50,6 +50,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
       uuid: "",
       lastName: "",
       firstName: "",
+      values: "",
     },
   ]);
 
@@ -134,7 +135,6 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
 
     fetchData();
   }, []);
-  
 
   const ref = useRef<HTMLTextAreaElement>(null);
   const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
@@ -156,7 +156,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
       setIsSuccess(false);
     }
   }, [isSuccess]);
-  
+
   return (
     <>
       {" "}
@@ -238,14 +238,13 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
                       <CommandInput placeholder="Search patient..." />
                       <CommandEmpty>No patient found.</CommandEmpty>
                       <CommandGroup>
-                        <CommandList className=" z-[9999] ">
+                        <CommandList className=" z-[9999] ">    
                           {patientList.map((patient) => (
                             <CommandItem
                               key={patient.uuid}
-                              value={patient.uuid ? patient.uuid : ''}
                               onSelect={(currentUuid) => {
                                 setPatientId(
-                                  currentUuid === patientId ? "" : currentUuid
+                                  patient.uuid === patientId ? "" : patient.uuid
                                 );
                                 setOpen(false);
                               }}

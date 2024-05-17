@@ -5,6 +5,8 @@ import DBDueMedication from "@/components/dbDueMedications";
 import DBUpcomingAppointments from "@/components/dbUpcomingAppointments";
 import DBDueMedicationLoader from "@/components/loaders/DBDueMedicationLoader";
 import DBUpcomingLoader from "@/components/loaders/DBUpcomingLoader";
+import UserDetail from "@/components/userDetails";
+import DBUserDetailLoader from "@/components/loaders/DBUserDetailLoader";
 
 const Dashboard = () => {
   return (
@@ -14,7 +16,11 @@ const Dashboard = () => {
           <div className="w-full">
             <p className="p-title select-none mb-1">WELCOME TO DASHBOARD!</p>
             <div className="font-bold text-[15px] flex mb-4 select-none">
-              Hey Alexa Dramos -
+              Hey{" "}
+              <Suspense fallback={<DBUserDetailLoader/>}>
+                <UserDetail />{" "}
+              </Suspense>
+              -
               <p className="font-normal text-[15px] pl-1 text-[#71717A] select-none">
                 here's what's happening with your clinic today!
               </p>
@@ -45,7 +51,7 @@ const Dashboard = () => {
               <DBDueMedication />
             </Suspense>
             <Suspense fallback={<DBUpcomingLoader />}>
-            <DBUpcomingAppointments />
+              <DBUpcomingAppointments />
             </Suspense>
           </div>
         </div>

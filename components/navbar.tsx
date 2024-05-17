@@ -21,6 +21,7 @@ export const Navbar = ({
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
+  
   const [isActive, setIsActive] = useState(false);
   const pathname = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);

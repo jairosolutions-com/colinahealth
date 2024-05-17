@@ -44,7 +44,7 @@ const DBDueMedication = () => {
           currentPage,
           dueMedSortBy,
           sortOrder as "ASC" | "DESC",
-          4,
+          3,
           router
         );
 
