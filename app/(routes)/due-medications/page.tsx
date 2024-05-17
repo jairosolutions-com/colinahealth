@@ -5,9 +5,7 @@ import { Suspense } from "react";
 export default function DueMedicationPage() {
   return (
     <div className="h-full">
-      <Suspense fallback={<DueMedicationLoader />}>
-        <DueMedication />
-      </Suspense>
+      <DueMedication />
     </div>
   );
 }
