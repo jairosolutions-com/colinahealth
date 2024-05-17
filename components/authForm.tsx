@@ -105,6 +105,13 @@ const AuthForm = () => {
         } else if (rememberMeToken !== "") {
           router.push("/dashboard");
         }
+      } else {
+        // Handle invalid login
+        setPassword("");
+        setIsInvalid(true);
+        setTimeout(() => {
+          setIsInvalid(false);
+        }, 2000);
       }
 
       // const signIn = await validateUser(email, password, rememberMe);
@@ -116,14 +123,6 @@ const AuthForm = () => {
       //   }
       // } else if (rememberMeToken){
       //   router.push('/dashboard')
-      // }else {
-      //   // Handle invalid login
-      //   setPassword("");
-      //   setIsInvalid(true);
-      //   setTimeout(() => {
-      //     setIsInvalid(false);
-      //   }, 2000);
-      // }
     } catch (error) {
       console.error("Error during login:", error);
       // Handle error
@@ -221,7 +220,7 @@ const AuthForm = () => {
                     >
                       <div className="relative mb-4 flex flex-col">
                         <input
-                        autoFocus
+                          autoFocus
                           id="email"
                           type="email"
                           className={`${
