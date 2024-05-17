@@ -16,7 +16,7 @@ const Dashboard = () => {
           <div className="w-full">
             <p className="p-title select-none mb-1">WELCOME TO DASHBOARD!</p>
             <div className="font-bold text-[15px] flex mb-4 select-none">
-              Hey{" "}
+              Hey,{" "}
               <Suspense fallback={<DBUserDetailLoader/>}>
                 <UserDetail />{" "}
               </Suspense>

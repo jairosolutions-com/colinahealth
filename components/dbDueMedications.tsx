@@ -244,7 +244,9 @@ const DBDueMedication = () => {
                 </div>
                 <div className="w-1/4  flex flex-col justify-center items-end text-end gap-1">
                   <p className="font-semibold text-[15px] flex">
-                    {dueMedication.medicationlogs_medicationLogsDate}
+                    {formatDate(
+                      dueMedication.medicationlogs_medicationLogsDate
+                    )}
                   </p>
                   <p className="text-[#71717A] font-medium text-[15px] ml-4">
                     {formatTime(

@@ -175,14 +175,14 @@ const DBUpcomingAppointments = () => {
                               {image.data ? (
                                 // Render the image if data is not empty
                                 <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
-                                <Image
-                                  className="rounded-full object-cover w-12 h-12"
-                                  src={image.data} // Use the base64-encoded image data directly
-                                  alt=""
-                                  width={45}
-                                  height={45}
-                                />
-                              </div>
+                                  <Image
+                                    className="rounded-full object-cover w-12 h-12"
+                                    src={image.data} // Use the base64-encoded image data directly
+                                    alt=""
+                                    width={45}
+                                    height={45}
+                                  />
+                                </div>
                               ) : (
                                 // Render the stock image (.svg) if data is empty
                                 <Image
@@ -233,7 +233,9 @@ const DBUpcomingAppointments = () => {
                 </div>
                 <div className=" flex flex-col justify-center items-end text-end gap-1">
                   <p className="font-semibold text-[15px] flex">
-                    {upcomingAppointment.appointments_appointmentDate}
+                    {formatDate(
+                      upcomingAppointment.appointments_appointmentDate
+                    )}
                   </p>
                   <p className="text-[#71717A] font-medium text-[15px] ml-4">
                     {formatTime(
