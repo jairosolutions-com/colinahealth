@@ -9,10 +9,12 @@ import { getAccessToken } from "@/app/api/login-api/accessToken";
 import Link from "next/link";
 import { searchPatientList } from "@/app/api/patients-api/patientList.api";
 import { CornerDownRightIcon } from "lucide-react";
+import { selectPatient } from "@/app/api/patients-api/patientSelect.api";
 
 interface Tabs {
-  name: string;
-  patientId: string;
+  firstName: string;
+  lastName: string;
+  uuid: string;
 }
 
 export const Navbar = ({
@@ -21,7 +23,7 @@ export const Navbar = ({
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
-  
+
   const [isActive, setIsActive] = useState(false);
   const pathname = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -37,10 +39,11 @@ export const Navbar = ({
   const handleSearchChange = (e: { target: { value: any } }) => {
     const value = e.target.value;
     setSearchValue(value);
-    const filteredPatient = searchData.filter(
+    const filteredPatient: Tabs[] = searchData.filter(
       (patient) =>
-        patient.name.toLowerCase().startsWith(value.toLowerCase()) ||
-        patient.patientId.toLowerCase().startsWith(value.toLowerCase())
+        patient.firstName.toLowerCase().startsWith(value.toLowerCase()) ||
+        patient.lastName.toLowerCase().startsWith(value.toLowerCase()) ||
+        patient.uuid.toLowerCase().startsWith(value.toLowerCase())
     );
     setFilteredPatient(filteredPatient);
   };
@@ -73,16 +76,26 @@ export const Navbar = ({
     },
   ];
 
-  const searchData = [
+  const [searchData, setSearchData] = useState([
     {
-      name: "Chesky Marga Chesky Marga Marga C. Palma Gil",
-      patientId: "PTN-20234A41",
+      firstName: "",
+      lastName: "",
+      uuid: "",
     },
-    {
-      name: "Daryl Lesiguez Estrada",
-      patientId: "PTN-25613682",
-    },
-  ];
+  ]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await selectPatient(router);
+        setSearchData(response.data);
+      } catch (error: any) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const onPatientClick = (patientId: string, url: string) => {
     setSelectedPatientId(patientId);
@@ -90,10 +103,11 @@ export const Navbar = ({
     const path = `/${urlParts[urlParts.length - 2]}/${
       urlParts[urlParts.length - 1]
     }`;
-    router.push(`/patient-overview/${patientId}${path}`);
+    router.push(`/patient-overview/${patientId.toLocaleLowerCase()}${path}`);
     setTimeout(() => {
       setShowGlobalSearch(false);
       setSuggestionContainer(false);
+      setSelectedPatientId("");
     }, 300);
   };
   const tabsUrls = [
@@ -351,16 +365,18 @@ export const Navbar = ({
                                       <p
                                         onClick={() => {
                                           onPatientClick(
-                                            patient.patientId,
-                                            tab.subTab[index]?.url
+                                            patient.uuid,
+                                            tab.subTab[0]?.url
                                           );
                                         }}
                                         key={index}
-                                        data-uuid={patient.patientId}
+                                        data-uuid={patient.uuid}
                                         className="bg-white hover:bg-[#D9D9D933] p-[10px] pl-[40px] flex justify-between cursor-pointer"
                                       >
-                                        <span>{patient.name}</span>
-                                        <span>{patient.patientId}</span>
+                                        <span>
+                                          {patient.lastName} {patient.firstName}
+                                        </span>
+                                        <span>{patient.uuid}</span>
                                       </p>
                                     ))}
                                   </div>
@@ -373,14 +389,16 @@ export const Navbar = ({
                             {filteredPatient.map((patient, index) => (
                               <p
                                 onClick={() => {
-                                  onPatientClick(patient.patientId, tab.url);
+                                  onPatientClick(patient.uuid, tab.url);
                                 }}
                                 key={index}
-                                data-uuid={patient.patientId}
+                                data-uuid={patient.uuid}
                                 className="bg-white hover:bg-[#D9D9D933] p-[10px] flex justify-between cursor-pointer"
                               >
-                                <span>{patient.name}</span>
-                                <span>{patient.patientId}</span>
+                                <span>
+                                  {patient.lastName} {patient.firstName}
+                                </span>
+                                <span>{patient.uuid}</span>
                               </p>
                             ))}
 
@@ -410,16 +428,19 @@ export const Navbar = ({
                                             <p
                                               onClick={() => {
                                                 onPatientClick(
-                                                  patient.patientId,
-                                                  tab.subTab[index]?.url
+                                                  patient.uuid,
+                                                  tab.subTab[0]?.url
                                                 );
                                               }}
                                               key={index}
-                                              data-uuid={patient.patientId}
+                                              data-uuid={patient.uuid}
                                               className="bg-white hover:bg-[#D9D9D933] p-[10px] pl-[40px] flex justify-between cursor-pointer"
                                             >
-                                              <span>{patient.name}</span>
-                                              <span>{patient.patientId}</span>
+                                              <span>
+                                                {patient.lastName}{" "}
+                                                {patient.firstName}
+                                              </span>
+                                              <span>{patient.uuid}</span>
                                             </p>
                                           )
                                         )}
