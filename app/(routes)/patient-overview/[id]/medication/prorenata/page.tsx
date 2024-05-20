@@ -14,6 +14,7 @@ import { ErrorModal } from "@/components/shared/error";
 import Modal from "@/components/reusable/modal";
 import { PrnModalContent } from "@/components/modal-content/prn-modal-content";
 import Pagination from "@/components/shared/pagination";
+import ResuableTooltip from "@/components/reusable/tooltip";
 const Prorenata = () => {
   const router = useRouter();
   if (typeof window === "undefined") {
@@ -336,10 +337,10 @@ const Prorenata = () => {
                       key={index}
                       className="group hover:bg-[#f4f4f4]  border-b text-[15px]"
                     >
-                      <td className="truncate px-6 py-3 ">
-                        {prnMed.medicationlogs_uuid}
+                      <td className="px-6 py-3 ">
+                        <ResuableTooltip text={prnMed.medicationlogs_uuid} />
                       </td>
-                      <td className="truncate px-6 py-3 ">
+                      <td className="px-6 py-3 ">
                         {prnMed.medicationlogs_medicationLogsDate}
                       </td>
                       <td className="px-6 py-3 ">
@@ -363,11 +364,13 @@ const Prorenata = () => {
                           hour12: true,
                         })}
                       </td>
-                      <td className="truncate px-6 py-3 ">
-                        {prnMed.medicationlogs_medicationLogsName}
+                      <td className="px-6 py-3 ">
+                        <ResuableTooltip
+                          text={prnMed.medicationlogs_medicationLogsName}
+                        />
                       </td>
                       <td className="px-6 py-3 ">
-                        {prnMed.medicationlogs_notes}
+                        <ResuableTooltip text={prnMed.medicationlogs_notes} />
                       </td>
                       <td className="text-15px me-1 px-6 py-5  rounded-full flex items-center">
                         <div

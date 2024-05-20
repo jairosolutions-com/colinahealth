@@ -91,6 +91,8 @@ export const LabResultsViewModalContent = ({
       setCurrentFile(labFiles[fileIndex + 1]);
     }
   };
+  const [blobUrl, setBlobUrl] = useState("");
+
   const defaultLabFiles = Array.isArray(labFiles) ? labFiles : [];
   const [base64String, setBase64String] = useState("");
   const [fileType, setFileType] = useState<string>("");
@@ -110,6 +112,28 @@ export const LabResultsViewModalContent = ({
 
         const newFileType = file.filename.split(".").pop();
         setFileType(newFileType as string);
+        // Create a Blob URL for PDF and images
+        const binaryString = window.atob(newBase64String);
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+
+        let mimeType;
+        if (newFileType === "pdf") {
+          mimeType = "application/pdf";
+        } else if (
+          ["png", "jpg", "jpeg", "gif"].includes(newFileType as string)
+        ) {
+          mimeType = `image/${newFileType}`;
+        }
+
+        if (mimeType) {
+          const blob = new Blob([bytes], { type: mimeType });
+          const url = URL.createObjectURL(blob);
+          setBlobUrl(url);
+        }
       }
     }
   }, [fileIndex, labFiles]);
@@ -525,10 +549,13 @@ export const LabResultsViewModalContent = ({
                           >
                             {fileType === "pdf" ? (
                               <iframe
-                                src={`data:application/pdf;base64,${base64String}`}
+                                src={blobUrl}
                                 width="600px"
                                 height="550px"
                                 className="shadow-md rounded-lg"
+                                title="PDF Document"
+                                onClick={toggleModal}
+                                onLoad={(e) => {}}
                               ></iframe>
                             ) : (
                               <Image
@@ -536,7 +563,7 @@ export const LabResultsViewModalContent = ({
                                 width="600"
                                 height="550"
                                 onClick={toggleModal}
-                                src={`data:image/${fileType};base64,${base64String}`}
+                                src={blobUrl}
                               />
                             )}
                           </div>
@@ -626,7 +653,7 @@ export const LabResultsViewModalContent = ({
                         content={
                           <ConfirmationModal
                             uuid={selectedFileUUID}
-                            setConfirm={setConfirmDelete}
+                            setConfirm={setDeleteModalOpen}
                             label="Delete"
                             handleFunction={(e) => {
                               handleDeleteClick();

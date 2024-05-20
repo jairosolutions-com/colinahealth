@@ -15,6 +15,7 @@ import { IncidentreportModalContent } from "@/components/modal-content/incidentr
 import Modal from "@/components/reusable/modal";
 import Pagination from "@/components/shared/pagination";
 import { ImageMinus } from "lucide-react";
+import ResuableTooltip from "@/components/reusable/tooltip";
 
 const Notes = () => {
   const router = useRouter();
@@ -323,16 +324,24 @@ const Notes = () => {
                   key={index}
                   className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                 >
-                  <td className=" px-6 py-3">{notes.notes_uuid}</td>
+                  <td className=" px-6 py-3">
+                    <ResuableTooltip text={notes.notes_uuid} />
+                  </td>
                   <td className=" px-6 py-3">
                     {new Date(notes.notes_createdAt).toLocaleDateString()}
                   </td>
                   <td className=" px-6 py-3">
                     {new Date(notes.notes_createdAt).toLocaleTimeString()}
                   </td>
-                  <td className="px-6 py-3">{notes.notes_subject}</td>
-                  <td className="px-6 py-3">{notes.notes_notes}</td>
-                  <td className="px-6 py-3">Ansel MD</td>
+                  <td className="px-6 py-3">
+                    <ResuableTooltip text={notes.notes_subject} />
+                  </td>
+                  <td className="px-6 py-3">
+                    <ResuableTooltip text={notes.notes_notes} />
+                  </td>
+                  <td className="px-6 py-3">
+                    <ResuableTooltip text="Ansel MD" />
+                  </td>
                 </tr>
               ))}
             </tbody>

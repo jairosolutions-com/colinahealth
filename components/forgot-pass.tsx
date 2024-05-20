@@ -34,7 +34,7 @@ const ForgotPass = ({
 
     try {
       if (forgotPassEmail !== "") {
-        const response = await generateOTPCode(forgotPassEmail);
+        const response = await generateOTPCode(forgotPassEmail,'forgotPass');
 
         if (response) {
           setIsError(false);

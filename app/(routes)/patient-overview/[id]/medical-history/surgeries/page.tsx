@@ -13,6 +13,7 @@ import { ErrorModal } from "@/components/shared/error";
 import { SurgeriesModalContent } from "@/components/modal-content/surgeries-modal-content";
 import Modal from "@/components/reusable/modal";
 import Pagination from "@/components/shared/pagination";
+import ResuableTooltip from "@/components/reusable/tooltip";
 
 export default function Surgeries() {
   if (typeof window === "undefined") {
@@ -340,20 +341,20 @@ export default function Surgeries() {
                   key={index}
                   className="group hover:bg-[#f4f4f4]  border-b text-[15px]"
                 >
-                  <td className="truncate px-6 py-3 ">
-                    {surgery.surgeries_uuid}
+                  <td className="px-6 py-3 ">
+                    <ResuableTooltip text={surgery.surgeries_uuid} />
                   </td>
-                  <td className="truncate px-6 py-3 ">
+                  <td className="px-6 py-3 ">
                     {formatDate(surgery.surgeries_dateOfSurgery)}
                   </td>
-                  <td className="truncate px-6 py-3 ">
-                    {surgery.surgeries_typeOfSurgery}
+                  <td className="px-6 py-3 ">
+                    <ResuableTooltip text={surgery.surgeries_typeOfSurgery} />
                   </td>
-                  <td className="truncate px-6 py-3 ">
-                    {surgery.surgeries_surgery}
+                  <td className="px-6 py-3 ">
+                    <ResuableTooltip text={surgery.surgeries_surgery} />
                   </td>
-                  <td className="truncate px-6 py-3 ">
-                    {surgery.surgeries_notes}
+                  <td className="px-6 py-3 ">
+                    <ResuableTooltip text={surgery.surgeries_notes} />
                   </td>
                   <td className="py-3 px-6 flex justify-center">
                     <div

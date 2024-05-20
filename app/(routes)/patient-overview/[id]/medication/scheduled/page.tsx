@@ -15,6 +15,7 @@ import Image from "next/image";
 import Modal from "@/components/reusable/modal";
 import { ScheduledModalContent } from "@/components/modal-content/scheduled-modal-content";
 import Pagination from "@/components/shared/pagination";
+import ResuableTooltip from "@/components/reusable/tooltip";
 
 const Scheduled = () => {
   const router = useRouter();
@@ -339,10 +340,12 @@ const Scheduled = () => {
                         key={index}
                         className="group hover:bg-[#f4f4f4]  border-b text-[15px]"
                       >
-                        <td className="truncate px-6 py-3">
-                          {schedMed.medicationlogs_uuid}
+                        <td className="px-6 py-3">
+                          <ResuableTooltip
+                            text={schedMed.medicationlogs_uuid}
+                          />
                         </td>
-                        <td className="truncate px-6 py-3">
+                        <td className="px-6 py-3">
                           {schedMed.medicationlogs_medicationLogsDate}
                         </td>
                         <td className="px-6 py-4">
@@ -366,11 +369,15 @@ const Scheduled = () => {
                             hour12: true,
                           })}
                         </td>
-                        <td className="truncate px-6 py-3">
-                          {schedMed.medicationlogs_medicationLogsName}
+                        <td className="px-6 py-3">
+                          <ResuableTooltip
+                            text={schedMed.medicationlogs_medicationLogsName}
+                          />
                         </td>
-                        <td className="truncate px-6 py-3">
-                          {schedMed.medicationlogs_notes}
+                        <td className="px-6 py-3">
+                          <ResuableTooltip
+                            text={schedMed.medicationlogs_notes}
+                          />
                         </td>
                         <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
                           <div

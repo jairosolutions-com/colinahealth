@@ -7,7 +7,6 @@ import {
   fetchFormsByPatient,
   addFormFile,
   deleteFormFiles,
-  getCurrentFileCountFromDatabase,
   updateFormsOfPatient,
 } from "@/app/api/forms-api/forms.api";
 import { toast, useToast } from "@/components/ui/use-toast";
@@ -65,6 +64,14 @@ export const FormsModalContent = ({
       description: `Total size of selected files exceeds the limit of 15MB!`,
     });
   };
+  const toggleNoFileAttached = (): void => {
+    setIsSubmitted(false);
+    toast({
+      variant: "destructive",
+      title: "No File Attached!",
+      description: `Please insert a document to submit form!`,
+    });
+  };
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsSubmitted(true);
@@ -86,6 +93,7 @@ export const FormsModalContent = ({
         e.target.value = ""; // Clear the input field
       }
     }
+
     if (files && files.length > 0) {
       const newFiles: File[] = [];
       const newFileNames: string[] = [];
@@ -157,62 +165,53 @@ export const FormsModalContent = ({
       selectedFileNames,
       selectedFiles.length
     );
-    const getUuid = formData.nameOfDocument;
+    if (selectedFiles.length === 0) {
+      toggleNoFileAttached();
+    } else {
+      try {
+        // Create the form result
+        const forms = await createFormsOfPatient(patientId, formData, router);
+        console.log("Form Result added successfully:", forms);
+        const getUuid = forms.uuid;
+        console.log("Form UUID:", getUuid);
 
-    const currentFileCount = await getCurrentFileCountFromDatabase(getUuid);
-    console.log("Current file count:", currentFileCount);
-    // Define the maximum allowed files based on the current count
-    const maxAllowedFiles = currentFileCount === 0 ? 5 : 5 - currentFileCount;
-    if (selectedFiles.length > maxAllowedFiles) {
-      toggleMaxFilesToast(maxAllowedFiles);
-      return;
-    }
-    console.log("FILES TO ADD", maxAllowedFiles);
-
-    console.log(" UUID:", getUuid);
-
-    try {
-      // Create the form result
-      const forms = await createFormsOfPatient(patientId, formData, router);
-      console.log("Form Result added successfully:", forms);
-      const getUuid = forms.uuid;
-      console.log("Form UUID:", getUuid);
-
-      // Iterate through each selected file
-      if (selectedFiles && selectedFiles.length > 0) {
         // Iterate through each selected file
-        for (let i = 0; i < selectedFiles.length; i++) {
-          const formFileFormData = new FormData();
-          formFileFormData.append("formfile", selectedFiles[i], fileNames[i]);
+        if (selectedFiles && selectedFiles.length > 0) {
+          // Iterate through each selected file
+          for (let i = 0; i < selectedFiles.length; i++) {
+            const formFileFormData = new FormData();
+            formFileFormData.append("formfile", selectedFiles[i], fileNames[i]);
 
-          // Add form file
-          const addFormFiles = await addFormFile(
-            getUuid,
-            formFileFormData,
-            router
-          );
+            // Add form file
+            const addFormFiles = await addFormFile(
+              getUuid,
+              formFileFormData,
+              router
+            );
 
-          console.log(
-            `Form FILE ${fileNames[i]} added successfully:`,
-            addFormFiles
-          );
-          isModalOpen(false);
+            console.log(
+              `Form FILE ${fileNames[i]} added successfully:`,
+              addFormFiles
+            );
+          }
+        } else {
+          console.warn("No files selected to upload");
         }
-      } else {
-        console.warn("No files selected to upload");
+        // Reset form data
+        setFormData({
+          nameOfDocument: "",
+          dateIssued: "",
+          notes: "",
+        });
+        onSuccess();
+      } catch (error) {
+        console.error("Error adding Form Result:", error);
+        setError("Failed to add Form Result");
+      } finally {
+        isModalOpen(false);
       }
-      // Reset form data
-      setFormData({
-        nameOfDocument: "",
-        dateIssued: "",
-        notes: "",
-      });
-      onSuccess();
-    } catch (error) {
-      console.error("Error adding Form Result:", error);
-      setError("Failed to add Form Result");
+      setIsSubmitted(false);
     }
-    setIsSubmitted(false);
   };
   // de
 

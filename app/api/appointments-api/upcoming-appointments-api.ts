@@ -9,6 +9,7 @@ export async function fetchUpcomingAppointments(
   currentPage: number,
   sortBy: string,
   sortOrder: "ASC" | "DESC",
+  perPage: number,
   router: any // Pass router instance as a parameter
 ): Promise<any> {
   const requestData = {
@@ -16,6 +17,7 @@ export async function fetchUpcomingAppointments(
     page: currentPage,
     sortBy: sortBy,
     sortOrder: sortOrder,
+    perPage: perPage,
   };
   try {
     console.log("searchPatient", requestData);

@@ -1,6 +1,57 @@
 import axios, { AxiosError } from "axios";
-import { setAccessToken } from "./accessToken";
+import {
+  getRememberToken,
+  setAccessToken,
+  setRememberToken,
+  setUserDetail,
+} from "./accessToken";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+export async function checkTokenValidity(): Promise<any> {
+  try {
+    const rememberToken = getRememberToken();
+    const response = await fetch(`${apiUrl}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${rememberToken}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response;
+      if (data) {
+        return true;
+      } else {
+        console.log(false);
+        console.log("mali");
+        return false; // Access token not available
+      }
+    } else {
+      console.log("mali2");
+      return false; // User is not valid
+    }
+  } catch (error: any) {
+    console.log(error, "error");
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.log(axiosError.message, "axiosError.message");
+      if (axiosError.message === "Network Error") {
+        // Handle network error
+        console.error("Connection refused or network error occurred.");
+        window.alert("Connection refused or network error occurred.");
+        return Promise.reject(
+          new Error("Connection refused or network error occurred.")
+        );
+      }
+      if (axiosError.response?.status === 404) {
+        console.log(error);
+        return Promise.reject(new Error("Connection Error"));
+      }
+    }
+
+    return false;
+  }
+}
 
 export async function validateUser(
   email: string,
@@ -28,24 +79,27 @@ export async function validateUser(
       const userDetail = data.userDetail;
 
       if (accessToken) {
-        // Store the access token in local storage
-        setAccessToken(accessToken);
+        setUserDetail(userDetail);
+        if (getRememberToken()) {
+          setAccessToken(accessToken);
+          return accessToken;
+        }
 
         return accessToken;
       } else {
         console.log(false);
-        console.log("mali")
+        console.log("mali");
         return false; // Access token not available
       }
     } else {
-      console.log("mali2")
+      console.log("mali2");
       return false; // User is not valid
     }
-  } catch (error:any) {
-    console.log(error, 'error')
+  } catch (error: any) {
+    console.log(error, "error");
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
-      console.log(axiosError.message, 'axiosError.message')
+      console.log(axiosError.message, "axiosError.message");
       if (axiosError.message === "Network Error") {
         // Handle network error
         console.error("Connection refused or network error occurred.");
@@ -59,7 +113,7 @@ export async function validateUser(
         return Promise.reject(new Error("Connection Error"));
       }
     }
-    
+
     return false;
   }
 }

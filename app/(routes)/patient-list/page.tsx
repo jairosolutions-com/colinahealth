@@ -18,6 +18,7 @@ import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 import Pagination from "@/components/shared/pagination";
+import ResuableTooltip from "@/components/reusable/tooltip";
 
 export default function PatientPage() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function PatientPage() {
           src="/imgs/colina-logo-animation.gif"
           width={100}
           height={100}
-          alt="loading"
+          alt="logo"
         />
       </div>
     );
@@ -150,7 +151,6 @@ export default function PatientPage() {
     }
     return pageNumbers;
   };
-  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -198,11 +198,9 @@ export default function PatientPage() {
           });
           setPatientImages(patientImagesData);
         }
-        setImagesLoaded(true); // Set to true when images are loaded
 
         if (response.data.length === 0) {
           setPatientList([]);
-          setImagesLoaded(true); // Set to true when images are loaded
           setIsLoading(false);
         }
       } catch (error: any) {
@@ -233,13 +231,13 @@ export default function PatientPage() {
     const lowercasePatientId = patientId.toLowerCase();
     setIsLoading(true);
     router.replace(
-      `/patient-overview/${lowercasePatientId}/medical-history/allergies`
+      `/patient-overview/${lowercasePatientId}/medication/scheduled`
     );
   };
 
   if (isLoading) {
     return (
-      <div className=" w-full h-full flex justify-center items-center">
+      <div className="w-full h-full flex justify-center items-center">
         <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
@@ -374,7 +372,7 @@ export default function PatientPage() {
                     key={index}
                     className="group bg-white hover:bg-gray-100 border-b"
                   >
-                    <td className="truncate flex items-center gap-2 px-6 py-5">
+                    <td className="flex items-center gap-2 px-6 py-5">
                       {/* Check if any matching image found for the patient */}
                       {patientImages.some(
                         (image) => image.patientUuid === patient.uuid
@@ -387,18 +385,20 @@ export default function PatientPage() {
                                 <div key={imgIndex}>
                                   {image.data ? (
                                     // Render the image if data is not empty
-                                    <Image
-                                      className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
-                                      src={image.data} // Use the base64-encoded image data directly
-                                      alt=""
-                                      width={45}
-                                      height={45}
-                                    />
+                                    <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
+                                      <Image
+                                        className="rounded-full object-cover w-12 h-12"
+                                        src={image.data} // Use the base64-encoded image data directly
+                                        alt=""
+                                        width={45}
+                                        height={45}
+                                      />
+                                    </div>
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
                                     <Image
-                                      className="rounded-full"
-                                      src="/imgs/no-icon-user.svg"
+                                      className="rounded-full  min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                      src="/imgs/user-no-icon.svg"
                                       alt=""
                                       width={45}
                                       height={45}
@@ -407,25 +407,13 @@ export default function PatientPage() {
                                 </div>
                               );
                             }
-                            return null;
                           })}
                         </div>
-                      ) : // Render a placeholder image if no matching image found
-                      imagesLoaded ? ( // Only render stock image when images are loaded
-                        <div>
-                          <Image
-                            className="rounded-full"
-                            src="/imgs/loading.gif" // Show loading gif while fetching images
-                            alt="Loading"
-                            width={45}
-                            height={45}
-                          />
-                        </div>
                       ) : (
-                        // Render loading gif while fetching images
+                        // Render a placeholder image if no matching image found
                         <div>
                           <Image
-                            className="rounded-full"
+                            className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
                             src="/imgs/loading.gif" // Show loading gif while fetching images
                             alt="Loading"
                             width={45}
@@ -434,14 +422,18 @@ export default function PatientPage() {
                         </div>
                       )}
 
-                      <p className="truncate ">
-                        {patient.firstName} {patient.lastName}
+                      <p className="overflow-hidden">
+                        <ResuableTooltip
+                          text={`${patient.firstName} ${patient.lastName}`}
+                        />
                       </p>
                     </td>
 
-                    <td className="truncate px-6 py-5">{patient.uuid}</td>
-                    <td className="truncate px-6 py-5">{patient.age}</td>
-                    <td className="truncate px-6 py-5">{patient.gender}</td>
+                    <td className="px-6 py-5">
+                      <ResuableTooltip text={patient.uuid} />
+                    </td>
+                    <td className="px-6 py-5">{patient.age}</td>
+                    <td className="px-6 py-5">{patient.gender}</td>
                     <td className="px-[70px]">
                       <p onClick={() => handlePatientClick(patient.uuid)}>
                         <Edit></Edit>

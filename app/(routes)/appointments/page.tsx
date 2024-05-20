@@ -26,6 +26,7 @@ import { fetchAllAppointments } from "@/app/api/appointments-api/fetch-all-appoi
 import { ErrorModal } from "@/components/shared/error";
 import Pagination from "@/components/shared/pagination";
 import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
+import ResuableTooltip from "@/components/reusable/tooltip";
 
 export default function AppointmentPage() {
   const router = useRouter();
@@ -174,7 +175,6 @@ export default function AppointmentPage() {
     return pageNumbers;
   };
   const [patientImages, setPatientImages] = useState<any[]>([]);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -198,8 +198,6 @@ export default function AppointmentPage() {
 
         const patientUuids = Array.from(uniquePatientUuids);
         console.log(patientUuids, "patientUuids");
-        setImagesLoaded(true); // Set to true when images are loaded
-
         const appointmentsArray = Object.values(upcomingAppoinments.data);
         setTotalPages(upcomingAppoinments.totalPages);
         setAppointmentList(appointmentsArray);
@@ -437,19 +435,20 @@ export default function AppointmentPage() {
                               return (
                                 <div key={imgIndex}>
                                   {image.data ? (
-                                    // Render the image if data is not empty
-                                    <Image
-                                      className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
-                                      src={image.data} // Use the base64-encoded image data directly
-                                      alt=""
-                                      width={45}
-                                      height={45}
-                                    />
+                                    <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
+                                      <Image
+                                        className="rounded-full object-cover w-12 h-12"
+                                        src={image.data} // Use the base64-encoded image data directly
+                                        alt=""
+                                        width={45}
+                                        height={45}
+                                      />
+                                    </div>
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
                                     <Image
-                                      className="rounded-full"
-                                      src="/imgs/no-icon-user.svg"
+                                      className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                      src="/imgs/user-no-icon.svg"
                                       alt=""
                                       width={45}
                                       height={45}
@@ -461,22 +460,11 @@ export default function AppointmentPage() {
                             return null;
                           })}
                         </div>
-                      ) : // Render a placeholder image if no matching image found
-                      imagesLoaded ? ( // Only render stock image when images are loaded
-                        <div>
-                          <Image
-                            className="rounded-full"
-                            src="/imgs/loading.gif" // Show loading gif while fetching images
-                            alt="Loading"
-                            width={45}
-                            height={45}
-                          />
-                        </div>
                       ) : (
-                        // Render loading gif while fetching images
+                        // Render a placeholder image if no matching image found
                         <div>
                           <Image
-                            className="rounded-full"
+                            className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
                             src="/imgs/loading.gif" // Show loading gif while fetching images
                             alt="Loading"
                             width={45}
@@ -484,9 +472,11 @@ export default function AppointmentPage() {
                           />
                         </div>
                       )}
-                      <span>
-                        {appointment.patient_firstName} {""}
-                        {appointment.patient_lastName}
+                      <span className="overflow-hidden">
+                        <ResuableTooltip
+                          text={`${appointment.patient_firstName} 
+                        ${appointment.patient_lastName}`}
+                        />
                       </span>
                     </td>
                     <td className="px-6 py-5 ">

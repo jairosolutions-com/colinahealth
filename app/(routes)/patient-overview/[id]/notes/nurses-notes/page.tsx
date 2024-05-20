@@ -15,6 +15,7 @@ import Modal from "@/components/reusable/modal";
 import View from "@/components/shared/buttons/view";
 import { useParams, useRouter } from "next/navigation";
 import Pagination from "@/components/shared/pagination";
+import ResuableTooltip from "@/components/reusable/tooltip";
 
 const Notes = () => {
   const router = useRouter();
@@ -326,11 +327,13 @@ const Notes = () => {
                   key={index}
                   className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                 >
-                  <td className="truncate px-6 py-3">{note.notes_uuid}</td>
-                  <td className="truncate px-6 py-3">
+                  <td className="px-6 py-3">
+                    <ResuableTooltip text={note.notes_uuid} />
+                  </td>
+                  <td className="px-6 py-3">
                     {new Date(note.notes_createdAt).toLocaleDateString()}
                   </td>
-                  <td className="truncate max-w-[552px] px-6 py-3">
+                  <td className="max-w-[552px] px-6 py-3">
                     {new Date(
                       new Date(note.notes_createdAt).getTime() -
                         new Date().getTimezoneOffset() * 60000
@@ -340,8 +343,12 @@ const Notes = () => {
                       hour12: true,
                     })}
                   </td>
-                  <td className="truncate px-6 py-3">{note.notes_subject}</td>
-                  <td className="truncate px-6 py-3 ">{note.notes_notes}</td>
+                  <td className="px-6 py-3">
+                    <ResuableTooltip text={note.notes_subject} />
+                  </td>
+                  <td className="px-6 py-3 ">
+                    <ResuableTooltip text={note.notes_notes} />
+                  </td>
                   <td className="flex justify-center px-6 py-3">
                     <p
                       onClick={() => {

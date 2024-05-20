@@ -154,6 +154,8 @@ export const FormViewsModalContent = ({
   const [fileType, setFileType] = useState<string>("");
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [blobUrl, setBlobUrl] = useState("");
+
   //switching to through previews
   useEffect(() => {
     if (FormsFiles && FormsFiles.length > 0) {
@@ -168,12 +170,31 @@ export const FormViewsModalContent = ({
 
         const newFileType = file.filename.split(".").pop();
         setFileType(newFileType as string);
+         // Create a Blob URL for PDF and images
+         const binaryString = window.atob(newBase64String);
+         const len = binaryString.length;
+         const bytes = new Uint8Array(len);
+         for (let i = 0; i < len; i++) {
+           bytes[i] = binaryString.charCodeAt(i);
+         }
+ 
+         let mimeType;
+         if (newFileType === "pdf") {
+           mimeType = "application/pdf";
+         } else if (["png", "jpg", "jpeg", "gif"].includes(newFileType as string)) {
+           mimeType = `image/${newFileType}`;
+         }
+ 
+         if (mimeType) {
+           const blob = new Blob([bytes], { type: mimeType });
+           const url = URL.createObjectURL(blob);
+           setBlobUrl(url);
+         }  
       }
     }
   }, [fileIndex, FormsFiles]);
   //fetching files from database
   useEffect(() => {
-    setIsSubmitted(true);
     const fetchData = async () => {
       setFormsUuid(formsData.forms_uuid);
       try {
@@ -195,14 +216,14 @@ export const FormViewsModalContent = ({
         }
       } catch (error: any) {
         setError(error.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     if (formsData.forms_uuid) {
       fetchData();
     }
-
-    setIsSubmitted(false);
   }, [
     formsData.forms_uuid,
     router,
@@ -310,8 +331,9 @@ export const FormViewsModalContent = ({
     }
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setIsSubmitted(true);
     e.preventDefault();
+    setIsSubmitted(true);
+
     const getUuid = formsUuid;
 
     console.log("submit clicked");
@@ -338,13 +360,13 @@ export const FormViewsModalContent = ({
         setIsLoading(true);
         for (let i = 0; i < selectedFiles.length; i++) {
           const formsFileFormData = new FormData();
-          formsFileFormData.append("formsfile", selectedFiles[i], fileNames[i]);
+          formsFileFormData.append("formfile", selectedFiles[i], fileNames[i]);
 
           // Add  file
-          const adFormsFiles = await addFormFile(
+          const addFormsFiles = await addFormFile(
             getUuid,
             formsFileFormData,
-            ""
+            router
           );
           console.log(
             `Forms FILE ${fileNames[i]} added successfully:`,
@@ -442,7 +464,7 @@ export const FormViewsModalContent = ({
     <div>
       {defaultFormsFiles?.length === 0 && isLoading === false ? (
         <NofileviewFormsModalContent
-          formsUuid={formsData.forms_uuid}
+          formsUuid={formsUuid}
           onClose={handleNoFileModalClose}
           isModalOpen={(isOpen: boolean): void => {
             isModalOpen(isOpen);
@@ -497,12 +519,14 @@ export const FormViewsModalContent = ({
                           >
                             {fileType === "pdf" ? (
                               <iframe
-                                src={`data:application/pdf;base64,${base64String}`}
-                                width="600px"
-                                height="550px"
-                                className="shadow-md rounded-lg"
-                                onClick={toggleModal}
-                              ></iframe>
+                              src={blobUrl}
+                              width="600px"
+                              height="550px"
+                              className="shadow-md rounded-lg"
+                              title="PDF Document"
+                              onClick={toggleModal}
+                              onLoad={(e) => {}}
+                            ></iframe>
                             ) : (
                               <Image
                                 alt="file image"

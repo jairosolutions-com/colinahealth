@@ -81,6 +81,7 @@ body,
   height: 100%;
   /* color: white; */
 }
+
 .App {
   text-align: center;
 }
@@ -329,7 +330,7 @@ body,
   top: 3.5rem;
   right: 1.5rem;
   width: 215px;
-  height: 215px;
+  height: 160px;
   padding: 15px;
   border-radius: 8px;
   background-color: white;
@@ -380,4 +381,37 @@ tbody tr {
 
 table {
   width: 100%;
+}
+
+.global-search {
+  position: absolute;
+  right: 225px;
+  width: 650px;
+  transition: padding-left 0.3s ease-in;
+}
+
+.global-search.animate {
+  animation: global-search-animation 0.3s ease forwards;
+}
+
+@keyframes global-search-animation {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 650px;
+  }
+}
+
+.global-search.animate-close {
+  animation: global-search-animation-close 0.3s ease forwards;
+}
+
+@keyframes global-search-animation-close {
+  0% {
+    width: 650px;
+  }
+  100% {
+    width: 0;
+  }
 }

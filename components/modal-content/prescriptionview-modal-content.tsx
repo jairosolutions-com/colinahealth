@@ -53,18 +53,18 @@ export const PrescriptionViewModalContent = ({
   const [toastVisible, setToastVisible] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-  // update isNoFileModalOpen state
+
   const handleNoFileModalClose = (isModalOpen: boolean) => {
     setIsNoFileModalOpen(isModalOpen);
     setIsLoading(true);
     console.log("isNoFileModalOpen HANDLE", isNoFileModalOpen);
   };
 
-  const isConfirmModalOpen = (confirmDelete: boolean) => {
-    setConfirmDelete(confirmDelete);
-    if (confirmDelete) {
+  const isConfirmModalOpen = (deleteModalOpen: boolean) => {
+    setConfirmDelete(deleteModalOpen);
+    if (deleteModalOpen) {
       document.body.style.overflow = "hidden";
-    } else if (!confirmDelete) {
+    } else if (!deleteModalOpen) {
       document.body.style.overflow = "visible";
     }
   };
@@ -160,6 +160,8 @@ export const PrescriptionViewModalContent = ({
   const [fileType, setFileType] = useState<string>("");
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [blobUrl, setBlobUrl] = useState("");
+
   //switching to through previews
   useEffect(() => {
     if (PrescriptionFiles && PrescriptionFiles.length > 0) {
@@ -174,6 +176,27 @@ export const PrescriptionViewModalContent = ({
 
         const newFileType = file.filename.split(".").pop();
         setFileType(newFileType as string);
+
+         // Create a Blob URL for PDF and images
+         const binaryString = window.atob(newBase64String);
+         const len = binaryString.length;
+         const bytes = new Uint8Array(len);
+         for (let i = 0; i < len; i++) {
+           bytes[i] = binaryString.charCodeAt(i);
+         }
+ 
+         let mimeType;
+         if (newFileType === "pdf") {
+           mimeType = "application/pdf";
+         } else if (["png", "jpg", "jpeg", "gif"].includes(newFileType as string)) {
+           mimeType = `image/${newFileType}`;
+         }
+ 
+         if (mimeType) {
+           const blob = new Blob([bytes], { type: mimeType });
+           const url = URL.createObjectURL(blob);
+           setBlobUrl(url);
+         }
       }
     }
   }, [fileIndex, PrescriptionFiles]);
@@ -523,11 +546,13 @@ export const PrescriptionViewModalContent = ({
                           >
                             {fileType === "pdf" ? (
                               <iframe
-                                src={`data:application/pdf;base64,${base64String}`}
+                                src={blobUrl}
                                 width="600px"
                                 height="550px"
                                 className="shadow-md rounded-lg"
+                                title="PDF Document"
                                 onClick={toggleModal}
+                                onLoad={(e) => {}}
                               ></iframe>
                             ) : (
                               <Image
@@ -535,7 +560,7 @@ export const PrescriptionViewModalContent = ({
                                 width="600"
                                 height="550"
                                 onClick={toggleModal}
-                                src={`data:image/${fileType};base64,${base64String}`}
+                                src={blobUrl}
                               />
                             )}
                           </div>
@@ -627,7 +652,7 @@ export const PrescriptionViewModalContent = ({
                         content={
                           <ConfirmationModal
                             uuid={selectedFileUUID}
-                            setConfirm={setConfirmDelete}
+                            setConfirm={setDeleteModalOpen}
                             label="Delete"
                             handleFunction={(e) => {
                               handleDeleteClick();
