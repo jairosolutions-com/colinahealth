@@ -328,7 +328,7 @@ const Notes = () => {
                   className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
                 >
                   <td className="px-6 py-3">
-                    <ResuableTooltip maxWidth="429px" text={note.notes_uuid} />
+                    <ResuableTooltip text={note.notes_uuid} />
                   </td>
                   <td className="px-6 py-3">
                     {new Date(note.notes_createdAt).toLocaleDateString()}
@@ -344,13 +344,10 @@ const Notes = () => {
                     })}
                   </td>
                   <td className="px-6 py-3">
-                    <ResuableTooltip
-                      maxWidth="429px"
-                      text={note.notes_subject}
-                    />
+                    <ResuableTooltip text={note.notes_subject} />
                   </td>
                   <td className="px-6 py-3 ">
-                    <ResuableTooltip maxWidth="429px" text={note.notes_notes} />
+                    <ResuableTooltip text={note.notes_notes} />
                   </td>
                   <td className="flex justify-center px-6 py-3">
                     <p

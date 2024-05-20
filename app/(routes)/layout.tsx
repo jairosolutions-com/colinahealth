@@ -5,9 +5,10 @@ import { Navbar } from "@/components/navbar";
 import { getAccessToken, setAccessToken } from "../api/login-api/accessToken";
 import { redirect, useRouter } from "next/navigation";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Footer from "@/components/footer";
 import { useIdleTimer } from "react-idle-timer";
+import Loading from "./loading";
 import { toast } from "@/components/ui/use-toast";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -59,18 +60,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <div className="flex flex-col h-screen ">
         <Navbar setIsLoading={setIsLoading} />
-        {isLoading ? (
-          <div className="w-full h-full flex justify-center items-center ">
-            <Image
-              src="/imgs/colina-logo-animation.gif"
-              alt="logo"
-              width={100}
-              height={100}
-            />
-          </div>
-        ) : (
+        <Suspense fallback={<Loading />}>
           <div className="flex-grow">{children}</div>
-        )}
+        </Suspense>
         <Footer />
       </div>
     </>

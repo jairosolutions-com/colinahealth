@@ -35,6 +35,8 @@ const OTPCode = ({
   const [isNewCode, setIsNewCode] = useState<boolean>(false);
   const [countdown, setCountdown] = useState<number>(60);
   const [isError, setIsError] = useState<boolean>(false);
+  const [isSending, setIsSending] = useState<boolean>(false);
+
   const handleOTPChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -44,9 +46,20 @@ const OTPCode = ({
       const newOTP = [...otp];
       newOTP[index] = value;
       setOTP(newOTP);
-      if (index < 5) {
-        inputs.current[index + 1].focus();
-        setCurrentInputIndex(index + 1);
+      for (let i = 0; i < index; i++) {
+        if (inputs.current[i].value === "") {
+          setCurrentInputIndex(i);
+          inputs.current[i].focus();
+          return;
+        }
+      }
+      // If all previous inputs are not empty, find the first empty input
+      const nextInputIndex = inputs.current.findIndex(
+        (input) => input.value === ""
+      );
+      if (nextInputIndex !== -1) {
+        setCurrentInputIndex(nextInputIndex);
+        inputs.current[nextInputIndex].focus();
       }
     }
   };
@@ -58,19 +71,30 @@ const OTPCode = ({
   }, [otp]);
 
   console.log(otp);
+
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number
   ) => {
     if (e.key === "Backspace") {
       const newOTP = [...otp];
-      newOTP[index] = "";
-      setOTP(newOTP);
-      setIsError(false);
-      if (index > 0 && otp[index - 1] !== "") {
-        inputs.current[index - 1].focus();
-        setCurrentInputIndex(index - 1);
+      if (newOTP[index] === "") {
+        // If the current input is empty, delete the previous input
+        if (index > 0) {
+          newOTP[index - 1] = "";
+          setCurrentInputIndex(index - 1);
+          inputs.current[index - 1].focus();
+        }
+      } else {
+        // If the current input is not empty, delete the current input
+        newOTP[index] = "";
+        setIsError(false);
+        if (index > 0 && otp[index - 1] !== "") {
+          inputs.current[index - 1].focus();
+          setCurrentInputIndex(index - 1);
+        }
       }
+      setOTP(newOTP);
     }
   };
 
@@ -78,9 +102,27 @@ const OTPCode = ({
     e: React.MouseEvent<HTMLInputElement>,
     index: number
   ) => {
-    setCurrentInputIndex(index);
-    inputs.current[index].focus();
+    const { value } = e.target as HTMLInputElement;
+    if (value.length > 0) {
+      // Find the next empty input field
+      let nextInputIndex = index + 1;
+      while (
+        nextInputIndex < inputs.current.length &&
+        inputs.current[nextInputIndex].value !== ""
+      ) {
+        nextInputIndex++;
+      }
+      if (nextInputIndex < inputs.current.length) {
+        setCurrentInputIndex(nextInputIndex);
+        inputs.current[nextInputIndex].focus();
+      }
+    } else {
+      // If the input field is empty, focus on it
+      setCurrentInputIndex(index);
+      inputs.current[index].focus();
+    }
   };
+
   console.log(variant, "var");
   const handleSubmit = async () => {
     setIsVerify(true);
@@ -119,21 +161,22 @@ const OTPCode = ({
 
   const handleSendNewCode = async (e: any) => {
     e.preventDefault();
-    setIsNewCode(true);
-    setCountdown(60); // Reset countdown to 60 seconds
-    const intervalId = setInterval(() => {
-      setCountdown((prevCountdown) => prevCountdown - 1);
-    }, 1000);
-
-    // Clear interval after 1 minute (60 seconds)
-    setTimeout(() => {
-      clearInterval(intervalId);
-      setIsNewCode(false);
-    }, 60000);
+    setIsSending(true);
     try {
       if (forgotPassEmail !== "") {
-        const response = await generateOTPCode(forgotPassEmail,variant);
+        const response = await generateOTPCode(forgotPassEmail, variant);
+        setIsSending(false);
+        setIsNewCode(true);
+        setCountdown(60); // Reset countdown to 60 seconds
+        const intervalId = setInterval(() => {
+          setCountdown((prevCountdown) => prevCountdown - 1);
+        }, 1000);
 
+        // Clear interval after 1 minute (60 seconds)
+        setTimeout(() => {
+          clearInterval(intervalId);
+          setIsNewCode(false);
+        }, 60000);
         if (response) {
           console.log("Email Sent Successfully.");
         }
@@ -164,7 +207,7 @@ const OTPCode = ({
 
   return (
     <div
-      className={`flex flex-col fixed justify-center md:px-0 px-[30px] items-center lg:w-[1091px] md:w-full  duration-500 transition h-full 
+      className={`flex flex-col fixed justify-center md:px-0 px-[30px] items-center lg:max-w-[560px] md:w-full max-w-[400px]  duration-500 transition h-full 
                 ${
                   isOTP
                     ? " opacity-100 z-50"
@@ -176,23 +219,26 @@ const OTPCode = ({
       <h1 className="md:text-[20px] font-semibold  md:text-2xl lg:mb-3 text-white md:text-black md:mb-0 mb-3">
         Enter your verification code!
       </h1>
-      <p className="mb-5">We’ve sent the verification code to {maskedEmail}.</p>
+      <p className="mb-5 text-white md:text-black md:px-0 text-center">
+        We’ve sent the verification code to {maskedEmail}.
+      </p>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           setIsVerify(true);
           handleSubmit();
         }}
+        className="flex flex-col items-center justify-center w-full"
       >
-        <div className="flex gap-3">
+        <div className="flex md:gap-3 gap-1  items-center justify-center text-center">
           {otp.map((digit, index) => (
             <input
-              className={`w-[83px] h-[90px] rounded-md focus:outline-none text-center text-[50px] 
+              className={`md:max-w-[83px] md:max-h-[90px]  max-w-[50px] max-h-[57px] rounded-md focus:outline-none text-center text-[50px] 
               
               ${
                 otp[index] !== ""
                   ? "bg-[#007C85] text-white"
-                  : "bg-[#D9D9D91A]  border border-slate-500"
+                  : "md:bg-[#D9D9D91A] bg-white border border-slate-500"
               } 
               ${isError ? "border-red-500 border bg-red-500" : ""}
               ${currentInputIndex === index ? "border-blue-500" : ""}`}
@@ -210,17 +256,21 @@ const OTPCode = ({
           ))}
         </div>
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center w-full">
           {isError && (
             <p className="text-red-500 w-full">Verification code not valid!</p>
           )}
-          {isNewCode ? (
-            <p className="text-end w-full my-2 cursor-pointer">
+          {isSending ? (
+            <p className="text-end w-full my-2 cursor-pointer text-white md:text-black">
+              Sending...
+            </p>
+          ) : isNewCode ? (
+            <p className="text-end w-full my-2 cursor-pointer text-white md:text-black">
               Send a new code in: {countdown} seconds.
             </p>
           ) : (
             <p
-              className="underline text-end w-full my-2 cursor-pointer"
+              className="underline text-end w-full my-2 cursor-pointer text-white md:text-black"
               onClick={handleSendNewCode}
             >
               Send a new code.
@@ -232,7 +282,7 @@ const OTPCode = ({
           disabled={isVerify}
           className={`
                           ${isVerify ? "cursor-not-allowed" : "cursor-pointer"}
-                          inline-block w-full  max-w-[565px] text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
+                          inline-block w-full  md:max-w-[565px] max-w-[400px] text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
           type="submit"
         >
           {isVerify ? (
@@ -245,7 +295,7 @@ const OTPCode = ({
         </button>
       </form>
       <p
-        className="cursor-pointer bottom-28 absolute"
+        className="cursor-pointer bottom-28 absolute text-white md:text-black"
         onClick={() => {
           setIsOTP(!isOTP);
         }}

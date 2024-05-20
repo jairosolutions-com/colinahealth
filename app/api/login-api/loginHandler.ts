@@ -3,6 +3,7 @@ import {
   getRememberToken,
   setAccessToken,
   setRememberToken,
+  setUserDetail,
 } from "./accessToken";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -78,6 +79,7 @@ export async function validateUser(
       const userDetail = data.userDetail;
 
       if (accessToken) {
+        setUserDetail(userDetail);
         if (getRememberToken()) {
           setAccessToken(accessToken);
           return accessToken;

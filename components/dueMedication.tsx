@@ -1,7 +1,6 @@
 "use client";
-
+import React from "react";
 import { onNavigate } from "@/actions/navigation";
-import { searchPatientList } from "@/app/api/patients-api/patientList.api";
 import DropdownMenu from "@/components/dropdown-menu";
 import Edit from "@/components/shared/buttons/view";
 import { redirect, useRouter } from "next/navigation";
@@ -15,30 +14,23 @@ import Modal from "@/components/reusable/modal";
 import { DemographicModalContent } from "@/components/modal-content/demographic-modal-content";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import { fetchDueMedication } from "@/app/api/medication-logs-api/due-medication-api";
 import Image from "next/image";
-import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 import Pagination from "@/components/shared/pagination";
+import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 import ResuableTooltip from "@/components/reusable/tooltip";
+import DueMedicationLoader from "./loaders/dueMedicationLoader";
 
-export default function PatientPage() {
+
+const DueMedication = () => {
   const router = useRouter();
-  if (typeof window === "undefined") {
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        <Image
-          src="/imgs/colina-logo-animation.gif"
-          width={100}
-          height={100}
-          alt="logo"
-        />
-      </div>
-    );
-  }
-
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortBy, setSortBy] = useState("firstName");
+  const [dueMedSortBy, setDueMedSortBy] = useState(
+    "medicationlogs.medicationLogsTime"
+  );
   const [patientList, setPatientList] = useState<any[]>([]);
   const [patientId, setPatientId] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -47,15 +39,27 @@ export default function PatientPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [pageNumber, setPageNumber] = useState("");
-  const [gotoError, setGotoError] = useState(false);
   const [term, setTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("ASC");
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
-  const isEdit = false;
+  const [dueMedTotalPages, setDueMedTotalPages] = useState(0);
+  const [totalDueMedication, setTotalDueMedication] = useState(0);
   const [patientImages, setPatientImages] = useState<any[]>([]);
-
+  const [dueMedicationList, setDueMedicationList] = useState<
+    {
+      patient_uuid: string;
+      medicationlogs_medicationLogsName: string;
+      patient_firstName: string;
+      patient_lastName: string;
+      patient_middleName: string;
+      medicationlogs_medicationLogsDate: string;
+      medicationlogs_medicationLogsTime: string;
+      medicationlogs_uuid: string;
+    }[]
+  >([]);
+  const isEdit = false;
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
       setSortOrder("ASC");
@@ -65,12 +69,16 @@ export default function PatientPage() {
   };
 
   const handleSortOptionClick = (option: string) => {
-    if (option == "Age") {
-      setSortBy("age");
-    } else if (option == "Name") {
-      setSortBy("firstName");
-    } else if (option == "Gender") {
-      setSortBy("gender");
+    if (option == "Name") {
+      setDueMedSortBy("patient.firstName");
+    } else if (option == "Due Med UID") {
+      setDueMedSortBy("medicationlogs.medicationLogsName");
+    } else if (option == "Date") {
+      setDueMedSortBy("medicationlogs.medicationLogsDate");
+    } else if (option == "Time") {
+      setDueMedSortBy("medicationlogs.medicationLogsTime");
+    } else if (option == "Medication") {
+      setDueMedSortBy("medicationlogs.medicationLogsName");
     }
     console.log(sortBy, "ooption");
   };
@@ -81,8 +89,10 @@ export default function PatientPage() {
   ];
   const optionsSortBy = [
     { label: "Name", onClick: handleSortOptionClick },
-    { label: "Age", onClick: handleSortOptionClick },
-    { label: "Gender", onClick: handleSortOptionClick },
+    { label: "Due Med UID", onClick: handleSortOptionClick },
+    { label: "Date", onClick: handleSortOptionClick },
+    { label: "Time", onClick: handleSortOptionClick },
+    { label: "Medicaiton", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
   const isModalOpen = (isOpen: boolean) => {
@@ -94,88 +104,32 @@ export default function PatientPage() {
     }
   };
 
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Function to handle going to next page
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const pageNumberInt = parseInt(pageNumber, 10);
-
-    // Check if pageNumber is a valid number and greater than 0
-    if (
-      !isNaN(pageNumberInt) &&
-      pageNumberInt <= totalPages &&
-      pageNumberInt > 0
-    ) {
-      setCurrentPage(pageNumberInt);
-
-      console.log("Navigate to page:", pageNumberInt);
-    } else {
-      setGotoError(true);
-      setTimeout(() => {
-        setGotoError(false);
-      }, 3000);
-      console.error("Invalid page number:", pageNumber);
-    }
-  };
-
-  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageNumber(e.target.value);
-  };
-
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          className={`flex ring-1 ring-gray-300 items-center justify-center  w-[49px]  ${
-            currentPage === i ? "btn-pagination" : ""
-          }`}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </button>
-      );
-    }
-    return pageNumbers;
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await searchPatientList(
+        const dueMedicationList = await fetchDueMedication(
           term,
           currentPage,
-          sortBy,
+          dueMedSortBy,
           sortOrder as "ASC" | "DESC",
+          5,
           router
         );
 
-        // Update patient list
-        setPatientList(response.data);
-        setTotalPages(response.totalPages);
-        setTotalPatient(response.totalCount);
-        setIsLoading(false);
-        // Get UUIDs of all patients
-        const patientUuids = response.data.map(
-          (patient: { uuid: any }) => patient.uuid
+        const uniquePatientUuids = new Set(
+          dueMedicationList.data.map(
+            (patient: { patient_uuid: any }) => patient.patient_uuid
+          )
         );
-        // Fetch profile images for all patients
-        const profileImagesResponse = await fetchProfileImages(patientUuids);
 
-        // Buffer the images and store them in an array
+        const patientUuids = Array.from(uniquePatientUuids);
+        setDueMedicationList(dueMedicationList.data);
+        setTotalPages(dueMedicationList.totalPages);
+        setTotalDueMedication(dueMedicationList.totalCount);
+        setIsLoading(false);
+        const profileImagesResponse = await fetchProfileImages(
+          patientUuids as string[]
+        );
         if (profileImagesResponse) {
           const patientImagesData = profileImagesResponse.map((image: any) => {
             // Convert the image data buffer to a data URL if available
@@ -197,55 +151,26 @@ export default function PatientPage() {
             }
           });
           setPatientImages(patientImagesData);
+          console.log(patientImagesData, "patientImagesData");
         }
-
-        if (response.data.length === 0) {
-          setPatientList([]);
-          setIsLoading(false);
-        }
-      } catch (error: any) {
-        setError(error.message);
-        console.log("error", error.message);
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: error.message,
-          action: (
-            <ToastAction
-              altText="Try again"
-              onClick={() => {
-                window.location.reload();
-              }}
-            >
-              Try again
-            </ToastAction>
-          ),
-        });
+      } catch (error) {
+        // Handle error
       }
     };
-
     fetchData();
-  }, [term, sortOrder, currentPage, sortBy, isSuccessOpen]);
+  }, [currentPage, term, sortBy, sortOrder]);
 
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
     setIsLoading(true);
-    router.replace(
-      `/patient-overview/${lowercasePatientId}/medication/scheduled`
+    onNavigate(
+      router,
+      `/patient-overview/${lowercasePatientId}/medical-history/allergies`
     );
   };
 
   if (isLoading) {
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        <Image
-          src="/imgs/colina-logo-animation.gif"
-          alt="logo"
-          width={100}
-          height={100}
-        />
-      </div>
-    );
+    return <DueMedicationLoader />;
   }
   console.log("patientList", patientList);
 
@@ -255,31 +180,30 @@ export default function PatientPage() {
   const onFailed = () => {
     setIsErrorOpen(true);
   };
-
   return (
-    <div className="w-full  px-[150px] pt-[90px] flex flex-col justify-between h-full">
+    <div className="w-full px-[150px] pt-[90px] flex flex-col justify-between h-full">
       <div className="w-full h-full">
-        {/* <div className="flex justify-end">
-          <p
+        <div className="flex justify-end">
+          {/* <p
             onClick={() => {
               setIsLoading(true);
-              router.replace("/dashboard");
+              onNavigate(router, "/dashboard");
             }}
             className="text-[#64748B] underline cursor-pointer text-[15px]"
           >
             Back to Dashboard
-          </p>
-        </div> */}
+          </p> */}
+        </div>
         <div className="flex justify-between items-center">
           <div className="flex flex-col mb-3">
-            <p className="p-title">Patients List Records</p>
+            <p className="p-title">Due Medication</p>
             {/* number of patiens */}
             <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
-              Total of {patientList.length == 0 ? "0" : totalPatient} Patients
+              Total of {totalDueMedication == 0 ? "0" : totalDueMedication} Due
+              Medication{totalDueMedication > 1 ? "s" : ""}
             </p>
           </div>
           <div className="flex flex-row justify-end">
-            <Add onClick={() => isModalOpen(true)}></Add>
             <DownloadPDF></DownloadPDF>
           </div>
         </div>
@@ -325,7 +249,7 @@ export default function PatientPage() {
                 width={"165px"}
                 label={"Select"}
               />
-              <p className="text-[#191D23] text-opacity-[60%] font-semibold text-[15px]">
+              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
                 Sort by
               </p>
               <DropdownMenu
@@ -345,60 +269,60 @@ export default function PatientPage() {
 
           {/* START OF TABLE */}
           <div>
-            <table className="w-full justify-center items-start text-[15px]">
-              <thead className="text-left rtl:text-right">
-                <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
-                  <th className="px-6 py-3">Name</th>
-                  <th className="px-6 py-3">Patient ID</th>
-                  <th className="px-6 py-3">Age</th>
-                  <th className="px-6 py-3">Gender</th>
-
-                  <th className="px-20 py-3 items-center">Action</th>
+            <table className="w-full h-full justify-center items-start text-[15px]">
+              <thead className=" text-left rtl:text-right">
+                <tr className="uppercase font-semibold text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
+                  <td className="px-6 py-5 ">Name</td>
+                  <td className="px-6 py-5 ">DUE MED UID</td>
+                  <td className="px-6 py-5 ">Date</td>
+                  <td className="px-6 py-5 ">Time</td>
+                  <td className="px-6 py-5">Medication</td>
                 </tr>
               </thead>
               <tbody>
-                {patientList.length === 0 && (
+                {dueMedicationList.length === 0 && (
                   <tr>
                     <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                      <p className="text-[15px] font-normal text-gray-700 flex text-center">
-                        No Patient Found! <br />
+                      <p className="text-[15px] font-normal text-gray-700  text-center">
+                        No Due Medication Found!
                       </p>
                     </td>
                   </tr>
                 )}
-
-                {patientList.map((patient, index) => (
+                {dueMedicationList.map((dueMedication, index) => (
                   <tr
                     key={index}
-                    className="group bg-white hover:bg-gray-100 border-b"
+                    className=" group  bg-white hover:bg-gray-100  border-b"
                   >
-                    <td className="flex items-center gap-2 px-6 py-5">
-                      {/* Check if any matching image found for the patient */}
+                    <td className="px-6 py-5 flex items-center gap-2">
                       {patientImages.some(
-                        (image) => image.patientUuid === patient.uuid
+                        (image) =>
+                          image.patientUuid === dueMedication.patient_uuid
                       ) ? (
                         // Render the matched image
                         <div>
                           {patientImages.map((image, imgIndex) => {
-                            if (image.patientUuid === patient.uuid) {
+                            if (
+                              image.patientUuid === dueMedication.patient_uuid
+                            ) {
                               return (
                                 <div key={imgIndex}>
                                   {image.data ? (
                                     // Render the image if data is not empty
                                     <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
-                                      <Image
-                                        className="rounded-full object-cover w-12 h-12"
-                                        src={image.data} // Use the base64-encoded image data directly
-                                        alt=""
-                                        width={45}
-                                        height={45}
-                                      />
-                                    </div>
+                                    <Image
+                                      className="rounded-full object-cover w-12 h-12"
+                                      src={image.data} // Use the base64-encoded image data directly
+                                      alt=""
+                                      width={45}
+                                      height={45}
+                                    />
+                                  </div>
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
                                     <Image
-                                      className="rounded-full  min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
-                                      src="/imgs/user-no-icon.svg"
+                                      className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                      src="/imgs/user.png"
                                       alt=""
                                       width={45}
                                       height={45}
@@ -407,10 +331,11 @@ export default function PatientPage() {
                                 </div>
                               );
                             }
+                            return null;
                           })}
                         </div>
-                      ) : (
-                        // Render a placeholder image if no matching image found
+                      ) : // Render a placeholder image if no matching image found
+                 ( // Only render stock image when images are loaded
                         <div>
                           <Image
                             className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
@@ -420,24 +345,30 @@ export default function PatientPage() {
                             height={45}
                           />
                         </div>
+
                       )}
-
-                      <p className="overflow-hidden">
+                      <span className="overflow-hidden">
                         <ResuableTooltip
-                          text={`${patient.firstName} ${patient.lastName}`}
+                          text={`${dueMedication.patient_firstName} ${""}
+                        ${dueMedication.patient_lastName}`}
                         />
-                      </p>
+                      </span>
                     </td>
-
+                    <td className="px-6 py-5 ">
+                      <ResuableTooltip
+                        text={dueMedication.medicationlogs_uuid}
+                      />
+                    </td>
+                    <td className="px-6 py-5 ">
+                      {dueMedication.medicationlogs_medicationLogsDate}
+                    </td>
+                    <td className="px-6 py-5 ">
+                      {dueMedication.medicationlogs_medicationLogsTime}
+                    </td>
                     <td className="px-6 py-5">
-                      <ResuableTooltip text={patient.uuid} />
-                    </td>
-                    <td className="px-6 py-5">{patient.age}</td>
-                    <td className="px-6 py-5">{patient.gender}</td>
-                    <td className="px-[70px]">
-                      <p onClick={() => handlePatientClick(patient.uuid)}>
-                        <Edit></Edit>
-                      </p>
+                      <ResuableTooltip
+                        text={dueMedication.medicationlogs_medicationLogsName}
+                      />
                     </td>
                   </tr>
                 ))}
@@ -446,43 +377,9 @@ export default function PatientPage() {
           </div>
           {/* END OF TABLE */}
         </div>
-        {/* pagination */}
-
-        {isOpen && (
-          <Modal
-            content={
-              <DemographicModalContent
-                isModalOpen={isModalOpen}
-                isOpen={isOpen}
-                label="sample label"
-                onSuccess={onSuccess}
-                onFailed={onFailed}
-                setErrorMessage={setError}
-              />
-            }
-            isModalOpen={isModalOpen}
-          />
-        )}
-        {isSuccessOpen && (
-          <SuccessModal
-            label="Success"
-            isAlertOpen={isSuccessOpen}
-            toggleModal={setIsSuccessOpen}
-            setIsUpdated=""
-            isUpdated=""
-          />
-        )}
-        {isErrorOpen && (
-          <ErrorModal
-            label="Patient already exist"
-            isAlertOpen={isErrorOpen}
-            toggleModal={setIsErrorOpen}
-            isEdit={isEdit}
-            errorMessage={error}
-          />
-        )}
       </div>
-      <div className=" bg-white ">
+      {/* pagination */}
+      <div className="">
         <Pagination
           totalPages={totalPages}
           currentPage={currentPage}
@@ -493,4 +390,6 @@ export default function PatientPage() {
       </div>
     </div>
   );
-}
+};
+
+export default DueMedication;
