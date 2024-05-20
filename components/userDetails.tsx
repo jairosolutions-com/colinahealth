@@ -16,7 +16,7 @@ const UserDetail = () => {
 
   return (
     <>
-      {userDetail.fName} {userDetail.lName}
+      {userDetail?.fName} {userDetail?.lName}
     </>
   );
 };
