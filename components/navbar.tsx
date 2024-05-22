@@ -257,9 +257,9 @@ export const Navbar = ({
         <Image
           src={"/imgs/colina-logo.png"}
           alt={""}
-          width={200}
-          height={37}
-          className="cursor-pointer"
+          width={211}
+          height={50}
+          className="cursor-pointer  w-[211px]"
           onClick={(event) => {
             if (pathname === "/dashboard") {
               event.preventDefault();
@@ -275,7 +275,7 @@ export const Navbar = ({
             <Link
               key={index}
               href={route.url}
-              className={`cursor-pointer text-white relative `}
+              className={`cursor-pointer text-white relative font-medium`}
               onClick={() => {
                 setIsLoading(true);
                 if (pathname === route.url) {
@@ -286,7 +286,7 @@ export const Navbar = ({
               <p className="hover:text-gray-200">{route.label}</p>
               {pathname === route.url && !showGlobalSearch && (
                 <p
-                  className={`${"border-b-[3px] border-[#ffffff] w-full absolute bottom-[-20px]"}`}
+                  className={`${"border-b-[2px] border-[#ffffff] w-full absolute bottom-[-20px]"}`}
                 ></p>
               )}
             </Link>
