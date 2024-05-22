@@ -168,18 +168,18 @@ const NurseDrawer = () => {
       {" "}
       <Drawer direction="right">
         <DrawerTrigger className="font-semibold">
-          <div className="w-[180px] justify-center rounded-sm cursor-pointer  border-[1px] p-2 border-[#D0D5DD] flex">
+          <div className="w-[195px] h-[52px] justify-center rounded-[5px] cursor-pointer  border-[1.76px] p-2 border-[#D0D5DD] flex items-center text-[18px] font-bold gap-[4px]">
             <Image
               src="/icons/plus-icon.svg"
               alt="add"
-              width={15}
-              height={15}
+              width={18.95}
+              height={18.95}
             />
             Nurse's Note
           </div>
         </DrawerTrigger>
         <DrawerContent className="top-0 right-0 left-auto mt-0 w-[500px] rounded-none">
-          <DrawerHeader className="bg-[#007C85]">
+          <DrawerHeader className="bg-[#007C85] h-[70px]">
             <DrawerTitle className="text-white w-full flex justify-between items-center">
               <p className="ml-1">Nurse's Notes</p>
               <p>

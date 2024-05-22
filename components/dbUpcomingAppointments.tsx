@@ -140,7 +140,7 @@ const DBUpcomingAppointments = () => {
 
   console.log(upcomingAppointments, "upcomingAppointments");
   return (
-    <div className="w-full h-[350px]">
+    <div className="w-full h-[360px]">
       {upcomingAppointments.length > 0 ? (
         <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white flex flex-col justify-between h-full">
           <div>
