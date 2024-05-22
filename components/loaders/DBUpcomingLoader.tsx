@@ -2,7 +2,7 @@ import React from "react";
 
 const DBUpcomingLoader = () => {
   return (
-    <div className="flex flex-col items-start border-[1px] border-[#E4E4E7] py-[9px] px-5 gap-5 w-full">
+    <div className="flex flex-col items-start border-[1px] border-[#E4E4E7] py-3 px-5 gap-5 w-full h-[350px]">
       <div className="h-[30px] w-[250px] rounded-full mr-2 p-title">
         Upcoming Appointments
       </div>
