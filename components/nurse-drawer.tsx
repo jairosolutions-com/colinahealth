@@ -37,23 +37,19 @@ import { createNotesOfPatient } from "@/app/api/notes-api/notes-api";
 import { toast } from "./ui/use-toast";
 import { ToastAction } from "./ui/toast";
 import { selectPatient } from "@/app/api/patients-api/patientSelect.api";
-import { SuccessModal } from "./shared/success";
 
-const NurseDrawer = () => {
+const NurseDrawer = ({ setIsSuccessOpen }: any) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [patientId, setPatientId] = React.useState("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState("");
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
-  const [isError, setIsError] = useState(false);
   const [patientList, setPatientList] = useState([
     {
       uuid: "",
       lastName: "",
       firstName: "",
-      values: "",
     },
   ]);
 
@@ -77,10 +73,21 @@ const NurseDrawer = () => {
       [name]: value,
     }));
   };
+
+  const handleOnClose = () => {
+    setFormData({
+      subject: "",
+      notes: "",
+      type: "nn",
+    });
+    setPatientId("");
+    setError("")
+  }
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     console.log("sub");
-    setIsSubmitted(true);
+
     try {
       const notes = await createNotesOfPatient(patientId, formData, router);
       if (notes) {
@@ -93,8 +100,7 @@ const NurseDrawer = () => {
         notes: "",
         type: "nn",
       });
-
-      onSuccess();
+      setOpen(false);
       setPatientId("");
     } catch (error: any) {
       console.log(error, "errrorr1");
@@ -158,16 +164,11 @@ const NurseDrawer = () => {
     }
   }, [isSuccess]);
 
-  const onSuccess = () => {
-    setIsSuccessOpen(true);
-    setOpen(false);
-  };
-
   return (
     <>
       {" "}
       <Drawer direction="right">
-        <DrawerTrigger className="font-semibold">
+      <DrawerTrigger className="font-semibold">
           <div className="w-[195px] h-[52px] justify-center rounded-[5px] cursor-pointer  border-[1.76px] p-2 border-[#D0D5DD] flex items-center text-[18px] font-bold gap-[4px]">
             <Image
               src="/icons/plus-icon.svg"
@@ -179,12 +180,12 @@ const NurseDrawer = () => {
           </div>
         </DrawerTrigger>
         <DrawerContent className="top-0 right-0 left-auto mt-0 w-[500px] rounded-none">
-          <DrawerHeader className="bg-[#007C85] h-[70px]">
+          <DrawerHeader className="bg-[#007C85]">
             <DrawerTitle className="text-white w-full flex justify-between items-center">
               <p className="ml-1">Nurse's Notes</p>
               <p>
                 <DrawerClose>
-                  <X />
+                  <X onClick={handleOnClose}/>
                 </DrawerClose>
               </p>
             </DrawerTitle>
@@ -204,7 +205,9 @@ const NurseDrawer = () => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={open}
-                      className="w-full justify-between mb-5 h-12 rounded-md shadow-sm"
+                      className={`${
+                        error && "text-red-500 border-red-500"
+                      } w-full justify-between mb-5 h-12 rounded-md shadow-sm`}
                     >
                       {patientId
                         ? patientList.find(
@@ -224,7 +227,7 @@ const NurseDrawer = () => {
                             )?.lastName
                         : "Select patient..."}
                       <Image
-                        src="/icons/arrow-down-gray.svg"
+                        src={error? "/icons/arrow-down-red.svg":"/icons/arrow-down-gray.svg"}
                         width={15}
                         height={15}
                         alt="arrow-down"
@@ -244,7 +247,7 @@ const NurseDrawer = () => {
                       <CommandInput placeholder="Search patient..." />
                       <CommandEmpty>No patient found.</CommandEmpty>
                       <CommandGroup>
-                        <CommandList className=" z-[9999] ">    
+                        <CommandList className=" z-[9999] ">
                           {patientList.map((patient) => (
                             <CommandItem
                               key={patient.uuid}
@@ -271,11 +274,6 @@ const NurseDrawer = () => {
                     </Command>
                   </PopoverContent>
                 </Popover>
-                {error && (
-                  <p className="-mt-3 text-red-500 text-sm  mb-1">
-                    Select a patient!
-                  </p>
-                )}
               </div>
               <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2 px-[20px]">
                 <div className="flex flex-col gap-1">
@@ -328,41 +326,32 @@ const NurseDrawer = () => {
               </div>
             </div>
 
-            <DrawerFooter className="flex flex-row justify-end gap-3 mb-2">
+            <DrawerFooter className="flex flex-row justify-end gap-1 mb-2">
               <DrawerClose>
-                <button
+                <Button
                   type="button"
                   disabled={isSubmitted}
+                  variant="outline"
+                  onClick={handleOnClose}
                   className={` cancel-button
-                  ${isSubmitted ? " cursor-not-allowed" : "cursor-pointer"}
-                  w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  rounded-sm`}
+                  ${isSubmitted && " cursor-not-allowed"}
+                  w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm`}
                 >
                   Cancel
-                </button>
+                </Button>
               </DrawerClose>
-              <button
+              <Button
                 disabled={isSubmitted}
                 type="submit"
                 className={`
-                ${isSubmitted ? " cursor-not-allowed" : "cursor-pointer"}
+                ${isSubmitted && " cursor-not-allowed"}
                        w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
               >
                 Submit
-              </button>
+              </Button>
             </DrawerFooter>
           </form>
         </DrawerContent>
-        {isSuccessOpen && (
-          <DrawerClose>
-            <SuccessModal
-              label="Success"
-              isAlertOpen={isSuccessOpen}
-              toggleModal={setIsSuccessOpen}
-              isUpdated={""}
-              setIsUpdated={""}
-            />
-          </DrawerClose>
-        )}
       </Drawer>
     </>
   );
