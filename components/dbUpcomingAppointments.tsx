@@ -142,7 +142,8 @@ const DBUpcomingAppointments = () => {
   return (
     <div className="w-full h-[350px]">
       {upcomingAppointments.length > 0 ? (
-        <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white">
+        <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white flex flex-col justify-between h-full">
+          <div>
           <div className="">
             <p className="p-title ">
               Upcoming Appointment
@@ -246,11 +247,7 @@ const DBUpcomingAppointments = () => {
               </div>
             ))}
           </div>
-          {/* ) // : ( //{" "}
-          <div className="flex items-center text-center justify-center font-normal text-[15px] w-full h-full -mt-10">
-            // No Due Medication/s // <br />
-            //{" "}
-          </div> */}
+          </div>
           <div
             onClick={() => {
               setIsLoading(true);
@@ -258,7 +255,7 @@ const DBUpcomingAppointments = () => {
             }}
             className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] mt-3"
           >
-            SEE ALL UPCOMING
+            SEE ALL UPCOMING APPOINTMENTS
             <svg
               className="text-[#71717A] ml-2 group-hover:text-[#007C85]"
               width="17"
