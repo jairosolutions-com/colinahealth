@@ -223,6 +223,12 @@ const DueMedication = () => {
                     setTerm(e.target.value);
                     setCurrentPage(1);
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      // Add your search logic here
+                    }
+                  }}
                 />
                 <Image
                   src="/svgs/search.svg"

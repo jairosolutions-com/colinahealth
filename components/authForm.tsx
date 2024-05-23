@@ -188,7 +188,7 @@ const AuthForm = () => {
                     : " z-11"
                 }`}
               >
-                <div className="md:w-[542.27px] w-full text-left">
+                <div className="md:w-[642.27px] w-full text-left">
                   <Image
                     src="/imgs/colina-logo.png"
                     alt="logo"
