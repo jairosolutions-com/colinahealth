@@ -180,7 +180,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
           </div>
         </DrawerTrigger>
         <DrawerContent className="top-0 right-0 left-auto mt-0 w-[500px] rounded-none">
-          <DrawerHeader className="bg-[#007C85] h-[71px]">
+          <DrawerHeader className="bg-[#007C85] h-[71px] just for sync testing">
             <DrawerTitle className="text-white w-full flex justify-between items-center">
               <p className="ml-1">Nurse's Notes</p>
               <p>
