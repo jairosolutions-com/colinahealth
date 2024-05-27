@@ -335,7 +335,7 @@ export const Navbar = ({
                     {tabsUrls.map((tab, index) => (
                       <div key={index} className="flex flex-col gap-[8px]">
                         <p
-                          className="bg-[#007C85] p-[10px] text-white font-bold flex justify-between items-center"
+                          className="bg-[#007C85] p-[10px] text-white font-bold flex justify-between items-center mr-2"
                           key={index}
                         >
                           <span>{tab.label}</span>
@@ -348,7 +348,7 @@ export const Navbar = ({
                                 {tab.subTab.map((sub, subIndex) => (
                                   <div key={subIndex}>
                                     <div
-                                      className="bg-[#007C85] p-[10px] text-white font-bold flex justify-between items-center"
+                                      className="bg-[#007C85] p-[10px] text-white font-bold flex justify-between items-center mr-2"
                                       key={index}
                                     >
                                       <div className="flex gap-[10px]">
