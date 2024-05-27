@@ -253,7 +253,7 @@ const DBUpcomingAppointments = () => {
               setIsLoading(true);
               router.push("/appointments");
             }}
-            className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] opacity-50 text-[#151518] mt-2"
+            className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] opacity-50 hover:opacity-100 text-[#151518] mt-2"
           >
             SEE ALL UPCOMING APPOINTMENTS
             <svg

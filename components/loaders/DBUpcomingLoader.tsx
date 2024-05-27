@@ -50,7 +50,7 @@ const DBUpcomingLoader = () => {
           </div>
         </div>
       </div>
-      <div className="flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] opacity-50 text-[#151518] ">
+      <div className="flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] opacity-50 hover:opacity-100 text-[#151518] ">
         SEE ALL UPCOMING APPOINTMENTS
         <svg
           className="text-[#71717A] ml-2 group-hover:text-[#007C85]"
