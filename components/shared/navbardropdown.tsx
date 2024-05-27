@@ -38,7 +38,7 @@ const NavBarDropdown = forwardRef<HTMLDivElement, NavBarDropdownProps>(
         ref={ref}
         className={`${
           dropDownOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        } transition ease-in duration-300 flex flex-col dropdowncss shadow-lg select-none z-[9999] 
+        } transition ease-in duration-300 flex flex-col dropdowncss shadow-lg select-none z-[9999] justify-end w-full 
     `}
       >
         <ul className="flex flex-col z-50 truncate">

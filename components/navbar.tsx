@@ -252,14 +252,14 @@ export const Navbar = ({
   };
 
   return (
-    <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[145px] z-10 font-medium text-[15px]">
+    <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[154px] z-10 font-medium text-[15px]">
       <Link href="/dashboard" shallow>
         <Image
-          src={"/imgs/colina-logo.png"}
+          src={"/icons/colinahealth-logo.png"}
           alt={""}
-          width={211}
+          width={213}
           height={50}
-          className="cursor-pointer  w-[211px]"
+          className="cursor-pointer w-[213px] h-[26px]"
           onClick={(event) => {
             if (pathname === "/dashboard") {
               event.preventDefault();
@@ -269,8 +269,8 @@ export const Navbar = ({
           }}
         />
       </Link>
-      <div className="flex gap-[30px] items-center">
-        <div className="flex gap-[40px] items-end">
+      <div className="flex gap-[30px] items-center ">
+        <div className="flex gap-[30px] items-end">
           {routes.map((route, index) => (
             <Link
               key={index}
@@ -460,7 +460,7 @@ export const Navbar = ({
             </>
           )}
         </div>
-        <div className="flex gap-3 items-center mr-2">
+        <div className="flex gap-3 items-center  justify-end">
           <Image
             src={"/imgs/drake.png"}
             alt={""}
@@ -470,7 +470,7 @@ export const Navbar = ({
           />
           <Image
             ref={iconRef}
-            className={`cursor-pointer select-none ${
+            className={`cursor-pointer select-none flex justify-end w-full ${
               dropdownOpen ? "rotate-180" : ""
             } duration-300 w-auto h-auto`}
             onClick={() => {
