@@ -142,7 +142,7 @@ const DBUpcomingAppointments = () => {
   return (
     <div className="w-full h-[360px]">
       {upcomingAppointments.length > 0 ? (
-        <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white flex flex-col justify-between h-full">
+        <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white flex flex-col justify-between h-full rounded-[5px]">
           <div>
           <div className="">
             <p className="p-title ">
@@ -158,7 +158,7 @@ const DBUpcomingAppointments = () => {
             {upcomingAppointments.map((upcomingAppointment, index) => (
               <div
                 key={index}
-                className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-slate-100 cursor-pointer justify-between"
+                className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-slate-100 cursor-pointer justify-between gap-[13px]"
               >
                 <div className="flex items-center gap-[10px]">
                   {patientAppointmentImages.some(
@@ -226,7 +226,7 @@ const DBUpcomingAppointments = () => {
                               {upcomingAppointment.patient_middleName}
                               {upcomingAppointment.patient_lastName} */}
                       </p>
-                      <p className="text-[#E4B90E] font-normal text-[15px]">
+                      <p className="f-pending font-normal text-[15px]">
                         Pending
                       </p>
                     </div>
@@ -253,7 +253,7 @@ const DBUpcomingAppointments = () => {
               setIsLoading(true);
               router.push("/appointments");
             }}
-            className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] mt-2"
+            className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] opacity-50 text-[#151518] mt-2"
           >
             SEE ALL UPCOMING APPOINTMENTS
             <svg
