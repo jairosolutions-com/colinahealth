@@ -14,6 +14,7 @@ interface UserDetail {
   fName?: string;
   lName?: string;
   uuid?: string;
+  email?: string;
 }
 const NavBarDropdown = forwardRef<HTMLDivElement, NavBarDropdownProps>(
   (props, ref) => {
@@ -40,12 +41,12 @@ const NavBarDropdown = forwardRef<HTMLDivElement, NavBarDropdownProps>(
         } transition ease-in duration-300 flex flex-col dropdowncss shadow-lg select-none z-[9999] 
     `}
       >
-        <ul className="flex flex-col z-50">
-          <li className="flex">
+        <ul className="flex flex-col z-50 truncate">
+          <li className="flex  ">
             <div className="flex flex-col">
               <h1 className="pl-3 font-bold ">ADMIN</h1>
               <div className="pl-3">
-                {userDetail.fName} {userDetail.lName}
+                <p className="text-ellipsis">{userDetail.email}</p>
               </div>
             </div>
           </li>
