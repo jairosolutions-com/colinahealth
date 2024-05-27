@@ -37,14 +37,16 @@ import { createNotesOfPatient } from "@/app/api/notes-api/notes-api";
 import { toast } from "./ui/use-toast";
 import { ToastAction } from "./ui/toast";
 import { selectPatient } from "@/app/api/patients-api/patientSelect.api";
+import { SuccessModal } from "./shared/success";
 
-const NurseDrawer = ({ setIsSuccessOpen }: any) => {
+const NurseDrawer = () => {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [patientId, setPatientId] = React.useState("");
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(true);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState("");
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [patientList, setPatientList] = useState([
     {
       uuid: "",
@@ -87,7 +89,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     console.log("sub");
-
+    setIsSubmitted(true);
     try {
       const notes = await createNotesOfPatient(patientId, formData, router);
       if (notes) {
@@ -100,6 +102,7 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
         notes: "",
         type: "nn",
       });
+      onSuccess();
       setOpen(false);
       setPatientId("");
     } catch (error: any) {
@@ -163,6 +166,11 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
       setIsSuccess(false);
     }
   }, [isSuccess]);
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+    setOpen(false);
+  };
 
   return (
     <>
@@ -328,19 +336,18 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
 
             <DrawerFooter className="flex flex-row justify-end gap-1 mb-2">
               <DrawerClose>
-                <Button
+                <button
                   type="button"
                   disabled={isSubmitted}
-                  variant="outline"
                   onClick={handleOnClose}
                   className={` cancel-button
                   ${isSubmitted && " cursor-not-allowed"}
                   w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm`}
                 >
                   Cancel
-                </Button>
+                </button>
               </DrawerClose>
-              <Button
+              <button
                 disabled={isSubmitted}
                 type="submit"
                 className={`
@@ -348,10 +355,21 @@ const NurseDrawer = ({ setIsSuccessOpen }: any) => {
                        w-[150px] h-[45px] px-3 py-2 bg-[#007C85] hover:bg-[#03595B]  text-[#ffff] font-medium  rounded-sm`}
               >
                 Submit
-              </Button>
+              </button>
             </DrawerFooter>
           </form>
         </DrawerContent>
+        {isSuccessOpen && (
+          <DrawerClose>
+            <SuccessModal
+              label="Success"
+              isAlertOpen={isSuccessOpen}
+              toggleModal={setIsSuccessOpen}
+              isUpdated={""}
+              setIsUpdated={""}
+            />
+          </DrawerClose>
+        )}
       </Drawer>
     </>
   );
