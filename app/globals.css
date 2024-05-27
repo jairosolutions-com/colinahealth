@@ -79,7 +79,7 @@ html,
 body,
 :root {
   height: 100%;
-  /* color: white; */
+  color:#28282B;
 }
 
 .App {
@@ -247,7 +247,6 @@ body,
 .p-title {
   font-weight: 600;
   font-size: 20px;
-  color: black;
 }
 
 .slash {
@@ -414,4 +413,9 @@ table {
   100% {
     width: 0;
   }
+}
+
+
+.f-pending {
+  color: #EEC80E;
 }

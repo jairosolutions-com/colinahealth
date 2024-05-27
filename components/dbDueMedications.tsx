@@ -154,9 +154,9 @@ const DBDueMedication = () => {
   return (
     <div className="w-full h-[360px]">
       {dueMedicationList.length > 0 ? (
-        <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white flex flex-col justify-between h-full">
+        <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white flex flex-col justify-between h-full rounded-[5px]">
           <div className="h-full">
-          <div className="">
+          <div className="flex flex-col ">
             <p className="p-title ">
               Due Medication
               <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
@@ -170,7 +170,7 @@ const DBDueMedication = () => {
             {dueMedicationList.map((dueMedication, index) => (
               <div
                 key={index}
-                className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-slate-100 cursor-pointer justify-between"
+                className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-slate-100 cursor-pointer justify-between gap-[13px]"
               >
                 <div className="flex w-3/4">
                   <div className="flex mr-3 items-center ">
@@ -265,7 +265,7 @@ const DBDueMedication = () => {
               setIsLoading(true);
               router.push("/due-medications");
             }}
-            className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] mt-2"
+              className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] opacity-50 text-[#151518] mt-2"
           >
             SEE ALL DUE
             <svg
