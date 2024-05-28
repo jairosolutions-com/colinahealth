@@ -63,12 +63,12 @@ export const Navbar = ({
       url: "/due-medications",
     },
     {
-      label: "Patients List",
-      url: "/patient-list",
-    },
-    {
       label: "Appointments",
       url: "/appointments",
+    },
+    {
+      label: "Patients List",
+      url: "/patient-list",
     },
     {
       label: "Chart",
