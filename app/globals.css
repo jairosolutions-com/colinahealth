@@ -79,7 +79,7 @@ html,
 body,
 :root {
   height: 100%;
-  color:#28282B;
+  color:#020817;
 }
 
 .App {
@@ -221,15 +221,16 @@ body,
 
 .btn-pagination {
   border: 0.9px;
+  border-color:#007c85;
   background: #007c85;
   color: #ffffff;
   width: 48px;
-  height: 25px;
+  height: 30px;
 }
 
 .ipt-pagination {
   width: 48px;
-  height: 25px;
+  height: 30px;
 }
 
 .btn-edit {
@@ -418,4 +419,10 @@ table {
 
 .f-pending {
   color: #EEC80E;
+}
+
+.sub-title {
+  color: #64748B;
+  size: 15px;
+  font-weight: 400;
 }

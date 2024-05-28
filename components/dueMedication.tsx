@@ -21,7 +21,6 @@ import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.a
 import ResuableTooltip from "@/components/reusable/tooltip";
 import DueMedicationLoader from "./loaders/dueMedicationLoader";
 
-
 const DueMedication = () => {
   const router = useRouter();
   const { toast } = useToast();
@@ -196,7 +195,7 @@ const DueMedication = () => {
           <div className="flex flex-col mb-3">
             <p className="p-title">Due Medication</p>
             {/* number of patiens */}
-            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
+            <p className="sub-title ">
               Total of {totalDueMedication == 0 ? "0" : totalDueMedication} Due
               Medication{totalDueMedication > 1 ? "s" : ""}
             </p>
@@ -211,9 +210,9 @@ const DueMedication = () => {
             <form className="mr-5 relative">
               {/* search bar */}
               <label className=""></label>
-              <div className="flex">
+              <div className="flex flex-col">
                 <input
-                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat "
+                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] sub-title rounded pl-10 relative bg-[#fff] bg-no-repeat "
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -222,7 +221,7 @@ const DueMedication = () => {
                     setCurrentPage(1);
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
+                    if (e.key === "Enter") {
                       e.preventDefault();
                       // Add your search logic here
                     }
@@ -231,9 +230,9 @@ const DueMedication = () => {
                 <Image
                   src="/svgs/search.svg"
                   alt="Search"
-                  width="20"
-                  height="20"
-                  className="absolute left-8 top-9 pointer-events-none"
+                  width={18.75}
+                  height={18.75}
+                  className=" w-[18.75px] h-[18.75px] pointer-events-none absolute top-9 left-8"
                 />
               </div>
             </form>
@@ -266,21 +265,21 @@ const DueMedication = () => {
                 }))}
                 open={isOpenSortedBy}
                 width={"165px"}
-                label={"Select"}
+                label={"Choose  "}
               />
             </div>
           </div>
 
           {/* START OF TABLE */}
           <div>
-            <table className="w-full h-full justify-center items-start text-[15px]">
+            <table className="w-full h-full justify-center items-start">
               <thead className=" text-left rtl:text-right">
-                <tr className="uppercase font-semibold text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
+                <tr className="uppercase !font-semibold sub-title border-b border-[#E7EAEE] h-[70px] text-[15px]">
                   <td className="px-6 py-5 ">Name</td>
-                  <td className="px-6 py-5 ">DUE MED UID</td>
-                  <td className="px-6 py-5 ">Date</td>
-                  <td className="px-6 py-5 ">Time</td>
+                  <td className="px-6 py-5 w-[300px]">DUE MED UID</td>
                   <td className="px-6 py-5">Medication</td>
+                  <td className="px-6 py-5 w-[200px]">Date</td>
+                  <td className="px-6 py-5 w-[200px]">Time</td>
                 </tr>
               </thead>
               <tbody>
@@ -296,7 +295,7 @@ const DueMedication = () => {
                 {dueMedicationList.map((dueMedication, index) => (
                   <tr
                     key={index}
-                    className=" group  bg-white hover:bg-gray-100  border-b"
+                    className=" group  bg-white hover:bg-gray-100  border-b text-[15px]"
                   >
                     <td className="px-6 py-5 flex items-center gap-2">
                       {patientImages.some(
@@ -314,14 +313,14 @@ const DueMedication = () => {
                                   {image.data ? (
                                     // Render the image if data is not empty
                                     <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
-                                    <Image
-                                      className="rounded-full object-cover w-12 h-12"
-                                      src={image.data} // Use the base64-encoded image data directly
-                                      alt=""
-                                      width={45}
-                                      height={45}
-                                    />
-                                  </div>
+                                      <Image
+                                        className="rounded-full object-cover min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                        src={image.data} // Use the base64-encoded image data directly
+                                        alt=""
+                                        width={45}
+                                        height={45}
+                                      />
+                                    </div>
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
                                     <Image
@@ -338,8 +337,9 @@ const DueMedication = () => {
                             return null;
                           })}
                         </div>
-                      ) : // Render a placeholder image if no matching image found
-                 ( // Only render stock image when images are loaded
+                      ) : (
+                        // Render a placeholder image if no matching image found
+                        // Only render stock image when images are loaded
                         <div>
                           <Image
                             className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
@@ -349,30 +349,29 @@ const DueMedication = () => {
                             height={45}
                           />
                         </div>
-
                       )}
-                      <span className="overflow-hidden">
+                      <span className="overflow-hidden ">
                         <ResuableTooltip
                           text={`${dueMedication.patient_firstName} ${""}
                         ${dueMedication.patient_lastName}`}
                         />
                       </span>
                     </td>
-                    <td className="px-6 py-5 ">
+                    <td className="px-6 py-5 w-[300px]">
                       <ResuableTooltip
                         text={dueMedication.medicationlogs_uuid}
                       />
                     </td>
-                    <td className="px-6 py-5 ">
+                      <td className="px-6 py-5 ">
+                        <ResuableTooltip
+                          text={dueMedication.medicationlogs_medicationLogsName}
+                        />
+                      </td>
+                    <td className="px-6 py-5 w-[200px]">
                       {dueMedication.medicationlogs_medicationLogsDate}
                     </td>
-                    <td className="px-6 py-5 ">
+                    <td className="px-6 py-5 w-[200px]">
                       {dueMedication.medicationlogs_medicationLogsTime}
-                    </td>
-                    <td className="px-6 py-5">
-                      <ResuableTooltip
-                        text={dueMedication.medicationlogs_medicationLogsName}
-                      />
                     </td>
                   </tr>
                 ))}
