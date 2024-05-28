@@ -27,7 +27,6 @@ const DueMedication = () => {
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-  const [sortBy, setSortBy] = useState("firstName");
   const [dueMedSortBy, setDueMedSortBy] = useState(
     "medicationlogs.medicationLogsTime"
   );
@@ -80,7 +79,6 @@ const DueMedication = () => {
     } else if (option == "Medication") {
       setDueMedSortBy("medicationlogs.medicationLogsName");
     }
-    console.log(sortBy, "ooption");
   };
 
   const optionsOrderedBy = [
@@ -158,7 +156,7 @@ const DueMedication = () => {
       }
     };
     fetchData();
-  }, [currentPage, term, sortBy, sortOrder]);
+  }, [currentPage, term, dueMedSortBy, sortOrder]);
 
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
