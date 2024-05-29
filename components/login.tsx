@@ -23,9 +23,7 @@ import { generateOTPCode } from "@/app/api/forgot-pass-api/otp-code";
 
 export const Login = () => {
   const router = useRouter();
-  if (getAccessToken()) {
-    router.push("/dashboard");
-  }
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
@@ -53,6 +51,10 @@ export const Login = () => {
   }, []);
 
   const rememberMeToken = getRememberToken();
+
+  if (getAccessToken()) {
+    router.push("/dashboard");
+  }
 
   const handleEmailFocus = () => {
     setIsEmailFocused(true);
