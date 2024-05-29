@@ -89,7 +89,7 @@ const DueMedication = () => {
     { label: "Due Med UID", onClick: handleSortOptionClick },
     { label: "Date", onClick: handleSortOptionClick },
     { label: "Time", onClick: handleSortOptionClick },
-    { label: "Medicaiton", onClick: handleSortOptionClick },
+    { label: "Medication", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
   const isModalOpen = (isOpen: boolean) => {
