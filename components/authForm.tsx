@@ -162,7 +162,7 @@ const AuthForm = () => {
               height={1081}
               priority={true}
             />
-            <div className=" hidden md:flex  absolute lg:px-32 md:px-16  flex-col gap-5 ">
+            <div className=" hidden md:flex  absolute lg:px-32 md:px-16  flex-col gap-5 w-1/2">
               <Image
                 src="/imgs/colina-logo.png"
                 alt="logo"
