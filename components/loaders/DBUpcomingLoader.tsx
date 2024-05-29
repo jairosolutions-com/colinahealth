@@ -2,11 +2,11 @@ import React from "react";
 
 const DBUpcomingLoader = () => {
   return (
-    <div className="flex flex-col items-start border-[1px] border-[#E4E4E7] py-3 px-5 gap-5 w-full">
+    <div className="flex flex-col items-start border-[1px] border-[#E4E4E7] py-3 px-5 gap-5 w-full h-[360px] rounded-[5px]">
       <div className="h-[30px] w-[250px] rounded-full mr-2 p-title">
         Upcoming Appointments
       </div>
-      <div className=" w-full font-normal text-[15px] text-[#71717A] -mt-2 ">
+      <div className=" w-full font-normal sub-title text-[15px] -mt-2 ">
         Total of 0 upcoming appointment
       </div>
       <div className="animate-pulse w-full h-full gap-[23px] flex flex-col">
@@ -50,7 +50,7 @@ const DBUpcomingLoader = () => {
           </div>
         </div>
       </div>
-      <div className="flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] ">
+      <div className="flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] opacity-50 hover:opacity-100 text-[#151518] ">
         SEE ALL UPCOMING APPOINTMENTS
         <svg
           className="text-[#71717A] ml-2 group-hover:text-[#007C85]"

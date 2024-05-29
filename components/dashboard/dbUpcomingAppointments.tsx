@@ -1,13 +1,13 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../ui/use-toast";
 import { fetchUpcomingAppointments } from "@/app/api/appointments-api/upcoming-appointments-api";
 import { ToastAction } from "@radix-ui/react-toast";
 import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 import Image from "next/image";
-import ResuableTooltip from "./reusable/tooltip";
-import DBUpcomingLoader from "./loaders/DBUpcomingLoader";
+import ResuableTooltip from "../reusable/tooltip";
+import DBUpcomingLoader from "../loaders/DBUpcomingLoader";
 const DBUpcomingAppointments = () => {
   const router = useRouter();
   const { toast } = useToast();
@@ -140,125 +140,123 @@ const DBUpcomingAppointments = () => {
 
   console.log(upcomingAppointments, "upcomingAppointments");
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-[360px]">
       {upcomingAppointments.length > 0 ? (
-        <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white">
-          <div className="">
-            <p className="p-title ">
-              Upcoming Appointment
-              <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
-            </p>
-            <p className="font-normal text-[15px] text-[#71717A] pt-3 mb-3">
-              Total of {totalUpcoming} upcoming appointment
-              <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
-            </p>
-          </div>
+        <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white flex flex-col justify-between h-full rounded-[5px]">
           <div>
-            {upcomingAppointments.map((upcomingAppointment, index) => (
-              <div
-                key={index}
-                className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-slate-100 cursor-pointer justify-between"
-              >
-                <div className="flex items-center gap-[10px]">
-                  {patientAppointmentImages.some(
-                    (image) =>
-                      image.patientUuid === upcomingAppointment.patient_uuid
-                  ) ? (
-                    // Render the matched image
-                    <div>
-                      {patientAppointmentImages.map((image, imgIndex) => {
-                        if (
-                          image.patientUuid === upcomingAppointment.patient_uuid
-                        ) {
-                          return (
-                            <div key={imgIndex}>
-                              {image.data ? (
-                                // Render the image if data is not empty
-                                <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
+            <div className="">
+              <p className="p-title ">
+                Upcoming Appointment
+                <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
+              </p>
+              <p className="font-normal sub-title text-[15px] pt-3 mb-3">
+                Total of {totalUpcoming} upcoming appointment
+                <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
+              </p>
+            </div>
+            <div>
+              {upcomingAppointments.map((upcomingAppointment, index) => (
+                <div
+                  key={index}
+                  className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-slate-100 cursor-pointer justify-between gap-[13px]"
+                >
+                  <div className="flex items-center gap-[10px]">
+                    {patientAppointmentImages.some(
+                      (image) =>
+                        image.patientUuid === upcomingAppointment.patient_uuid
+                    ) ? (
+                      // Render the matched image
+                      <div>
+                        {patientAppointmentImages.map((image, imgIndex) => {
+                          if (
+                            image.patientUuid ===
+                            upcomingAppointment.patient_uuid
+                          ) {
+                            return (
+                              <div key={imgIndex}>
+                                {image.data ? (
+                                  // Render the image if data is not empty
+                                  <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
+                                    <Image
+                                      className="rounded-full object-cover w-12 h-12"
+                                      src={image.data} // Use the base64-encoded image data directly
+                                      alt=""
+                                      width={45}
+                                      height={45}
+                                    />
+                                  </div>
+                                ) : (
+                                  // Render the stock image (.svg) if data is empty
                                   <Image
-                                    className="rounded-full object-cover w-12 h-12"
-                                    src={image.data} // Use the base64-encoded image data directly
+                                    className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                    src="/imgs/user-no-icon.svg"
                                     alt=""
                                     width={45}
                                     height={45}
                                   />
-                                </div>
-                              ) : (
-                                // Render the stock image (.svg) if data is empty
-                                <Image
-                                  className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
-                                  src="/imgs/user-no-icon.svg"
-                                  alt=""
-                                  width={45}
-                                  height={45}
-                                />
-                              )}
-                            </div>
-                          );
-                        }
-                        return null;
-                      })}
-                    </div>
-                  ) : (
-                    // Render a placeholder image if no matching image found
-                    <div>
-                      <Image
-                        className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
-                        src="/imgs/loading.gif" // Show loading gif while fetching images
-                        alt="Loading"
-                        width={45}
-                        height={45}
-                      />
-                    </div>
-                  )}
-                  <div className="flex ">
-                    <div className="flex flex-col justify-center gap-1">
-                      <p className="font-bold text-[15px] w-[300px]">
-                        <ResuableTooltip
-                          text={`${
-                            upcomingAppointment.patient_firstName
-                          }${" "}${
-                            upcomingAppointment.patient_middleName
-                          }${" "}${upcomingAppointment.patient_lastName}`}
+                                )}
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    ) : (
+                      // Render a placeholder image if no matching image found
+                      <div>
+                        <Image
+                          className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                          src="/imgs/loading.gif" // Show loading gif while fetching images
+                          alt="Loading"
+                          width={45}
+                          height={45}
                         />
-                        {/* {upcomingAppointment.patient_firstName}
+                      </div>
+                    )}
+                    <div className="flex ">
+                      <div className="flex flex-col justify-center gap-1">
+                        <p className="font-bold text-[15px] w-[300px]">
+                          <ResuableTooltip
+                            text={`${
+                              upcomingAppointment.patient_firstName
+                            }${" "}${
+                              upcomingAppointment.patient_middleName
+                            }${" "}${upcomingAppointment.patient_lastName}`}
+                          />
+                          {/* {upcomingAppointment.patient_firstName}
                               {upcomingAppointment.patient_middleName}
                               {upcomingAppointment.patient_lastName} */}
-                      </p>
-                      <p className="text-[#E4B90E] font-normal text-[15px]">
-                        Pending
-                      </p>
+                        </p>
+                        <p className="f-pending font-normal text-[15px]">
+                          Pending
+                        </p>
+                      </div>
                     </div>
                   </div>
+                  <div className=" flex flex-col justify-center items-end text-end gap-1">
+                    <p className="font-semibold text-[15px] flex">
+                      {formatDate(
+                        upcomingAppointment.appointments_appointmentDate
+                      )}
+                    </p>
+                    <p className=" font-medium sub-title ml-4">
+                      {formatTime(
+                        upcomingAppointment.appointments_appointmentTime
+                      )}
+                    </p>
+                  </div>
                 </div>
-                <div className=" flex flex-col justify-center items-end text-end gap-1">
-                  <p className="font-semibold text-[15px] flex">
-                    {formatDate(
-                      upcomingAppointment.appointments_appointmentDate
-                    )}
-                  </p>
-                  <p className="text-[#71717A] font-medium text-[15px] ml-4">
-                    {formatTime(
-                      upcomingAppointment.appointments_appointmentTime
-                    )}
-                  </p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-          {/* ) // : ( //{" "}
-          <div className="flex items-center text-center justify-center font-normal text-[15px] w-full h-full -mt-10">
-            // No Due Medication/s // <br />
-            //{" "}
-          </div> */}
           <div
             onClick={() => {
               setIsLoading(true);
               router.push("/appointments");
             }}
-            className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] text-[#71717A] mt-3"
+            className="group flex w-fit cursor-pointer items-center hover:text-[#007C85] font-semibold text-[15px] opacity-50 hover:opacity-100 text-[#151518] mt-2"
           >
-            SEE ALL UPCOMING
+            SEE ALL UPCOMING APPOINTMENTS
             <svg
               className="text-[#71717A] ml-2 group-hover:text-[#007C85]"
               width="17"

@@ -57,7 +57,7 @@ const ForgotPass = ({
 
   return (
     <div
-      className={`flex flex-col fixed justify-center items-center  md:w-[825.24px] lg:w-[1091px] sm:w-full px-10 md:px-0  duration-500 transition h-full 
+      className={`flex flex-col fixed justify-center items-center  md:w-[825.24px] lg:w-[1091px] sm:w-full px-8 md:px-0  duration-500 transition h-full 
                 ${
                   isForgotPassword
                     ? " opacity-100 z-50"

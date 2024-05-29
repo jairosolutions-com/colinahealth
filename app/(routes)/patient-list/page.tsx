@@ -259,17 +259,6 @@ export default function PatientPage() {
   return (
     <div className="w-full  px-[150px] pt-[90px] flex flex-col justify-between h-full">
       <div className="w-full h-full">
-        {/* <div className="flex justify-end">
-          <p
-            onClick={() => {
-              setIsLoading(true);
-              router.replace("/dashboard");
-            }}
-            className="text-[#64748B] underline cursor-pointer text-[15px]"
-          >
-            Back to Dashboard
-          </p>
-        </div> */}
         <div className="flex justify-between items-center">
           <div className="flex flex-col mb-3">
             <p className="p-title">Patients List Records</p>
@@ -298,6 +287,12 @@ export default function PatientPage() {
                   onChange={(e) => {
                     setTerm(e.target.value);
                     setCurrentPage(1);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      // Add your search logic here
+                    }
                   }}
                 />
                 <Image

@@ -63,12 +63,12 @@ export const Navbar = ({
       url: "/due-medications",
     },
     {
-      label: "Patients List",
-      url: "/patient-list",
-    },
-    {
       label: "Appointments",
       url: "/appointments",
+    },
+    {
+      label: "Patients List",
+      url: "/patient-list",
     },
     {
       label: "Chart",
@@ -252,14 +252,14 @@ export const Navbar = ({
   };
 
   return (
-    <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[145px] z-10 font-medium text-[15px]">
+    <div className="fixed bg-[#007C85] w-full h-[70px] flex items-center justify-between px-[154px] z-10 font-medium text-[15px]">
       <Link href="/dashboard" shallow>
         <Image
-          src={"/imgs/colina-logo.png"}
+          src={"/icons/colinahealth-logo.png"}
           alt={""}
-          width={200}
-          height={37}
-          className="cursor-pointer"
+          width={213}
+          height={50}
+          className="cursor-pointer w-[213px] h-[26px]"
           onClick={(event) => {
             if (pathname === "/dashboard") {
               event.preventDefault();
@@ -269,13 +269,13 @@ export const Navbar = ({
           }}
         />
       </Link>
-      <div className="flex gap-[30px] items-center">
-        <div className="flex gap-[40px] items-end">
+      <div className="flex gap-[30px] items-center ">
+        <div className="flex gap-[30px] items-end">
           {routes.map((route, index) => (
             <Link
               key={index}
               href={route.url}
-              className={`cursor-pointer text-white relative `}
+              className={`cursor-pointer text-white relative font-medium`}
               onClick={() => {
                 setIsLoading(true);
                 if (pathname === route.url) {
@@ -286,7 +286,7 @@ export const Navbar = ({
               <p className="hover:text-gray-200">{route.label}</p>
               {pathname === route.url && !showGlobalSearch && (
                 <p
-                  className={`${"border-b-[3px] border-[#ffffff] w-full absolute bottom-[-20px]"}`}
+                  className={`${"border-b-[2px] border-[#ffffff] w-full absolute bottom-[-20px]"}`}
                 ></p>
               )}
             </Link>
@@ -335,7 +335,7 @@ export const Navbar = ({
                     {tabsUrls.map((tab, index) => (
                       <div key={index} className="flex flex-col gap-[8px]">
                         <p
-                          className="bg-[#007C85] p-[10px] text-white font-bold flex justify-between items-center"
+                          className="bg-[#007C85] p-[10px] text-white font-bold flex justify-between items-center mr-2"
                           key={index}
                         >
                           <span>{tab.label}</span>
@@ -348,7 +348,7 @@ export const Navbar = ({
                                 {tab.subTab.map((sub, subIndex) => (
                                   <div key={subIndex}>
                                     <div
-                                      className="bg-[#007C85] p-[10px] text-white font-bold flex justify-between items-center"
+                                      className="bg-[#007C85] p-[10px] text-white font-bold flex justify-between items-center mr-2"
                                       key={index}
                                     >
                                       <div className="flex gap-[10px]">
@@ -460,7 +460,7 @@ export const Navbar = ({
             </>
           )}
         </div>
-        <div className="flex gap-3 items-center mr-2">
+        <div className="flex gap-3 items-center  justify-end">
           <Image
             src={"/imgs/drake.png"}
             alt={""}
@@ -470,7 +470,7 @@ export const Navbar = ({
           />
           <Image
             ref={iconRef}
-            className={`cursor-pointer select-none ${
+            className={`cursor-pointer select-none flex justify-end w-full ${
               dropdownOpen ? "rotate-180" : ""
             } duration-300 w-auto h-auto`}
             onClick={() => {

@@ -150,10 +150,10 @@ const AuthForm = () => {
   //     );
   //   }
   return (
-    <div className="h-full">
+    <div className="h-full w-full">
       {isLoaded && (
         <div className="w-full h-full flex ">
-          <div className="flex bg-[#007C85] w-full items-center h-full justify-center md:z-10 -z-[100]">
+          <div className="flex bg-[#007C85] w-full lg:w-[44.4%] items-center h-full justify-center md:z-10 -z-[100]">
             <Image
               src="/imgs/login-bg.png"
               alt="login-image"
@@ -162,7 +162,7 @@ const AuthForm = () => {
               height={1081}
               priority={true}
             />
-            <div className=" hidden md:flex  absolute lg:px-32 px-10 flex-col gap-5 ">
+            <div className=" hidden md:flex  absolute lg:px-32 md:px-16  flex-col gap-5 ">
               <Image
                 src="/imgs/colina-logo.png"
                 alt="logo"
@@ -177,7 +177,7 @@ const AuthForm = () => {
               </p>
             </div>
           </div>
-          <div className="lg:w-[1091px] md:w-[825.24px] w-full h-full px-10 md:px-0 absolute md:relative flex flex-col justify-center items-center">
+          <div className=" md:w-7/12 w-full h-full px-8 lg:px-0 absolute md:relative flex flex-col justify-center items-center">
             <div className=" w-full h-full flex">
               {/* Sign In */}
               <div
@@ -188,7 +188,7 @@ const AuthForm = () => {
                     : " z-11"
                 }`}
               >
-                <div className="md:w-[542.27px] w-full text-left">
+                <div className="lg:w-[642.27px] md:w-[450px] w-full text-left">
                   <Image
                     src="/imgs/colina-logo.png"
                     alt="logo"

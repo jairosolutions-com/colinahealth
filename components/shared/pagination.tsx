@@ -27,7 +27,7 @@ const Pagination = ({
       pageNumbers.push(
         <button
           key={i}
-          className={`flex border border-px items-center justify-center h-full w-[49px] ring-1 ring-gray-300  ${
+          className={`flex  border-px items-center justify-center h-full w-[49px] border-[0.9px] border-[#E7EAEE99] ${
             currentPage === i ? "btn-pagination " : ""
           }`}
           onClick={() => setCurrentPage(i)}
@@ -91,12 +91,12 @@ const Pagination = ({
         <div>
           <nav>
             <div className="flex text-[15px] ">
-              <div className="flex">
+              <div className="flex h-[30px]">
                 <button
                   onClick={goToPreviousPage}
                   className={`${
                     isPrevDisabled ? "cursor-not-allowed" : "cursor-pointer"
-                  } flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full`}
+                  } flex  text-[15px] border-[0.9px] border-[#E7EAEE99] items-center justify-center  w-[77px] h-full`}
                   disabled={isPrevDisabled}
                 >
                   Prev
@@ -107,18 +107,18 @@ const Pagination = ({
                   onClick={goToNextPage}
                   className={`${
                     isNextDisabled ? "cursor-not-allowed" : "cursor-pointer"
-                  } flex ring-1 text-[15px] ring-gray-300 items-center justify-center  w-[77px] h-full`}
+                  } flex text-[15px] border-[0.9px] border-[#E7EAEE99] items-center justify-center  w-[77px] h-full`}
                   disabled={isNextDisabled}
                 >
                   Next
                 </button>
               </div>
               <form onSubmit={handleGoToPage}>
-                <div className="flex pl-4 ">
+                <div className="flex pl-4 h-[30px]">
                   <input
-                    className={`ipt-pagination appearance-none  text-center ring-1 ${
-                      gotoError ? "ring-red-500" : "ring-gray-300"
-                    } border-gray-100`}
+                    className={`ipt-pagination appearance-none  text-center border-[0.9px]${
+                      gotoError ? " border-red-500" : " border-[#E7EAEE99]"
+                    }  border-[#E7EAEE99]`}
                     type="text"
                     placeholder="-"
                     pattern="\d*"
@@ -138,7 +138,7 @@ const Pagination = ({
                   <div className="">
                     <button
                       type="submit"
-                      className="btn-pagination ring-1 ring-[#007C85]"
+                      className="btn-pagination border-[0.9px] border-[#007C85]"
                     >
                       Go{" "}
                     </button>

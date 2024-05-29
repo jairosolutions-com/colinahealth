@@ -38,7 +38,7 @@ const DropdownMenu = ({ open, width, label, options }: DropdownMenuProps) => {
         className="bg-white w-full h-[47px] rounded-[5px] px-[20px] items-center flex justify-between font-bold text-[15px] text-[#191D23] text-opacity-60 shadow-sm"
       >
         {optionLabel}
-        <ChevronDown width={18} height={18} />
+        <Image src={"/icons/dropdown.svg"} width={18} height={18} alt="dropdown" className={`w-[8px] h-[7px] transition duration-300 ${isOpen?"rotate-180":""}`}/>
       </button>
 
       {isOpen && (
