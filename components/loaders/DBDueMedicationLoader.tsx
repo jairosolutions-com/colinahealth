@@ -6,7 +6,7 @@ const DBDueMedicationLoader = () => {
       <div className="h-[30px] w-[250px] rounded-full mr-2 p-title">
         Due Medications
       </div>
-      <div className=" w-full font-normal text-[15px] text-[#71717A] -mt-2 ">
+      <div className=" w-full font-normal sub-title text-[15px] -mt-2 ">
         Total of 0 due medication
       </div>
       <div className="animate-pulse w-full h-full gap-[23px] flex flex-col">

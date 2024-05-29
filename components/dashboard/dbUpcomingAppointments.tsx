@@ -149,7 +149,7 @@ const DBUpcomingAppointments = () => {
                 Upcoming Appointment
                 <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
               </p>
-              <p className="font-normal text-[15px] text-[#71717A] pt-3 mb-3">
+              <p className="font-normal sub-title text-[15px] pt-3 mb-3">
                 Total of {totalUpcoming} upcoming appointment
                 <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
               </p>
@@ -239,7 +239,7 @@ const DBUpcomingAppointments = () => {
                         upcomingAppointment.appointments_appointmentDate
                       )}
                     </p>
-                    <p className="text-[#71717A] font-medium text-[15px] ml-4">
+                    <p className=" font-medium sub-title ml-4">
                       {formatTime(
                         upcomingAppointment.appointments_appointmentTime
                       )}
