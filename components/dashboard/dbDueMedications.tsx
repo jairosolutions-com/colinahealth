@@ -227,7 +227,7 @@ const DBDueMedication = () => {
                       )}
                     </div>
                     <div className="flex w-4/6">
-                      <div className="flex flex-col justify-center gap-1 w-[300px]">
+                      <div className="flex flex-col justify-center gap-1 w-full">
                         <p className="font-bold text-[15px] truncate hover:text-wrap">
                           <ResuableTooltip
                             text={`${dueMedication.patient_firstName}${" "}${

@@ -341,19 +341,19 @@ const DueMedication = () => {
                           />
                         </div>
                       )}
-                      <span className="overflow-hidden ">
+                      <span className="w-[300px] truncate">
                         <ResuableTooltip
                           text={`${dueMedication.patient_firstName} ${""}
                         ${dueMedication.patient_lastName}`}
                         />
                       </span>
                     </td>
-                    <td className="px-6 py-5 w-[300px]">
+                    <td className="px-6 py-5 w-[300px] truncate">
                       <ResuableTooltip
                         text={dueMedication.medicationlogs_uuid}
                       />
                     </td>
-                      <td className="px-6 py-5 ">
+                      <td className="px-6 py-5 truncate">
                         <ResuableTooltip
                           text={dueMedication.medicationlogs_medicationLogsName}
                         />
