@@ -70,9 +70,7 @@ const DueMedication = () => {
     if (option == "Name") {
       setDueMedSortBy("patient.firstName");
     } else if (option == "Due Med UID") {
-      setDueMedSortBy("medicationlogs.medicationLogsName");
-    } else if (option == "Date") {
-      setDueMedSortBy("medicationlogs.medicationLogsDate");
+      setDueMedSortBy("medicationlogs.uuid");
     } else if (option == "Time") {
       setDueMedSortBy("medicationlogs.medicationLogsTime");
     } else if (option == "Medication") {
@@ -87,7 +85,6 @@ const DueMedication = () => {
   const optionsSortBy = [
     { label: "Name", onClick: handleSortOptionClick },
     { label: "Due Med UID", onClick: handleSortOptionClick },
-    { label: "Date", onClick: handleSortOptionClick },
     { label: "Time", onClick: handleSortOptionClick },
     { label: "Medication", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function

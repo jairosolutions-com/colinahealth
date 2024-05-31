@@ -25,7 +25,7 @@ const DueMedicationLoader = () => {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="py-3 px-5 m-5 w-[460px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded-[4.69px] pl-10 relative bg-[#fff] bg-no-repeat "
+                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded-[4.69px] pl-10 relative bg-[#fff] bg-no-repeat "
                   type="text"
                   placeholder="Search by reference no. or name..."
                 />
