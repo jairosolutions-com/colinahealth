@@ -177,13 +177,16 @@ const NurseDrawer = () => {
       {" "}
       <Drawer direction="right">
         <DrawerTrigger className="font-semibold">
-          <div className="w-[195px] h-[52px] justify-center rounded-[5px] cursor-pointer  border-[1.76px] p-2 border-[#D0D5DD] flex items-center text-[15px] font-bold gap-[4px]">
+          <div className="w-[195px] h-[52px] justify-center rounded-[5px] cursor-pointer hover:text-white border-[1.76px] p-2 border-[#D0D5DD] hover:bg-[#007C85] group hover:border-[#007C85] flex items-center text-[15px] font-bold gap-[4px]">
+            <div className="group invert">
             <Image
-              src="/icons/plus-icon.svg"
+              src="/icons/plus-icon-white.svg"
               alt="add"
-              width={18.95}
-              height={18.95}
+              width={18}
+              height={18}
+              className="h-[18px] w-[18px] group-hover:invert"
             />
+            </div>
             Nurse's Note
           </div>
         </DrawerTrigger>
@@ -214,7 +217,7 @@ const NurseDrawer = () => {
                       role="combobox"
                       aria-expanded={open}
                       className={`${
-                        error && "text-red-500 border-red-500"
+                        error && "error"
                       } w-full justify-between mb-5 h-12 rounded-[3px] sub-title`}
                     >
                       {patientId
@@ -278,7 +281,7 @@ const NurseDrawer = () => {
                                     : "opacity-0"
                                 )}
                               />
-                              {patient.lastName}, {patient.firstName}
+                              {patient.firstName} {patient.lastName}
                             </CommandItem>
                           ))}
                         </CommandList>

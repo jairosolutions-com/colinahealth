@@ -8,9 +8,9 @@ const DownloadPDF = () => {
         <Image
           src="/imgs/downloadpdf-white.svg"
           alt="Custom Icon"
-          className="w-[18.75px] group-hover:invert"
-          width={18.75}
-          height={18.75}
+          className="w-[18px] h-[18px] group-hover:invert"
+          width={18}
+          height={18}
         />
       </div>
       Download PDF
