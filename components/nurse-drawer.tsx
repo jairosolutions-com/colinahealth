@@ -215,7 +215,7 @@ const NurseDrawer = () => {
                       aria-expanded={open}
                       className={`${
                         error && "text-red-500 border-red-500"
-                      } w-full justify-between mb-5 h-12 rounded-[0.9px] sub-title`}
+                      } w-full justify-between mb-5 h-12 rounded-[3px] sub-title`}
                     >
                       {patientId
                         ? patientList.find(
@@ -304,7 +304,7 @@ const NurseDrawer = () => {
                   <div className="mt-2.5">
                     <input
                       type="text"
-                      className="block w-full h-12 rounded-[0.9px] px-3.5 py-2 border-[1px] border-[#D0D5DD]  placeholder:text-[#64748B] placeholder:text-[15px] text-[15px] sm:text-sm sm:leading-6"
+                      className="block w-full h-12 rounded-[3px] px-3.5 py-2 border-[1px] border-[#D0D5DD]  placeholder:text-[#64748B] placeholder:text-[15px] text-[15px] sm:text-sm sm:leading-6"
                       placeholder="input subject"
                       name="subject"
                       value={formData.subject}
@@ -323,7 +323,7 @@ const NurseDrawer = () => {
                   <div className="mt-2.5">
                     <textarea
                       ref={ref}
-                      className="resize-y block w-full rounded-[0.9px] max-h-[400px] h-[150px] min-h-[50px] border-[1px] border-[#D0D5DD] px-3.5 py-2 placeholder:text-[#64748B] placeholder:text-[15px] text-[15px]  sm:text-sm sm:leading-6"
+                      className="resize-y block w-full rounded-[3px] max-h-[400px] h-[150px] min-h-[50px] border-[1px] border-[#D0D5DD] px-3.5 py-2 placeholder:text-[#64748B] placeholder:text-[15px] text-[15px]  sm:text-sm sm:leading-6"
                       placeholder="input notes"
                       onInput={handleInput}
                       name="notes"
