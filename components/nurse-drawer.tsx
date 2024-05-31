@@ -177,7 +177,7 @@ const NurseDrawer = () => {
       {" "}
       <Drawer direction="right">
         <DrawerTrigger className="font-semibold">
-          <div className="w-[195px] h-[52px] justify-center rounded-[5px] cursor-pointer  border-[1.76px] p-2 border-[#D0D5DD] flex items-center text-[18px] font-bold gap-[4px]">
+          <div className="w-[195px] h-[52px] justify-center rounded-[5px] cursor-pointer  border-[1.76px] p-2 border-[#D0D5DD] flex items-center text-[15px] font-bold gap-[4px]">
             <Image
               src="/icons/plus-icon.svg"
               alt="add"
@@ -238,7 +238,7 @@ const NurseDrawer = () => {
                         src={
                           error
                             ? "/icons/arrow-down-red.svg"
-                            : "/icons/arrow-down-gray.svg"
+                            : "/icons/arrow-down-gray-nn.svg"
                         }
                         width={15}
                         height={15}
