@@ -87,9 +87,9 @@ export const Login = () => {
     fetchToken();
   }, []);
 
-  if (getAccessToken()) {
-    router.push("/dashboard");
-  }
+  // if (getAccessToken()) {
+  //   router.push("/dashboard");
+  // }
 
   console.log(rememberMeToken, "rememberme");
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {

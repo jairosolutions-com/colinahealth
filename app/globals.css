@@ -80,6 +80,8 @@ body,
 :root {
   height: 100%;
   color: #020817;
+  font-size: 15px;
+  font-weight: 400;
 }
 
 .App {
