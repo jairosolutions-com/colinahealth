@@ -158,7 +158,7 @@ const DBUpcomingAppointments = () => {
               {upcomingAppointments.map((upcomingAppointment, index) => (
                 <div
                   key={index}
-                  className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-slate-100 cursor-pointer justify-between gap-[13px]"
+                  className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-[#F4F4F4] cursor-pointer justify-between gap-[13px]"
                 >
                   <div className="w-3/4 flex items-center gap-[10px]">
                     {patientAppointmentImages.some(

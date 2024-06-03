@@ -365,7 +365,7 @@ export default function PatientPage() {
                 {patientList.map((patient, index) => (
                   <tr
                     key={index}
-                    className="group bg-white hover:bg-gray-100 border-b"
+                    className="group bg-white hover:bg-[#F4F4F4] border-b"
                   >
                     <td className="flex items-center gap-5 px-6 py-5">
                       {/* Check if any matching image found for the patient */}

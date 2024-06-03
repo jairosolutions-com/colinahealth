@@ -281,7 +281,7 @@ const DueMedication = () => {
                 {dueMedicationList.map((dueMedication, index) => (
                   <tr
                     key={index}
-                    className=" group  bg-white hover:bg-gray-100  border-b text-[15px]"
+                      className=" group  bg-white hover:bg-[#F4F4F4] border-b text-[15px]"
                   >
                     <td className="px-6 py-5 flex items-center gap-2">
                       {patientImages.some(
