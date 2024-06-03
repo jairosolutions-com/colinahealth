@@ -51,7 +51,7 @@ export const DemographicModalContent = ({
     state: "",
     country: "",
     zip: "",
-    admissionDate: "",
+    admissionDate: new Date().toISOString().slice(0, 10),
     codeStatus: "",
     email: "",
   });
@@ -61,21 +61,24 @@ export const DemographicModalContent = ({
     if (name === "age" && !/^\d*$/.test(value)) {
       return; // Don't update state
     }
-    if (name === "dateOfBirth"){
+    if (name === "dateOfBirth") {
       const calculateAge = (dateOfBirth: string) => {
-        const today = new Date();
-        const birthDate = new Date(dateOfBirth);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-          age--;
-        }
-        return age.toString();
+      if (!dateOfBirth) {
+        return "0";
+      }
+      const today = new Date();
+      const birthDate = new Date(dateOfBirth);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age.toString();
       };
 
       setFormData((prevData) => ({
-        ...prevData,
-        age: calculateAge(value),
+      ...prevData,
+      age: calculateAge(value),
       }));
     }
 
@@ -432,6 +435,7 @@ export const DemographicModalContent = ({
                       name="dateOfBirth"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
+                      max={new Date().toISOString().slice(0, 10)}
                     />
                     <Image
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"

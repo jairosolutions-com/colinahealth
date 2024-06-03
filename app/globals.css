@@ -79,7 +79,9 @@ html,
 body,
 :root {
   height: 100%;
-  color:#020817;
+  color: #020817;
+  font-size: 15px;
+  font-weight: 400;
 }
 
 .App {
@@ -221,7 +223,7 @@ body,
 
 .btn-pagination {
   border: 0.9px;
-  border-color:#007c85;
+  border-color: #007c85;
   background: #007c85;
   color: #ffffff;
   width: 48px;
@@ -416,13 +418,17 @@ table {
   }
 }
 
-
 .f-pending {
-  color: #EEC80E;
+  color: #eec80e;
 }
 
 .sub-title {
-  color: #64748B;
+  color: #64748b;
   font-size: 15px;
   font-weight: 400;
+}
+
+.error {
+  color: #db3956;
+  border-color: #db3956;
 }

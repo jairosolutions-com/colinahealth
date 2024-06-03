@@ -43,7 +43,7 @@ const NurseDrawer = () => {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [patientId, setPatientId] = React.useState("");
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(true);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState("");
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
@@ -83,8 +83,8 @@ const NurseDrawer = () => {
       type: "nn",
     });
     setPatientId("");
-    setError("")
-  }
+    setError("");
+  };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -176,24 +176,27 @@ const NurseDrawer = () => {
     <>
       {" "}
       <Drawer direction="right">
-      <DrawerTrigger className="font-semibold">
-          <div className="w-[195px] h-[52px] justify-center rounded-[5px] cursor-pointer  border-[1.76px] p-2 border-[#D0D5DD] flex items-center text-[18px] font-bold gap-[4px]">
+        <DrawerTrigger className="font-semibold">
+          <div className="w-[195px] h-[52px] justify-center rounded-[5px] cursor-pointer hover:text-white border-[1.76px] p-2 border-[#D0D5DD] hover:bg-[#007C85] group hover:border-[#007C85] flex items-center text-[15px] font-bold gap-[4px]">
+            <div className="group invert">
             <Image
-              src="/icons/plus-icon.svg"
+              src="/icons/plus-icon-white.svg"
               alt="add"
-              width={18.95}
-              height={18.95}
+              width={18}
+              height={18}
+              className="h-[18px] w-[18px] group-hover:invert"
             />
+            </div>
             Nurse's Note
           </div>
         </DrawerTrigger>
         <DrawerContent className="top-0 right-0 left-auto mt-0 w-[500px] rounded-none">
-          <DrawerHeader className="bg-[#007C85] h-[71px] test1">
+          <DrawerHeader className="bg-[#007C85] h-[71px]">
             <DrawerTitle className="text-white w-full flex justify-between items-center">
-              <p className="ml-1">Nurse's Notes</p>
+              <p className="ml-1 text-[20px] font-semibold">Nurse's Notes</p>
               <p>
                 <DrawerClose>
-                  <X onClick={handleOnClose}/>
+                  <X onClick={handleOnClose} />
                 </DrawerClose>
               </p>
             </DrawerTitle>
@@ -204,8 +207,8 @@ const NurseDrawer = () => {
           >
             <div className="w-full h-full">
               <div className="w-full px-[20px] mt-3">
-                <h1 className="text-md font-bold leading-6 text-gray-900 mb-2">
-                  PATIENT
+                <h1 className="text-md font-medium text-[20px] leading-6   mb-2">
+                  Patient
                 </h1>
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
@@ -214,8 +217,8 @@ const NurseDrawer = () => {
                       role="combobox"
                       aria-expanded={open}
                       className={`${
-                        error && "text-red-500 border-red-500"
-                      } w-full justify-between mb-5 h-12 rounded-md shadow-sm`}
+                        error && "error"
+                      } w-full justify-between mb-5 h-12 rounded-[3px] sub-title`}
                     >
                       {patientId
                         ? patientList.find(
@@ -233,15 +236,19 @@ const NurseDrawer = () => {
                           : patientList.find(
                               (patientList) => patientList.uuid === patientId
                             )?.lastName
-                        : "Select patient..."}
+                        : "Select patient........."}
                       <Image
-                        src={error? "/icons/arrow-down-red.svg":"/icons/arrow-down-gray.svg"}
+                        src={
+                          error
+                            ? "/icons/arrow-down-red.svg"
+                            : "/icons/arrow-down-gray-nn.svg"
+                        }
                         width={15}
                         height={15}
                         alt="arrow-down"
                         className={`${
                           open ? "rotate-180" : ""
-                        } ml-2 h-4 w-4 shrink-0 opacity-50 transition duration-300`}
+                        } ml-2 w-[7.49px] h-[3.57px] shrink-0 opacity-50 transition duration-300`}
                       />
                     </Button>
                   </PopoverTrigger>
@@ -274,7 +281,7 @@ const NurseDrawer = () => {
                                     : "opacity-0"
                                 )}
                               />
-                              {patient.lastName}, {patient.firstName}
+                              {patient.firstName} {patient.lastName}
                             </CommandItem>
                           ))}
                         </CommandList>
@@ -285,24 +292,22 @@ const NurseDrawer = () => {
               </div>
               <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2 px-[20px]">
                 <div className="flex flex-col gap-1">
-                  <h1 className="font-semibold text-lg">
+                  <h1 className=" font-medium text-[20px]">
                     Add Note and Compose
                   </h1>
-                  <p className="text-sm text-[#667085]">
-                    Submit your log details.
-                  </p>
+                  <p className="sub-title">Submit your log details.</p>
                 </div>
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="company"
-                    className="block text-md font-bold leading-6 text-gray-900 required-field"
+                    className="block text-md leading-6 font-medium text-[20px] required-field"
                   >
-                    SUBJECT
+                    Subject
                   </label>
                   <div className="mt-2.5">
                     <input
                       type="text"
-                      className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      className="block w-full h-12 rounded-[3px] px-3.5 py-2 border-[1px] border-[#D0D5DD]  placeholder:text-[#64748B] placeholder:text-[15px] text-[15px] sm:text-sm sm:leading-6"
                       placeholder="input subject"
                       name="subject"
                       value={formData.subject}
@@ -314,14 +319,14 @@ const NurseDrawer = () => {
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="message"
-                    className="block text-md font-bold leading-6 text-gray-900 required-field"
+                    className="block text-md leading-6 font-medium text-[20px] required-field"
                   >
-                    NOTES
+                    Notes
                   </label>
                   <div className="mt-2.5">
                     <textarea
                       ref={ref}
-                      className="resize-y block w-full rounded-md max-h-[400px] h-[150px] min-h-[50px] border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      className="resize-y block w-full rounded-[3px] max-h-[400px] h-[150px] min-h-[50px] border-[1px] border-[#D0D5DD] px-3.5 py-2 placeholder:text-[#64748B] placeholder:text-[15px] text-[15px]  sm:text-sm sm:leading-6"
                       placeholder="input notes"
                       onInput={handleInput}
                       name="notes"
@@ -342,7 +347,7 @@ const NurseDrawer = () => {
                   onClick={handleOnClose}
                   className={` cancel-button
                   ${isSubmitted && " cursor-not-allowed"}
-                  w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium text-black  mr-4 rounded-sm`}
+                  w-[150px] h-[45px]  bg-[#F3F3F3] hover:bg-[#D9D9D9] font-medium  mr-4 rounded-sm`}
                 >
                   Cancel
                 </button>

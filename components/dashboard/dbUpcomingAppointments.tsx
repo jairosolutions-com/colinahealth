@@ -158,9 +158,9 @@ const DBUpcomingAppointments = () => {
               {upcomingAppointments.map((upcomingAppointment, index) => (
                 <div
                   key={index}
-                  className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-slate-100 cursor-pointer justify-between gap-[13px]"
+                  className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-[#F4F4F4] cursor-pointer justify-between gap-[13px]"
                 >
-                  <div className="flex items-center gap-[10px]">
+                  <div className="w-3/4 flex items-center gap-[10px]">
                     {patientAppointmentImages.some(
                       (image) =>
                         image.patientUuid === upcomingAppointment.patient_uuid
@@ -213,9 +213,9 @@ const DBUpcomingAppointments = () => {
                         />
                       </div>
                     )}
-                    <div className="flex ">
-                      <div className="flex flex-col justify-center gap-1">
-                        <p className="font-bold text-[15px] w-[300px]">
+                    <div className="flex w-4/6">
+                      <div className="flex flex-col justify-center gap-1 truncate">
+                        <p className="font-bold text-[15px] w-full">
                           <ResuableTooltip
                             text={`${
                               upcomingAppointment.patient_firstName
@@ -233,7 +233,7 @@ const DBUpcomingAppointments = () => {
                       </div>
                     </div>
                   </div>
-                  <div className=" flex flex-col justify-center items-end text-end gap-1">
+                  <div className="w-1/4 flex flex-col justify-center items-end text-end gap-1">
                     <p className="font-semibold text-[15px] flex">
                       {formatDate(
                         upcomingAppointment.appointments_appointmentDate

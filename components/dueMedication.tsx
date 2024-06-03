@@ -70,9 +70,7 @@ const DueMedication = () => {
     if (option == "Name") {
       setDueMedSortBy("patient.firstName");
     } else if (option == "Due Med UID") {
-      setDueMedSortBy("medicationlogs.medicationLogsName");
-    } else if (option == "Date") {
-      setDueMedSortBy("medicationlogs.medicationLogsDate");
+      setDueMedSortBy("medicationlogs.uuid");
     } else if (option == "Time") {
       setDueMedSortBy("medicationlogs.medicationLogsTime");
     } else if (option == "Medication") {
@@ -87,9 +85,8 @@ const DueMedication = () => {
   const optionsSortBy = [
     { label: "Name", onClick: handleSortOptionClick },
     { label: "Due Med UID", onClick: handleSortOptionClick },
-    { label: "Date", onClick: handleSortOptionClick },
     { label: "Time", onClick: handleSortOptionClick },
-    { label: "Medicaiton", onClick: handleSortOptionClick },
+    { label: "Medication", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
   const isModalOpen = (isOpen: boolean) => {
@@ -180,11 +177,9 @@ const DueMedication = () => {
   return (
     <div className="w-full px-[150px] pt-[90px] flex flex-col justify-between h-full">
       <div className="w-full h-full">
-        <div className="flex justify-end">
-        </div>
         <div className="flex justify-between items-center">
-          <div className="flex flex-col mb-3">
-            <p className="p-title">Due Medication</p>
+          <div className="flex flex-col justify-center h-full">
+            <p className="p-title flex ">Due Medication</p>
             {/* number of patiens */}
             <p className="sub-title ">
               Total of {totalDueMedication == 0 ? "0" : totalDueMedication} Due
@@ -196,7 +191,7 @@ const DueMedication = () => {
           </div>
         </div>
 
-        <div className="w-full sm:rounded-lg items-center">
+        <div className="w-full sm:rounded-lg items-center mt-4">
           <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
             <form className="mr-5 relative">
               {/* search bar */}
@@ -265,7 +260,7 @@ const DueMedication = () => {
           <div>
             <table className="w-full h-full justify-center items-start">
               <thead className=" text-left rtl:text-right">
-                <tr className="uppercase !font-semibold sub-title border-b border-[#E7EAEE] h-[70px] text-[15px]">
+                <tr className="uppercase !font-semibold sub-title border-b border-[#E7EAEE] h-[70px]">
                   <td className="px-6 py-5 ">Name</td>
                   <td className="px-6 py-5 w-[300px]">DUE MED UID</td>
                   <td className="px-6 py-5">Medication</td>
@@ -286,7 +281,7 @@ const DueMedication = () => {
                 {dueMedicationList.map((dueMedication, index) => (
                   <tr
                     key={index}
-                    className=" group  bg-white hover:bg-gray-100  border-b text-[15px]"
+                      className=" group  bg-white hover:bg-[#F4F4F4] border-b text-[15px]"
                   >
                     <td className="px-6 py-5 flex items-center gap-2">
                       {patientImages.some(
@@ -341,19 +336,19 @@ const DueMedication = () => {
                           />
                         </div>
                       )}
-                      <span className="overflow-hidden ">
+                      <span className="w-[300px] truncate">
                         <ResuableTooltip
                           text={`${dueMedication.patient_firstName} ${""}
                         ${dueMedication.patient_lastName}`}
                         />
                       </span>
                     </td>
-                    <td className="px-6 py-5 w-[300px]">
+                    <td className="px-6 py-5 w-[300px] truncate">
                       <ResuableTooltip
                         text={dueMedication.medicationlogs_uuid}
                       />
                     </td>
-                      <td className="px-6 py-5 ">
+                      <td className="px-6 py-5 truncate">
                         <ResuableTooltip
                           text={dueMedication.medicationlogs_medicationLogsName}
                         />
