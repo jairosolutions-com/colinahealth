@@ -51,7 +51,7 @@ export const DemographicModalContent = ({
     state: "",
     country: "",
     zip: "",
-    admissionDate: "",
+    admissionDate: new Date().toISOString().slice(0, 10),
     codeStatus: "",
     email: "",
   });

@@ -170,7 +170,7 @@ const DBDueMedication = () => {
               {dueMedicationList.map((dueMedication, index) => (
                 <div
                   key={index}
-                  className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-slate-100 cursor-pointer justify-between gap-[13px]"
+                  className="w-full flex flex-row h-[70px] mb-1 px-2 rounded-md hover:bg-[#F4F4F4] cursor-pointer justify-between gap-[13px]"
                 >
                   <div className="flex w-3/4">
                     <div className="flex mr-3 items-center ">
@@ -227,7 +227,7 @@ const DBDueMedication = () => {
                       )}
                     </div>
                     <div className="flex w-4/6">
-                      <div className="flex flex-col justify-center gap-1 w-[300px]">
+                      <div className="flex flex-col justify-center gap-1 w-full">
                         <p className="font-bold text-[15px] truncate hover:text-wrap">
                           <ResuableTooltip
                             text={`${dueMedication.patient_firstName}${" "}${

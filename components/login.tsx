@@ -52,10 +52,6 @@ export const Login = () => {
 
   const rememberMeToken = getRememberToken();
 
-  if (getAccessToken()) {
-    router.push("/dashboard");
-  }
-
   const handleEmailFocus = () => {
     setIsEmailFocused(true);
   };
@@ -90,6 +86,10 @@ export const Login = () => {
 
     fetchToken();
   }, []);
+
+  // if (getAccessToken()) {
+  //   router.push("/dashboard");
+  // }
 
   console.log(rememberMeToken, "rememberme");
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
