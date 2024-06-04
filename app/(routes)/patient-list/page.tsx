@@ -261,7 +261,7 @@ export default function PatientPage() {
       <div className="w-full h-full">
         <div className="flex justify-between items-center">
           <div className="flex flex-col ">
-            <p className="p-title">Patients Lists</p>
+            <p className="p-title">Patients Lists Records</p>
             {/* number of patiens */}
             <p className="sub-title w-[1157px] h-[22px]">
               Total of {patientList.length == 0 ? "0" : totalPatient} Patients

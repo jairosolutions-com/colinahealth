@@ -112,9 +112,9 @@ export const Login = () => {
         // Handle invalid login
         setPassword("");
         setIsInvalid(true);
-        setTimeout(() => {
-          setIsInvalid(false);
-        }, 2000);
+        // setTimeout(() => {
+        //   setIsInvalid(false);
+        // }, 5000);
       }
 
       // const signIn = await validateUser(email, password, rememberMe);
@@ -200,11 +200,11 @@ export const Login = () => {
                     height={37.05}
                     priority={true}
                   />
-                  <h2 className=" md:text-[20px] font-semibold  md:text-2xl lg:mb-10 text-white md:text-black md:mb-0 mb-5">
+                  <h2 className=" md:text-[20px] font-medium  md:text-2xl lg:mb-10 text-white md:text-[#020817] md:mb-0 mb-5">
                     Sign in to your Account
                   </h2>
                   <div
-                    className={`text-red-500 w-full md:mb-8 mb-4 -mt-5 text-md ${
+                    className={`error w-full md:mb-8 mb-4 -mt-5 text-md ${
                       isInvalid ? "block" : "hidden"
                     }`}
                   >
@@ -227,9 +227,9 @@ export const Login = () => {
                           id="email"
                           type="email"
                           className={`${
-                            isInvalid ? "ring-1 ring-red-400" : ""
+                            isInvalid ? "ring-1 ring-[#db3956]" : ""
                           }  
-                      h-[60px] w-full focus:bg-opacity-10 md:bg-[#D9D9D91A] bg-[#D9D9D94D] px-3 py-6 pl-5 pb-2 text-md md:text-[#333333] text-white`}
+                      h-[60px] w-full focus:bg-opacity-10 md:bg-[#D9D9D91A] bg-[#D9D9D94D] px-3 py-6 pl-5 pb-2 md:text-[#020817] text-white`}
                           value={email}
                           onFocus={handleEmailFocus}
                           onBlur={handleEmailBlur}
@@ -240,12 +240,12 @@ export const Login = () => {
                           htmlFor="email"
                           className={`absolute left-5 text-white transition-all duration-300 cursor-text select-none ${
                             isEmailFocused || email
-                              ? "top-2 text-[12px] md:text-[#333333]"
+                              ? "top-2 text-[12px] md:text-[#64748b]"
                               : "top-5 text-[15px]"
                           } ${
                             isInvalid
-                              ? "md:text-[#928989]"
-                              : "md:text-[#928989]"
+                              ? "md:text-[#64748b]"
+                              : "md:text-[#64748b]"
                           }`}
                         >
                           {isInvalid ? "Email" : "Email"}
@@ -253,7 +253,7 @@ export const Login = () => {
                         <p
                           className={`${
                             isInvalid ? "block" : "hidden"
-                          } mt-2 text-red-500`}
+                          } mt-2 error`}
                         >
                           Enter a valid email
                         </p>
@@ -264,9 +264,9 @@ export const Login = () => {
                           id="password"
                           type={!showPass ? "password" : "text"}
                           className={`${
-                            isInvalid ? "ring-1 ring-red-400" : ""
+                            isInvalid ? "ring-1 ring-[#db3956]" : ""
                           }  
-                      h-[60px] w-full bg-opacity-10   md:bg-[#D9D9D91A] bg-[#D9D9D94D] px-3 py-6 pl-5 pb-2 text-md md:text-[#333333] text-white`}
+                      h-[60px] w-full bg-opacity-10   md:bg-[#D9D9D91A] bg-[#D9D9D94D] px-3 py-6 pl-5 pb-2 text-md md:text-[#020817] text-white`}
                           value={password}
                           onFocus={handlePasswordFocus}
                           onBlur={handlePasswordBlur}
@@ -277,12 +277,12 @@ export const Login = () => {
                           htmlFor="password"
                           className={`absolute left-5 text-white transition-all duration-300 cursor-text select-none ${
                             isPasswordFocused || password
-                              ? "top-2 text-[12px] md:text-[#333333]"
+                              ? "top-2 text-[12px] md:text-[#64748b]"
                               : "top-5 text-[15px]"
                           } ${
                             isInvalid
-                              ? "md:text-[#928989]"
-                              : "md:text-[#928989]"
+                              ? "md:text-[#64748b]"
+                              : "md:text-[#64748b]"
                           }`}
                         >
                           {isInvalid ? "Password" : "Password"}
@@ -290,7 +290,7 @@ export const Login = () => {
                         <p
                           className={`${
                             isInvalid ? "block" : "hidden"
-                          } mt-2 text-red-500`}
+                          } mt-2 error`}
                         >
                           Enter your password
                         </p>
@@ -308,14 +308,14 @@ export const Login = () => {
                                 : "/icons/hide-pass.svg"
                             }`}
                             alt="show-pass"
-                            width={25}
-                            height={25}
+                            width={18}
+                            height={18}
                           />
                         </div>
                       </div>
 
-                      <div className="flex text-white md:text-black justify-between">
-                        <label className="flex items-center justify-start mb-7 l-5 font-medium md:mb-3">
+                      <div className="flex text-white md:text-[#020817] justify-between">
+                        <label className="flex items-center justify-start mb-7 l-5  md:mb-3">
                           <input
                             type="checkbox"
                             name="checkbox"
@@ -323,14 +323,14 @@ export const Login = () => {
                             checked={rememberMe} // Bind checked attribute to rememberMe state
                             onChange={handleCheckboxChange} // Handle checkbox change
                           />
-                          <span className="ml-2 inline-block font-medium text-[15px] cursor-pointer checkbox mt-1 select-none">
+                          <span className="ml-2 inline-block text-[15px] cursor-pointer checkbox mt-1 select-none">
                             {" "}
                             Remember me
                           </span>
                         </label>
-                        <label className="flex items-center justify-start mb-7 l-5 font-medium md:mb-3">
+                        <label className="flex items-center justify-start mb-7 l-5  md:mb-3">
                           <p
-                            className="font-medium text-[15px] ml-auto inline-block cursor-pointer mt-1 "
+                            className=" text-[15px] ml-auto inline-block cursor-pointer mt-1 "
                             onClick={() =>
                               setIsForgotPassword(!isForgotPassword)
                             }
@@ -339,7 +339,7 @@ export const Login = () => {
                           </p>
                         </label>
                       </div>
-                      <div>
+                      <div className="mt-2">
                         <button
                           disabled={isSubmitted}
                           className={`
@@ -348,7 +348,7 @@ export const Login = () => {
                               ? "cursor-not-allowed"
                               : "cursor-pointer"
                           }
-                          inline-block w-full  text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
+                          inline-block w-full h-[60px] text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
                           type="submit"
                         >
                           {isSubmitted ? (

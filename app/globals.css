@@ -431,4 +431,6 @@ table {
 .error {
   color: #db3956;
   border-color: #db3956;
+  border-width: 1px;
+  
 }

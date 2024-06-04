@@ -5,7 +5,7 @@ import { Navbar } from "@/components/navbar";
 import { getAccessToken, setAccessToken } from "../api/login-api/accessToken";
 import { redirect, useRouter } from "next/navigation";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import Footer from "@/components/footer";
 import { useIdleTimer } from "react-idle-timer";
 import Loading from "./loading";
@@ -19,33 +19,39 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     }
   }, []);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [timeout, setTimeout] = useState(5000 * 60); // 5 minute
+  const [timeout, setTimeout] = useState(5000 * 60); // 5 minutes
   const [lastActive, setLastActive] = useState(Date.now());
+
+  const onIdle = useCallback(() => {
+    setAccessToken("");
+    toast({
+      variant: "destructive",
+      title: "Automatic Logout.",
+      description: "You have been away for 5 minutes.",
+    });
+    router.push("/login");
+  }, [router]);
+
+  const onActive = useCallback(() => {
+    setLastActive(Date.now());
+  }, []);
+
   const { getRemainingTime, isIdle } = useIdleTimer({
     timeout,
-    onIdle: () => {
-      setAccessToken("");
-      toast({
-        variant: "destructive",
-        title: "Automatic Logout.",
-        description: "You have been away for 5 minutes.",
-      });
-      router.push("/login");
-    },
-    onActive: () => {
-      setLastActive(Date.now());
-    },
+    onIdle,
+    onActive,
     debounce: 500,
   });
 
   useEffect(() => {
     const handleMouseMove = () => {
-      setLastActive(Date.now());
+      const now = Date.now();
+      if (now - lastActive > 1000) {
+        setLastActive(now);
+      }
     };
-    const handleKeyPress = () => {
-      setLastActive(Date.now());
-    };
+
+    const handleKeyPress = handleMouseMove;
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("keypress", handleKeyPress);
@@ -54,12 +60,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("keypress", handleKeyPress);
     };
-  }, []);
+  }, [lastActive]);
 
   return (
     <>
       <div className="flex flex-col h-screen ">
-        <Navbar setIsLoading={setIsLoading} />
+        <Navbar
+        // setIsLoading={setIsLoading}
+        />
         <Suspense fallback={<Loading />}>
           <div className="flex-grow">{children}</div>
         </Suspense>

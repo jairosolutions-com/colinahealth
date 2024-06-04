@@ -102,10 +102,10 @@ const ResetPass = ({
                   : "translate-x-[1000px] opacity-0 -z-50"
               }`}
     >
-      <h1 className="md:text-[20px] font-semibold  md:text-2xl lg:mb-3 text-white md:text-black md:mb-0 mb-3">
+      <h1 className="md:text-[20px] font-medium  md:text-2xl lg:mb-3 text-white md:text-[#020817] md:mb-0 mb-3">
         Reset your Password?
       </h1>
-      <p className="mb-5 text-white md:text-black">
+      <p className="mb-5 text-white md:text-[#020817]">
         Enter your new password below, were just being extra safe.
       </p>
       <form
@@ -116,8 +116,8 @@ const ResetPass = ({
           <input
             id="password"
             type={!showNewPass ? "password" : "text"}
-            className={`${isInvalid ? "ring-1 ring-red-400" : ""}  
-                      h-[60px] w-full bg-opacity-10   md:bg-[#D9D9D91A] bg-[#D9D9D94D] px-3 py-6 pl-5 pb-2 text-md md:text-[#333333] text-white`}
+            className={`${isInvalid ? "ring-1 ring-[#db3956]" : ""}  
+                      h-[60px] w-full bg-opacity-10   md:bg-[#D9D9D91A] bg-[#D9D9D94D] px-3 py-6 pl-5 pb-2 text-md md:text-[#64748B] text-white`}
             value={newPassword}
             onFocus={handleNewPasswordFocus}
             onBlur={handleNewPasswordBlur}
@@ -128,13 +128,13 @@ const ResetPass = ({
             htmlFor="password"
             className={`absolute left-5 text-white transition-all duration-300 cursor-text select-none ${
               isNewPasswordFocused || newPassword
-                ? "top-2 text-[12px] md:text-[#333333]"
+                ? "top-2 text-[12px] md:text-[#64748B]"
                 : "top-5 text-[15px]"
             } ${isInvalid ? "md:text-[#928989]" : "md:text-[#928989]"}`}
           >
             {isInvalid ? "New Password" : "New Password"}
           </label>
-          <p className={`${isInvalid ? "block" : "hidden"} mt-2 text-red-500`}>
+          <p className={`${isInvalid ? "block" : "hidden"} mt-2 text-[#db3956]`}>
             Enter your password
           </p>
           <div
@@ -158,8 +158,8 @@ const ResetPass = ({
           <input
             id="password"
             type={!showConfirmPass ? "password" : "text"}
-            className={`${isInvalid ? "ring-1 ring-red-400" : ""}  
-                      h-[60px] w-full bg-opacity-10   md:bg-[#D9D9D91A] bg-[#D9D9D94D] px-3 py-6 pl-5 pb-2 text-md md:text-[#333333] text-white`}
+            className={`${isInvalid ? "ring-1 ring-[#db3956]" : ""}  
+                      h-[60px] w-full bg-opacity-10   md:bg-[#D9D9D91A] bg-[#D9D9D94D] px-3 py-6 pl-5 pb-2 text-md md:text-[#020817] text-white`}
             value={confirmPassword}
             onFocus={handleConfirmPasswordFocus}
             onBlur={handleConfirmPasswordBlur}
@@ -170,13 +170,13 @@ const ResetPass = ({
             htmlFor="password"
             className={`absolute left-5 text-white transition-all duration-300 cursor-text select-none ${
               isConfirmPasswordFocused || confirmPassword
-                ? "top-2 text-[12px] md:text-[#333333]"
+                ? "top-2 text-[12px] md:text-[#64748B]"
                 : "top-5 text-[15px]"
             } ${isInvalid ? "md:text-[#928989]" : "md:text-[#928989]"}`}
           >
             {isInvalid ? "Confirm Password" : "Confirm Password"}
           </label>
-          <p className={`${isInvalid ? "block" : "hidden"} mt-2 text-red-500`}>
+          <p className={`${isInvalid ? "block" : "hidden"} mt-2 text-[#db3956]`}>
             Enter your password
           </p>
           <div
@@ -197,7 +197,7 @@ const ResetPass = ({
             />
           </div>
         </div>
-        {isInvalid && <p className="text-red-500 pb-2 text-start max-w-[642.27px] w-full">Password does not match.</p>}
+        {isInvalid && <p className="text-[#db3956] pb-2 text-start max-w-[642.27px] w-full">Password does not match.</p>}
         <button
           disabled={isSubmitted}
           className={`
@@ -206,7 +206,7 @@ const ResetPass = ({
                               ? "cursor-not-allowed"
                               : "cursor-pointer"
                           }
-                          inline-block w-full  max-w-[642.27px] text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
+                          inline-block w-full h-[60px] max-w-[642.27px] text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-medium text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
           type="submit"
         >
           {isSubmitted ? (
@@ -219,7 +219,7 @@ const ResetPass = ({
         </button>
       </form>
       <p
-        className="cursor-pointer bottom-28 absolute text-white md:text-black"
+        className="cursor-pointer bottom-28 absolute text-white md:text-[#020817]"
         onClick={() => {
           setIsResetPass(!isResetPass);
         }}
