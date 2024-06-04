@@ -15,11 +15,14 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import { selectPatient } from "@/app/api/patients-api/patientSelect.api";
-
-const DBPatientSelect = () => {
+interface DBPatientSelectProps {
+  patientId: string;
+  setPatientId: (patientId: string) => void;
+}
+const DBPatientSelect = ({patientId,setPatientId}:DBPatientSelectProps) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
-  const [patientId, setPatientId] = React.useState("");
+ 
   const [isSubmitted, setIsSubmitted] = useState<boolean>(true);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState("");
@@ -27,7 +30,6 @@ const DBPatientSelect = () => {
   const [patientList, setPatientList] = useState([
     {
       uuid: "",
-
       firstName: "",
       lastName: "",
     },
@@ -51,6 +53,7 @@ const DBPatientSelect = () => {
 
     fetchData();
   }, []);
+  
 
   return (
     <div className="w-[460px]">

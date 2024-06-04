@@ -9,7 +9,13 @@ import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.a
 import ResuableTooltip from "../reusable/tooltip";
 import DBDueMedicationLoader from "../loaders/DBDueMedicationLoader";
 
-const DBDueMedication = () => {
+interface DBDueMedicationProps {
+  totalDueMedication: number;
+  setTotalDueMedication: (dueMedicationLength: number) => void;
+  totalDone: number;
+  setTotalDone: (totalDone: number) => void;
+}
+const DBDueMedication = ({totalDueMedication,setTotalDueMedication,totalDone,setTotalDone}:DBDueMedicationProps) => {
   const router = useRouter();
   const { toast } = useToast();
   const [term, setTerm] = useState("");
@@ -34,8 +40,8 @@ const DBDueMedication = () => {
     }[]
   >([]);
   const [dueMedTotalPages, setDueMedTotalPages] = useState(0);
-  const [totalDueMedication, setTotalDueMedication] = useState(0);
 
+  console.log(totalDone,'totalDone')
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,6 +94,7 @@ const DBDueMedication = () => {
         setDueMedicationList(limitedArray);
         setDueMedTotalPages(dueMedicationList.totalPages);
         setTotalDueMedication(dueMedicationList.totalCount);
+        setTotalDone(dueMedicationList.totalDone);
         setIsLoading(false);
         const profileImagesResponse = await fetchProfileImages(
           patientUuids as string[]

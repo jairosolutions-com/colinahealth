@@ -8,8 +8,10 @@ import DBUpcomingLoader from "@/components/loaders/DBUpcomingLoader";
 import UserDetail from "@/components/userDetails";
 import DBUserDetailLoader from "@/components/loaders/DBUserDetailLoader";
 import DBPatientSummary from "@/components/dashboard/dbPatientSummary";
+import DBBody from "@/components/dashboard/dbBody";
 
 const Dashboard = () => {
+  
   return (
     <div className="w-full">
       <div className="justify-center h-full items-center mx-[154px] mt-[90px] overflow-hidden">
@@ -29,24 +31,7 @@ const Dashboard = () => {
           </div>
           <NurseDrawer />
         </div>
-        <div className="w-full h-full flex gap-5">
-          <div className="w-4/6 ">
-            <DBPatientSummary />
-          </div>
-          <div className="w-2/6 h-full flex flex-col gap-3">
-            <div className="w-full h-1/2">
-              <Suspense fallback={<DBDueMedicationLoader />}>
-                <DBDueMedication />
-              </Suspense>
-            </div>
-
-            <Suspense fallback={<DBUpcomingLoader />}>
-              <div className="w-full h-1/2">
-                <DBUpcomingAppointments />
-              </div>
-            </Suspense>
-          </div>
-        </div>
+        <DBBody/>
       </div>
     </div>
   );

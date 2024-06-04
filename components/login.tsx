@@ -204,7 +204,7 @@ export const Login = () => {
                     Sign in to your Account
                   </h2>
                   <div
-                    className={`error w-full md:mb-8 mb-4 -mt-5 text-md ${
+                    className={`text-[#db3956] w-full md:mb-8 mb-4 -mt-5 text-md ${
                       isInvalid ? "block" : "hidden"
                     }`}
                   >
@@ -253,7 +253,7 @@ export const Login = () => {
                         <p
                           className={`${
                             isInvalid ? "block" : "hidden"
-                          } mt-2 error`}
+                          } mt-2 text-[#db3956]`}
                         >
                           Enter a valid email
                         </p>
@@ -290,7 +290,7 @@ export const Login = () => {
                         <p
                           className={`${
                             isInvalid ? "block" : "hidden"
-                          } mt-2 error`}
+                          } mt-2 text-[#db3956]`}
                         >
                           Enter your password
                         </p>
