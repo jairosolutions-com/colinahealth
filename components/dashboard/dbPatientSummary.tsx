@@ -56,7 +56,6 @@ const DBPatientSummary = ({
                     <div >
                       <h1>
                         Name: {pri?.data[0]?.patient_firstName}{" "}
-                        {pri?.data[0]?.patient_middleName}{" "}
                         {pri?.data[0]?.patient_lastName} -{" "}
                         {pri?.data[0]?.patient_age}{" "}
                         {pri?.data[0]?.patient_gender}
