@@ -128,7 +128,7 @@ const DBPatientSummary = ({
             <div className="flex gap-3 w-full">
               <div className="w-1/2 relative">
                 <h1 className="absolute p-title !font-medium">{pri?.data[0]?.patient_firstName}</h1>
-                <div className="h-full w-full flex  items-center justify-center -mt-10">
+                <div className="h-full w-full flex  items-center justify-center -mt-[30px]">
                   <DoughnutChart
                     total={totalPatientDue}
                     totalDone={totalPatientDone}
@@ -138,7 +138,7 @@ const DBPatientSummary = ({
 
               <div className="w-1/2 relative">
                 <h1 className="absolute p-title !font-medium">All Due Meds</h1>
-                <div className="h-full w-full flex  items-center justify-center -mt-10">
+                <div className="h-full w-full flex  items-center justify-center -mt-[30px]">
                   <DoughnutChart
                     total={totalDueMedication}
                     totalDone={totalDone}
