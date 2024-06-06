@@ -74,11 +74,11 @@ const DBPatientSelect = ({patientId,setPatientId}:DBPatientSelectProps) => {
                 ? `${
                     patientList.find(
                       (patientList) => patientList.uuid === patientId
-                    )?.lastName
-                  }, ${
+                    )?.firstName
+                  } ${
                     patientList.find(
                       (patientList) => patientList.uuid === patientId
-                    )?.firstName
+                    )?.lastName
                   }`
                 : patientList.find(
                     (patientList) => patientList.uuid === patientId
