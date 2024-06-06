@@ -47,7 +47,7 @@ export default function AppointmentPage() {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
 
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-  const [sortBy, setSortBy] = useState("appointmentDate");
+  const [sortBy, setSortBy] = useState("appointmentStatus");
   const [appointmentList, setAppointmentList] = useState<any[]>([]);
   const [patientIdappointmentList, setPatientId] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -58,7 +58,7 @@ export default function AppointmentPage() {
   const [pageNumber, setPageNumber] = useState("");
   const [gotoError, setGotoError] = useState(false);
   const [term, setTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortOrder, setSortOrder] = useState("DESC");
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [totalUpcoming, setTotalUpcoming] = useState(0);

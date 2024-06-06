@@ -79,7 +79,9 @@ html,
 body,
 :root {
   height: 100%;
-  /* color: white; */
+  color: #020817;
+  font-size: 15px;
+  font-weight: 400;
 }
 
 .App {
@@ -221,15 +223,16 @@ body,
 
 .btn-pagination {
   border: 0.9px;
+  border-color: #007c85;
   background: #007c85;
   color: #ffffff;
   width: 48px;
-  height: 25px;
+  height: 30px;
 }
 
 .ipt-pagination {
   width: 48px;
-  height: 25px;
+  height: 30px;
 }
 
 .btn-edit {
@@ -245,9 +248,8 @@ body,
 }
 
 .p-title {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 20px;
-  color: black;
 }
 
 .slash {
@@ -414,4 +416,21 @@ table {
   100% {
     width: 0;
   }
+}
+
+.f-pending {
+  color: #eec80e;
+}
+
+.sub-title {
+  color: #64748b;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.error {
+  color: #db3956;
+  border-color: #db3956;
+  border-width: 1px;
+  
 }

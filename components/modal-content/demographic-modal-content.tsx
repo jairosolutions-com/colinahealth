@@ -51,7 +51,7 @@ export const DemographicModalContent = ({
     state: "",
     country: "",
     zip: "",
-    admissionDate: "",
+    admissionDate: new Date().toISOString().slice(0, 10),
     codeStatus: "",
     email: "",
   });
@@ -61,6 +61,27 @@ export const DemographicModalContent = ({
     if (name === "age" && !/^\d*$/.test(value)) {
       return; // Don't update state
     }
+    if (name === "dateOfBirth") {
+      const calculateAge = (dateOfBirth: string) => {
+      if (!dateOfBirth) {
+        return "0";
+      }
+      const today = new Date();
+      const birthDate = new Date(dateOfBirth);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age.toString();
+      };
+
+      setFormData((prevData) => ({
+      ...prevData,
+      age: calculateAge(value),
+      }));
+    }
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -414,6 +435,7 @@ export const DemographicModalContent = ({
                       name="dateOfBirth"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
+                      max={new Date().toISOString().slice(0, 10)}
                     />
                     <Image
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"
@@ -597,12 +619,11 @@ export const DemographicModalContent = ({
                   <div className="mt-1 relative">
                     <input
                       type="date"
-                      required
+                      disabled
                       className="block w-full h-12 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400t sm:text-sm sm:leading-6"
                       placeholder="input addmission date"
                       name="admissionDate"
-                      value={formData.admissionDate}
-                      onChange={handleChange}
+                      defaultValue={new Date().toISOString().slice(0, 10)}
                     />
                     <Image
                       className="absolute top-0 right-0 mt-3.5 mr-3 pointer-events-none"

@@ -1,10 +1,11 @@
 import axios, { AxiosError } from "axios";
 import { setResetPassToken } from "./reset-pass-token";
 import { setAccessToken, setRememberToken } from "../login-api/accessToken";
-import { redirect } from "next/navigation";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const rememberMeTime = process.env.NEXT_PUBLIC_REMEMBER_TIME;
 
+console.log(rememberMeTime, "rememberMeTime2 ")
 export async function generateOTPCode(
   email: string,
   variant: string
@@ -48,7 +49,14 @@ export async function verifyOTPCode(
   variant: string,
   rememberMe: boolean
 ): Promise<any> {
-  const expiresIn = rememberMe ? "30d" : "1d";
+  const rememberMeTime = process.env.NEXT_PUBLIC_REMEMBER_TIME;
+  console.log('Environment REMEMBER_TIME:', rememberMeTime); // Add this line for debugging
+
+  if (!rememberMeTime) {
+    console.error('REMEMBER_TIME is not defined in the environment variables.');
+  }
+  const expiresIn = rememberMe ? `${rememberMeTime}` : "1d";
+  console.log(rememberMeTime, "rememberMeTime")
   const requestData = {
     userOTP: userOTP,
     email: email,

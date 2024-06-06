@@ -259,39 +259,28 @@ export default function PatientPage() {
   return (
     <div className="w-full  px-[150px] pt-[90px] flex flex-col justify-between h-full">
       <div className="w-full h-full">
-        {/* <div className="flex justify-end">
-          <p
-            onClick={() => {
-              setIsLoading(true);
-              router.replace("/dashboard");
-            }}
-            className="text-[#64748B] underline cursor-pointer text-[15px]"
-          >
-            Back to Dashboard
-          </p>
-        </div> */}
         <div className="flex justify-between items-center">
-          <div className="flex flex-col mb-3">
-            <p className="p-title">Patients List Records</p>
+          <div className="flex flex-col ">
+            <p className="p-title">Patients Lists Records</p>
             {/* number of patiens */}
-            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
+            <p className="sub-title w-[1157px] h-[22px]">
               Total of {patientList.length == 0 ? "0" : totalPatient} Patients
             </p>
           </div>
-          <div className="flex flex-row justify-end">
+          <div className="flex flex-row justify-end gap-2">
             <Add onClick={() => isModalOpen(true)}></Add>
             <DownloadPDF></DownloadPDF>
           </div>
         </div>
 
-        <div className="w-full sm:rounded-lg items-center">
+        <div className="w-full sm:rounded-lg items-center mt-4">
           <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
             <form className="mr-5 relative">
               {/* search bar */}
               <label className=""></label>
-              <div className="flex">
+              <div className="flex flex-col">
                 <input
-                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat "
+                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] sub-title rounded pl-10 relative bg-[#fff] bg-no-repeat "
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -299,13 +288,19 @@ export default function PatientPage() {
                     setTerm(e.target.value);
                     setCurrentPage(1);
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      // Add your search logic here
+                    }
+                  }}
                 />
                 <Image
                   src="/svgs/search.svg"
                   alt="Search"
-                  width="20"
-                  height="20"
-                  className="absolute left-8 top-9 pointer-events-none"
+                  width={18.75}
+                  height={18.75}
+                  className=" w-[18.75px] h-[18.75px] pointer-events-none absolute top-9 left-8"
                 />
               </div>
             </form>
@@ -325,7 +320,7 @@ export default function PatientPage() {
                 width={"165px"}
                 label={"Select"}
               />
-              <p className="text-[#191D23] text-opacity-[60%] font-semibold text-[15px]">
+              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
                 Sort by
               </p>
               <DropdownMenu
@@ -338,25 +333,25 @@ export default function PatientPage() {
                 }))}
                 open={isOpenSortedBy}
                 width={"165px"}
-                label={"Select"}
+                label={"Choose  "}
               />
             </div>
           </div>
 
           {/* START OF TABLE */}
           <div>
-            <table className="w-full justify-center items-start text-[15px]">
-              <thead className="text-left rtl:text-right">
-                <tr className="uppercase text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
-                  <th className="px-6 py-3">Name</th>
-                  <th className="px-6 py-3">Patient ID</th>
-                  <th className="px-6 py-3">Age</th>
-                  <th className="px-6 py-3">Gender</th>
+            <table className="w-full justify-center items-start">
+              <thead className="text-left rtl:text-right !font-semibold sub-title">
+                <tr className="uppercase  border-b border-[#E7EAEE] h-[70px]">
+                  <th className="px-6 py-3 !font-semibold">Name</th>
+                  <th className="px-6 py-3 !font-semibold">Patient UID</th>
+                  <th className="px-6 py-3 !font-semibold">Age</th>
+                  <th className="px-6 py-3 !font-semibold">Gender</th>
 
-                  <th className="px-20 py-3 items-center">Action</th>
+                  <th className="px-20 py-3 items-center !font-semibold">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody >
                 {patientList.length === 0 && (
                   <tr>
                     <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
@@ -370,9 +365,9 @@ export default function PatientPage() {
                 {patientList.map((patient, index) => (
                   <tr
                     key={index}
-                    className="group bg-white hover:bg-gray-100 border-b"
+                    className="group bg-white hover:bg-[#F4F4F4] border-b"
                   >
-                    <td className="flex items-center gap-2 px-6 py-5">
+                    <td className="flex items-center gap-5 px-6 py-5">
                       {/* Check if any matching image found for the patient */}
                       {patientImages.some(
                         (image) => image.patientUuid === patient.uuid
@@ -385,23 +380,23 @@ export default function PatientPage() {
                                 <div key={imgIndex}>
                                   {image.data ? (
                                     // Render the image if data is not empty
-                                    <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
+                                    <div className=" min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px]">
                                       <Image
                                         className="rounded-full object-cover w-12 h-12"
                                         src={image.data} // Use the base64-encoded image data directly
                                         alt=""
-                                        width={45}
-                                        height={45}
+                                        width={48}
+                                        height={48}
                                       />
                                     </div>
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
                                     <Image
-                                      className="rounded-full  min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                      className="rounded-full  min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px]"
                                       src="/imgs/user-no-icon.svg"
                                       alt=""
-                                      width={45}
-                                      height={45}
+                                      width={48}
+                                      height={48}
                                     />
                                   )}
                                 </div>
@@ -413,11 +408,11 @@ export default function PatientPage() {
                         // Render a placeholder image if no matching image found
                         <div>
                           <Image
-                            className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                            className="rounded-full min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px]"
                             src="/imgs/loading.gif" // Show loading gif while fetching images
                             alt="Loading"
-                            width={45}
-                            height={45}
+                            width={48}
+                            height={48}
                           />
                         </div>
                       )}

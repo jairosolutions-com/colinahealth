@@ -21,13 +21,11 @@ import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.a
 import ResuableTooltip from "@/components/reusable/tooltip";
 import DueMedicationLoader from "./loaders/dueMedicationLoader";
 
-
 const DueMedication = () => {
   const router = useRouter();
   const { toast } = useToast();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-  const [sortBy, setSortBy] = useState("firstName");
   const [dueMedSortBy, setDueMedSortBy] = useState(
     "medicationlogs.medicationLogsTime"
   );
@@ -72,15 +70,12 @@ const DueMedication = () => {
     if (option == "Name") {
       setDueMedSortBy("patient.firstName");
     } else if (option == "Due Med UID") {
-      setDueMedSortBy("medicationlogs.medicationLogsName");
-    } else if (option == "Date") {
-      setDueMedSortBy("medicationlogs.medicationLogsDate");
+      setDueMedSortBy("medicationlogs.uuid");
     } else if (option == "Time") {
       setDueMedSortBy("medicationlogs.medicationLogsTime");
     } else if (option == "Medication") {
       setDueMedSortBy("medicationlogs.medicationLogsName");
     }
-    console.log(sortBy, "ooption");
   };
 
   const optionsOrderedBy = [
@@ -90,9 +85,8 @@ const DueMedication = () => {
   const optionsSortBy = [
     { label: "Name", onClick: handleSortOptionClick },
     { label: "Due Med UID", onClick: handleSortOptionClick },
-    { label: "Date", onClick: handleSortOptionClick },
     { label: "Time", onClick: handleSortOptionClick },
-    { label: "Medicaiton", onClick: handleSortOptionClick },
+    { label: "Medication", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
   const isModalOpen = (isOpen: boolean) => {
@@ -158,7 +152,7 @@ const DueMedication = () => {
       }
     };
     fetchData();
-  }, [currentPage, term, sortBy, sortOrder]);
+  }, [currentPage, term, dueMedSortBy, sortOrder]);
 
   const handlePatientClick = (patientId: any) => {
     const lowercasePatientId = patientId.toLowerCase();
@@ -183,22 +177,11 @@ const DueMedication = () => {
   return (
     <div className="w-full px-[150px] pt-[90px] flex flex-col justify-between h-full">
       <div className="w-full h-full">
-        <div className="flex justify-end">
-          {/* <p
-            onClick={() => {
-              setIsLoading(true);
-              onNavigate(router, "/dashboard");
-            }}
-            className="text-[#64748B] underline cursor-pointer text-[15px]"
-          >
-            Back to Dashboard
-          </p> */}
-        </div>
         <div className="flex justify-between items-center">
-          <div className="flex flex-col mb-3">
-            <p className="p-title">Due Medication</p>
+          <div className="flex flex-col justify-center h-full">
+            <p className="p-title flex ">Due Medication</p>
             {/* number of patiens */}
-            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
+            <p className="sub-title ">
               Total of {totalDueMedication == 0 ? "0" : totalDueMedication} Due
               Medication{totalDueMedication > 1 ? "s" : ""}
             </p>
@@ -208,14 +191,14 @@ const DueMedication = () => {
           </div>
         </div>
 
-        <div className="w-full sm:rounded-lg items-center">
+        <div className="w-full sm:rounded-lg items-center mt-4">
           <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
             <form className="mr-5 relative">
               {/* search bar */}
               <label className=""></label>
-              <div className="flex">
+              <div className="flex flex-col">
                 <input
-                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat "
+                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] sub-title rounded pl-10 relative bg-[#fff] bg-no-repeat "
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -223,13 +206,19 @@ const DueMedication = () => {
                     setTerm(e.target.value);
                     setCurrentPage(1);
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      // Add your search logic here
+                    }
+                  }}
                 />
                 <Image
                   src="/svgs/search.svg"
                   alt="Search"
-                  width="20"
-                  height="20"
-                  className="absolute left-8 top-9 pointer-events-none"
+                  width={18.75}
+                  height={18.75}
+                  className=" w-[18.75px] h-[18.75px] pointer-events-none absolute top-9 left-8"
                 />
               </div>
             </form>
@@ -262,21 +251,21 @@ const DueMedication = () => {
                 }))}
                 open={isOpenSortedBy}
                 width={"165px"}
-                label={"Select"}
+                label={"Choose  "}
               />
             </div>
           </div>
 
           {/* START OF TABLE */}
           <div>
-            <table className="w-full h-full justify-center items-start text-[15px]">
+            <table className="w-full h-full justify-center items-start">
               <thead className=" text-left rtl:text-right">
-                <tr className="uppercase font-semibold text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
+                <tr className="uppercase !font-semibold sub-title border-b border-[#E7EAEE] h-[70px]">
                   <td className="px-6 py-5 ">Name</td>
-                  <td className="px-6 py-5 ">DUE MED UID</td>
-                  <td className="px-6 py-5 ">Date</td>
-                  <td className="px-6 py-5 ">Time</td>
+                  <td className="px-6 py-5 w-[300px]">DUE MED UID</td>
                   <td className="px-6 py-5">Medication</td>
+                  <td className="px-6 py-5 w-[200px]">Date</td>
+                  <td className="px-6 py-5 w-[200px]">Time</td>
                 </tr>
               </thead>
               <tbody>
@@ -292,7 +281,7 @@ const DueMedication = () => {
                 {dueMedicationList.map((dueMedication, index) => (
                   <tr
                     key={index}
-                    className=" group  bg-white hover:bg-gray-100  border-b"
+                      className=" group  bg-white hover:bg-[#F4F4F4] border-b text-[15px]"
                   >
                     <td className="px-6 py-5 flex items-center gap-2">
                       {patientImages.some(
@@ -310,14 +299,14 @@ const DueMedication = () => {
                                   {image.data ? (
                                     // Render the image if data is not empty
                                     <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
-                                    <Image
-                                      className="rounded-full object-cover w-12 h-12"
-                                      src={image.data} // Use the base64-encoded image data directly
-                                      alt=""
-                                      width={45}
-                                      height={45}
-                                    />
-                                  </div>
+                                      <Image
+                                        className="rounded-full object-cover min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                        src={image.data} // Use the base64-encoded image data directly
+                                        alt=""
+                                        width={45}
+                                        height={45}
+                                      />
+                                    </div>
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
                                     <Image
@@ -334,8 +323,9 @@ const DueMedication = () => {
                             return null;
                           })}
                         </div>
-                      ) : // Render a placeholder image if no matching image found
-                 ( // Only render stock image when images are loaded
+                      ) : (
+                        // Render a placeholder image if no matching image found
+                        // Only render stock image when images are loaded
                         <div>
                           <Image
                             className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
@@ -345,30 +335,29 @@ const DueMedication = () => {
                             height={45}
                           />
                         </div>
-
                       )}
-                      <span className="overflow-hidden">
+                      <span className="w-[300px] truncate">
                         <ResuableTooltip
                           text={`${dueMedication.patient_firstName} ${""}
                         ${dueMedication.patient_lastName}`}
                         />
                       </span>
                     </td>
-                    <td className="px-6 py-5 ">
+                    <td className="px-6 py-5 w-[300px] truncate">
                       <ResuableTooltip
                         text={dueMedication.medicationlogs_uuid}
                       />
                     </td>
-                    <td className="px-6 py-5 ">
+                      <td className="px-6 py-5 truncate">
+                        <ResuableTooltip
+                          text={dueMedication.medicationlogs_medicationLogsName}
+                        />
+                      </td>
+                    <td className="px-6 py-5 w-[200px]">
                       {dueMedication.medicationlogs_medicationLogsDate}
                     </td>
-                    <td className="px-6 py-5 ">
+                    <td className="px-6 py-5 w-[200px]">
                       {dueMedication.medicationlogs_medicationLogsTime}
-                    </td>
-                    <td className="px-6 py-5">
-                      <ResuableTooltip
-                        text={dueMedication.medicationlogs_medicationLogsName}
-                      />
                     </td>
                   </tr>
                 ))}
