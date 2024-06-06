@@ -164,7 +164,7 @@ const DBDueMedication = ({totalDueMedication,setTotalDueMedication,totalDone,set
         <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white flex flex-col justify-between h-full rounded-[5px]">
           <div className="h-full">
             <div className="flex flex-col ">
-              <p className="p-title ">
+              <p className="p-title !font-medium">
                 Due Medication
                 <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
               </p>
@@ -235,7 +235,7 @@ const DBDueMedication = ({totalDueMedication,setTotalDueMedication,totalDone,set
                     </div>
                     <div className="flex w-4/6">
                       <div className="flex flex-col justify-center gap-1 w-full">
-                        <p className="font-bold text-[15px] truncate hover:text-wrap">
+                        <p className=" text-[15px] truncate hover:text-wrap">
                           <ResuableTooltip
                             text={`${dueMedication.patient_firstName}${" "}${
                               dueMedication.patient_middleName

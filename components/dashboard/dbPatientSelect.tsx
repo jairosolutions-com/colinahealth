@@ -56,7 +56,7 @@ const DBPatientSelect = ({patientId,setPatientId}:DBPatientSelectProps) => {
   
 
   return (
-    <div className="w-[460px]">
+    <div className="w-full">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -64,7 +64,7 @@ const DBPatientSelect = ({patientId,setPatientId}:DBPatientSelectProps) => {
             role="combobox"
             aria-expanded={open}
             className={`${
-              error && "text-red-500 border-red-500"
+              error ? "text-[#DB3956] border-[#DB3956]": "sub-title"
             } w-full justify-between mb-5 h-12 rounded-md shadow-sm`}
           >
             {patientId
@@ -83,7 +83,7 @@ const DBPatientSelect = ({patientId,setPatientId}:DBPatientSelectProps) => {
                 : patientList.find(
                     (patientList) => patientList.uuid === patientId
                   )?.lastName
-              : "Select patient..."}
+              : "Select patient"}
             <Image
               src={
                 error
@@ -99,7 +99,7 @@ const DBPatientSelect = ({patientId,setPatientId}:DBPatientSelectProps) => {
             />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[458px] p-0 overflow-y-auto">
+        <PopoverContent className="w-[522px] p-0 overflow-y-auto">
           <Command
             className="w-full"
             onClick={() => {

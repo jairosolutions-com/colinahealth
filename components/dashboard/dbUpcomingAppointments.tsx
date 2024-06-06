@@ -145,7 +145,7 @@ const DBUpcomingAppointments = () => {
         <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white flex flex-col justify-between h-full rounded-[5px]">
           <div>
             <div className="">
-              <p className="p-title ">
+              <p className="p-title !font-medium">
                 Upcoming Appointment
                 <span>{upcomingAppointments.length > 1 ? "s" : ""}</span>
               </p>
@@ -215,7 +215,7 @@ const DBUpcomingAppointments = () => {
                     )}
                     <div className="flex w-4/6">
                       <div className="flex flex-col justify-center gap-1 truncate">
-                        <p className="font-bold text-[15px] w-full">
+                        <p className=" text-[15px] w-full">
                           <ResuableTooltip
                             text={`${
                               upcomingAppointment.patient_firstName
@@ -234,12 +234,12 @@ const DBUpcomingAppointments = () => {
                     </div>
                   </div>
                   <div className="w-1/4 flex flex-col justify-center items-end text-end gap-1">
-                    <p className="font-semibold text-[15px] flex">
+                    <p className="font-medium text-[15px] flex">
                       {formatDate(
                         upcomingAppointment.appointments_appointmentDate
                       )}
                     </p>
-                    <p className=" font-medium sub-title ml-4">
+                    <p className="  sub-title ml-4">
                       {formatTime(
                         upcomingAppointment.appointments_appointmentTime
                       )}
