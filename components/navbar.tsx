@@ -18,9 +18,9 @@ interface Tabs {
 }
 
 export const Navbar = ({
-  setIsLoading,
+  // setIsLoading,
 }: {
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
 
@@ -242,7 +242,7 @@ export const Navbar = ({
       pathname === "/appointments" ||
       pathname === "/dashboard"
     ) {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [pathname]);
 
@@ -263,7 +263,7 @@ export const Navbar = ({
           onClick={(event) => {
             if (pathname === "/dashboard") {
               event.preventDefault();
-              setIsLoading(true);
+              // setIsLoading(true);
               window.location.reload();
             }
           }}
@@ -277,7 +277,7 @@ export const Navbar = ({
               href={route.url}
               className={`cursor-pointer text-white relative font-medium`}
               onClick={() => {
-                setIsLoading(true);
+                // setIsLoading(true);
                 if (pathname === route.url) {
                   window.location.reload();
                 }

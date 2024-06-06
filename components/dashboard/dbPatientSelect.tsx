@@ -15,11 +15,14 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import { selectPatient } from "@/app/api/patients-api/patientSelect.api";
-
-const DBPatientSelect = () => {
+interface DBPatientSelectProps {
+  patientId: string;
+  setPatientId: (patientId: string) => void;
+}
+const DBPatientSelect = ({patientId,setPatientId}:DBPatientSelectProps) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
-  const [patientId, setPatientId] = React.useState("");
+ 
   const [isSubmitted, setIsSubmitted] = useState<boolean>(true);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState("");
@@ -27,7 +30,6 @@ const DBPatientSelect = () => {
   const [patientList, setPatientList] = useState([
     {
       uuid: "",
-
       firstName: "",
       lastName: "",
     },
@@ -51,9 +53,10 @@ const DBPatientSelect = () => {
 
     fetchData();
   }, []);
+  
 
   return (
-    <div className="w-[460px]">
+    <div className="w-full">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -61,7 +64,7 @@ const DBPatientSelect = () => {
             role="combobox"
             aria-expanded={open}
             className={`${
-              error && "text-red-500 border-red-500"
+              error ? "text-[#DB3956] border-[#DB3956]": "sub-title"
             } w-full justify-between mb-5 h-12 rounded-md shadow-sm`}
           >
             {patientId
@@ -71,16 +74,16 @@ const DBPatientSelect = () => {
                 ? `${
                     patientList.find(
                       (patientList) => patientList.uuid === patientId
-                    )?.lastName
-                  }, ${
+                    )?.firstName
+                  } ${
                     patientList.find(
                       (patientList) => patientList.uuid === patientId
-                    )?.firstName
+                    )?.lastName
                   }`
                 : patientList.find(
                     (patientList) => patientList.uuid === patientId
                   )?.lastName
-              : "Select patient..."}
+              : "Select patient"}
             <Image
               src={
                 error
@@ -96,7 +99,7 @@ const DBPatientSelect = () => {
             />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[458px] p-0 overflow-y-auto">
+        <PopoverContent className="w-[522px] p-0 overflow-y-auto">
           <Command
             className="w-full"
             onClick={() => {

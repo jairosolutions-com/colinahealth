@@ -9,7 +9,13 @@ import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.a
 import ResuableTooltip from "../reusable/tooltip";
 import DBDueMedicationLoader from "../loaders/DBDueMedicationLoader";
 
-const DBDueMedication = () => {
+interface DBDueMedicationProps {
+  totalDueMedication: number;
+  setTotalDueMedication: (dueMedicationLength: number) => void;
+  totalDone: number;
+  setTotalDone: (totalDone: number) => void;
+}
+const DBDueMedication = ({totalDueMedication,setTotalDueMedication,totalDone,setTotalDone}:DBDueMedicationProps) => {
   const router = useRouter();
   const { toast } = useToast();
   const [term, setTerm] = useState("");
@@ -34,8 +40,8 @@ const DBDueMedication = () => {
     }[]
   >([]);
   const [dueMedTotalPages, setDueMedTotalPages] = useState(0);
-  const [totalDueMedication, setTotalDueMedication] = useState(0);
 
+  console.log(totalDone,'totalDone')
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,6 +94,7 @@ const DBDueMedication = () => {
         setDueMedicationList(limitedArray);
         setDueMedTotalPages(dueMedicationList.totalPages);
         setTotalDueMedication(dueMedicationList.totalCount);
+        setTotalDone(dueMedicationList.totalDone);
         setIsLoading(false);
         const profileImagesResponse = await fetchProfileImages(
           patientUuids as string[]
@@ -157,7 +164,7 @@ const DBDueMedication = () => {
         <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white flex flex-col justify-between h-full rounded-[5px]">
           <div className="h-full">
             <div className="flex flex-col ">
-              <p className="p-title ">
+              <p className="p-title !font-medium">
                 Due Medication
                 <span>{dueMedicationList.length > 1 ? "s" : ""}</span>
               </p>
@@ -228,7 +235,7 @@ const DBDueMedication = () => {
                     </div>
                     <div className="flex w-4/6">
                       <div className="flex flex-col justify-center gap-1 w-full">
-                        <p className="font-bold text-[15px] truncate hover:text-wrap">
+                        <p className=" text-[15px] truncate hover:text-wrap">
                           <ResuableTooltip
                             text={`${dueMedication.patient_firstName}${" "}${
                               dueMedication.patient_middleName

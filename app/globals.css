@@ -248,7 +248,7 @@ body,
 }
 
 .p-title {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 20px;
 }
 
@@ -431,4 +431,6 @@ table {
 .error {
   color: #db3956;
   border-color: #db3956;
+  border-width: 1px;
+  
 }
