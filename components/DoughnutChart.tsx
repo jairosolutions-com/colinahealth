@@ -54,7 +54,7 @@ const DoughnutChart = ({ total, totalDone }: DoughnutChartProps) => {
         }}
       />
       <div
-        className="absolute top-14 right-6 bg-white"
+        className="absolute top-14 right-6 "
       >
         {legendItems}
       </div>

@@ -24,6 +24,11 @@ const DBPatientSummary = ({
   const totalPatientDone =
     pri === undefined ? 0 : pri?.totalMedicationDone?.medicationCount;
 
+  const allergens = pri?.patientAllergies[0]?.allergens
+    ? pri.patientAllergies[0].allergens
+        .split(",")
+        .map((allergen: string) => allergen.trim())
+    : ["No Allergens"];
   console.log("totalPatientDue", totalPatientDue);
   useEffect(() => {
     const fetchData = async () => {
@@ -45,9 +50,9 @@ const DBPatientSummary = ({
         <DBPatientSelect patientId={patientId} setPatientId={setPatientId} />
       </div>
       <div className="w-full h-full gap-3 flex flex-col">
-        <div className="h-4/6 w-full flex gap-3">
-          <div className="w-1/2 flex flex-col  gap-3 relative">
-            <div className="h-full bg-[#D9D9D91A] ">
+        <div className="h-4/6 w-full gap-3">
+          <div className="h-1/2 w-full flex   gap-3 relative">
+            <div className="h-full bg-[#D9D9D91A] w-1/2">
               <div className="h-[40px] rounded-t-[5px] bg-[#F4E394] w-full"></div>
               <div className="pt-5 px-5">
                 <h1 className="text-[15px] font-medium">Patient Details</h1>
@@ -73,7 +78,8 @@ const DBPatientSummary = ({
                         </div>
                       </div>
                       <h1>
-                        Date of Birth: {formatDate(pri?.data[0]?.patient_dateOfBirth)}
+                        Date of Birth:{" "}
+                        {formatDate(pri?.data[0]?.patient_dateOfBirth)}
                       </h1>
                       <h1 className="w-full truncate flex">
                         Address:
@@ -87,24 +93,7 @@ const DBPatientSummary = ({
                 </div>
               </div>
             </div>
-            <div className="h-full bg-[#D9D9D91A] ">
-              <div className="h-[40px] rounded-t-[5px] bg-[#93F3B9] w-full"></div>
-              <div className="pt-5 px-5">
-                <h1 className="text-[15px] font-medium ">Medications</h1>
-                <div className="h-full w-full flex items-center sub-title ">
-                  {pri == undefined ? (
-                    <h1 className="text-center w-full">no data yet</h1>
-                  ) : (
-                    <div>
-                      <h1>{pri?.data[0]?.medicationLogsName}</h1>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="w-1/2 flex flex-col gap-3">
-            <div className="h-full bg-[#D9D9D91A] relative">
+            <div className="h-full bg-[#D9D9D91A] relative w-1/2">
               <div className="h-[40px] rounded-t-[5px] bg-[#F3BB93] w-full"></div>
               <div className="pt-5 px-5 relative">
                 <h1 className="text-[15px] font-medium ">Vital Signs</h1>
@@ -122,16 +111,54 @@ const DBPatientSummary = ({
                 </div>
               </div>
             </div>
-            <div className="h-full bg-[#D9D9D91A] ">
-              <div className="h-[40px] rounded-t-[5px] bg-[#93F3DC] w-full"></div>
+          </div>
+          <div className="h-[200px] w-full flex flex-row gap-3">
+            <div className="h-full bg-[#D9D9D91A] w-1/2">
+              <div className="h-[40px] rounded-t-[5px] bg-[#93F3B9] w-full"></div>
               <div className="pt-5 px-5">
-                <h1 className="text-[15px] font-medium ">Allergies</h1>
+                <h1 className="text-[15px] font-medium ">Medications</h1>
                 <div className="h-full w-full flex items-center sub-title ">
                   {pri == undefined ? (
                     <h1 className="text-center w-full">no data yet</h1>
                   ) : (
                     <div>
-                      <h1>{pri?.data[0]?.allergen}</h1>
+                      <h1>{pri?.data[0]?.medicationLogsName}</h1>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="h-full bg-[#D9D9D91A] w-1/2">
+              <div className="h-[40px] rounded-t-[5px] bg-[#93F3DC] w-full"></div>
+              <div className="pt-5 pl-5">
+                <h1 className="text-[15px] font-medium">Allergies</h1>
+                <div className="h-full w-full flex items-center sub-title">
+                  {pri == undefined ? (
+                    <h1 className="text-center w-full">no data yet</h1>
+                  ) : (
+                    <div className="max-h-[100px] w-full overflow-auto">
+                      <div className="h-full mt-[2px]">
+                        {allergens.map(
+                          (
+                            allergen:
+                              | string
+                              | number
+                              | boolean
+                              | React.ReactElement<
+                                  any,
+                                  string | React.JSXElementConstructor<any>
+                                >
+                              | Iterable<React.ReactNode>
+                              | React.ReactPortal
+                              | React.PromiseLikeOfReactNode
+                              | null
+                              | undefined,
+                            index: React.Key | null | undefined
+                          ) => (
+                            <div key={index}>{allergen}</div>
+                          )
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -147,8 +174,7 @@ const DBPatientSummary = ({
                 <h1 className="absolute text-[15px] font-medium  truncate w-full">
                   {pri === undefined
                     ? "[Patient Name]"
-                    : pri?.data[0]?.patient_firstName}{" "}
-                  {pri === undefined ? "" : pri?.data[0]?.patient_lastName}
+                    : pri?.data[0]?.patient_firstName}'s Due Medication
                 </h1>
                 <div className="h-full w-full flex  items-center justify-center ">
                   <DoughnutChart
@@ -159,7 +185,9 @@ const DBPatientSummary = ({
               </div>
               <div className=" w-[1px]  bg-[#DDDDDD]"></div>
               <div className="w-1/2 relative">
-                <h1 className="absolute text-[15px] font-medium ">All Due Medications</h1>
+                <h1 className="absolute text-[15px] font-medium ">
+                  Total Due Meds of All Patients
+                </h1>
                 <div className="h-full w-full flex  items-center justify-center ">
                   <DoughnutChart
                     total={totalDueMedication}
