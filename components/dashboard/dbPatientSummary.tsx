@@ -5,7 +5,7 @@ import DoughnutChart from "../DoughnutChart";
 import { useRouter } from "next/navigation";
 import { fetchPatientRecentInfo } from "@/app/api/patients-api/patientRecentInfo.api";
 import ResuableTooltip from "../reusable/tooltip";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatTime } from "@/lib/utils";
 interface DBPatientSummaryProps {
   totalDueMedication: number;
   totalDone: number;
@@ -23,6 +23,13 @@ const DBPatientSummary = ({
     pri === undefined ? 0 : pri?.totalMedicationDue?.medicationCount;
   const totalPatientDone =
     pri === undefined ? 0 : pri?.totalMedicationDone?.medicationCount;
+
+  const recentMedication =
+    pri?.recentMedication?.medicationlogs_medicationLogsName;
+    const recentMedicationDate =
+    pri?.recentMedication?.medicationlogs_medicationLogsDate;
+    const recentMedicationTime =
+    pri?.recentMedication?.medicationlogs_medicationLogsTime;
 
   const allergens = pri?.patientAllergies[0]?.allergens
     ? pri.patientAllergies[0].allergens
@@ -44,6 +51,7 @@ const DBPatientSummary = ({
   }, [patientId]);
   console.log("patientId", patientId);
   console.log(patientRecentInfo, "patientRecentInfo");
+  console.log("recentMedication", recentMedication);
   return (
     <div className="w-full h-full flex flex-col justify-between gap-3">
       <div className="h-[50px]  w-1/2 flex pr-[6px]">
@@ -85,10 +93,10 @@ const DBPatientSummary = ({
                       <div className="w-full flex ">
                         Address:{" "}
                         <h1 className="max-w-9/12 truncate">
-                            <ResuableTooltip
-                              text={`${pri?.data[0]?.patient_address1}`}
-                            />
-                          </h1>
+                          <ResuableTooltip
+                            text={`${pri?.data[0]?.patient_address1}`}
+                          />
+                        </h1>
                       </div>
                       <h1>Phone Number: {pri?.data[0]?.patient_phoneNo}</h1>
                     </div>
@@ -120,12 +128,16 @@ const DBPatientSummary = ({
               <div className="h-[40px] rounded-t-[5px] bg-[#93F3B9] w-full"></div>
               <div className="pt-5 px-5">
                 <h1 className="text-[15px] font-medium ">Medications</h1>
-                <div className="h-full w-full flex items-center sub-title ">
+                <div className="h-full w-full flex items-center sub-title mt-2">
                   {pri == undefined ? (
                     <h1 className="text-center w-full">no data yet</h1>
+                  ) : recentMedication === undefined ? (
+                    <div>No Recent Medication</div>
                   ) : (
-                    <div>
-                      <h1>{pri?.data[0]?.medicationLogsName}</h1>
+                    <div className="flex flex-col gap-1">
+                      <p>{recentMedication}</p>
+                      <p>Date Taken : {" "} {formatDate(recentMedicationDate)}</p>
+                      <p>Time Taken : {" "} {formatTime(recentMedicationTime)}</p>
                     </div>
                   )}
                 </div>
@@ -140,7 +152,7 @@ const DBPatientSummary = ({
                     <h1 className="text-center w-full">no data yet</h1>
                   ) : (
                     <div className="max-h-[100px] w-full overflow-auto">
-                      <div className="h-full mt-[2px]">
+                      <div className="h-full mt-2 flex flex-col gap-1">
                         {allergens.map(
                           (
                             allergen:
