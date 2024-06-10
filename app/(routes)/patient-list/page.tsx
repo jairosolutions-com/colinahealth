@@ -174,6 +174,10 @@ export default function PatientPage() {
         const patientUuids = response.data.map(
           (patient: { uuid: any }) => patient.uuid
         );
+        if (patientUuids.length === 0) {
+          setPatientImages([]);
+          return;
+        }
         // Fetch profile images for all patients
         const profileImagesResponse = await fetchProfileImages(patientUuids);
 

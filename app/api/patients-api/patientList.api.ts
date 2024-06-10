@@ -50,7 +50,7 @@ export async function searchPatientList(
         return Promise.reject(
           new Error("Connection refused or network error occurred.")
         );
-      }
+      } 
       if (axiosError.response?.status === 401) {
         setAccessToken("");
         onNavigate(router, "/login");
