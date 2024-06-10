@@ -15,7 +15,7 @@ const DueMedicationLoader = () => {
             </div>
             <div className="sub-title">Total of 0 Due Medication</div>
           </div>
-          <div className="flex flex-row justify-end h-full -mb-[13px]">
+          <div className="flex flex-row justify-end h-full ">
             <DownloadPDF></DownloadPDF>
           </div>
         </div>

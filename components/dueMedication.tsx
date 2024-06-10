@@ -20,7 +20,7 @@ import Pagination from "@/components/shared/pagination";
 import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 import ResuableTooltip from "@/components/reusable/tooltip";
 import DueMedicationLoader from "./loaders/dueMedicationLoader";
-import PdfDueMedDownloader from "./pdfDueMedDownloader";
+import PdfDownloader from "./pdfDownloader";
 
 const DueMedication = () => {
   const router = useRouter();
@@ -188,7 +188,7 @@ const DueMedication = () => {
             </p>
           </div>
           <div className="flex flex-row justify-end">
-            <PdfDueMedDownloader 
+            <PdfDownloader 
             props={[
               "Name",
               "Uuid",

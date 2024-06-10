@@ -1,122 +1,130 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { toast } from "./ui/use-toast";
 import { ToastAction } from "./ui/toast";
-import printJS from "print-js";
+import DownloadPDF from "./shared/buttons/downloadpdf";
+import { fetchDueMedication } from "@/app/api/medication-logs-api/due-medication-api";
+import { useRouter } from "next/navigation";
+import { print } from "@/lib/utils";
+import { searchPatientList } from "@/app/api/patients-api/patientList.api";
 
-const PdfDownloader = ({ data, props, variant }: any) => {
+const PdfDownloader = ({ props, variant }: any) => {
+  const router = useRouter();
+  const [sortOrder, setSortOrder] = useState("ASC");
+
   const handleDownloadPDF = async () => {
-    console.log(data, "data");
-    if (data.length === 0) {
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "Allergy list is empty",
-        action: (
-          <ToastAction
-            altText="Try again"
-            onClick={() => {
-              window.location.reload();
-            }}
-          >
-            Try again
-          </ToastAction>
-        ),
-      });
-    } else {
-      let patientName =
-        data[0]?.patient_lastName +
-        ", " +
-        data[0]?.patient_firstName +
-        " " +
-        data[0]?.patient_middleName;
-      let jsonFile: {
-        Uuid: string;
-        Date: string;
-        Type: string;
-        Allergen: string;
-        Severity: string;
-        Reaction: string;
-        Notes: string;
-      }[] = data.map((d: any) => ({
-        Uuid: d.allergies_uuid,
-        Date: new Date(d.allergies_createdAt).toLocaleDateString(),
-        Type: d.allergies_type,
-        Allergen: d.allergies_allergen,
-        Severity: d.allergies_severity,
-        Reaction: d.allergies_reaction,
-        Notes: d.allergies_notes,
-      }));
+    if (variant === "Due Medication Table") {
+      try {
+        const dueMedicationList = await fetchDueMedication(
+          "",
+          1,
+          "medicationlogs.medicationLogsTime",
+          sortOrder as "ASC" | "DESC",
+          0,
+          router
+        );
 
-      const patientFullName = patientName;
+        if (dueMedicationList.data.length === 0) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "Due Med is empty",
+            action: (
+              <ToastAction
+                altText="Try again"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Try again
+              </ToastAction>
+            ),
+          });
+        } else {
+          let jsonFile: {
+            Name: string;
+            Uuid: string;
+            Medication: string;
+            Date: string;
+            Time: string;
+          }[] = dueMedicationList.data.map((d: any) => ({
+            Name: d.patient_firstName + " " + d.patient_lastName,
+            Uuid: d.medicationlogs_uuid,
+            Medication: d.medicationlogs_medicationLogsName,
+            Date: d.medicationlogs_medicationLogsDate,
+            Time: d.medicationlogs_medicationLogsTime,
+          }));
 
-      printJS({
-        printable: jsonFile,
-        properties: props,
-        type: "json",
-        style: `
-              @page { size: Letter landscape; }
-              @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
-              
-              body {
-                font-family: 'Manrope', sans-serif;
-                font-weight:lighter;
-              }
-              hr.new1 {
-                margin-top: -40px;
-                border: 3px solid #007C85;
-              }
-              hr.new2 {
-                border: 1px solid #007C85;
-              }
-    
-              p {
-                font-size: 23.57px;
-                font-weight: lighter;
-              }
-              .logo-bg {
-                display:flex;
-                height: 77.79px;
-                width: 226.48px;
-              }
-              .variant {
-                text-align: center;
-                align-items: center;
-                width: 100%;
-                position:absolute;
-              }
-              .w-full {
-                width: 100%;
-              }
-              div {
-                width: 100%;
-              }
-            `,
-        header: `<div class="w-full"> 
-                        <div class="logo-bg w-full">
-                          <img src="https://i.imgur.com/LrS9IUe.png" height="30px alt="">
-                          <div class="variant w-full">${variant}</div>
-                        </div>
-                      <div>
-                      <hr class="new1">
-                      <hr class="new2">
-                        <p>${patientFullName}</p>
-                      </div>
-                    </div>`,
-        headerStyle: "color: #64748B; font-size:23.57px; font-weight:lighter",
-        gridHeaderStyle:
-          "color: #64748B;  border: 1.18px solid #EEEEEE; text-align:left; padding-left:5px; height:56.05px; font-weight:lighter; ",
-        gridStyle:
-          "border: 1.18px solid #EEEEEE; padding-left:5px; height:71.87px ",
-        documentTitle: "",
-      });
+          print(jsonFile, props, variant);
+        }
+      } catch (error) {
+        console.error("Error fetching due medications:", error);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "Failed to fetch due medications",
+        });
+      }
+    }
+    if (variant === "Patient List Table") {
+      try {
+        const patientList = await searchPatientList(
+          "",
+          1,
+          "firstName",
+          sortOrder as "ASC" | "DESC",
+          0,
+          router
+        );
+
+        console.log(patientList, "patientList");
+        if (patientList.data.length === 0) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "Patient List is empty",
+            action: (
+              <ToastAction
+                altText="Try again"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Try again
+              </ToastAction>
+            ),
+          });
+        } else {
+          let jsonFile: {
+            Uuid: string;
+            Name: string;
+            Age: string;
+            Gender: string;
+          }[] = patientList.data.map((d: any) => ({
+            Uuid: d.uuid,
+            Name: d.firstName + " " + d.lastName,
+            Age: d.age,
+            Gender: d.gender,
+          }));
+
+          print(jsonFile, props, variant);
+        }
+      } catch (error) {
+        console.error("Error fetching due medications:", error);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "Failed to fetch due medications",
+        });
+      }
     }
   };
+
   return (
-    <button className="btn-pdfs gap-2" onClick={handleDownloadPDF}>
-      <Image src="/imgs/downloadpdf.svg" alt="" width={22} height={22} />
-      <p className="text-[18px]">Download PDF</p>
-    </button>
+    <div onClick={handleDownloadPDF}>
+      <DownloadPDF />
+    </div>
   );
 };
 
