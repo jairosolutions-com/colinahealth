@@ -127,7 +127,7 @@ const DBPatientSummary = ({
             <div className="h-full bg-[#D9D9D91A] w-1/2">
               <div className="h-[40px] rounded-t-[5px] bg-[#93F3B9] w-full"></div>
               <div className="pt-5 px-5">
-                <h1 className="text-[15px] font-medium ">Medications</h1>
+                <h1 className="text-[15px] font-medium ">Medication</h1>
                 <div className="h-full w-full flex items-center sub-title mt-2">
                   {pri == undefined ? (
                     <h1 className="text-center w-full">no data yet</h1>
