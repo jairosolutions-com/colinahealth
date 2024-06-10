@@ -15,7 +15,7 @@ const DoughnutChart = ({ total, totalDone }: DoughnutChartProps) => {
     datasets: [
       {
         label: "Medications",
-        data: [totalDone, totalNum - totalDone, totalNum === 0 ? 1 : 0],
+        data: [totalDone, totalNum === 0 ? 0 : totalNum - totalDone , totalNum === 0 && totalDone ===0 ? 1 : 0],
         backgroundColor: ["#63ABFD", "#FFA5CB", "#D7D7D7"],
       },
     ],

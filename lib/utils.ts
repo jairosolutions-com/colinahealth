@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import qs from "query-string";
 import { UrlQueryParams, RemoveUrlQueryParams } from "@/types";
 import printJS from "print-js";
+import { DateTime } from 'luxon';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -41,16 +42,17 @@ export function removeKeysFromQuery({
   );
 }
 
-export function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  };
-  const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
+export function formatDate(dateString:string) {
+  // Parse the date string using luxon
+  const date = DateTime.fromISO(dateString);
 
-  return formattedDate.replace(/\//g, " / ");
+  // Format the date in the desired format
+  return date.toFormat('MM / dd / yyyy');
+}
+
+export function formatTime(timeString:string) {
+  const time = DateTime.fromFormat(timeString, 'HH:mm:ss');
+  return time.toFormat('h:mm a');
 }
 
 export async function print(jsonFile: any, props: any, variant: string) {
