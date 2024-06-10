@@ -79,7 +79,7 @@ const DBPatientSummary = ({
                           ${pri?.data[0]?.patient_lastName} ${" "}`}
                             />
                           </p>
-                          <span className="w-3/12">
+                          <span className="w-3/12 ml-1">
                             {" "}
                             - {pri?.data[0]?.patient_age}{" "}
                             {pri?.data[0]?.patient_gender}
