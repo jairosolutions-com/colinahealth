@@ -62,7 +62,7 @@ const DBPatientSummary = ({
                   ) : (
                     <div className="flex flex-col gap-1 w-full">
                       <div className="flex w-full">
-                        Name:
+                        Name:{" "}
                         <div className="w-full  flex ">
                           <p className="max-w-9/12 truncate">
                             <ResuableTooltip
@@ -72,6 +72,7 @@ const DBPatientSummary = ({
                             />
                           </p>
                           <span className="w-3/12">
+                            {" "}
                             - {pri?.data[0]?.patient_age}{" "}
                             {pri?.data[0]?.patient_gender}
                           </span>
@@ -81,12 +82,14 @@ const DBPatientSummary = ({
                         Date of Birth:{" "}
                         {formatDate(pri?.data[0]?.patient_dateOfBirth)}
                       </h1>
-                      <h1 className="w-full truncate flex">
-                        Address:
-                        <ResuableTooltip
-                          text={`${pri?.data[0]?.patient_address1}`}
-                        />
-                      </h1>
+                      <div className="w-full flex ">
+                        Address:{" "}
+                        <h1 className="max-w-9/12 truncate">
+                            <ResuableTooltip
+                              text={`${pri?.data[0]?.patient_address1}`}
+                            />
+                          </h1>
+                      </div>
                       <h1>Phone Number: {pri?.data[0]?.patient_phoneNo}</h1>
                     </div>
                   )}
@@ -174,7 +177,8 @@ const DBPatientSummary = ({
                 <h1 className="absolute text-[15px] font-medium  truncate w-full">
                   {pri === undefined
                     ? "[Patient Name]"
-                    : pri?.data[0]?.patient_firstName}'s Due Medication
+                    : pri?.data[0]?.patient_firstName}
+                  's Due Medication
                 </h1>
                 <div className="h-full w-full flex  items-center justify-center ">
                   <DoughnutChart

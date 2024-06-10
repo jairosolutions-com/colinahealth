@@ -20,7 +20,7 @@ import { AllergiesModalContent } from "@/components/modal-content/allergies-moda
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Pagination from "@/components/shared/pagination";
-import PdfDownloader from "@/components/pdfDownloader";
+import PdfDownloader from "@/components/pdfAllergiesDownloader";
 import ResuableTooltip from "@/components/reusable/tooltip";
 
 const Allergies = () => {
