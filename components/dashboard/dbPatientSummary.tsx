@@ -60,7 +60,7 @@ const DBPatientSummary = ({
       <div className="w-full h-full gap-3 flex flex-col">
         <div className="h-4/6 w-full gap-3">
           <div className="h-1/2 w-full flex   gap-3 relative">
-            <div className="h-full bg-[#D9D9D91A] w-1/2">
+            <div className="h-full bg-[#D9D9D91A] w-1/2 ">
               <div className="h-[40px] rounded-t-[5px] bg-[#F4E394] w-full"></div>
               <div className="pt-5 px-5">
                 <h1 className="text-[15px] font-medium">Patient Details</h1>
@@ -72,7 +72,7 @@ const DBPatientSummary = ({
                       <div className="flex w-full">
                         Name:{" "}
                         <div className="w-full  flex ">
-                          <p className="max-w-9/12 truncate">
+                          <p className="w-9/12 truncate">
                             <ResuableTooltip
                               text={`${pri?.data[0]?.patient_firstName}${" "}
                             ${pri?.data[0]?.patient_middleName}${" "}
@@ -90,9 +90,9 @@ const DBPatientSummary = ({
                         Date of Birth:{" "}
                         {formatDate(pri?.data[0]?.patient_dateOfBirth)}
                       </h1>
-                      <div className="w-full flex ">
+                      <div className="w-full  flex ">
                         Address:{" "}
-                        <h1 className="max-w-9/12 truncate">
+                        <h1 className="w-[420px] truncate">
                           <ResuableTooltip
                             text={`${pri?.data[0]?.patient_address1}`}
                           />
