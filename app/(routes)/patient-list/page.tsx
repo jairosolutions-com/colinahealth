@@ -19,6 +19,7 @@ import Image from "next/image";
 import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 import Pagination from "@/components/shared/pagination";
 import ResuableTooltip from "@/components/reusable/tooltip";
+import PdfDownloader from "@/components/pdfDownloader";
 
 export default function PatientPage() {
   const router = useRouter();
@@ -160,6 +161,7 @@ export default function PatientPage() {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
+          5,
           router
         );
 
@@ -172,6 +174,10 @@ export default function PatientPage() {
         const patientUuids = response.data.map(
           (patient: { uuid: any }) => patient.uuid
         );
+        if (patientUuids.length === 0) {
+          setPatientImages([]);
+          return;
+        }
         // Fetch profile images for all patients
         const profileImagesResponse = await fetchProfileImages(patientUuids);
 
@@ -269,7 +275,10 @@ export default function PatientPage() {
           </div>
           <div className="flex flex-row justify-end gap-2">
             <Add onClick={() => isModalOpen(true)}></Add>
-            <DownloadPDF></DownloadPDF>
+            <PdfDownloader
+              props={["Uuid", "Name", "Age", "Gender"]}
+              variant={"Patient List Table"}
+            />
           </div>
         </div>
 
@@ -348,10 +357,12 @@ export default function PatientPage() {
                   <th className="px-6 py-3 !font-semibold">Age</th>
                   <th className="px-6 py-3 !font-semibold">Gender</th>
 
-                  <th className="px-20 py-3 items-center !font-semibold">Action</th>
+                  <th className="px-20 py-3 items-center !font-semibold">
+                    Action
+                  </th>
                 </tr>
               </thead>
-              <tbody >
+              <tbody>
                 {patientList.length === 0 && (
                   <tr>
                     <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">

@@ -248,7 +248,7 @@ const NurseDrawer = () => {
                         alt="arrow-down"
                         className={`${
                           open ? "rotate-180" : ""
-                        } ml-2 w-[7.49px] h-[3.57px] shrink-0 opacity-50 transition duration-300`}
+                        } ml-2 w-[8px] h-[5px] shrink-0 opacity-50 transition duration-300`}
                       />
                     </Button>
                   </PopoverTrigger>

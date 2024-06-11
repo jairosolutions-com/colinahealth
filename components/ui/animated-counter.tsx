@@ -1,9 +1,17 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import CountUp from "react-countup";
 
 const AnimatedCounter = ({ amount }: { amount: number }) => {
-  return <CountUp end={amount} />;
+  const [lastAmount, setLastAmount] = useState(0);
+  const [newAmount, setNewAmount] = useState(amount);
+
+  useEffect(() => {
+    setLastAmount(newAmount);
+    setNewAmount(amount);
+  }, [amount]);
+
+  return <CountUp start={lastAmount} end={newAmount} />;
 };
 
 export default AnimatedCounter;

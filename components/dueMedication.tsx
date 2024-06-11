@@ -20,6 +20,7 @@ import Pagination from "@/components/shared/pagination";
 import { fetchProfileImages } from "@/app/api/patients-api/patientProfileImage.api";
 import ResuableTooltip from "@/components/reusable/tooltip";
 import DueMedicationLoader from "./loaders/dueMedicationLoader";
+import PdfDownloader from "./pdfDownloader";
 
 const DueMedication = () => {
   const router = useRouter();
@@ -187,7 +188,15 @@ const DueMedication = () => {
             </p>
           </div>
           <div className="flex flex-row justify-end">
-            <DownloadPDF></DownloadPDF>
+            <PdfDownloader 
+            props={[
+              "Name",
+              "Uuid",
+              "Medication",
+              "Date",
+              "Time",
+            ]}
+            variant={"Due Medication Table"}/>
           </div>
         </div>
 
@@ -281,7 +290,7 @@ const DueMedication = () => {
                 {dueMedicationList.map((dueMedication, index) => (
                   <tr
                     key={index}
-                      className=" group  bg-white hover:bg-[#F4F4F4] border-b text-[15px]"
+                    className=" group  bg-white hover:bg-[#F4F4F4] border-b text-[15px]"
                   >
                     <td className="px-6 py-5 flex items-center gap-2">
                       {patientImages.some(
@@ -348,11 +357,11 @@ const DueMedication = () => {
                         text={dueMedication.medicationlogs_uuid}
                       />
                     </td>
-                      <td className="px-6 py-5 truncate">
-                        <ResuableTooltip
-                          text={dueMedication.medicationlogs_medicationLogsName}
-                        />
-                      </td>
+                    <td className="px-6 py-5 truncate">
+                      <ResuableTooltip
+                        text={dueMedication.medicationlogs_medicationLogsName}
+                      />
+                    </td>
                     <td className="px-6 py-5 w-[200px]">
                       {dueMedication.medicationlogs_medicationLogsDate}
                     </td>

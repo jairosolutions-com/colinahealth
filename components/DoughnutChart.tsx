@@ -11,11 +11,12 @@ interface DoughnutChartProps {
 
 const DoughnutChart = ({ total, totalDone }: DoughnutChartProps) => {
   const totalNum = parseInt(String(total));
+  const totalDoneNum = parseInt(String(totalDone));
   const data = {
     datasets: [
       {
         label: "Medications",
-        data: [totalDone, totalNum - totalDone, totalNum === 0 ? 1 : 0],
+        data: [totalDoneNum, totalNum === 0 ? 0 : totalNum , totalNum === 0 && totalDoneNum === 0  ? 1 : 0],
         backgroundColor: ["#63ABFD", "#FFA5CB", "#D7D7D7"],
       },
     ],
@@ -54,7 +55,7 @@ const DoughnutChart = ({ total, totalDone }: DoughnutChartProps) => {
         }}
       />
       <div
-        className="absolute top-14 right-6 bg-white"
+        className="absolute top-14 right-6 "
       >
         {legendItems}
       </div>
