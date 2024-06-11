@@ -43,15 +43,12 @@ export function removeKeysFromQuery({
 }
 
 export function formatDate(dateString:string) {
-  // Parse the date string using luxon
   const date = DateTime.fromISO(dateString);
-
-  // Format the date in the desired format
   return date.toFormat('MM / dd / yyyy');
 }
 
 export function formatTime(timeString:string) {
-  const time = DateTime.fromFormat(timeString, 'HH:mm:ss');
+  const time = DateTime.fromFormat(timeString, 'HH:mm');
   return time.toFormat('h:mm a');
 }
 
