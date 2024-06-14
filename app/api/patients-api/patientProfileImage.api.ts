@@ -40,40 +40,44 @@ export async function fetchPatientProfileImage(patientUuid: string, router: any)
 }
 
 export async function fetchProfileImages(patientUuids: string[]) {
-  try {
-    const accessToken = getAccessToken();
-    if (!accessToken) {
-      setAccessToken('');
-      throw new Error('Unauthorized Access');
+    try {
+        const accessToken = getAccessToken();
+        if (!accessToken) {
+            setAccessToken('');
+            throw new Error('Unauthorized Access');
+        }
+
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
+        if (!patientUuids || patientUuids.length === 0) {
+            return { message: 'No patientuuid found for the provided UUIDs' };
+        }
+        const response = await axios.post(`${apiUrl}/patient-information/profile-images`, {
+            patientUuids,
+        }, { headers });
+
+
+
+        if (!response.data || response.data.length === 0) {
+            return { message: 'No profile images found for the provided UUIDs' };
+        }
+
+        return response.data;
+    } catch (error: any) {
+        if (axios.isAxiosError(error)) {
+            const axiosError = error as AxiosError;
+            if (axiosError.message === 'Network Error') {
+                console.error('Connection refused or network error occurred.');
+                throw new Error('Connection refused or network error occurred.');
+            }
+            if (axiosError.response?.status === 401) {
+                throw new Error('Unauthorized access');
+            }
+        }
+        console.error('Error fetching patient profile images:', error.message);
+        return null; // Return null or undefined for other errors
     }
-
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-    };
-
-    const response = await axios.post(`${apiUrl}/patient-information/profile-images`, {
-      patientUuids,
-    }, { headers });
-
-    if (!response.data || response.data.length === 0) {
-      return { message: 'No profile images found for the provided UUIDs' };
-    }
-
-    return response.data;
-  } catch (error: any) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      if (axiosError.message === 'Network Error') {
-        console.error('Connection refused or network error occurred.');
-        throw new Error('Connection refused or network error occurred.');
-      }
-      if (axiosError.response?.status === 401) {
-        throw new Error('Unauthorized access');
-      }
-    }
-    console.error('Error fetching patient profile images:', error.message);
-    return null; // Return null or undefined for other errors
-  }
 }
 
 export async function addPatientProfileImage(patientUuid: string,
