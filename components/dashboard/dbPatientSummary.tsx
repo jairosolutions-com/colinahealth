@@ -62,7 +62,7 @@ const DBPatientSummary = ({
           <div className="h-1/2 w-full flex   gap-3 relative">
             <div className="h-full bg-[#D9D9D91A] w-1/2 ">
               <div className="h-[40px] rounded-t-[5px] bg-[#F4E394] w-full"></div>
-              <div className="pt-5 px-5">
+              <div className="pt-2 pb-5 px-5">
                 <h1 className="text-[15px] font-medium">Patient Details</h1>
                 <div className="h-full w-full flex items-center mt-2 sub-title ">
                   {pri == undefined ? (
@@ -106,7 +106,7 @@ const DBPatientSummary = ({
             </div>
             <div className="h-full bg-[#D9D9D91A] relative w-1/2">
               <div className="h-[40px] rounded-t-[5px] bg-[#F3BB93] w-full"></div>
-              <div className="pt-5 px-5 relative">
+              <div className="pt-2 pb-5 px-5 relative">
                 <h1 className="text-[15px] font-medium ">Vital Signs</h1>
                 <div className="h-full w-full flex items-center mt-2 sub-title ">
                   {pri == undefined ? (
@@ -126,7 +126,7 @@ const DBPatientSummary = ({
           <div className="h-[200px] w-full flex flex-row gap-3">
             <div className="h-full bg-[#D9D9D91A] w-1/2">
               <div className="h-[40px] rounded-t-[5px] bg-[#93F3B9] w-full"></div>
-              <div className="pt-5 px-5">
+              <div className="pt-2 pb-5  px-5">
                 <h1 className="text-[15px] font-medium ">Medication</h1>
                 <div className="h-full w-full flex items-center sub-title mt-2">
                   {pri == undefined ? (
@@ -145,7 +145,7 @@ const DBPatientSummary = ({
             </div>
             <div className="h-full bg-[#D9D9D91A] w-1/2">
               <div className="h-[40px] rounded-t-[5px] bg-[#93F3DC] w-full"></div>
-              <div className="pt-5 pl-5">
+              <div className="pt-2 pb-5  pl-5">
                 <h1 className="text-[15px] font-medium">Allergies</h1>
                 <div className="h-full w-full flex items-center sub-title">
                   {pri == undefined ? (
