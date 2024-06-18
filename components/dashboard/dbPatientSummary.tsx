@@ -113,10 +113,10 @@ const DBPatientSummary = ({
                     <h1 className="text-center w-full">no data yet</h1>
                   ) : (
                     <div className="flex flex-col gap-1">
-                      <h1>Blood Pressure: {pri?.data[0]?.bloodPressure}mmHg</h1>
-                      <h1>Heart Rate: {pri?.data[0]?.heartRate}{" "}bpm</h1>
-                      <h1>Temperature: {pri?.data[0]?.temperature}°F</h1>
-                      <h1>Respiratory: {pri?.data[0]?.respiratoryRate}{" "}breaths per minute</h1>
+                      <h1>Blood Pressure: {pri?.data[0]?.bloodPressure}{pri?.data[0]?.bloodPressure == "No Blood Pressure"?"" :"mmHg"}</h1>
+                      <h1>Heart Rate: {pri?.data[0]?.heartRate}{" "}{pri?.data[0]?.heartRate == "No Heart Rate"?"":"bpm"}</h1>
+                      <h1>Temperature: {pri?.data[0]?.temperature}{pri?.data[0]?.temperature== "No Temperature"?"":"°F"}</h1>
+                      <h1>Respiratory: {pri?.data[0]?.respiratoryRate}{" "}{pri?.data[0]?.respiratoryRate == "No Respiratory Rate"?"":"breaths per minute"}</h1>
                     </div>
                   )}
                 </div>
