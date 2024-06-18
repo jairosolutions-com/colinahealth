@@ -72,7 +72,7 @@ const DBPatientSummary = ({
                       <div className="flex w-full">
                         Name:{" "}
                         <div className="w-full  flex ">
-                          <p className="w-9/12 truncate">
+                          <p className="max-w-9/12 truncate">
                             <ResuableTooltip
                               text={`${pri?.data[0]?.patient_firstName}${" "}
                             ${pri?.data[0]?.patient_middleName}${" "}
