@@ -110,10 +110,11 @@ export default function AppointmentPage() {
   ];
   const optionsSortBy = [
     { label: "Name", onClick: handleSortOptionClick },
-    { label: "Status", onClick: handleSortOptionClick },
     { label: "Date", onClick: handleSortOptionClick },
     { label: "Time", onClick: handleSortOptionClick },
-    { label: "Endtime", onClick: handleSortOptionClick },
+    { label: "End Time", onClick: handleSortOptionClick },
+    { label: "Status", onClick: handleSortOptionClick }
+
   ]; // end of orderby & sortby function
 
   const isModalOpen = (isOpen: boolean) => {
