@@ -189,8 +189,8 @@ const DBPatientSummary = ({
                 <h1 className="absolute text-[15px] font-medium  truncate w-full">
                   {pri === undefined
                     ? "[Patient Name]"
-                    : pri?.data[0]?.patient_firstName}
-                  's Due Medication
+                    : pri?.data[0]?.patient_firstName+"'s"}{" "}
+                  Due Medication
                 </h1>
                 <div className="h-full w-full flex  items-center justify-center ">
                   <DoughnutChart
