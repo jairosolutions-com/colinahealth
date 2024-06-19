@@ -11,7 +11,7 @@ import DBPatientSummary from "@/components/dashboard/dbPatientSummary";
 import DBBody from "@/components/dashboard/dbBody";
 
 const Dashboard = () => {
-  //test
+
   return (
     <div className="w-full">
       <div className="justify-center h-full items-center mx-[154px] mt-[90px] overflow-hidden">
