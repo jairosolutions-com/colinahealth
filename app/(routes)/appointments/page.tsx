@@ -47,6 +47,7 @@ export default function AppointmentPage() {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
 
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
+  const [isOpenFilterStatus, setIsOpenFilterStatus] = useState(false);
   const [sortBy, setSortBy] = useState("appointmentStatus");
   const [appointmentList, setAppointmentList] = useState<any[]>([]);
   const [patientIdappointmentList, setPatientId] = useState<number>(0);
@@ -59,6 +60,8 @@ export default function AppointmentPage() {
   const [gotoError, setGotoError] = useState(false);
   const [term, setTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("DESC");
+  const [filterStatus, setFilterStatus] = useState('');
+
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [totalUpcoming, setTotalUpcoming] = useState(0);
@@ -101,6 +104,20 @@ export default function AppointmentPage() {
     }
     console.log(sortBy, "ooption");
   };
+  const handleFilterStatusClick = (option: string) => {
+    if (option == "Scheduled") {
+      setFilterStatus("Scheduled");
+    } else if (option == "On-going") {
+      setFilterStatus("On-going");
+    } else if (option == "Missed") {
+      setFilterStatus("Missed");
+    } else if (option == "Cancelled") {
+      setFilterStatus("Cancelled");
+    }else if (option == "All") {
+      setFilterStatus("");
+    }
+    console.log(sortBy, "ooption");
+  };
 
   const optionsOrderedBy = [
     { label: "Ascending", onClick: handleOrderOptionClick },
@@ -112,6 +129,16 @@ export default function AppointmentPage() {
     { label: "Time", onClick: handleSortOptionClick },
     { label: "Endtime", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
+  const optionsFilterStatus = [
+    { label: "All", onClick: handleFilterStatusClick },
+
+    { label: "Scheduled", onClick: handleFilterStatusClick },
+    { label: "On-going", onClick: handleFilterStatusClick },
+    { label: "Missed", onClick: handleFilterStatusClick },
+    { label: "Patient-IN", onClick: handleFilterStatusClick },
+    { label: "Cancelled", onClick: handleFilterStatusClick },
+  ]; // end of status function
+
 
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
@@ -184,6 +211,7 @@ export default function AppointmentPage() {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
+          filterStatus,
           startD,
           endD,
           router
@@ -234,7 +262,7 @@ export default function AppointmentPage() {
       } catch (error) {}
     };
     fetchData();
-  }, [currentPage, startDate, endDate, sortBy, sortOrder, term]);
+  }, [currentPage, startDate, endDate, sortBy, sortOrder, filterStatus, term]);
 
   // const handlePatientClick = (patientId: any) => {
   //   const lowercasePatientId = patientId.toLowerCase();
@@ -357,10 +385,27 @@ export default function AppointmentPage() {
                     />
                   </PopoverContent>
                 </Popover>
+                
               </div>
+      
             </div>
             <div className="w-[500px]">
-              <div className="w-full justify-end items-center flex gap-3">
+              <div className="w-full justify-end items-center text-center flex gap-3">
+                        <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+                  Filter Status
+                </p>
+                <DropdownMenu
+                  options={optionsFilterStatus.map(({ label, onClick }) => ({
+                    label,
+                    onClick: () => {
+                      onClick(label);
+                      console.log("label", label);
+                    },
+                  }))}
+                  open={isOpenFilterStatus}
+                  width={"165px"}
+                  label={"All"}
+                />
                 <p className="flex text-[#191D23] opacity-[60%] font-semibold">
                   Order by
                 </p>
