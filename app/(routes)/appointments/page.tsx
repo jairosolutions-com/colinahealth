@@ -119,7 +119,7 @@ export default function AppointmentPage() {
   //   console.log(sortBy, "ooption");
   // };
 
-  const [selectedStatuses, setSelectedStatuses] = useState([]);
+  // const [selectedStatuses, setSelectedStatuses] = useState([]);
   // const handleFilterStatusClick = (label) => {
   //   setSelectedStatuses((prevSelected) => {
   //     if (prevSelected.includes(label)) {
@@ -215,9 +215,13 @@ export default function AppointmentPage() {
 
   const handleStatusUpdate = (checkedFilters: string[]) => {
     setFilterStatusFromCheck(checkedFilters);
+
     // Here you can further process the checked filters or update other state as needed
   };
+  const [statusFiltered, setStatusFiltered] = useState<string>("");
+
   useEffect(() => {
+    setStatusFiltered(filterStatusFromCheck.join(", "));
     const fetchData = async () => {
       try {
         const upcomingAppoinments = await fetchAllAppointments(
@@ -276,11 +280,22 @@ export default function AppointmentPage() {
       } catch (error) {}
     };
     fetchData();
-  }, [currentPage, filterStatusFromCheck, startDate, endDate, sortBy, sortOrder,  term]);
+  }, [
+    currentPage,
+    filterStatusFromCheck,
+    startDate,
+    endDate,
+    sortBy,
+    sortOrder,
+    term,
+  ]);
   useEffect(() => {
-    console.log(filterStatusFromCheck, "parent");
+    setFilterStatusFromCheck(filterStatusFromCheck);
+    const newLabel = filterStatusFromCheck.length > 0 ? filterStatusFromCheck.join(", "):"Choose"
+    setStatusFiltered(newLabel);
+    console.log(filterStatusFromCheck.join(", "), "parent");
+    console.log(newLabel,"new parent");
   }, [filterStatusFromCheck]);
-
   // const handlePatientClick = (patientId: any) => {
   //   const lowercasePatientId = patientId.toLowerCase();
   //   setIsLoading(true);
@@ -421,7 +436,7 @@ export default function AppointmentPage() {
                   width={"165px"}
                   statusUpdate={handleStatusUpdate} // Pass the handler function
                   checkBox={true}
-                  label={"All"}
+                  label={statusFiltered} 
                 />
                 <p className="flex font-semibold text-[#191D23] opacity-[60%]">
                   Order by

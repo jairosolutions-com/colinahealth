@@ -142,13 +142,13 @@ const Scheduled = () => {
       pageNumbers.push(
         <button
           key={i}
-          className={`flex ring-1 ring-gray-300 items-center justify-center  w-[49px]  ${
+          className={`flex w-[49px] items-center justify-center ring-1 ring-gray-300 ${
             currentPage === i ? "btn-pagination" : ""
           }`}
           onClick={() => setCurrentPage(i)}
         >
           {i}
-        </button>
+        </button>,
       );
     }
     return pageNumbers;
@@ -162,7 +162,7 @@ const Scheduled = () => {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
-          router
+          router,
         );
         setPatientScheduledMed(response.data);
         setTotalPages(response.totalPages);
@@ -191,7 +191,7 @@ const Scheduled = () => {
 
   if (isLoading) {
     return (
-      <div className="container w-full h-full flex justify-center items-center ">
+      <div className="container flex h-full w-full items-center justify-center">
         <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
@@ -205,9 +205,9 @@ const Scheduled = () => {
   console.log("patientScheduledMed", patientScheduledMed);
   console.log(patientScheduledMed);
   return (
-    <div className="  w-full h-full flex flex-col justify-between">
-      <div className="w-full h-full">
-        <div className="w-full justify-between flex mb-2">
+    <div className="flex h-full w-full flex-col justify-between">
+      <div className="h-full w-full">
+        <div className="mb-2 flex w-full justify-between">
           <div className="flex-row">
             <div className="flex gap-2">
               <p className="p-title">Medication Logs</p>
@@ -218,7 +218,7 @@ const Scheduled = () => {
                 onClick={() => {
                   setIsLoading(true);
                   router.replace(
-                    `/patient-overview/${patientId.toLowerCase()}/medication/prorenata`
+                    `/patient-overview/${patientId.toLowerCase()}/medication/prorenata`,
                   );
                 }}
                 className="bread"
@@ -227,7 +227,7 @@ const Scheduled = () => {
               </span>
             </div>
             <div>
-              <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
+              <p className="h-[22px] w-[1157px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalScheduledMeds} Scheduled Medication Logs
               </p>
             </div>
@@ -249,14 +249,14 @@ const Scheduled = () => {
           </div>
         </div>
 
-        <div className="w-full m:rounded-lg items-center">
-          <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
-            <form className="mr-5 relative">
+        <div className="m:rounded-lg w-full items-center">
+          <div className="flex h-[75px] w-full items-center justify-between bg-[#F4F4F4]">
+            <form className="relative mr-5">
               {/* search bar */}
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
+                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-[573px] bg-[calc(100%-20px)] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -270,13 +270,13 @@ const Scheduled = () => {
                   alt="Search"
                   width="20"
                   height="20"
-                  className="absolute left-8 top-9 pointer-events-none"
+                  className="pointer-events-none absolute left-8 top-9"
                 />
               </div>
             </form>
 
-            <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+            <div className="mr-3 flex w-full items-center justify-end gap-[12px]">
+              <p className="text-[15px] font-semibold text-[#191D23] opacity-[60%]">
                 Order by
               </p>
               <DropdownMenu
@@ -288,12 +288,9 @@ const Scheduled = () => {
                 }))}
                 open={isOpenOrderedBy}
                 width={"165px"}
-
-
-checkBox=false
                 label={"Select"}
               />
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+              <p className="text-[15px] font-semibold text-[#191D23] opacity-[60%]">
                 Sort by
               </p>
               <DropdownMenu
@@ -306,9 +303,6 @@ checkBox=false
                 }))}
                 open={isOpenSortedBy}
                 width={"165px"}
-
-
-checkBox=false
                 label={"Select"}
               />
             </div>
@@ -318,13 +312,13 @@ checkBox=false
           <div>
             <table className="text-left rtl:text-right">
               <thead>
-                <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+                <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
                   <td className="px-6 py-3">Medication ID</td>
                   <td className="px-6 py-3">Date</td>
                   <td className="px-6 py-3">Time</td>
                   <td className="px-6 py-3">Medication</td>
                   <td className="px-6 py-3">Notes</td>
-                  <td className="px-6 py-3 ">Status</td>
+                  <td className="px-6 py-3">Status</td>
                   <td className="px-9 py-3">Action</td>
                   <td className="w-[14px]"></td>
                 </tr>
@@ -332,8 +326,8 @@ checkBox=false
               <tbody className="h-[220px] overflow-y-scroll">
                 {patientScheduledMed.length === 0 && (
                   <tr>
-                    <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                      <p className="text-[15px] font-normal text-gray-700 flex text-center">
+                    <td className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+                      <p className="flex text-center text-[15px] font-normal text-gray-700">
                         No Scheduled Medication Log/s <br />
                       </p>
                     </td>
@@ -344,7 +338,7 @@ checkBox=false
                     {patientScheduledMed.map((schedMed, index) => (
                       <tr
                         key={index}
-                        className="group hover:bg-[#f4f4f4]  border-b text-[15px]"
+                        className="group border-b text-[15px] hover:bg-[#f4f4f4]"
                       >
                         <td className="px-6 py-3">
                           <ResuableTooltip
@@ -361,14 +355,14 @@ checkBox=false
                             new Date().getDate(), // Use current day as default
                             parseInt(
                               schedMed.medicationlogs_medicationLogsTime.split(
-                                ":"
-                              )[0]
+                                ":",
+                              )[0],
                             ), // Extract hours
                             parseInt(
                               schedMed.medicationlogs_medicationLogsTime.split(
-                                ":"
-                              )[1]
-                            ) // Extract minutes
+                                ":",
+                              )[1],
+                            ), // Extract minutes
                           ).toLocaleTimeString("en-US", {
                             hour: "2-digit",
                             minute: "2-digit",
@@ -385,19 +379,19 @@ checkBox=false
                             text={schedMed.medicationlogs_notes}
                           />
                         </td>
-                        <td className="text-15px me-1 px-6 py-5 rounded-full flex items-center">
+                        <td className="text-15px me-1 flex items-center rounded-full px-6 py-5">
                           <div
-                            className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
+                            className={`relative flex items-center rounded-[20px] px-2 font-semibold ${
                               schedMed.medicationlogs_medicationLogStatus ===
                               "Given"
-                                ? "bg-[#CCFFDD] text-[#17C653] text-[15px]" // Green color for Given
+                                ? "bg-[#CCFFDD] text-[15px] text-[#17C653]" // Green color for Given
                                 : schedMed.medicationlogs_medicationLogStatus ===
-                                  "Held"
-                                ? "bg-[#E7EAEE] text-[#71717A] text-[15px]" // Dark color for Held
-                                : schedMed.medicationlogs_medicationLogStatus ===
-                                  "Refused"
-                                ? "bg-[#FFE8EC] text-[#EF4C6A] text-[15px]" // Red color for Refused
-                                : schedMed.medicationlogs_medicationLogStatus
+                                    "Held"
+                                  ? "bg-[#E7EAEE] text-[15px] text-[#71717A]" // Dark color for Held
+                                  : schedMed.medicationlogs_medicationLogStatus ===
+                                      "Refused"
+                                    ? "bg-[#FFE8EC] text-[15px] text-[#EF4C6A]" // Red color for Refused
+                                    : schedMed.medicationlogs_medicationLogStatus
                             }`}
                           >
                             {schedMed.medicationlogs_medicationLogStatus}

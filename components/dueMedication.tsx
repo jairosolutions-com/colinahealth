@@ -28,7 +28,7 @@ const DueMedication = () => {
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [dueMedSortBy, setDueMedSortBy] = useState(
-    "medicationlogs.medicationLogsTime"
+    "medicationlogs.medicationLogsTime",
   );
   const [patientList, setPatientList] = useState<any[]>([]);
   const [patientId, setPatientId] = useState<number>(0);
@@ -108,13 +108,13 @@ const DueMedication = () => {
           dueMedSortBy,
           sortOrder as "ASC" | "DESC",
           5,
-          router
+          router,
         );
 
         const uniquePatientUuids = new Set(
           dueMedicationList.data.map(
-            (patient: { patient_uuid: any }) => patient.patient_uuid
-          )
+            (patient: { patient_uuid: any }) => patient.patient_uuid,
+          ),
         );
 
         const patientUuids = Array.from(uniquePatientUuids);
@@ -123,7 +123,7 @@ const DueMedication = () => {
         setTotalDueMedication(dueMedicationList.totalCount);
         setIsLoading(false);
         const profileImagesResponse = await fetchProfileImages(
-          patientUuids as string[]
+          patientUuids as string[],
         );
         if (profileImagesResponse) {
           const patientImagesData = profileImagesResponse.map((image: any) => {
@@ -131,7 +131,7 @@ const DueMedication = () => {
             if (image.data) {
               const buffer = Buffer.from(image.data);
               const dataUrl = `data:image/jpeg;base64,${buffer.toString(
-                "base64"
+                "base64",
               )}`;
               return {
                 patientUuid: image.patientUuid,
@@ -160,7 +160,7 @@ const DueMedication = () => {
     setIsLoading(true);
     onNavigate(
       router,
-      `/patient-overview/${lowercasePatientId}/medical-history/allergies`
+      `/patient-overview/${lowercasePatientId}/medical-history/allergies`,
     );
   };
 
@@ -176,38 +176,33 @@ const DueMedication = () => {
     setIsErrorOpen(true);
   };
   return (
-    <div className="w-full px-[150px] pt-[90px] flex flex-col justify-between h-full">
-      <div className="w-full h-full">
-        <div className="flex justify-between items-center">
-          <div className="flex flex-col justify-center h-full">
-            <p className="p-title flex ">Due Medication</p>
+    <div className="flex h-full w-full flex-col justify-between px-[150px] pt-[90px]">
+      <div className="h-full w-full">
+        <div className="flex items-center justify-between">
+          <div className="flex h-full flex-col justify-center">
+            <p className="p-title flex">Due Medication</p>
             {/* number of patiens */}
-            <p className="sub-title ">
+            <p className="sub-title">
               Total of {totalDueMedication == 0 ? "0" : totalDueMedication} Due
               Medication{totalDueMedication > 1 ? "s" : ""}
             </p>
           </div>
           <div className="flex flex-row justify-end">
-            <PdfDownloader 
-            props={[
-              "Name",
-              "Uuid",
-              "Medication",
-              "Date",
-              "Time",
-            ]}
-            variant={"Due Medication Table"}/>
+            <PdfDownloader
+              props={["Name", "Uuid", "Medication", "Date", "Time"]}
+              variant={"Due Medication Table"}
+            />
           </div>
         </div>
 
-        <div className="w-full sm:rounded-lg items-center mt-4">
-          <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
-            <form className="mr-5 relative">
+        <div className="mt-4 w-full items-center sm:rounded-lg">
+          <div className="flex h-[75px] w-full items-center justify-between bg-[#F4F4F4]">
+            <form className="relative mr-5">
               {/* search bar */}
               <label className=""></label>
               <div className="flex flex-col">
                 <input
-                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] sub-title rounded pl-10 relative bg-[#fff] bg-no-repeat "
+                  className="sub-title relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-no-repeat px-5 py-3 pl-10 pt-[14px] outline-none ring-[1px] ring-[#E7EAEE]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -227,13 +222,13 @@ const DueMedication = () => {
                   alt="Search"
                   width={18.75}
                   height={18.75}
-                  className=" w-[18.75px] h-[18.75px] pointer-events-none absolute top-9 left-8"
+                  className="pointer-events-none absolute left-8 top-9 h-[18.75px] w-[18.75px]"
                 />
               </div>
             </form>
 
-            <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+            <div className="mr-3 flex w-full items-center justify-end gap-[12px]">
+              <p className="text-[15px] font-semibold text-[#191D23] opacity-[60%]">
                 Order by
               </p>
               <DropdownMenu
@@ -245,12 +240,9 @@ const DueMedication = () => {
                 }))}
                 open={isOpenOrderedBy}
                 width={"165px"}
-
-
-checkBox=false
                 label={"Select"}
               />
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+              <p className="text-[15px] font-semibold text-[#191D23] opacity-[60%]">
                 Sort by
               </p>
               <DropdownMenu
@@ -263,9 +255,6 @@ checkBox=false
                 }))}
                 open={isOpenSortedBy}
                 width={"165px"}
-
-
-checkBox=false
                 label={"Choose  "}
               />
             </div>
@@ -273,21 +262,21 @@ checkBox=false
 
           {/* START OF TABLE */}
           <div>
-            <table className="w-full h-full justify-center items-start">
-              <thead className=" text-left rtl:text-right">
-                <tr className="uppercase !font-semibold sub-title border-b border-[#E7EAEE] h-[70px]">
-                  <td className="px-6 py-5 ">Name</td>
-                  <td className="px-6 py-5 w-[300px]">DUE MED UID</td>
+            <table className="h-full w-full items-start justify-center">
+              <thead className="text-left rtl:text-right">
+                <tr className="sub-title h-[70px] border-b border-[#E7EAEE] !font-semibold uppercase">
+                  <td className="px-6 py-5">Name</td>
+                  <td className="w-[300px] px-6 py-5">DUE MED UID</td>
                   <td className="px-6 py-5">Medication</td>
-                  <td className="px-6 py-5 w-[200px]">Date</td>
-                  <td className="px-6 py-5 w-[200px]">Time</td>
+                  <td className="w-[200px] px-6 py-5">Date</td>
+                  <td className="w-[200px] px-6 py-5">Time</td>
                 </tr>
               </thead>
               <tbody>
                 {dueMedicationList.length === 0 && (
                   <tr>
-                    <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                      <p className="text-[15px] font-normal text-gray-700  text-center">
+                    <td className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+                      <p className="text-center text-[15px] font-normal text-gray-700">
                         No Due Medication Found!
                       </p>
                     </td>
@@ -296,12 +285,12 @@ checkBox=false
                 {dueMedicationList.map((dueMedication, index) => (
                   <tr
                     key={index}
-                    className=" group  bg-white hover:bg-[#F4F4F4] border-b text-[15px]"
+                    className="group border-b bg-white text-[15px] hover:bg-[#F4F4F4]"
                   >
-                    <td className="px-6 py-5 flex items-center gap-2">
+                    <td className="flex items-center gap-2 px-6 py-5">
                       {patientImages.some(
                         (image) =>
-                          image.patientUuid === dueMedication.patient_uuid
+                          image.patientUuid === dueMedication.patient_uuid,
                       ) ? (
                         // Render the matched image
                         <div>
@@ -313,9 +302,9 @@ checkBox=false
                                 <div key={imgIndex}>
                                   {image.data ? (
                                     // Render the image if data is not empty
-                                    <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
+                                    <div className="max-h-[45px] min-h-[45px] min-w-[45px] max-w-[45px]">
                                       <Image
-                                        className="rounded-full object-cover min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                        className="max-h-[45px] min-h-[45px] min-w-[45px] max-w-[45px] rounded-full object-cover"
                                         src={image.data} // Use the base64-encoded image data directly
                                         alt=""
                                         width={45}
@@ -325,7 +314,7 @@ checkBox=false
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
                                     <Image
-                                      className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                      className="max-h-[45px] min-h-[45px] min-w-[45px] max-w-[45px] rounded-full"
                                       src="/imgs/user.png"
                                       alt=""
                                       width={45}
@@ -343,7 +332,7 @@ checkBox=false
                         // Only render stock image when images are loaded
                         <div>
                           <Image
-                            className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                            className="max-h-[45px] min-h-[45px] min-w-[45px] max-w-[45px] rounded-full"
                             src="/imgs/loading.gif" // Show loading gif while fetching images
                             alt="Loading"
                             width={45}
@@ -358,20 +347,20 @@ checkBox=false
                         />
                       </span>
                     </td>
-                    <td className="px-6 py-5 w-[300px] truncate">
+                    <td className="w-[300px] truncate px-6 py-5">
                       <ResuableTooltip
                         text={dueMedication.medicationlogs_uuid}
                       />
                     </td>
-                    <td className="px-6 py-5 truncate">
+                    <td className="truncate px-6 py-5">
                       <ResuableTooltip
                         text={dueMedication.medicationlogs_medicationLogsName}
                       />
                     </td>
-                    <td className="px-6 py-5 w-[200px]">
+                    <td className="w-[200px] px-6 py-5">
                       {dueMedication.medicationlogs_medicationLogsDate}
                     </td>
-                    <td className="px-6 py-5 w-[200px]">
+                    <td className="w-[200px] px-6 py-5">
                       {dueMedication.medicationlogs_medicationLogsTime}
                     </td>
                   </tr>

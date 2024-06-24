@@ -138,13 +138,13 @@ const Notes = () => {
       pageNumbers.push(
         <button
           key={i}
-          className={`flex ring-1 ring-gray-300 items-center justify-center  w-[49px]  ${
+          className={`flex w-[49px] items-center justify-center ring-1 ring-gray-300 ${
             currentPage === i ? "btn-pagination" : ""
           }`}
           onClick={() => setCurrentPage(i)}
         >
           {i}
-        </button>
+        </button>,
       );
     }
     return pageNumbers;
@@ -160,7 +160,7 @@ const Notes = () => {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
-          router
+          router,
         );
         setPatientNotes(response.data);
         setTotalPages(response.totalPages);
@@ -184,7 +184,7 @@ const Notes = () => {
 
   if (isLoading) {
     return (
-      <div className="container w-full h-full flex justify-center items-center ">
+      <div className="container flex h-full w-full items-center justify-center">
         <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
@@ -196,9 +196,9 @@ const Notes = () => {
   }
 
   return (
-    <div className="  w-full h-full flex flex-col justify-between">
+    <div className="flex h-full w-full flex-col justify-between">
       <div className="h-full w-full">
-        <div className="w-full justify-between flex mb-2">
+        <div className="mb-2 flex w-full justify-between">
           <div className="flex-row">
             <div className="flex gap-2">
               <p className="p-title">Notes</p>
@@ -209,7 +209,7 @@ const Notes = () => {
                 onClick={() => {
                   setIsLoading(true);
                   router.replace(
-                    `/patient-overview/${patientId.toLowerCase()}/notes/incident-report`
+                    `/patient-overview/${patientId.toLowerCase()}/notes/incident-report`,
                   );
                 }}
                 className="bread"
@@ -218,7 +218,7 @@ const Notes = () => {
               </span>
             </div>
             <div>
-              <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[14px]">
+              <p className="h-[22px] w-[1157px] text-[14px] font-normal text-[#64748B]">
                 Total of {totalNotes} Notes
               </p>
             </div>
@@ -240,14 +240,14 @@ const Notes = () => {
           </div>
         </div>
 
-        <div className="w-full m:rounded-lg items-center">
-          <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
-            <form className="mr-5 relative">
+        <div className="m:rounded-lg w-full items-center">
+          <div className="flex h-[75px] w-full items-center justify-between bg-[#F4F4F4]">
+            <form className="relative mr-5">
               {/* search bar */}
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[14px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat bg-[573px] bg-[center] bg-[calc(100%-20px)]"
+                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-[573px] bg-[calc(100%-20px)] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -261,13 +261,13 @@ const Notes = () => {
                   alt="Search"
                   width={20}
                   height={20}
-                  className="absolute left-8 top-9 pointer-events-none"
+                  className="pointer-events-none absolute left-8 top-9"
                 />
               </div>
             </form>
 
-            <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+            <div className="mr-3 flex w-full items-center justify-end gap-[12px]">
+              <p className="text-[15px] font-semibold text-[#191D23] opacity-[60%]">
                 Order by
               </p>
               <DropdownMenu
@@ -279,12 +279,9 @@ const Notes = () => {
                 }))}
                 open={isOpenOrderedBy}
                 width={"165px"}
-
-
-checkBox=false
                 label={"Select"}
               />
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+              <p className="text-[15px] font-semibold text-[#191D23] opacity-[60%]">
                 Sort by
               </p>
               <DropdownMenu
@@ -297,9 +294,6 @@ checkBox=false
                 }))}
                 open={isOpenSortedBy}
                 width={"165px"}
-
-
-checkBox=false
                 label={"Select"}
               />
             </div>
@@ -310,20 +304,20 @@ checkBox=false
         <div>
           <table className="text-left rtl:text-right">
             <thead>
-              <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
+              <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
                 <td className="px-6 py-3">NOTES UID</td>
                 <td className="px-6 py-3">DATE</td>
                 <td className="px-6 py-3">TIME</td>
                 <td className="px-6 py-3">SUBJECT</td>
-                <td className="px-6 py-3 ">NOTES</td>
+                <td className="px-6 py-3">NOTES</td>
                 <td className="px-6 py-3 text-center">ACTION</td>
                 <td className="w-[14px]"></td>
               </tr>
             </thead>
             <tbody className="h-[220px] overflow-y-scroll">
               {patientNotes.length === 0 && (
-                <h1 className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                  <p className="text-[15px] font-normal text-gray-700 text-center">
+                <h1 className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+                  <p className="text-center text-[15px] font-normal text-gray-700">
                     No Note/s <br />
                   </p>
                 </h1>
@@ -331,7 +325,7 @@ checkBox=false
               {patientNotes.map((note, index) => (
                 <tr
                   key={index}
-                  className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
+                  className="group border-b odd:bg-white even:bg-gray-50 hover:bg-[#f4f4f4]"
                 >
                   <td className="px-6 py-3">
                     <ResuableTooltip text={note.notes_uuid} />
@@ -342,7 +336,7 @@ checkBox=false
                   <td className="max-w-[552px] px-6 py-3">
                     {new Date(
                       new Date(note.notes_createdAt).getTime() -
-                        new Date().getTimezoneOffset() * 60000
+                        new Date().getTimezoneOffset() * 60000,
                     ).toLocaleTimeString(navigator.language, {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -352,7 +346,7 @@ checkBox=false
                   <td className="px-6 py-3">
                     <ResuableTooltip text={note.notes_subject} />
                   </td>
-                  <td className="px-6 py-3 ">
+                  <td className="px-6 py-3">
                     <ResuableTooltip text={note.notes_notes} />
                   </td>
                   <td className="flex justify-center px-6 py-3">

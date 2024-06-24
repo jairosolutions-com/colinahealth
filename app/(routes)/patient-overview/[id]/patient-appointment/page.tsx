@@ -153,13 +153,13 @@ const Appointment = () => {
       pageNumbers.push(
         <button
           key={i}
-          className={`flex ring-1 ring-gray-300 items-center justify-center  w-[49px]  ${
+          className={`flex w-[49px] items-center justify-center ring-1 ring-gray-300 ${
             currentPage === i ? "btn-pagination" : ""
           }`}
           onClick={() => setCurrentPage(i)}
         >
           {i}
-        </button>
+        </button>,
       );
     }
     return pageNumbers;
@@ -202,7 +202,7 @@ const Appointment = () => {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
-          router
+          router,
         );
 
         //convert date to ISO string
@@ -222,7 +222,7 @@ const Appointment = () => {
   }, [currentPage, sortOrder, sortBy, term, isOpen]);
   if (isLoading) {
     return (
-      <div className="container w-full h-full flex justify-center items-center ">
+      <div className="container flex h-full w-full items-center justify-center">
         <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
@@ -234,14 +234,14 @@ const Appointment = () => {
   }
 
   return (
-    <div className="w-full h-full flex flex-col justify-between">
-      <div className="w-full h-full">
-        <div className="w-full justify-between flex mb-2">
+    <div className="flex h-full w-full flex-col justify-between">
+      <div className="h-full w-full">
+        <div className="mb-2 flex w-full justify-between">
           <div className="flex-row">
             <p className="p-title">Appointment</p>
 
             <div>
-              <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px] ">
+              <p className="h-[22px] w-[1157px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalAppointments} Appointments
               </p>
             </div>
@@ -261,14 +261,14 @@ const Appointment = () => {
           </div>
         </div>
 
-        <div className="w-full m:rounded-lg items-center">
-          <div className="w-full justify-between flex items-center bg-[#F4F4F4] h-[75px]">
-            <form className="mr-5 relative">
+        <div className="m:rounded-lg w-full items-center">
+          <div className="flex h-[75px] w-full items-center justify-between bg-[#F4F4F4]">
+            <form className="relative mr-5">
               {/* search bar */}
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="py-3 px-5 m-5 w-[573px] outline-none h-[47px] pt-[15px] ring-[1px] ring-[#E7EAEE] text-[15px] rounded pl-10 relative bg-[#fff] bg-no-repeat"
+                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-no-repeat px-5 py-3 pl-10 pt-[15px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -282,13 +282,13 @@ const Appointment = () => {
                   alt="Search"
                   width={20}
                   height={20}
-                  className="absolute left-8 top-9 pointer-events-none"
+                  className="pointer-events-none absolute left-8 top-9"
                 />
               </div>
             </form>
 
-            <div className="flex w-full justify-end items-center gap-[12px] mr-3">
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+            <div className="mr-3 flex w-full items-center justify-end gap-[12px]">
+              <p className="text-[15px] font-semibold text-[#191D23] opacity-[60%]">
                 Order by
               </p>
               <DropdownMenu
@@ -300,12 +300,9 @@ const Appointment = () => {
                 }))}
                 open={isOpenOrderedBy}
                 width={"165px"}
-
-
-checkBox=false
                 label={"Select"}
               />
-              <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+              <p className="text-[15px] font-semibold text-[#191D23] opacity-[60%]">
                 Sort by
               </p>
               <DropdownMenu
@@ -318,9 +315,6 @@ checkBox=false
                 }))}
                 open={isOpenSortedBy}
                 width={"165px"}
-
-
-checkBox=false
                 label={"Select"}
               />
             </div>
@@ -330,21 +324,21 @@ checkBox=false
         <div>
           <table className="text-left rtl:text-right">
             <thead>
-              <tr className="uppercase text-[#64748B] border-y text-[15px] h-[70px] font-semibold">
-                <td className="px-6 py-3 ">STATUS</td>
-                <td className="px-6 py-3 ">DATE</td>
-                <td className="px-6 py-3 ">TIME</td>
-                <td className="px-6 py-3 ">END TIME</td>
-                <td className="px-6 py-3 ">DETAILS</td>
-                <td className="py-3 px-6 text-center">ACTION</td>
+              <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
+                <td className="px-6 py-3">STATUS</td>
+                <td className="px-6 py-3">DATE</td>
+                <td className="px-6 py-3">TIME</td>
+                <td className="px-6 py-3">END TIME</td>
+                <td className="px-6 py-3">DETAILS</td>
+                <td className="px-6 py-3 text-center">ACTION</td>
                 <td className="w-[14px]"></td>
               </tr>
             </thead>
             <tbody className="h-[220px] overflow-y-scroll">
               {patientAppointments.length === 0 && (
                 <tr>
-                  <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                    <p className="font-normal text-gray-700 text-center text-[15px]">
+                  <td className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+                    <p className="text-center text-[15px] font-normal text-gray-700">
                       No Appointment/s <br />
                     </p>
                   </td>
@@ -355,72 +349,72 @@ checkBox=false
                   {patientAppointments.map((appointments, index) => (
                     <tr
                       key={index}
-                      className="odd:bg-white  even:bg-gray-50  border-b hover:bg-[#f4f4f4] group"
+                      className="group border-b odd:bg-white even:bg-gray-50 hover:bg-[#f4f4f4]"
                     >
-                      <td className="text-[15px] px-6 py-3  rounded-full flex items-center">
+                      <td className="flex items-center rounded-full px-6 py-3 text-[15px]">
                         <div
-                          className={`px-2 font-semibold rounded-[20px] relative flex items-center ${
+                          className={`relative flex items-center rounded-[20px] px-2 font-semibold ${
                             appointments.appointments_appointmentStatus ===
                             "Scheduled"
-                              ? "bg-[#E7EAEE] text-[#71717A] text-[15px]" // Green color for Scheduled
+                              ? "bg-[#E7EAEE] text-[15px] text-[#71717A]" // Green color for Scheduled
                               : appointments.appointments_appointmentStatus ===
-                                "Done"
-                              ? "bg-[#CCFFDD] text-[#17C653] text-[15px]" // Dark color for Done
-                              : appointments.appointments_appointmentStatus ===
-                                  "Patient-IN" ||
-                                appointments.appointments_appointmentStatus ===
-                                  "On-going"
-                              ? "bg-[#FFF8DD] text-[#F6C000] text-[15px]" // Yellow for On Going
-                              : appointments.appointments_appointmentStatus ===
-                                  "Missed" ||
-                                appointments.appointments_appointmentStatus ===
-                                  "Cancelled"
-                              ? "bg-[#FFE8EC] text-[#EF4C6A] text-[15px]" // Red color for Missed and Cancelled
-                              : ""
+                                  "Done"
+                                ? "bg-[#CCFFDD] text-[15px] text-[#17C653]" // Dark color for Done
+                                : appointments.appointments_appointmentStatus ===
+                                      "Patient-IN" ||
+                                    appointments.appointments_appointmentStatus ===
+                                      "On-going"
+                                  ? "bg-[#FFF8DD] text-[15px] text-[#F6C000]" // Yellow for On Going
+                                  : appointments.appointments_appointmentStatus ===
+                                        "Missed" ||
+                                      appointments.appointments_appointmentStatus ===
+                                        "Cancelled"
+                                    ? "bg-[#FFE8EC] text-[15px] text-[#EF4C6A]" // Red color for Missed and Cancelled
+                                    : ""
                           }`}
                         >
                           <span
-                            className={`inline-block h-2 w-2 rounded-full mr-1 ${
+                            className={`mr-1 inline-block h-2 w-2 rounded-full ${
                               appointments.appointments_appointmentStatus ===
                               "Scheduled"
                                 ? "bg-[#7E7E7E]" // Green color for Scheduled
                                 : appointments.appointments_appointmentStatus ===
-                                  "Done"
-                                ? "bg-[#0EB146]" // Dark color for Done
-                                : appointments.appointments_appointmentStatus ===
-                                    "Patient-IN" ||
-                                  appointments.appointments_appointmentStatus ===
-                                    "On-going"
-                                ? "bg-[#E4B90E]" // Yellow for On Going
-                                : appointments.appointments_appointmentStatus ===
-                                    "Missed" ||
-                                  appointments.appointments_appointmentStatus ===
-                                    "Cancelled"
-                                ? "bg-[#EE4D4D]" // Red color for Missed and Cancelled
-                                : ""
+                                    "Done"
+                                  ? "bg-[#0EB146]" // Dark color for Done
+                                  : appointments.appointments_appointmentStatus ===
+                                        "Patient-IN" ||
+                                      appointments.appointments_appointmentStatus ===
+                                        "On-going"
+                                    ? "bg-[#E4B90E]" // Yellow for On Going
+                                    : appointments.appointments_appointmentStatus ===
+                                          "Missed" ||
+                                        appointments.appointments_appointmentStatus ===
+                                          "Cancelled"
+                                      ? "bg-[#EE4D4D]" // Red color for Missed and Cancelled
+                                      : ""
                             }`}
                           ></span>
                           {appointments.appointments_appointmentStatus}
                         </div>
                       </td>
 
-                      <td className="px-6 py-3 text-[15px] ">
+                      <td className="px-6 py-3 text-[15px]">
                         {appointments.appointments_appointmentDate}
                       </td>
-                      <td className="px-6 py-3 text-[15px] ">
+                      <td className="px-6 py-3 text-[15px]">
                         {formatTime(appointments.appointments_appointmentTime)}
                       </td>
-                      <td className="px-6 py-3 text-[15px] ">
+                      <td className="px-6 py-3 text-[15px]">
                         {formatTime(
-                          appointments.appointments_appointmentEndTime
+                          appointments.appointments_appointmentEndTime,
                         )}
                       </td>
-                      <td className="px-6 py-3 text-[15px] ">
+                      <td className="px-6 py-3 text-[15px]">
                         <ResuableTooltip
                           text={appointments.appointments_details}
                         />
                       </td>
-                      <td className="py-3 px-6 flex justify-center">
+                      <td className="flex justify-center px-6 py-3">
                         <p
                           onClick={() => {
                             isModalOpen(true);

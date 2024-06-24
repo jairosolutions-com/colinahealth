@@ -2,11 +2,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
+import ResuableTooltip from "./reusable/tooltip";
 interface DropdownMenuProps {
   open: boolean;
   width: string;
   label: string;
-  checkBox: boolean;
+  checkBox?: boolean;
   options: { label: string; onClick: () => void }[];
   statusUpdate?: (checkedFilters: string[]) => void; // Make statusUpdate optional
 
@@ -43,21 +44,22 @@ const DropdownMenu = ({
     onClick(); // Execute the onClick function of the option
     setIsOpen(false); // Close the dropdown after the option is clicked
   };
+
   const [checkedStatuses, setCheckedStatuses] = useState<{
     [key: string]: boolean;
   }>(() => {
     // Initialize checkedStatuses based on options
     const initialState: { [key: string]: boolean } = {};
     options.forEach((option) => {
-      initialState[option.label] = true; // Initialize all options with true initially
+      initialState[option.label] = false; // Initialize all options with true initially
     });
     return initialState;
   });
-  const [showClearButton, setShowClearButton] = useState(true);
+  const [showClearButton, setShowClearButton] = useState(false);
   // const [checkedStatuses, setCheckedStatuses] = useState({});
-  const [filterStatusToParent, setFilterStatusToParent] = useState<string[]>(
-    [],
-  );
+  // const [filterStatusToParent, setFilterStatusToParent] = useState<string[]>(
+  //   [],
+  // );
 
   const handleCheckboxChange = (label: string) => {
     setCheckedStatuses((prevStatuses) => {
@@ -66,7 +68,7 @@ const DropdownMenu = ({
         ...prevStatuses,
         [label]: !prevStatuses[label],
       };
-//update checkbox status
+      //update checkbox status
       const anyChecked = Object.values(updatedStatuses).some(
         (status) => status,
       );
@@ -79,13 +81,17 @@ const DropdownMenu = ({
       // conditional since not all dropdown uses checkbox or statusUpdate
       if (statusUpdate) {
         statusUpdate(checkedFilters);
+        const newLabel =
+          checkedFilters.length > 0 ? checkedFilters.join(", ") : "Choose";
+        setOptionLabel(newLabel);
       }
       console.log(checkedFilters, "child to parent");
-      setFilterStatusToParent(checkedFilters);
+      // setFilterStatusToParent(checkedFilters);
       // statusUpdate(checkedFilters); // Send the checked filters to the parent component
       return updatedStatuses;
     });
   };
+
   const clearCheckedStatuses = () => {
     setCheckedStatuses((prevStatuses) => {
       // Toggle the checked state for the given label
@@ -96,15 +102,17 @@ const DropdownMenu = ({
         },
         {} as { [key: string]: boolean },
       );
+
       // Collect all checked options and send to the parent component for filtering
       const checkedFilters = Object.keys(updatedStatuses).filter(
         (key) => updatedStatuses[key],
       );
       if (statusUpdate) {
         statusUpdate(checkedFilters);
+        setOptionLabel("Choose");
       }
       console.log(checkedFilters, "child to parent");
-      setFilterStatusToParent(checkedFilters);
+      // setFilterStatusToParent(checkedFilters);
       // Update the visibility of the "Clear" button
 
       return updatedStatuses;
@@ -118,7 +126,9 @@ const DropdownMenu = ({
         onClick={() => setIsOpen(!isOpen)}
         className="flex h-[47px] w-full items-center justify-between rounded-[5px] bg-white px-[20px] text-[15px] font-bold text-[#191D23] text-opacity-60 shadow-sm"
       >
-        {optionLabel}
+        <p className="truncate max-w-60px] w-full">
+          <ResuableTooltip text={optionLabel} />
+        </p>
         <Image
           src={"/icons/dropdown.svg"}
           width={18}
