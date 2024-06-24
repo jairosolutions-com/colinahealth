@@ -278,6 +278,9 @@ export default function prescription() {
                 }))}
                 open={isOpenOrderedBy}
                 width={"165px"}
+
+
+checkBox=false
                 label={"Select"}
               />
               <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
@@ -293,6 +296,9 @@ export default function prescription() {
                 }))}
                 open={isOpenSortedBy}
                 width={"165px"}
+
+
+checkBox=false
                 label={"Select"}
               />
             </div>

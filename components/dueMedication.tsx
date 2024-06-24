@@ -245,6 +245,9 @@ const DueMedication = () => {
                 }))}
                 open={isOpenOrderedBy}
                 width={"165px"}
+
+
+checkBox=false
                 label={"Select"}
               />
               <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
@@ -260,6 +263,9 @@ const DueMedication = () => {
                 }))}
                 open={isOpenSortedBy}
                 width={"165px"}
+
+
+checkBox=false
                 label={"Choose  "}
               />
             </div>

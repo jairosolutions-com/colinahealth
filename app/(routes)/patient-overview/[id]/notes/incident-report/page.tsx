@@ -276,6 +276,9 @@ const Notes = () => {
                 }))}
                 open={isOpenOrderedBy}
                 width={"165px"}
+
+
+checkBox=false
                 label={"Select"}
               />
               <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
@@ -291,6 +294,9 @@ const Notes = () => {
                 }))}
                 open={isOpenSortedBy}
                 width={"165px"}
+
+
+checkBox=false
                 label={"Select"}
               />
             </div>

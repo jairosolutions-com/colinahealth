@@ -46,6 +46,9 @@ const DueMedicationLoader = () => {
                 options={[]}
                 open={false}
                 width={"165px"}
+
+
+checkBox=false
                 label={"Select"}
               />
               <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
@@ -55,6 +58,9 @@ const DueMedicationLoader = () => {
                 options={[]}
                 open={false}
                 width={"165px"}
+
+
+checkBox=false
                 label={"Choose"}
               />
             </div>

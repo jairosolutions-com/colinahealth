@@ -9,7 +9,7 @@ export async function fetchAllAppointments(
   currentPage: number,
   sortBy: string,
   sortOrder: "ASC" | "DESC",
-  filterStatus: string,
+  filterStatusFromCheck: string[],
   startDate: string,
   endDate: string,
   router: any // Pass router instance as a parameter
@@ -19,7 +19,7 @@ export async function fetchAllAppointments(
     page: currentPage,
     sortBy: sortBy,
     sortOrder: sortOrder,
-    filterStatus: filterStatus,
+    filterStatus: filterStatusFromCheck,
     startDate: startDate,
     endDate: endDate,
   };

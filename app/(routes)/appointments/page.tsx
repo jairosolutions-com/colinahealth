@@ -33,7 +33,7 @@ export default function AppointmentPage() {
 
   if (typeof window === "undefined") {
     return (
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="flex h-full w-full items-center justify-center">
         <Image
           src="/imgs/colina-logo-animation.gif"
           width={100}
@@ -60,7 +60,7 @@ export default function AppointmentPage() {
   const [gotoError, setGotoError] = useState(false);
   const [term, setTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("DESC");
-  const [filterStatus, setFilterStatus] = useState('');
+  // const [filterStatus, setFilterStatus] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
@@ -104,21 +104,34 @@ export default function AppointmentPage() {
     }
     console.log(sortBy, "ooption");
   };
-  const handleFilterStatusClick = (option: string) => {
-    if (option == "Scheduled") {
-      setFilterStatus("Scheduled");
-    } else if (option == "On-going") {
-      setFilterStatus("On-going");
-    } else if (option == "Missed") {
-      setFilterStatus("Missed");
-    } else if (option == "Cancelled") {
-      setFilterStatus("Cancelled");
-    }else if (option == "All") {
-      setFilterStatus("");
-    }
-    console.log(sortBy, "ooption");
-  };
+  // const handleFilterStatusClick = (option: string) => {
+  //   if (option == "Scheduled") {
+  //     setFilterStatus("Scheduled");
+  //   } else if (option == "On-going") {
+  //     setFilterStatus("On-going");
+  //   } else if (option == "Missed") {
+  //     setFilterStatus("Missed");
+  //   } else if (option == "Cancelled") {
+  //     setFilterStatus("Cancelled");
+  //   } else {
+  //     setFilterStatus("");
+  //   }
+  //   console.log(sortBy, "ooption");
+  // };
 
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
+  // const handleFilterStatusClick = (label) => {
+  //   setSelectedStatuses((prevSelected) => {
+  //     if (prevSelected.includes(label)) {
+  //       return prevSelected.filter((status) => status !== label);
+  //     } else {
+  //       return [...prevSelected, label];
+  //     }
+  //   });
+  // };
+  const [filterStatusFromCheck, setFilterStatusFromCheck] = useState<string[]>(
+    [],
+  );
   const optionsOrderedBy = [
     { label: "Ascending", onClick: handleOrderOptionClick },
     { label: "Descending", onClick: handleOrderOptionClick },
@@ -130,15 +143,12 @@ export default function AppointmentPage() {
     { label: "Endtime", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
   const optionsFilterStatus = [
-    { label: "All", onClick: handleFilterStatusClick },
-
-    { label: "Scheduled", onClick: handleFilterStatusClick },
-    { label: "On-going", onClick: handleFilterStatusClick },
-    { label: "Missed", onClick: handleFilterStatusClick },
-    { label: "Patient-IN", onClick: handleFilterStatusClick },
-    { label: "Cancelled", onClick: handleFilterStatusClick },
+    { label: "Scheduled", onClick: setFilterStatusFromCheck },
+    { label: "Patient-IN", onClick: setFilterStatusFromCheck },
+    { label: "On-going", onClick: setFilterStatusFromCheck },
+    { label: "Missed", onClick: setFilterStatusFromCheck },
+    { label: "Cancelled", onClick: setFilterStatusFromCheck },
   ]; // end of status function
-
 
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
@@ -190,19 +200,23 @@ export default function AppointmentPage() {
       pageNumbers.push(
         <button
           key={i}
-          className={`flex border border-px items-center justify-center  w-[49px]  ${
+          className={`border-px flex w-[49px] items-center justify-center border ${
             currentPage === i ? "btn-pagination" : ""
           }`}
           onClick={() => setCurrentPage(i)}
         >
           {i}
-        </button>
+        </button>,
       );
     }
     return pageNumbers;
   };
   const [patientImages, setPatientImages] = useState<any[]>([]);
 
+  const handleStatusUpdate = (checkedFilters: string[]) => {
+    setFilterStatusFromCheck(checkedFilters);
+    // Here you can further process the checked filters or update other state as needed
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -211,17 +225,17 @@ export default function AppointmentPage() {
           currentPage,
           sortBy,
           sortOrder as "ASC" | "DESC",
-          filterStatus,
+          filterStatusFromCheck,
           startD,
           endD,
-          router
+          router,
         );
         // Convert the Set back to an array
         // Extract unique patient UUIDs using a Set
         const uniquePatientUuids = new Set(
           upcomingAppoinments.data.map(
-            (patient: { patient_uuid: any }) => patient.patient_uuid
-          )
+            (patient: { patient_uuid: any }) => patient.patient_uuid,
+          ),
         );
 
         const patientUuids = Array.from(uniquePatientUuids);
@@ -232,7 +246,7 @@ export default function AppointmentPage() {
         setTotalAppointments(upcomingAppoinments.totalCount);
         setIsLoading(false);
         const profileImagesResponse = await fetchProfileImages(
-          patientUuids as string[]
+          patientUuids as string[],
         );
         if (profileImagesResponse) {
           const patientImagesData = profileImagesResponse.map((image: any) => {
@@ -240,7 +254,7 @@ export default function AppointmentPage() {
             if (image.data) {
               const buffer = Buffer.from(image.data);
               const dataUrl = `data:image/jpeg;base64,${buffer.toString(
-                "base64"
+                "base64",
               )}`;
               return {
                 patientUuid: image.patientUuid,
@@ -262,7 +276,10 @@ export default function AppointmentPage() {
       } catch (error) {}
     };
     fetchData();
-  }, [currentPage, startDate, endDate, sortBy, sortOrder, filterStatus, term]);
+  }, [currentPage, filterStatusFromCheck, startDate, endDate, sortBy, sortOrder,  term]);
+  useEffect(() => {
+    console.log(filterStatusFromCheck, "parent");
+  }, [filterStatusFromCheck]);
 
   // const handlePatientClick = (patientId: any) => {
   //   const lowercasePatientId = patientId.toLowerCase();
@@ -276,7 +293,7 @@ export default function AppointmentPage() {
   console.log(appointmentList, "appointmentList");
   if (isLoading) {
     return (
-      <div className="container w-full h-full flex justify-center items-center">
+      <div className="container flex h-full w-full items-center justify-center">
         <Image
           src="/imgs/colina-logo-animation.gif"
           alt="logo"
@@ -295,7 +312,7 @@ export default function AppointmentPage() {
   };
 
   return (
-    <div className="w-full px-[150px] pt-[90px] flex flex-col justify-between h-full">
+    <div className="flex h-full w-full flex-col justify-between px-[150px] pt-[90px]">
       <div className="h-full w-full">
         <div className="flex justify-end">
           {/* <p
@@ -305,11 +322,11 @@ export default function AppointmentPage() {
             Back to Dashboard
           </p> */}
         </div>
-        <div className="flex justify-between items-center">
-          <div className="flex flex-col mb-3">
+        <div className="flex items-center justify-between">
+          <div className="mb-3 flex flex-col">
             <p className="p-title">Appointments List Records</p>
 
-            <p className="text-[#64748B] font-normal w-[1157px] h-[22px] text-[15px]">
+            <p className="h-[22px] w-[1157px] text-[15px] font-normal text-[#64748B]">
               Total of {totalAppointments} Appointments
             </p>
           </div>
@@ -319,13 +336,13 @@ export default function AppointmentPage() {
         </div>
 
         <div className="w-full">
-          <div className="w-full bg-[#F4F4F4] justify-between items-center flex px-5 h-[75px] rounded-sm gap-5">
-            <div className="flex items-center bg-white rounded-sm border border-gray-200  px-4 py-2 h-[47px] w-[460px]">
-              <Search className="h-4 w-4 text-gray-500 mr-2" />
+          <div className="flex h-[75px] w-full items-center justify-between gap-5 rounded-sm bg-[#F4F4F4] px-5">
+            <div className="flex h-[47px] w-[460px] items-center rounded-sm border border-gray-200 bg-white px-4 py-2">
+              <Search className="mr-2 h-4 w-4 text-gray-500" />
               <input
                 type="text"
                 placeholder="Search by reference no. or name..."
-                className="flex-grow focus:outline-none text-gray-700"
+                className="flex-grow text-gray-700 focus:outline-none"
                 value={term}
                 onChange={(e) => {
                   setTerm(e.target.value);
@@ -335,7 +352,7 @@ export default function AppointmentPage() {
             </div>
 
             <div className="w-[500px]">
-              <div className="flex w-full justify-end items-center gap-3">
+              <div className="flex w-full items-center justify-end gap-3">
                 <p className="font-semibold text-[#191D23] text-opacity-60">
                   Filter Date
                 </p>
@@ -345,8 +362,8 @@ export default function AppointmentPage() {
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-[166px] justify-start text-left font-normal h-[47px] rounded-[5px]",
-                        !startDate && "text-muted-foreground"
+                        "h-[47px] w-[166px] justify-start rounded-[5px] text-left font-normal",
+                        !startDate && "text-muted-foreground",
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -368,8 +385,8 @@ export default function AppointmentPage() {
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-[166px] justify-start text-left font-normal h-[47px] rounded-[5px] *:",
-                        !endDate && "text-muted-foreground"
+                        "*: h-[47px] w-[166px] justify-start rounded-[5px] text-left font-normal",
+                        !endDate && "text-muted-foreground",
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -385,28 +402,28 @@ export default function AppointmentPage() {
                     />
                   </PopoverContent>
                 </Popover>
-                
               </div>
-      
             </div>
             <div className="w-[500px]">
-              <div className="w-full justify-end items-center text-center flex gap-3">
-                        <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+              <div className="flex w-full items-center justify-end gap-3 text-center">
+                <p className="text-[15px] font-semibold text-[#191D23] opacity-[60%]">
                   Filter Status
                 </p>
                 <DropdownMenu
                   options={optionsFilterStatus.map(({ label, onClick }) => ({
                     label,
                     onClick: () => {
-                      onClick(label);
-                      console.log("label", label);
+                      // onClick(label);
+                      // console.log("label", label);
                     },
                   }))}
                   open={isOpenFilterStatus}
                   width={"165px"}
+                  statusUpdate={handleStatusUpdate} // Pass the handler function
+                  checkBox={true}
                   label={"All"}
                 />
-                <p className="flex text-[#191D23] opacity-[60%] font-semibold">
+                <p className="flex font-semibold text-[#191D23] opacity-[60%]">
                   Order by
                 </p>
                 <DropdownMenu
@@ -418,9 +435,10 @@ export default function AppointmentPage() {
                   }))}
                   open={isOpenOrderedBy}
                   width={"165px"}
+                  checkBox={false}
                   label={"Select"}
                 />
-                <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
+                <p className="text-[15px] font-semibold text-[#191D23] opacity-[60%]">
                   Sort by
                 </p>
                 <DropdownMenu
@@ -433,6 +451,7 @@ export default function AppointmentPage() {
                   }))}
                   open={isOpenSortedBy}
                   width={"165px"}
+                  checkBox={false}
                   label={"Select"}
                 />
               </div>
@@ -440,22 +459,22 @@ export default function AppointmentPage() {
           </div>
 
           <div>
-            <table className="w-full h-full justify-center items-start text-[15px]">
+            <table className="h-full w-full items-start justify-center text-[15px]">
               <thead className="text-left rtl:text-right">
-                <tr className="uppercase font-semibold text-[#64748B] border-b border-[#E7EAEE] h-[70px]">
-                  <td className="px-6 py-5 ">Name</td>
-                  <td className="px-6 py-5 ">Appointment UID</td>
-                  <td className="px-6 py-5 ">Date</td>
-                  <td className="px-6 py-5 ">Time</td>
-                  <td className="px-6 py-5 ">End time</td>
-                  <td className="px-6 py-5  flex justify-start">Status</td>
+                <tr className="h-[70px] border-b border-[#E7EAEE] font-semibold uppercase text-[#64748B]">
+                  <td className="px-6 py-5">Name</td>
+                  <td className="px-6 py-5">Appointment UID</td>
+                  <td className="px-6 py-5">Date</td>
+                  <td className="px-6 py-5">Time</td>
+                  <td className="px-6 py-5">End time</td>
+                  <td className="flex justify-start px-6 py-5">Status</td>
                 </tr>
               </thead>
               <tbody>
                 {appointmentList.length === 0 && (
                   <tr>
-                    <td className="border-1 w-[180vh] py-5 absolute flex justify-center items-center">
-                      <p className="text-[15px] font-normal text-gray-700 flex text-center">
+                    <td className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+                      <p className="flex text-center text-[15px] font-normal text-gray-700">
                         No Appointments Found! <br />
                       </p>
                     </td>
@@ -464,12 +483,12 @@ export default function AppointmentPage() {
                 {appointmentList.map((appointment, index) => (
                   <tr
                     key={index}
-                    className="bg-white hover:bg-[#f4f4f4] group border-b "
+                    className="group border-b bg-white hover:bg-[#f4f4f4]"
                   >
-                    <td className="px-6 py-5 flex items-center gap-2">
+                    <td className="flex items-center gap-2 px-6 py-5">
                       {patientImages.some(
                         (image) =>
-                          image.patientUuid === appointment.patient_uuid
+                          image.patientUuid === appointment.patient_uuid,
                       ) ? (
                         // Render the matched image
                         <div>
@@ -480,9 +499,9 @@ export default function AppointmentPage() {
                               return (
                                 <div key={imgIndex}>
                                   {image.data ? (
-                                    <div className=" min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]">
+                                    <div className="max-h-[45px] min-h-[45px] min-w-[45px] max-w-[45px]">
                                       <Image
-                                        className="rounded-full object-cover w-12 h-12"
+                                        className="h-12 w-12 rounded-full object-cover"
                                         src={image.data} // Use the base64-encoded image data directly
                                         alt=""
                                         width={45}
@@ -492,7 +511,7 @@ export default function AppointmentPage() {
                                   ) : (
                                     // Render the stock image (.svg) if data is empty
                                     <Image
-                                      className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                                      className="max-h-[45px] min-h-[45px] min-w-[45px] max-w-[45px] rounded-full"
                                       src="/imgs/user-no-icon.svg"
                                       alt=""
                                       width={45}
@@ -509,7 +528,7 @@ export default function AppointmentPage() {
                         // Render a placeholder image if no matching image found
                         <div>
                           <Image
-                            className="rounded-full min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px]"
+                            className="max-h-[45px] min-h-[45px] min-w-[45px] max-w-[45px] rounded-full"
                             src="/imgs/loading.gif" // Show loading gif while fetching images
                             alt="Loading"
                             width={45}
@@ -524,61 +543,61 @@ export default function AppointmentPage() {
                         />
                       </span>
                     </td>
-                    <td className="px-6 py-5 ">
+                    <td className="px-6 py-5">
                       {appointment.appointments_uuid}
                     </td>
                     <td className="px-6 py-5">
                       {appointment.appointments_appointmentDate}
                     </td>
-                    <td className="px-6 py-5 ">
+                    <td className="px-6 py-5">
                       {appointment.appointments_appointmentTime}
                     </td>
-                    <td className=" px-6 py-5">
+                    <td className="px-6 py-5">
                       {appointment.appointments_appointmentEndTime}
                     </td>
 
-                    <td className="text-15px text-nowrap  px-6 py-5 rounded-full">
+                    <td className="text-15px text-nowrap rounded-full px-6 py-5">
                       <div
-                        className={`px-2 font-semibold rounded-[20px] flex items-center w-fit ${
+                        className={`flex w-fit items-center rounded-[20px] px-2 font-semibold ${
                           appointment.appointments_appointmentStatus ===
                           "Scheduled"
                             ? "bg-[#E7EAEE] text-[#71717A]" // Green color for Scheduled
                             : appointment.appointments_appointmentStatus ===
-                              "Done"
-                            ? "bg-[#CCFFDD] text-[#17C653]" // Dark color for Done
-                            : appointment.appointments_appointmentStatus ===
-                                "Patient-IN" ||
-                              appointment.appointments_appointmentStatus ===
-                                "On-going"
-                            ? "bg-[#FFF8DD] text-[#F6C000]" // Yellow for On Going
-                            : appointment.appointments_appointmentStatus ===
-                              "Missed"
-                            ? "bg-[#FFE8EC] text-[#EF4C6A]" // Red color for Missed
-                            : appointment.appointments_appointmentStatus ===
-                              "Cancelled"
-                            ? "bg-[#FFE8EC] text-[#EF4C6A]" // Red color for Cancelled
-                            : ""
+                                "Done"
+                              ? "bg-[#CCFFDD] text-[#17C653]" // Dark color for Done
+                              : appointment.appointments_appointmentStatus ===
+                                    "Patient-IN" ||
+                                  appointment.appointments_appointmentStatus ===
+                                    "On-going"
+                                ? "bg-[#FFF8DD] text-[#F6C000]" // Yellow for On Going
+                                : appointment.appointments_appointmentStatus ===
+                                    "Missed"
+                                  ? "bg-[#FFE8EC] text-[#EF4C6A]" // Red color for Missed
+                                  : appointment.appointments_appointmentStatus ===
+                                      "Cancelled"
+                                    ? "bg-[#FFE8EC] text-[#EF4C6A]" // Red color for Cancelled
+                                    : ""
                         }`}
                       >
                         <span
-                          className={`inline-block h-2 w-2 rounded-full mr-1 ${
+                          className={`mr-1 inline-block h-2 w-2 rounded-full ${
                             appointment.appointments_appointmentStatus ===
                             "Scheduled"
                               ? "bg-[#7E7E7E]" // Green color for Scheduled
                               : appointment.appointments_appointmentStatus ===
-                                "Done"
-                              ? "bg-[#0EB146]" // Dark color for Done
-                              : appointment.appointments_appointmentStatus ===
-                                  "Patient-IN" ||
-                                appointment.appointments_appointmentStatus ===
-                                  "On-going"
-                              ? "bg-[#E4B90E]" // Yellow for On Going
-                              : appointment.appointments_appointmentStatus ===
-                                  "Missed" ||
-                                appointment.appointments_appointmentStatus ===
-                                  "Cancelled"
-                              ? "bg-[#EE4D4D]" // Red color for Missed and Cancelled
-                              : ""
+                                  "Done"
+                                ? "bg-[#0EB146]" // Dark color for Done
+                                : appointment.appointments_appointmentStatus ===
+                                      "Patient-IN" ||
+                                    appointment.appointments_appointmentStatus ===
+                                      "On-going"
+                                  ? "bg-[#E4B90E]" // Yellow for On Going
+                                  : appointment.appointments_appointmentStatus ===
+                                        "Missed" ||
+                                      appointment.appointments_appointmentStatus ===
+                                        "Cancelled"
+                                    ? "bg-[#EE4D4D]" // Red color for Missed and Cancelled
+                                    : ""
                           }`}
                         ></span>
                         {appointment.appointments_appointmentStatus}
