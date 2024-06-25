@@ -120,7 +120,7 @@ const Pagination = ({
                       gotoError ? " border-red-500" : " border-[#E7EAEE99]"
                     }  border-[#E7EAEE99]`}
                     type="text"
-                    placeholder="-"
+                    placeholder=""
                     pattern="\d*"
                     value={pageNumber}
                     onChange={handlePageNumberChange}
