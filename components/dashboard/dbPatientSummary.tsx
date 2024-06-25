@@ -26,10 +26,12 @@ const DBPatientSummary = ({
 
   const recentMedication =
     pri?.recentMedication?.medicationlogs_medicationLogsName;
-    const recentMedicationDate =
+  const recentMedicationDate =
     pri?.recentMedication?.medicationlogs_medicationLogsDate;
-    const recentMedicationTime =
+  const recentMedicationTime =
     pri?.recentMedication?.medicationlogs_medicationLogsTime;
+  const recentMedicationType =
+    pri?.recentMedication?.medicationlogs_medicationType;
 
   const allergens = pri?.patientAllergies[0]?.allergens
     ? pri.patientAllergies[0].allergens
@@ -135,7 +137,7 @@ const DBPatientSummary = ({
                     <div>No Recent Medication</div>
                   ) : (
                     <div className="flex flex-col gap-1">
-                      <p>{recentMedication}</p>
+                      <p>{recentMedication} {recentMedicationType=="PRN" && "PRN" }</p>
                       <p>Date Taken : {" "} {formatDate(recentMedicationDate)}</p>
                       <p>Time Taken : {" "} {formatTime(recentMedicationTime)}</p>
                     </div>
