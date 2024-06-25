@@ -101,6 +101,8 @@ export default function AppointmentPage() {
       setSortBy("appointmentTime");
     } else if (option == "Endtime") {
       setSortBy("appointmentEndTime");
+    } else if (option == "Name") {
+      setSortBy("patient_firstName");
     }
     console.log(sortBy, "ooption");
   };
@@ -137,10 +139,12 @@ export default function AppointmentPage() {
     { label: "Descending", onClick: handleOrderOptionClick },
   ];
   const optionsSortBy = [
-    { label: "Status", onClick: handleSortOptionClick },
+    { label: "Name", onClick: handleSortOptionClick },
     { label: "Date", onClick: handleSortOptionClick },
     { label: "Time", onClick: handleSortOptionClick },
-    { label: "Endtime", onClick: handleSortOptionClick },
+    { label: "End Time", onClick: handleSortOptionClick },
+    { label: "Status", onClick: handleSortOptionClick }
+
   ]; // end of orderby & sortby function
   const optionsFilterStatus = [
     { label: "Scheduled", onClick: setFilterStatusFromCheck },

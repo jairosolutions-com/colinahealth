@@ -26,10 +26,12 @@ const DBPatientSummary = ({
 
   const recentMedication =
     pri?.recentMedication?.medicationlogs_medicationLogsName;
-    const recentMedicationDate =
+  const recentMedicationDate =
     pri?.recentMedication?.medicationlogs_medicationLogsDate;
-    const recentMedicationTime =
+  const recentMedicationTime =
     pri?.recentMedication?.medicationlogs_medicationLogsTime;
+  const recentMedicationType =
+    pri?.recentMedication?.medicationlogs_medicationType;
 
   const allergens = pri?.patientAllergies[0]?.allergens
     ? pri.patientAllergies[0].allergens
@@ -135,7 +137,7 @@ const DBPatientSummary = ({
                     <div>No Recent Medication</div>
                   ) : (
                     <div className="flex flex-col gap-1">
-                      <p>{recentMedication}</p>
+                      <p>{recentMedication} {recentMedicationType=="PRN" && "- PRN" }</p>
                       <p>Date Taken : {" "} {formatDate(recentMedicationDate)}</p>
                       <p>Time Taken : {" "} {formatTime(recentMedicationTime)}</p>
                     </div>
@@ -189,8 +191,8 @@ const DBPatientSummary = ({
                 <h1 className="absolute text-[15px] font-medium  truncate w-full">
                   {pri === undefined
                     ? "[Patient Name]"
-                    : pri?.data[0]?.patient_firstName}
-                  's Due Medication
+                    : pri?.data[0]?.patient_firstName+"'s"}{" "}
+                  Due Medication
                 </h1>
                 <div className="h-full w-full flex  items-center justify-center ">
                   <DoughnutChart
