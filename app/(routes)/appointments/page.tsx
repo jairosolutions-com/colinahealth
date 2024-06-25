@@ -98,6 +98,8 @@ export default function AppointmentPage() {
       setSortBy("appointmentTime");
     } else if (option == "Endtime") {
       setSortBy("appointmentEndTime");
+    } else if (option == "Name") {
+      setSortBy("patient_firstName");
     }
     console.log(sortBy, "ooption");
   };
@@ -107,10 +109,12 @@ export default function AppointmentPage() {
     { label: "Descending", onClick: handleOrderOptionClick },
   ];
   const optionsSortBy = [
-    { label: "Status", onClick: handleSortOptionClick },
+    { label: "Name", onClick: handleSortOptionClick },
     { label: "Date", onClick: handleSortOptionClick },
     { label: "Time", onClick: handleSortOptionClick },
-    { label: "Endtime", onClick: handleSortOptionClick },
+    { label: "End Time", onClick: handleSortOptionClick },
+    { label: "Status", onClick: handleSortOptionClick }
+
   ]; // end of orderby & sortby function
 
   const isModalOpen = (isOpen: boolean) => {
@@ -373,7 +377,7 @@ export default function AppointmentPage() {
                   }))}
                   open={isOpenOrderedBy}
                   width={"165px"}
-                  label={"Select"}
+                  label={"Descending"}
                 />
                 <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
                   Sort by

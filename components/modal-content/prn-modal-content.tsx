@@ -64,12 +64,12 @@ export const PrnModalContent = ({
     if (label === "charting") {
       const now = new Date();
       const formattedDate = now.toISOString().split("T")[0];
-      const formattedTime = now.toTimeString().split(" ")[0];
+      // const formattedTime = now.toTimeString().split(" ")[0];
 
       setFormData({
         ...formData,
         medicationLogsDate: formattedDate,
-        medicationLogsTime: formattedTime,
+        // medicationLogsTime: formattedTime,
       });
     }
   }, [label]);
