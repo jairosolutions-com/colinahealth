@@ -9,29 +9,35 @@ import UserDetail from "@/components/userDetails";
 import DBUserDetailLoader from "@/components/loaders/DBUserDetailLoader";
 import DBPatientSummary from "@/components/dashboard/dbPatientSummary";
 import DBBody from "@/components/dashboard/dbBody";
+import { onNavigate } from "@/actions/navigation";
+import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
-
+  const router = useRouter();
+  const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken) {
+    onNavigate(router, "/login");
+  }
   return (
     <div className="w-full">
-      <div className="justify-center h-full items-center mx-[154px] mt-[90px] overflow-hidden">
-        <div className="w-full flex justify-between items-center">
+      <div className="mx-[154px] mt-[90px] h-full items-center justify-center overflow-hidden">
+        <div className="flex w-full items-center justify-between">
           <div className="w-full">
-            <p className="p-title select-none mb-1">WELCOME TO DASHBOARD!</p>
-            <div className="font-bold text-[15px] flex mb-4 select-none">
+            <p className="p-title mb-1 select-none">WELCOME TO DASHBOARD!</p>
+            <div className="mb-4 flex select-none text-[15px] font-bold">
               Hey,{" "}
               <Suspense fallback={<DBUserDetailLoader />}>
                 <UserDetail />{" "}
               </Suspense>
               -
-              <p className="sub-title pl-1 select-none">
+              <p className="sub-title select-none pl-1">
                 here's what's happening with your clinic today!
               </p>
             </div>
           </div>
           <NurseDrawer />
         </div>
-        <DBBody/>
+        <DBBody />
       </div>
     </div>
   );
