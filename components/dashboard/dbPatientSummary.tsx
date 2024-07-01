@@ -137,7 +137,7 @@ const DBPatientSummary = ({
                     <div>No Recent Medication</div>
                   ) : (
                     <div className="flex flex-col gap-1">
-                      <p>{recentMedication} {recentMedicationType=="PRN" && "- PRN" }</p>
+                      <p>{recentMedication} {recentMedicationType=="PRN" && "- lPRN" }</p>
                       <p>Date Taken : {" "} {formatDate(recentMedicationDate)}</p>
                       <p>Time Taken : {" "} {formatTime(recentMedicationTime)}</p>
                     </div>
