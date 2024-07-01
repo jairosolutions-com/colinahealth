@@ -10,7 +10,7 @@ import {
   checkTokenValidity,
   validateUser,
 } from "@/app/api/login-api/loginHandler";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Footer from "./footer";
 import React from "react";
@@ -20,6 +20,7 @@ import ResetPass from "./reset-pass";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { generateOTPCode } from "@/app/api/forgot-pass-api/otp-code";
+import Cookies from "js-cookie";
 
 export const Login = () => {
   const router = useRouter();
@@ -87,11 +88,14 @@ export const Login = () => {
     fetchToken();
   }, []);
 
-  if (getAccessToken()) {
-    router.push("/dashboard");
-  }
+  useEffect(() => {
+    if (getAccessToken()) {
+      router.push("/dashboard");
+    }
+  }, [isSubmitted]);
 
   console.log(rememberMeToken, "rememberme");
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSubmitted(true);
     setTwoFa(true);
@@ -106,29 +110,18 @@ export const Login = () => {
             setIsOTP(true);
           }
         } else if (rememberMeToken !== "") {
+          const accessToken = signIn.accessToken;
+          Cookies.set("accessToken", accessToken, { expires: 1 ,path: '/' });
+          setAccessToken(signIn.accessToken); 
           router.push("/dashboard");
         }
       } else {
         // Handle invalid login
         setPassword("");
         setIsInvalid(true);
-        // setTimeout(() => {
-        //   setIsInvalid(false);
-        // }, 5000);
       }
-
-      // const signIn = await validateUser(email, password, rememberMe);
-
-      // if (signIn != false && rememberMeToken===null) {
-      //   const response = await generateOTPCode(email, "signIn");
-      //   if (response) {
-      //     setIsOTP(true);
-      //   }
-      // } else if (rememberMeToken){
-      //   router.push('/dashboard')
     } catch (error) {
       console.error("Error during login:", error);
-      // Handle error
     }
     setIsSubmitted(false);
   };
@@ -137,39 +130,24 @@ export const Login = () => {
     setRememberMe(!rememberMe); // Toggle rememberMe state
   };
 
-  console.log("email", email);
-  console.log(isAccessed, "isAccessed");
-  console.log(isForgotPassword, "isForgotPassword");
-  //   if (isAccessed) {
-  //     return (
-  //       <div className="container w-full h-full flex justify-center items-center">
-  //         <Image
-  //           src="/imgs/colina-logo-animation.gif"
-  //           alt="logo"
-  //           width={100}
-  //           height={100}
-  //         />
-  //       </div>
-  //     );
-  //   }
   return (
     <div className="h-full w-full">
       {isLoaded && (
-        <div className="w-full h-full flex ">
-          <div className="flex bg-[#007C85] w-full lg:w-[44.4%] items-center h-full justify-center md:z-10 -z-[100]">
+        <div className="flex h-full w-full">
+          <div className="-z-[100] flex h-full w-full items-center justify-center bg-[#007C85] md:z-10 lg:w-[44.4%]">
             <Image
               src="/imgs/login-bg.png"
               alt="login-image"
-              className=" w-full h-full object-cover select-none pointer-events-none "
+              className="pointer-events-none h-full w-full select-none object-cover"
               width={827}
               height={1081}
               priority={true}
             />
-            <div className=" hidden md:flex  absolute lg:px-32 md:px-16  flex-col gap-5 w-1/2">
+            <div className="absolute hidden w-1/2 flex-col gap-5 md:flex md:px-16 lg:px-32">
               <Image
                 src="/imgs/colina-logo.png"
                 alt="logo"
-                className=" object-cover select-none pointer-events-none -ml-2 "
+                className="pointer-events-none -ml-2 select-none object-cover"
                 width={297}
                 height={37.05}
                 priority={true}
@@ -180,31 +158,30 @@ export const Login = () => {
               </p>
             </div>
           </div>
-          <div className=" md:w-7/12 w-full h-full px-8 lg:px-0 absolute md:relative flex flex-col justify-center items-center">
-            <div className=" w-full h-full flex">
+          <div className="absolute flex h-full w-full flex-col items-center justify-center px-8 md:relative md:w-7/12 lg:px-0">
+            <div className="flex h-full w-full">
               {/* Sign In */}
               <div
-                className={`flex flex-col justify-center items-center lg:w-[1091px] w-full  duration-500 transition h-full 
-                ${
+                className={`flex h-full w-full flex-col items-center justify-center transition duration-500 lg:w-[1091px] ${
                   isForgotPassword || isOTP || isResetPass
-                    ? "-translate-x-[1000px] opacity-0 -z-50"
-                    : " z-11"
+                    ? "-z-50 -translate-x-[1000px] opacity-0"
+                    : "z-11"
                 }`}
               >
-                <div className="lg:w-[642.27px] md:w-[450px] w-full text-left">
+                <div className="w-full text-left md:w-[450px] lg:w-[642.27px]">
                   <Image
                     src="/imgs/colina-logo.png"
                     alt="logo"
-                    className=" object-cover select-none pointer-events-none -ml-[5px] md:hidden block"
+                    className="pointer-events-none -ml-[5px] block select-none object-cover md:hidden"
                     width={200}
                     height={37.05}
                     priority={true}
                   />
-                  <h2 className=" md:text-[20px] font-medium  md:text-2xl lg:mb-10 text-white md:text-[#020817] md:mb-0 mb-5">
+                  <h2 className="mb-5 font-medium text-white md:mb-0 md:text-2xl md:text-[20px] md:text-[#020817] lg:mb-10">
                     Sign in to your Account
                   </h2>
                   <div
-                    className={`text-[#db3956] w-full md:mb-8 mb-4 -mt-5 text-md ${
+                    className={`text-md -mt-5 mb-4 w-full text-[#db3956] md:mb-8 ${
                       isInvalid ? "block" : "hidden"
                     }`}
                   >
@@ -228,8 +205,7 @@ export const Login = () => {
                           type="email"
                           className={`${
                             isInvalid ? "ring-1 ring-[#db3956]" : ""
-                          }  
-                      h-[60px] w-full focus:bg-opacity-10 md:bg-[#D9D9D91A] bg-[#D9D9D94D] px-3 py-6 pl-5 pb-2 md:text-[#020817] text-white`}
+                          } h-[60px] w-full bg-[#D9D9D94D] px-3 py-6 pb-2 pl-5 text-white focus:bg-opacity-10 md:bg-[#D9D9D91A] md:text-[#020817]`}
                           value={email}
                           onFocus={handleEmailFocus}
                           onBlur={handleEmailBlur}
@@ -238,7 +214,7 @@ export const Login = () => {
                         />
                         <label
                           htmlFor="email"
-                          className={`absolute left-5 text-white transition-all duration-300 cursor-text select-none ${
+                          className={`absolute left-5 cursor-text select-none text-white transition-all duration-300 ${
                             isEmailFocused || email
                               ? "top-2 text-[12px] md:text-[#64748b]"
                               : "top-5 text-[15px]"
@@ -265,8 +241,7 @@ export const Login = () => {
                           type={!showPass ? "password" : "text"}
                           className={`${
                             isInvalid ? "ring-1 ring-[#db3956]" : ""
-                          }  
-                      h-[60px] w-full bg-opacity-10   md:bg-[#D9D9D91A] bg-[#D9D9D94D] px-3 py-6 pl-5 pb-2 text-md md:text-[#020817] text-white`}
+                          } text-md h-[60px] w-full bg-[#D9D9D94D] bg-opacity-10 px-3 py-6 pb-2 pl-5 text-white md:bg-[#D9D9D91A] md:text-[#020817]`}
                           value={password}
                           onFocus={handlePasswordFocus}
                           onBlur={handlePasswordBlur}
@@ -275,7 +250,7 @@ export const Login = () => {
                         />
                         <label
                           htmlFor="password"
-                          className={`absolute left-5 text-white transition-all duration-300 cursor-text select-none ${
+                          className={`absolute left-5 cursor-text select-none text-white transition-all duration-300 ${
                             isPasswordFocused || password
                               ? "top-2 text-[12px] md:text-[#64748b]"
                               : "top-5 text-[15px]"
@@ -295,7 +270,7 @@ export const Login = () => {
                           Enter your password
                         </p>
                         <div
-                          className={` absolute cursor-pointer right-3 flex items-center justify-center h-full ${
+                          className={`absolute right-3 flex h-full cursor-pointer items-center justify-center ${
                             isInvalid ? "-top-3" : ""
                           }`}
                           onClick={() => setShowPass(!showPass)}
@@ -314,8 +289,8 @@ export const Login = () => {
                         </div>
                       </div>
 
-                      <div className="flex text-white md:text-[#020817] justify-between">
-                        <label className="flex items-center justify-start mb-7 l-5  md:mb-3">
+                      <div className="flex justify-between text-white md:text-[#020817]">
+                        <label className="l-5 mb-7 flex items-center justify-start md:mb-3">
                           <input
                             type="checkbox"
                             name="checkbox"
@@ -323,14 +298,14 @@ export const Login = () => {
                             checked={rememberMe} // Bind checked attribute to rememberMe state
                             onChange={handleCheckboxChange} // Handle checkbox change
                           />
-                          <span className="ml-2 inline-block text-[15px] cursor-pointer checkbox mt-1 select-none">
+                          <span className="checkbox ml-2 mt-1 inline-block cursor-pointer select-none text-[15px]">
                             {" "}
                             Remember me
                           </span>
                         </label>
-                        <label className="flex items-center justify-start mb-7 l-5  md:mb-3">
+                        <label className="l-5 mb-7 flex items-center justify-start md:mb-3">
                           <p
-                            className=" text-[15px] ml-auto inline-block cursor-pointer mt-1 "
+                            className="ml-auto mt-1 inline-block cursor-pointer text-[15px]"
                             onClick={() =>
                               setIsForgotPassword(!isForgotPassword)
                             }
@@ -342,17 +317,15 @@ export const Login = () => {
                       <div className="mt-2">
                         <button
                           disabled={isSubmitted}
-                          className={`
-                          ${
+                          className={` ${
                             isSubmitted
                               ? "cursor-not-allowed"
                               : "cursor-pointer"
-                          }
-                          inline-block w-full h-[60px] text-[15px] items-center bg-[#007C85] px-6 py-3 text-center font-normal text-white hover:bg-[#0E646A] transition duration-300 ease-in-out`}
+                          } inline-block h-[60px] w-full items-center bg-[#007C85] px-6 py-3 text-center text-[15px] font-normal text-white transition duration-300 ease-in-out hover:bg-[#0E646A]`}
                           type="submit"
                         >
                           {isSubmitted ? (
-                            <div className="flex justify-center items-center w-full">
+                            <div className="flex w-full items-center justify-center">
                               <Loader2 size={20} className="animate-spin" />{" "}
                               &nbsp; Signing in...
                             </div>
@@ -366,7 +339,7 @@ export const Login = () => {
                 </div>
               </div>
             </div>
-            <div className="hidden md:block w-full">
+            <div className="hidden w-full md:block">
               <Footer />
             </div>
             {/* Forgot Pass */}
@@ -405,4 +378,5 @@ export const Login = () => {
     </div>
   );
 };
+
 export default Login;

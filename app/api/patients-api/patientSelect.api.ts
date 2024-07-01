@@ -1,17 +1,16 @@
 import axios, { AxiosError } from "axios";
 import { onNavigate } from "@/actions/navigation";
 import { getAccessToken, setAccessToken } from "../login-api/accessToken";
+import Cookies from "js-cookie";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-// Function to get the access token from local storage
 
 export async function selectPatient(
-
-  router: any // Pass router instance as a parameter
+  router: any, // Pass router instance as a parameter
 ): Promise<any> {
-
   try {
-    const accessToken = getAccessToken();
+    const accessToken = Cookies.get("accessToken");
+    console.log(accessToken, "accessToken1");
     if (!accessToken) {
       setAccessToken("");
       onNavigate(router, "/login");
@@ -22,10 +21,9 @@ export async function selectPatient(
       Authorization: `Bearer ${accessToken}`,
     };
 
-    const response = await axios.get(
-      `${apiUrl}/patient-information/select`,
-      { headers }
-    );
+    const response = await axios.get(`${apiUrl}/patient-information/select`, {
+      headers,
+    });
 
     const patientList = response.data;
     return patientList;
@@ -36,7 +34,7 @@ export async function selectPatient(
         // Handle network error
         console.error("Connection refused or network error occurred.");
         return Promise.reject(
-          new Error("Connection refused or network error occurred.")
+          new Error("Connection refused or network error occurred."),
         );
       }
       if (axiosError.response?.status === 401) {

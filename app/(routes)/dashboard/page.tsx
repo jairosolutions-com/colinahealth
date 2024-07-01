@@ -1,23 +1,10 @@
 import React, { Suspense, useEffect, useState } from "react";
 import NurseDrawer from "@/components/nurse-drawer";
-import { SuccessModal } from "@/components/shared/success";
-import DBDueMedication from "@/components/dashboard/dbDueMedications";
-import DBUpcomingAppointments from "@/components/dashboard/dbUpcomingAppointments";
-import DBDueMedicationLoader from "@/components/loaders/DBDueMedicationLoader";
-import DBUpcomingLoader from "@/components/loaders/DBUpcomingLoader";
 import UserDetail from "@/components/userDetails";
 import DBUserDetailLoader from "@/components/loaders/DBUserDetailLoader";
-import DBPatientSummary from "@/components/dashboard/dbPatientSummary";
 import DBBody from "@/components/dashboard/dbBody";
-import { onNavigate } from "@/actions/navigation";
-import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
-  const router = useRouter();
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) {
-    onNavigate(router, "/login");
-  }
   return (
     <div className="w-full">
       <div className="mx-[154px] mt-[90px] h-full items-center justify-center overflow-hidden">
