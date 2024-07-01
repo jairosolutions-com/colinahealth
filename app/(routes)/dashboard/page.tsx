@@ -13,11 +13,7 @@ import { onNavigate } from "@/actions/navigation";
 import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
-  const router = useRouter();
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) {
-    onNavigate(router, "/login");
-  }
+
   return (
     <div className="w-full">
       <div className="mx-[154px] mt-[90px] h-full items-center justify-center overflow-hidden">
