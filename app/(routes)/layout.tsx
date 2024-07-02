@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { Navbar } from "@/components/navbar";
 import { getAccessToken, setAccessToken } from "../api/login-api/accessToken";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, useParams, usePathname, useRouter } from "next/navigation";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import Footer from "@/components/footer";
@@ -11,8 +11,20 @@ import { useIdleTimer } from "react-idle-timer";
 import Loading from "./loading";
 import { toast } from "@/components/ui/use-toast";
 
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const params = useParams<{
+    id: any;
+    tag: string;
+    item: string;
+  }>();
+ 
+  const pathname = usePathname();
+  const pathParts = pathname.split("/");
+  const baseRoute = pathParts[1] || ""; // Get the first part after the base URL
+  console.log(baseRoute, 'baseRoute');
+
   useEffect(() => {
     if (!getAccessToken()) {
       redirect("/login");
@@ -71,7 +83,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Suspense fallback={<Loading />}>
           <div className="flex-grow ">{children}</div>
         </Suspense>
+        <div className={`${baseRoute=="patient-overview"?"hidden" :"block"}`}>
         <Footer />
+        </div>
       </div>
     </>
   );
