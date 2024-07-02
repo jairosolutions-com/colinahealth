@@ -150,8 +150,8 @@ export default function AppointmentPage() {
     { label: "Scheduled", onClick: setFilterStatusFromCheck },
     { label: "Patient-IN", onClick: setFilterStatusFromCheck },
     { label: "On-going", onClick: setFilterStatusFromCheck },
-    { label: "Missed", onClick: setFilterStatusFromCheck },
     { label: "Cancelled", onClick: setFilterStatusFromCheck },
+    { label: "Missed", onClick: setFilterStatusFromCheck },
   ]; // end of status function
 
   const isModalOpen = (isOpen: boolean) => {
@@ -295,7 +295,9 @@ export default function AppointmentPage() {
   ]);
   useEffect(() => {
     setFilterStatusFromCheck(filterStatusFromCheck);
-    const newLabel = filterStatusFromCheck.length > 0 ? filterStatusFromCheck.join(", "):"Choose"
+    // const newLabel = filterStatusFromCheck.length > 0 ? filterStatusFromCheck.join(", "):"Status"
+    const newLabel = filterStatusFromCheck.length > 0 ? `${filterStatusFromCheck.length} Status Selected` : "Status";
+
     setStatusFiltered(newLabel);
     console.log(filterStatusFromCheck.join(", "), "parent");
     console.log(newLabel,"new parent");
@@ -355,13 +357,13 @@ export default function AppointmentPage() {
         </div>
 
         <div className="w-full">
-          <div className="flex h-[75px] w-full items-center justify-between gap-5 rounded-sm bg-[#F4F4F4] px-5">
-            <div className="flex h-[47px] w-[460px] items-center rounded-sm border border-gray-200 bg-white px-4 py-2">
-              <Search className="mr-2 h-4 w-4 text-gray-500" />
+          <div className="w-full bg-[#F4F4F4] justify-between items-center flex px-5 h-[75px] rounded-sm gap-5">
+            <div className="flex items-center bg-white rounded-sm border border-gray-200  px-4 py-2 h-[47px] w-[460px]">
+              <Search className="h-4 w-4 text-gray-500 mr-2" />
               <input
                 type="text"
                 placeholder="Search by reference no. or name..."
-                className="flex-grow text-gray-700 focus:outline-none"
+                className="flex-grow focus:outline-none text-gray-700"
                 value={term}
                 onChange={(e) => {
                   setTerm(e.target.value);
@@ -371,7 +373,7 @@ export default function AppointmentPage() {
             </div>
 
             <div className="w-[500px]">
-              <div className="flex w-full items-center justify-end gap-3">
+              <div className="flex w-full justify-end items-center gap-3">
                 <p className="font-semibold text-[#191D23] text-opacity-60">
                   Filter Date
                 </p>
@@ -381,8 +383,8 @@ export default function AppointmentPage() {
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "h-[47px] w-[166px] justify-start rounded-[5px] text-left font-normal",
-                        !startDate && "text-muted-foreground",
+                        "w-[166px] justify-start text-left font-normal h-[47px] rounded-[5px]",
+                        !startDate && "text-muted-foreground"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -404,8 +406,8 @@ export default function AppointmentPage() {
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "*: h-[47px] w-[166px] justify-start rounded-[5px] text-left font-normal",
-                        !endDate && "text-muted-foreground",
+                        "w-[166px] justify-start text-left font-normal h-[47px] rounded-[5px] *:",
+                        !endDate && "text-muted-foreground"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -424,25 +426,8 @@ export default function AppointmentPage() {
               </div>
             </div>
             <div className="w-[500px]">
-              <div className="flex w-full items-center justify-end gap-3 text-center">
-                <p className="text-[15px] font-semibold text-[#191D23] opacity-[60%]">
-                  Filter Status
-                </p>
-                <DropdownMenu
-                  options={optionsFilterStatus.map(({ label, onClick }) => ({
-                    label,
-                    onClick: () => {
-                      // onClick(label);
-                      // console.log("label", label);
-                    },
-                  }))}
-                  open={isOpenFilterStatus}
-                  width={"165px"}
-                  statusUpdate={handleStatusUpdate} // Pass the handler function
-                  checkBox={true}
-                  label={statusFiltered} 
-                />
-                <p className="flex font-semibold text-[#191D23] opacity-[60%]">
+              <div className="w-full justify-end items-center flex gap-3">
+                <p className="flex text-[#191D23] opacity-[60%] font-semibold">
                   Order by
                 </p>
                 <DropdownMenu
@@ -454,10 +439,9 @@ export default function AppointmentPage() {
                   }))}
                   open={isOpenOrderedBy}
                   width={"165px"}
-                  checkBox={false}
-                  label={"Select"}
+                  label={"Descending"}
                 />
-                <p className="text-[15px] font-semibold text-[#191D23] opacity-[60%]">
+                <p className="text-[#191D23] opacity-[60%] font-semibold text-[15px]">
                   Sort by
                 </p>
                 <DropdownMenu
@@ -470,13 +454,11 @@ export default function AppointmentPage() {
                   }))}
                   open={isOpenSortedBy}
                   width={"165px"}
-                  checkBox={false}
                   label={"Select"}
                 />
               </div>
             </div>
           </div>
-
           <div>
             <table className="h-full w-full items-start justify-center text-[15px]">
               <thead className="text-left rtl:text-right">
@@ -486,7 +468,21 @@ export default function AppointmentPage() {
                   <td className="px-6 py-5">Date</td>
                   <td className="px-6 py-5">Time</td>
                   <td className="px-6 py-5">End time</td>
-                  <td className="flex justify-start px-6 py-5">Status</td>
+                  <td className="flex justify-start px-6 py-5">
+                  <DropdownMenu
+                  options={optionsFilterStatus.map(({ label, onClick }) => ({
+                    label,
+                    onClick: () => {
+                      // onClick(label);
+                      // console.log("label", label);
+                    },
+                  }))}
+                  open={isOpenFilterStatus}
+                  width={"165px"}
+                  statusUpdate={handleStatusUpdate} // Pass the handler function
+                  checkBox={true}
+                  label={statusFiltered} 
+                />  </td>
                 </tr>
               </thead>
               <tbody>

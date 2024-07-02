@@ -81,8 +81,10 @@ const DropdownMenu = ({
       // conditional since not all dropdown uses checkbox or statusUpdate
       if (statusUpdate) {
         statusUpdate(checkedFilters);
-        const newLabel =
-          checkedFilters.length > 0 ? checkedFilters.join(", ") : "Choose";
+        // const newLabel =
+        //   checkedFilters.length > 0 ? checkedFilters.join(", ") : "Status";
+        const newLabel = checkedFilters.length > 0 ? `${checkedFilters.length} Status Selected` : "Status";
+
         setOptionLabel(newLabel);
       }
       console.log(checkedFilters, "child to parent");
@@ -109,7 +111,7 @@ const DropdownMenu = ({
       );
       if (statusUpdate) {
         statusUpdate(checkedFilters);
-        setOptionLabel("Choose");
+        setOptionLabel("Status");
       }
       console.log(checkedFilters, "child to parent");
       // setFilterStatusToParent(checkedFilters);
@@ -121,20 +123,18 @@ const DropdownMenu = ({
   };
 
   return (
-    <div className={`w-full max-w-[165px] w-${width} `} ref={menuRef}>
+    <div className={`w-full max-w-[166px] w-${width} `} ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-[47px] w-full items-center justify-between rounded-[5px] bg-white px-[20px] text-[15px] font-bold text-[#191D23] text-opacity-60 shadow-sm"
+        className={`flex h-[47px] items-center justify-between rounded-[5px] bg-white  text-[15px] font-bold text-[#191D23] ${!isCheckBox ? "w-full text-opacity-60 shadow-sm" : "uppercase text-[#64748B]"}`}
       >
-        <p className="truncate max-w-60px] w-full">
-          <ResuableTooltip text={optionLabel} />
-        </p>
+        {optionLabel}
         <Image
           src={"/icons/dropdown.svg"}
           width={18}
           height={18}
           alt="dropdown"
-          className={`h-[7px] w-[8px] transition duration-300 ${isOpen ? "rotate-180" : ""}`}
+          className={`h-[7px] w-[8px] transition duration-300 ${!isCheckBox ? "" : "ml-2"} ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -170,17 +170,17 @@ const DropdownMenu = ({
         </div>
       ) : (
         isOpen && (
-          <div className="absolute mt-2 flex w-[165px] cursor-pointer flex-col rounded-md bg-white p-4 text-[15px] shadow-xl">
+          <div className="absolute -mt-2 flex w-[165px] cursor-pointer flex-col rounded-md bg-white px-4 pt-4 pb-2  normal-case text-[#020817] drop-shadow-md shadow-xl">
             {options.map((option, index) => (
               <div key={index} className="flex flex-row gap-2">
-                <label className="flex items-center">
+                <label className="flex items-center  mb-1 ">
                   <input
                     type="checkbox"
                     checked={checkedStatuses[option.label]} // Bind to checked status from state
                     onChange={() => handleCheckboxChange(option.label)}
-                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 accent-[#007C85] focus:ring-[#007C85]"
+                    className="h-3 w-3 rounded  border-gray-300 bg-gray-100 accent-[#007C85] focus:ring-[#007C85]"
                   />
-                  <p className="ml-2 font-semibold hover:text-[#007C85]">
+                  <p className="ml-3 font-semibold  text-[15px] hover:text-[#007C85]">
                     {option.label}
                   </p>
                 </label>
@@ -188,7 +188,7 @@ const DropdownMenu = ({
             ))}
             {showClearButton && (
               <p
-                className="flex justify-end font-semibold hover:text-[#007C85]"
+                className="flex justify-end font-semibold text-[12px] hover:text-[#007C85]"
                 onClick={clearCheckedStatuses}
               >
                 Clear
