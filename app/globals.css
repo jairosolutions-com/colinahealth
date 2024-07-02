@@ -422,7 +422,8 @@ table {
   color: #eec80e;
 }
 
-.sub-title {
+.sub-title,
+.placeholder-text::placeholder {
   color: #64748b;
   font-size: 15px;
   font-weight: 400;
@@ -432,5 +433,14 @@ table {
   color: #db3956;
   border-color: #db3956;
   border-width: 1px;
-  
+}
+
+.chart-header {
+  font-size: 20px;
+  font-weight: 400;
+  color: #64748b;
+}
+
+.gray-1 {
+  color: #64748b;
 }

@@ -80,7 +80,7 @@ const Chart = () => {
         const patientListWithPrescription = await fetchPatientPrescriptions(
           term,
           currentPage,
-          router
+          router,
         );
         setPatientList(patientListWithPrescription.data);
         setTotalPages(patientListWithPrescription.totalPages);
@@ -145,32 +145,31 @@ const Chart = () => {
   }
 
   if (isLoading) {
-    return <LoadingGif/> 
+    return <LoadingGif />;
     // <ChartLoader />;
   }
-  console.log(patientWithMedicationLogsToday, "patientWithMedicationLogsToday");
   return (
-    <div className=" w-full px-[150px] h-full">
-      <div className="w-full flex-col  flex justify-center items-center">
+    <div className="h-full w-full px-[150px]">
+      <div className="flex h-full w-full flex-col items-center justify-center pt-20">
         {patientWithMedicationLogsToday.length == 0 && !term ? (
-          <div className="w-full h-screen flex  flex-col justify-center items-center -mt-14">
+          <div className="flex h-screen w-full flex-col items-center justify-center">
             <p className="mt-10"> No Data Yet</p>{" "}
             <span> Create a prescription for patient </span>
           </div>
         ) : (
-          <div className="bg-[#F4F4F4] h-[826px] max-h-[826px] w-full">
-            <div className="top-section w-full pt-24 pl-5">
+          <div className="w-full bg-[#F4F4F4]">
+            <div className="top-section w-full pl-5 pt-5">
               <div>
                 <Image
                   src="/icons/search-icon.svg"
                   alt="search-icon"
                   className="absolute ml-2 mt-4"
-                  width={20}
-                  height={20}
+                  width={13.35}
+                  height={13.35}
                 />
                 <input
                   type="text"
-                  className="w-[419px] rounded-md h-[45px] pl-7 mb-2"
+                  className="placeholder-text h-[45px] w-[419px] rounded-md pl-7"
                   placeholder="Search by reference no. or name..."
                   value={term}
                   onChange={(e) => {
@@ -179,23 +178,25 @@ const Chart = () => {
                   }}
                 />
               </div>
-              <div className="flex flex-col w-[250px] justify-between">
-                <h1 className=" -mb-8 font-semibold">
-                  {" "}
-                  Time Chart {" - "}
-                  <span className="text-gray-500">
-                    Total of {totalPatients} Patients
-                  </span>
+              <div className="flex w-full flex-col justify-between">
+                <h1 className="-mb-8 text-[20px] font-medium">
+                  <p className="absolute mt-2.5">
+                    {" "}
+                    Time Chart {" - "}
+                    <span className="chart-header">
+                      Total of {totalPatients} Patients
+                    </span>
+                  </p>
                 </h1>
               </div>
             </div>
             {patientWithMedicationLogsToday.length == 0 && term ? (
-              <div className="w-full h-full  flex items-center  justify-center font-thin  ">
+              <div className="flex h-full w-full items-center justify-center font-thin">
                 No Patient Found
               </div>
             ) : (
-              <div className="w-full relative overflow-hidden flex">
-                <div className="md:w-2/6  sticky top-0">
+              <div className="relative flex w-full overflow-hidden">
+                <div className="sticky top-0 md:w-2/6">
                   <div className="w-full">
                     <PatientCard
                       patientWithMedicationLogsToday={
@@ -208,8 +209,8 @@ const Chart = () => {
                     />
                   </div>
                 </div>
-                <div className="md:w-4/6 h-full md:block hidden overflow-y-hidden ">
-                  <div className="w-full h-full ">
+                <div className="hidden h-full overflow-y-hidden md:block md:w-4/6">
+                  <div className="h-full w-full">
                     <TimeGraph
                       patientWithMedicationLogsToday={
                         patientWithMedicationLogsToday
@@ -222,9 +223,9 @@ const Chart = () => {
                     />
                   </div>
                 </div>
-                <div className=" relative  r-0">
+                <div className="r-0 relative">
                   <div
-                    className="absolute w-1 bg-[#d9d9d9] endLine "
+                    className="endLine absolute w-[5px] bg-[#d9d9d9]"
                     style={{ height: endLineHeight + "px", right: 0 }}
                   ></div>
                 </div>
@@ -233,7 +234,7 @@ const Chart = () => {
           </div>
         )}
 
-        <div className="bg-white  w-full mt-5">
+        <div className="mt-5 w-full bg-white">
           <Pagination
             totalPages={totalPages}
             currentPage={currentPage}

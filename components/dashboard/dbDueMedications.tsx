@@ -161,7 +161,7 @@ const DBDueMedication = ({totalDueMedication,setTotalDueMedication,totalDone,set
   return (
     <div className="w-full h-[360px]">
       {dueMedicationList.length > 0 ? (
-        <div className="w-full border-[1px] border-[#E4E4E7] py-3 select-none px-5 bg-white flex flex-col justify-between h-full rounded-[5px]">
+        <div className="w-full py-3 select-none px-5 bg-[#D9D9D91A] flex flex-col justify-between h-full rounded-[5px]">
           <div className="h-full">
             <div className="flex flex-col ">
               <p className="p-title !font-medium">
