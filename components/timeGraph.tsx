@@ -159,31 +159,29 @@ const TimeGraph = ({
   };
   console.log(patientWithMedicationLogsToday.length, "lenght");
   return (
-    <div className="w-full  ">
-      <div className="w-[320vh] h-full overflow-hidden ">
-        <div className=" relative z-5">
+    <div className="w-full">
+      <div className="h-full w-[320vh] overflow-hidden">
+        <div className="z-5 relative">
           <div
             ref={lineRef}
-            className="absolute w-1 bg-red-500 "
+            className="absolute w-[5px] bg-[#DB3956]"
             style={linePosition}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
             {showTooltip && (
-              
               <div
-                className="fixed"
+                className="fixed bg-[#007C85] text-white overflow-visible max-w-[429px] text-wrap rounded-md px-2 py-1"
                 style={{ left: tooltipPosition.x, top: tooltipPosition.y }}
               >
-                <ResuableTooltip text={timeStrings}/>
+                <ResuableTooltip text={timeStrings} />
               </div>
-              
             )}
           </div>
         </div>
 
         <table
-          className="w-full time-graph-table h-full   "
+          className="time-graph-table h-full w-full"
           style={{ tableLayout: "fixed" }}
         >
           <thead>
@@ -191,9 +189,9 @@ const TimeGraph = ({
               {colData.map((col, index) => (
                 <th
                   key={col.time}
-                  className={`text-lg text-center border-b font-light text-gray-500  border-x border-[#191D23]  border-opacity-60   h-12 max-h-[20px] ${
+                  className={`chart-header h-12 max-h-[20px] border-x border-b border-[#191D23] border-opacity-60 text-center font-light ${
                     index !== colData.length - 1
-                      ? "text-center border-solid  max-h-[20px]  text-nowrap text-ellipsis overflow-hidden"
+                      ? "max-h-[20px] overflow-hidden text-ellipsis text-nowrap border-solid text-center"
                       : ""
                   }`}
                   style={{
@@ -215,7 +213,7 @@ const TimeGraph = ({
                     const logsInColumn = data.medicationlogs.filter(
                       (medLog: any) => {
                         const medicationLogsTime = parseInt(
-                          medLog.medicationLogsTime.replace(":", "")
+                          medLog.medicationLogsTime.replace(":", ""),
                         );
                         const colTime = parseInt(col.time);
 
@@ -223,41 +221,41 @@ const TimeGraph = ({
                           colTime <= medicationLogsTime &&
                           medicationLogsTime < colTime + 100
                         );
-                      }
+                      },
                     );
                     const isLastColumn =
                       dataIndex === patientWithMedicationLogsToday.length - 1;
                     return (
                       <td
                         key={`${dataIndex}_${col.time}`}
-                        className={`h-[204px] text-center border-x border-dashed  border-black overflow text-nowrap text-ellipsis overflow-hidden  ${
+                        className={`overflow h-[204px] overflow-hidden text-nowrap border-x border-dashed border-black text-center ${
                           parseInt(col.time) <= parseInt(currentTime) - 100
-                            ? "bg-[#E4E4E4] "
+                            ? "bg-[#E4E4E4]"
                             : "bg-white"
                         }`}
                         // style={{ maxHeight: "20px" }} // Set fixed height for table cells
                       >
                         <div
-                          className={`h-full  ${
+                          className={`h-full ${
                             isLastColumn &&
                             patientWithMedicationLogsToday.length != 1
-                              ? "border-b-[10px] "
+                              ? "border-b-[10px]"
                               : patientWithMedicationLogsToday.length === 1
-                              ? "border-b-0"
-                              : "border-b-[10px]"
-                          }  border-solid border-[#F4F4F4] flex flex-col justify-center items-center`}
+                                ? "border-b-0"
+                                : "border-b-[10px]"
+                          } flex flex-col items-center justify-center border-solid border-[#F4F4F4]`}
                         >
                           {logsInColumn.length >= 1 ? (
-                            <div className="max-h-[15px] flex-col gap-2 text-ellipsis flex  justify-center items-center ">
+                            <div className="flex max-h-[15px] flex-col items-center justify-center gap-2">
                               <HoverCard>
                                 <HoverCardTrigger>
                                   <div className="flex">
-                                    <div className="cursor-pointer relative flex items-center justify-center">
+                                    <div className="relative flex cursor-pointer items-center justify-center">
                                       {logsInColumn.some(
                                         (log: {
                                           medicationLogStatus: string;
                                         }) =>
-                                          log.medicationLogStatus !== "pending"
+                                          log.medicationLogStatus !== "pending",
                                       ) && (
                                         <Image
                                           src="/icons/chart-done.svg"
@@ -273,16 +271,16 @@ const TimeGraph = ({
                                         (log: {
                                           medicationLogStatus: string;
                                         }) =>
-                                          log.medicationLogStatus !== "pending"
+                                          log.medicationLogStatus !== "pending",
                                       ).length !== 0 && (
-                                        <span className="absolute h-4 w-4 -mt-10 pointer-events-none select-none -right-2 top-11 text-xs font-light rounded-full bg-red-600 text-white">
+                                        <span className="pointer-events-none absolute -right-2 top-11 -mt-10 h-4 w-4 select-none rounded-full bg-red-600 text-xs font-light text-white">
                                           {
                                             logsInColumn.filter(
                                               (log: {
                                                 medicationLogStatus: string;
                                               }) =>
                                                 log.medicationLogStatus !==
-                                                "pending"
+                                                "pending",
                                             ).length
                                           }
                                         </span>
@@ -293,7 +291,7 @@ const TimeGraph = ({
                                 {/* Conditionally render HoverCardContent if there are logs with status other than pending */}
                                 {logsInColumn.some(
                                   (log: { medicationLogStatus: string }) =>
-                                    log.medicationLogStatus !== "pending"
+                                    log.medicationLogStatus !== "pending",
                                 ) && (
                                   <HoverCardContent>
                                     {logsInColumn
@@ -301,7 +299,7 @@ const TimeGraph = ({
                                         (log: {
                                           medicationLogStatus: string;
                                         }) =>
-                                          log.medicationLogStatus !== "pending"
+                                          log.medicationLogStatus !== "pending",
                                       )
                                       .map(
                                         (
@@ -336,7 +334,10 @@ const TimeGraph = ({
                                               | null
                                               | undefined;
                                           },
-                                          logIndex: React.Key | null | undefined
+                                          logIndex:
+                                            | React.Key
+                                            | null
+                                            | undefined,
                                         ) => (
                                           <div
                                             key={logIndex}
@@ -346,7 +347,7 @@ const TimeGraph = ({
                                             {log.medicationType} -{" "}
                                             {log.medicationLogStatus}
                                           </div>
-                                        )
+                                        ),
                                       )}
                                   </HoverCardContent>
                                 )}
@@ -356,12 +357,12 @@ const TimeGraph = ({
 
                               {logsInColumn.filter(
                                 (log: { medicationLogStatus: string }) =>
-                                  log.medicationLogStatus === "pending"
+                                  log.medicationLogStatus === "pending",
                               ).length !== 0 && (
                                 <HoverCard>
                                   <HoverCardTrigger>
                                     <div>
-                                      <div className="cursor-pointer relative flex items-center justify-center">
+                                      <div className="relative flex cursor-pointer items-center justify-center">
                                         <Image
                                           src={`${
                                             parseInt(col.time) <=
@@ -381,16 +382,16 @@ const TimeGraph = ({
                                             medicationLogStatus: string;
                                           }) =>
                                             log.medicationLogStatus ===
-                                            "pending"
+                                            "pending",
                                         ).length !== 0 && (
-                                          <span className="absolute h-4 w-4 -mt-10 pointer-events-none select-none -right-2 top-11 text-xs font-light rounded-full bg-red-600 text-white">
+                                          <span className="pointer-events-none absolute -right-2 top-11 -mt-10 h-4 w-4 select-none rounded-full bg-red-600 text-xs font-light text-white">
                                             {
                                               logsInColumn.filter(
                                                 (log: {
                                                   medicationLogStatus: string;
                                                 }) =>
                                                   log.medicationLogStatus ===
-                                                  "pending"
+                                                  "pending",
                                               ).length
                                             }
                                           </span>
@@ -404,7 +405,7 @@ const TimeGraph = ({
                                         (log: {
                                           medicationLogStatus: string;
                                         }) =>
-                                          log.medicationLogStatus === "pending"
+                                          log.medicationLogStatus === "pending",
                                       )
                                       .map(
                                         (
@@ -439,7 +440,10 @@ const TimeGraph = ({
                                               | null
                                               | undefined;
                                           },
-                                          logIndex: React.Key | null | undefined
+                                          logIndex:
+                                            | React.Key
+                                            | null
+                                            | undefined,
                                         ) => (
                                           <div
                                             key={logIndex}
@@ -448,17 +452,21 @@ const TimeGraph = ({
                                               setMedicationLogUuid(log.uuid);
                                               isAschModalOpen(true);
                                               setPatientName(
-                                                `${data.firstName} ${data.lastName}`
+                                                `${data.firstName} ${data.lastName}`,
                                               );
                                               setAschData(log);
                                             }}
-                                            className="cursor-pointer hover:text-[#83C5CA] text-start"
+                                            className="cursor-pointer truncate text-start hover:text-[#007C85]"
                                           >
-                                            {log.medicationLogsName} -{" "}
-                                            {log.medicationType} -{" "}
-                                            {log.medicationLogStatus}
+                                            <ResuableTooltip
+                                              text={`
+                                              ${log.medicationLogsName} - ${" "}
+                                            ${log.medicationType} - ${" "}
+                                            ${log.medicationLogStatus}
+                                            `}
+                                            />
                                           </div>
-                                        )
+                                        ),
                                       )}
                                   </HoverCardContent>
                                 </HoverCard>
@@ -510,14 +518,14 @@ const TimeGraph = ({
                                     | null
                                     | undefined;
                                 },
-                                logIndex: React.Key | null | undefined
+                                logIndex: React.Key | null | undefined,
                               ) => (
                                 //For single prescription logs
 
                                 <HoverCard key={logIndex}>
                                   <HoverCardTrigger>
                                     <div
-                                      className="cursor-pointer max-h-[15px] relative flex items-center justify-center"
+                                      className="relative flex max-h-[15px] cursor-pointer items-center justify-center"
                                       key={`${dataIndex}_${col.time}_${logIndex}`}
                                     >
                                       {log.medicationLogStatus === "pending" ? (
@@ -536,17 +544,16 @@ const TimeGraph = ({
                                       )}
                                     </div>
                                   </HoverCardTrigger>
-                                  <HoverCardContent>
-                                    {log.medicationLogsName}
-                                    <br />
-                                    {formatTime(log.medicationLogsTime)}
-                                    <br />
-                                    {log.medicationLogStatus}
-                                    <br />
-                                    {log.medicationType}
+                                  <HoverCardContent className="truncate">
+                                    <ResuableTooltip
+                                      text={`${log.medicationLogsName}
+                                        ${formatTime(log.medicationLogsTime)}                               
+                                        ${log.medicationLogStatus}                       
+                                        ${log.medicationType}`}
+                                    />
                                   </HoverCardContent>
                                 </HoverCard>
-                              )
+                              ),
                             )
                           )}
                         </div>
@@ -554,7 +561,7 @@ const TimeGraph = ({
                     );
                   })}
                 </tr>
-              )
+              ),
             )}
           </tbody>
         </table>
