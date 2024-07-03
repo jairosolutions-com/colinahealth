@@ -9,6 +9,14 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuLabel,
+//   DropdownMenuSeparator,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu"
 import ResuableTooltip from "./reusable/tooltip";
 
 const TimeGraph = ({
@@ -170,11 +178,17 @@ const TimeGraph = ({
             onMouseLeave={handleMouseLeave}
           >
             {showTooltip && (
-              <div
-                className="fixed bg-[#007C85] text-white overflow-visible max-w-[429px] text-wrap rounded-md px-2 py-1"
+              <div className="">
+                
+                <div
+                className="fixed flex bg-[#007C85] text-white overflow-visible max-w-[429px] text-wrap rounded-md px-2 py-1 ml-5 -mt-3"
                 style={{ left: tooltipPosition.x, top: tooltipPosition.y }}
               >
-                <ResuableTooltip text={timeStrings} />
+                <div className="fixed  -ml-3 mt-[5px] w-3 h-3 bg-[#007C85] rotate-45 z-[49]"></div>
+                {timeStrings} 
+              </div>
+          
+              
               </div>
             )}
           </div>

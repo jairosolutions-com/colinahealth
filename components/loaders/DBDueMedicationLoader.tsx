@@ -1,5 +1,3 @@
-import React from "react";
-
 const DBDueMedicationLoader = () => {
   return (
     <div className="flex flex-col items-start bg-[#D9D9D91A] py-3 px-5 gap-5 w-full h-[360px] rounded-[5px]">
